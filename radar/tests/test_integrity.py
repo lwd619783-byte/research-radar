@@ -259,11 +259,20 @@ class CacheAndContractTests(unittest.TestCase):
             self.assertEqual(hashlib.sha256((ROOT/'radar/site'/name).read_bytes()).hexdigest(), sha)
 
     def test_schedule_gap_recorded_without_changing_schedule(self):
-        workflow = (ROOT/'.github/workflows/radar-deploy.yml').read_text(encoding='utf-8')
+        workflow = (ROOT/'.github/workflows/radar-deploy.yml.disabled').read_text(encoding='utf-8')
         self.assertIn('5 23 * * 0-4', workflow)
         friday_utc = dt.datetime(2026, 10, 16, 23, 5, tzinfo=dt.UTC)
         self.assertEqual(friday_utc.astimezone(build.BJ).weekday(), 5)
         self.assertNotIn(5, range(0,5))  # cron weekday Friday = 5, currently absent
+
+    def test_upload_branch_has_no_active_workflows(self):
+        workflows = ROOT/'.github/workflows'
+        self.assertEqual(list(workflows.glob('*.yml')), [])
+        self.assertEqual(list(workflows.glob('*.yaml')), [])
+        for name in ('radar-deploy', 'radar-preview'):
+            original = subprocess.check_output([
+                'git', 'show', f'22d9601:.github/workflows/{name}.yml'], cwd=ROOT)
+            self.assertEqual((workflows/f'{name}.yml.disabled').read_bytes(), original)
 
     def test_force_does_not_bypass_missing_data_gate(self):
         with tempfile.TemporaryDirectory() as td:
