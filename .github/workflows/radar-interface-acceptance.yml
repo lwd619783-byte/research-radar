@@ -1,0 +1,61 @@
+{
+  "name": "Radar interface acceptance (manual only)",
+  "run-name": "Radar interface acceptance ${{ inputs.reviewed_sha }}",
+  "on": {
+    "workflow_dispatch": {
+      "inputs": {
+        "reviewed_sha": {"description": "Exact independently reviewed commit SHA", "required": true, "type": "string"},
+        "zero_cost_verified": {"description": "Included minutes/storage and zero paid-overage budget verified", "required": true, "type": "boolean", "default": false}
+      }
+    }
+  },
+  "permissions": {"contents": "read"},
+  "concurrency": {"group": "radar-interface-acceptance", "cancel-in-progress": false},
+  "jobs": {
+    "acceptance": {
+      "if": "github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/radar-data-integrity' && github.run_attempt == 1",
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 20,
+      "steps": [
+        {
+          "name": "Validate reviewed SHA and cost authorization",
+          "env": {"REVIEWED_SHA": "${{ inputs.reviewed_sha }}", "ZERO_COST_VERIFIED": "${{ inputs.zero_cost_verified }}"},
+          "run": "test \"$ZERO_COST_VERIFIED\" = true\ntest \"$REVIEWED_SHA\" = \"$GITHUB_SHA\"\n"
+        },
+        {
+          "name": "Checkout exact execution commit",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {"persist-credentials": false, "fetch-depth": 0, "ref": "${{ github.sha }}"}
+        },
+        {
+          "name": "Python 3.12",
+          "uses": "actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+          "with": {"python-version": "3.12"}
+        },
+        {
+          "name": "Offline regression, schema and frozen hashes before requests",
+          "run": "python -B radar/scripts/acceptance_probe.py --preflight"
+        },
+        {
+          "name": "Bounded read-only interface acceptance",
+          "id": "probe",
+          "timeout-minutes": 16,
+          "run": "python -B radar/scripts/acceptance_probe.py --out \"$RUNNER_TEMP/radar-interface-acceptance/receipt.json\""
+        },
+        {
+          "name": "Upload only the sanitized receipt",
+          "if": "always() && steps.probe.outcome != 'skipped'",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "radar-interface-acceptance-${{ github.run_id }}",
+            "path": "${{ runner.temp }}/radar-interface-acceptance/receipt.json",
+            "retention-days": 7,
+            "if-no-files-found": "error",
+            "compression-level": 9,
+            "include-hidden-files": false
+          }
+        }
+      ]
+    }
+  }
+}

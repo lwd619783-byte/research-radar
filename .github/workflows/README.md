@@ -1,17 +1,20 @@
-# Workflows disabled pending independent audit
+# Manual acceptance only; publication workflows remain disabled
 
-Both original workflows are retained byte-for-byte as `*.yml.disabled`.
-There are no active `.yml` or `.yaml` workflow files on this branch.
-This disables push, pull-request, schedule, and manual workflow triggers
-without changing repository or organization settings.
+The original `radar-deploy.yml.disabled` and `radar-preview.yml.disabled`
+remain byte-for-byte unchanged and are not recognized as active workflows.
+Their push, pull-request, schedule and deployment behavior remains disabled.
 
-Do not restore the extensions, dispatch workflows, or deploy until the
-workflow and private-access protection review has been completed and the
-user has explicitly approved activation. Original history is retained for
-audit only; do not push an older commit as a branch tip.
+On 2026-10-17 the user explicitly authorized one execution of the new
+`radar-interface-acceptance.yml`. It has only `workflow_dispatch`, read-only
+repository permissions, one standard Linux job and a sanitized receipt
+artifact retained for seven days. The reviewed execution SHA and verified
+zero-cost boundary are required inputs. No deployment or cron is enabled.
+See `audit/INTERFACE-ACCEPTANCE-2026-10-17.md` for scope and evidence.
 
-GitHub recognizes workflow files ending in `.yml` or `.yaml`:
-https://docs.github.com/en/actions/get-started/quickstart
+The presence of this manual workflow does not authorize later dispatches,
+reruns, activation of the original workflows or publication. Those require
+their own user approval and unresolved financial/private-access checks.
+Do not push an older commit as a branch tip.
 
-See `audit/PUSH-PREPARATION.md` for the upload-stage status. Existing
-handoff deployment instructions are historical and do not authorize action.
+The upload-stage restrictions in `audit/PUSH-PREPARATION.md` are historical;
+only the specific manual-acceptance exception above has been authorized.

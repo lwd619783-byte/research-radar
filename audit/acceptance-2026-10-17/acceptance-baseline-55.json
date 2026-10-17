@@ -1,0 +1,19 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "-X",
+    "utf8",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "radar/tests",
+    "-v"
+  ],
+  "cwd": "C:\\Users\\10750\\Documents\\Codex\\2026-10-17\\task\\radar-local-audit",
+  "startedAt": "2026-10-17T15:43:58.715473+00:00",
+  "finishedAt": "2026-10-17T15:44:04.494670+00:00",
+  "exitCode": 0,
+  "tests": 55
+}
