@@ -1,0 +1,413 @@
+{
+  "id": 39047568864,
+  "html_url": "https://github.com/lwd619783-byte/research-radar/actions/runs/39047568864",
+  "status": "completed",
+  "conclusion": "success",
+  "head_sha": "c60d9f7f70b01e94b2367e02d4a46ab6ff5420ed",
+  "run_attempt": 1,
+  "event": "workflow_dispatch",
+  "created_at": "2026-10-17T16:01:03Z",
+  "updated_at": "2026-10-17T16:02:35Z",
+  "run_started_at": "2026-10-17T16:01:03Z",
+  "jobs": [
+    {
+      "id": 117439284589,
+      "html_url": "https://github.com/lwd619783-byte/research-radar/actions/runs/39047568864/job/117439284589",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-17T16:01:09Z",
+      "completed_at": "2026-10-17T16:02:35Z",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-17T16:01:10Z",
+          "completed_at": "2026-10-17T16:01:10Z"
+        },
+        {
+          "name": "Validate reviewed SHA and cost authorization",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-17T16:01:10Z",
+          "completed_at": "2026-10-17T16:01:11Z"
+        },
+        {
+          "name": "Checkout exact execution commit",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-17T16:01:11Z",
+          "completed_at": "2026-10-17T16:01:11Z"
+        },
+        {
+          "name": "Python 3.12",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-17T16:01:11Z",
+          "completed_at": "2026-10-17T16:01:12Z"
+        },
+        {
+          "name": "Offline regression, schema and frozen hashes before requests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-17T16:01:12Z",
+          "completed_at": "2026-10-17T16:01:22Z"
+        },
+        {
+          "name": "Bounded read-only interface acceptance",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-17T16:01:22Z",
+          "completed_at": "2026-10-17T16:02:32Z"
+        },
+        {
+          "name": "Upload only the sanitized receipt",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-17T16:02:32Z",
+          "completed_at": "2026-10-17T16:02:33Z"
+        },
+        {
+          "name": "Post Python 3.12",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-17T16:02:33Z",
+          "completed_at": "2026-10-17T16:02:33Z"
+        },
+        {
+          "name": "Post Checkout exact execution commit",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-17T16:02:33Z",
+          "completed_at": "2026-10-17T16:02:33Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-17T16:02:33Z",
+          "completed_at": "2026-10-17T16:02:33Z"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 12105379877,
+      "name": "radar-interface-acceptance-39047568864",
+      "size_in_bytes": 12530,
+      "digest": "sha256:2d5417d0587fc516a9bcff60dff693976c7ab985de23cc0fb6f47449cad7e6c6",
+      "expired": false,
+      "created_at": "2026-10-17T16:02:33Z",
+      "expires_at": "2026-10-24T16:02:32Z"
+    }
+  ],
+  "receiptBytes": 155662,
+  "receiptSHA256": "20fb2d0966b1bd7a33ad401cd850e1ad01f505f09a8e6619bf6f94c9697327dc",
+  "zipBytes": 12530,
+  "zipSHA256": "2d5417d0587fc516a9bcff60dff693976c7ab985de23cc0fb6f47449cad7e6c6",
+  "artifactDigestVerified": true,
+  "components": {
+    "company-tencent-backup": {
+      "counts": {
+        "planned": 24,
+        "connection": 24,
+        "parse": 24,
+        "quality": 0,
+        "publicationGate": 0
+      },
+      "asOf": {
+        "2026-10-16": 24
+      },
+      "failedChecks": {
+        "currencyMatches": 24,
+        "timezoneValidAndOffsetMatches": 24,
+        "adjustmentComplete": 3,
+        "high52Available": 1,
+        "historySufficient": 1
+      },
+      "failures": {},
+      "phase": {
+        "unknown": 24
+      },
+      "historyCounts": [
+        54,
+        520
+      ],
+      "completedMonths": []
+    },
+    "company-yahoo-daily": {
+      "counts": {
+        "planned": 42,
+        "connection": 42,
+        "parse": 42,
+        "quality": 41,
+        "publicationGate": 41
+      },
+      "asOf": {
+        "2026-10-16": 42
+      },
+      "failedChecks": {
+        "high52Available": 1,
+        "historySufficient": 1
+      },
+      "failures": {},
+      "phase": {
+        "closed": 42
+      },
+      "historyCounts": [
+        54,
+        642,
+        923,
+        944,
+        1123,
+        1212,
+        1213,
+        1220,
+        1221,
+        1230,
+        1255,
+        1275,
+        1281
+      ],
+      "completedMonths": []
+    },
+    "company-yahoo-quote": {
+      "counts": {
+        "planned": 42,
+        "connection": 42,
+        "parse": 42,
+        "quality": 40,
+        "publicationGate": 40
+      },
+      "asOf": {
+        "2026-10-16": 42
+      },
+      "failedChecks": {
+        "trailingPE": 2
+      },
+      "failures": {},
+      "phase": {
+        "None": 42
+      },
+      "historyCounts": [
+        1
+      ],
+      "completedMonths": []
+    },
+    "fx": {
+      "counts": {
+        "planned": 6,
+        "connection": 6,
+        "parse": 6,
+        "quality": 6,
+        "publicationGate": 6
+      },
+      "asOf": {
+        "2026-10-17": 4,
+        "2026-10-16": 2
+      },
+      "failedChecks": {},
+      "failures": {},
+      "phase": {
+        "None": 6
+      },
+      "historyCounts": [
+        1
+      ],
+      "completedMonths": []
+    },
+    "index-tencent": {
+      "counts": {
+        "planned": 5,
+        "connection": 5,
+        "parse": 5,
+        "quality": 5,
+        "publicationGate": 0
+      },
+      "asOf": {
+        "2026-10-16": 5
+      },
+      "failedChecks": {},
+      "failures": {},
+      "phase": {
+        "unknown": 5
+      },
+      "historyCounts": [
+        1
+      ],
+      "completedMonths": []
+    },
+    "index-yahoo": {
+      "counts": {
+        "planned": 8,
+        "connection": 8,
+        "parse": 8,
+        "quality": 5,
+        "publicationGate": 5
+      },
+      "asOf": {
+        "2026-10-16": 5,
+        "None": 3
+      },
+      "failedChecks": {},
+      "failures": {
+        "separate_source_only": 3
+      },
+      "phase": {
+        "closed": 5,
+        "None": 3
+      },
+      "historyCounts": [
+        1
+      ],
+      "completedMonths": []
+    },
+    "ratio-tencent": {
+      "counts": {
+        "planned": 2,
+        "connection": 2,
+        "parse": 2,
+        "quality": 2,
+        "publicationGate": 2
+      },
+      "asOf": {
+        "2026-10-16": 2
+      },
+      "failedChecks": {},
+      "failures": {},
+      "phase": {
+        "None": 2
+      },
+      "historyCounts": [
+        197,
+        200
+      ],
+      "completedMonths": [
+        196,
+        199
+      ]
+    },
+    "ratio-yahoo": {
+      "counts": {
+        "planned": 2,
+        "connection": 2,
+        "parse": 2,
+        "quality": 0,
+        "publicationGate": 0
+      },
+      "asOf": {
+        "None": 2
+      },
+      "failedChecks": {
+        "history120Completed": 2,
+        "currentDated": 2,
+        "dateFresh": 2
+      },
+      "failures": {},
+      "phase": {
+        "None": 2
+      },
+      "historyCounts": [
+        1
+      ],
+      "completedMonths": [
+        0
+      ]
+    }
+  },
+  "quoteSession": {
+    "failure": null,
+    "batches": [
+      {
+        "batch": 1,
+        "requested": 40,
+        "attempts": 1,
+        "connection": true,
+        "parse": true
+      },
+      {
+        "batch": 2,
+        "requested": 2,
+        "attempts": 1,
+        "connection": true,
+        "parse": true
+      }
+    ],
+    "expectedBatchSizes": [
+      40,
+      2
+    ],
+    "returned": 42,
+    "cookieAvailable": true,
+    "crumbAvailable": true
+  },
+  "publication": {
+    "blockers": [
+      "financial_evidence_missing_or_incompatible_with_frozen_text",
+      "missing_market_cap_fixed_area_label",
+      "short_price_history_fixed_chart_labels"
+    ],
+    "missingDailyCount": 0,
+    "staleDailyCount": 0,
+    "asOf": "2026-10-16",
+    "asOfByMarket": {
+      "A\u80a1": [
+        "2026-10-16"
+      ],
+      "\u7f8e\u80a1": [
+        "2026-10-16"
+      ],
+      "\u6e2f\u80a1": [
+        "2026-10-16"
+      ],
+      "\u97e9\u80a1": [
+        "2026-10-16"
+      ],
+      "\u65e5\u80a1": [
+        "2026-10-16"
+      ],
+      "\u53f0\u80a1": [
+        "2026-10-16"
+      ],
+      "\u6b27\u80a1": [
+        "2026-10-16"
+      ]
+    },
+    "ratioAvailable": true,
+    "financialVerified": 0,
+    "financialRequired": 42,
+    "primaryOnlyAssembly": true
+  },
+  "execution": {
+    "GITHUB_SHA": "c60d9f7f70b01e94b2367e02d4a46ab6ff5420ed",
+    "GITHUB_RUN_ID": "39047568864",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "RUNNER_OS": "Linux",
+    "RUNNER_ARCH": "X64",
+    "ImageOS": "ubuntu24",
+    "ImageVersion": "20261012.334.1"
+  },
+  "python": "3.12.15",
+  "requestsMade": 119,
+  "deniedPaths": [],
+  "httpStatuses": {
+    "404": 1,
+    "200": 118
+  },
+  "sourceStartedAt": "2026-10-17T16:01:22.856203+00:00",
+  "sourceFinishedAt": "2026-10-17T16:02:32.434319+00:00"
+}

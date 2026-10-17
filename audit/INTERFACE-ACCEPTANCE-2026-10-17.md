@@ -30,3 +30,59 @@ The first preparation attempt had a local quoting error and omitted the frozen m
 The execution commit, remote SHA, single run ID, terminal status, artifact digest, receipt byte hash, component results and post-run unchanged-file checks will be appended after the authorized run. Workflow success means the diagnostic completed; it never means all interfaces or release prerequisites passed. Any failure remains a gap and does not authorize rerun.
 
 The disabled cron's weekday range and any future `0-5` proposal remain separate review work. This acceptance provides no promise of three daily publications. Real financial evidence and private publication/access acceptance remain separate prerequisites.
+
+## Single authorized run — terminal result
+
+The parent independently approved the pre-run review. Immediately before dispatch, the remote ref still matched `c60d9f7f70b01e94b2367e02d4a46ab6ff5420ed`, the repository remained private and workflow 387767552 had zero runs. The existing Actions $0 paid-overage budget with usage blocking and included allowance were rechecked without changing settings. A local exclusive-create dispatch marker was written before exactly one POST; it returned exit 0 at 2026-10-17 16:01:03 UTC. No rerun or additional dispatch was issued.
+
+- [Run 39047568864](https://github.com/lwd619783-byte/research-radar/actions/runs/39047568864): `completed / success`, `workflow_dispatch`, attempt 1, exact reviewed execution SHA above.
+- [Job 117439284589](https://github.com/lwd619783-byte/research-radar/actions/runs/39047568864/job/117439284589): `completed / success`, 16:01:09–16:02:35 UTC, 86 seconds. Standard `ubuntu-24.04`, image `20261012.334.1`, runner `2.337.0`, Python `3.12.15`. No model/service-tier settings were changed.
+- Linux preflight, before requests: 75 tests passed, 9 frozen hashes matched, 57 schema warnings and 0 errors. Probe interval: 16:01:22.856203–16:02:32.434319 UTC (2026-10-17).
+- Exactly 119 GET attempts of the 240 maximum: 118 HTTP 200, one cookie-seed HTTP 404. No 401, 403, 429 or 451 was observed; no retry or access-denial lane activation occurred. That establishes this run's access only, not future reliability.
+
+### Four distinct result layers
+
+The last column is the receipt's **per-interface prerequisite**, not an integrated publication authorization. Connection and parse count diagnostic rows, not HTTP requests. One quote batch supplies multiple rows.
+
+| Category | Connection | JSON parse | Data quality | Interface prerequisite |
+|---|---:|---:|---:|---:|
+| Yahoo company daily | 42/42 | 42/42 | 41/42 | 41/42 |
+| Tencent company raw/qfq backup | 24/24 | 24/24 | 0/24 | 0/24 |
+| Yahoo valuation | 42/42 | 42/42 | 40/42 | 40/42 |
+| Yahoo indices | 8/8 | 8/8 | 5/8 | 5/8 |
+| Tencent indices | 5/5 | 5/5 | 5/5 | 0/5 |
+| Yahoo FX | 6/6 | 6/6 | 6/6 | 6/6 |
+| Tencent monthly + independent daily | 2/2 | 2/2 | 2/2 | 2/2 |
+| Separate Yahoo monthly fallback | 2/2 | 2/2 | 0/2 | 0/2 |
+
+All 42 company daily and valuation observations date to 2026-10-16; Yahoo daily phase was closed for 42/42. Yahoo valuation's 40+2 batches each succeeded in one request, returned 42 records and obtained an in-memory cookie/crumb. Neither authentication material nor its hashes were persisted. All 42 market-cap fields were positive, dated and currency-matched at the interface layer; `LITE` and `000660.KS` did not satisfy positive trailing-PE checks. The receipt cannot distinguish missing from nonpositive PE, so no more specific cause is claimed.
+
+`688825.SS` has 54 daily observations, beginning 2026-07-27, on both sources. It cannot meet the frozen two-year/history and 52-week display requirements; no synthetic history was substituted. Tencent raw series were valid for 24/24, complete adjustments for 21/24, with missing adjustments for `0522.HK`, `688825.SS` and `1888.HK`. All 24 lacked proven currency/timezone metadata and remained `phase=unknown`; the zero full-quality count must not be read as zero successful raw-price connections.
+
+Five Yahoo indices and all five Tencent indices date to 2026-10-16. Yahoo `399006.SZ`, `000922.SS` and `HSTECH.HK` did not produce usable index results. Their final diagnostic code is `separate_source_only`: the isolated source check prevented the adapter from silently mixing in Tencent. The receipt does not preserve the preceding Yahoo semantic failure in detail, so it cannot identify a more specific root cause. Tencent's five index prices/changes passed quality, but all five fail the closed-phase prerequisite because phase is unknown.
+
+All six FX directions and dates passed their own interface checks. EUR inversion was verified. However CNY, EUR, HKD and KRW are dated 2026-10-17, while JPY and TWD are dated 2026-10-16. Only 2/6 FX dates match the page/quote date 2026-10-16. The production assembly explicitly requires same-day FX for market-cap conversion. From the frozen currency inventory and these dates, 27/42 companies have mismatched FX dates and only 15/42 have a compatible USD/same-day FX path. These are derived coverage counts; the aggregate missing-market-cap blocker below is directly recorded. Thus the row-level FX 6/6 prerequisite is not evidence of integrated usability.
+
+Tencent temperature-series current values are independently dated 2026-10-16 on both sides and agree with the page date. Growth has 197 monthly points / 196 completed months; dividend has 200 / 199. Both exceed 120 completed months; the production ratio is available. Each Yahoo monthly fallback returned only one monthly point, zero completed months and no proven current date; neither fallback qualifies.
+
+### Integrated publication remains blocked
+
+The actual production assembly recorded these exact blockers:
+
+1. `financial_evidence_missing_or_incompatible_with_frozen_text`
+2. `missing_market_cap_fixed_area_label`
+3. `short_price_history_fixed_chart_labels`
+
+Its page date is 2026-10-16 across all seven configured markets; missing/stale company daily counts are both zero. Financial verification remains 0/42 in the frozen repository inputs. The separate team's 42-item evidence matrix was not written into code or data in this phase. Missing Yahoo index results are separately visible in interface diagnostics; the aggregate blocker list is not an exhaustive inventory of all source deficiencies. No build output, cache, fingerprint or deployment was produced, and the green workflow result means only that diagnostics and receipt upload completed.
+
+### Artifact verification and cost evidence
+
+[Artifact 12105379877](https://github.com/lwd619783-byte/research-radar/actions/runs/39047568864/artifacts/12105379877), `radar-interface-acceptance-39047568864`, expires 2026-10-24 16:02:32 UTC. Downloaded ZIP contains exactly `receipt.json`; private repository access is unchanged.
+
+- ZIP: 12,530 bytes; SHA-256 `2d5417d0587fc516a9bcff60dff693976c7ab985de23cc0fb6f47449cad7e6c6`, identical to GitHub's artifact digest and upload log.
+- Receipt: 155,662 bytes; SHA-256 `20fb2d0966b1bd7a33ad401cd850e1ad01f505f09a8e6619bf6f94c9697327dc`, identical to the job's output hash. Execution SHA/run ID/attempt, 131 rows and all 119 request records were checked. A scoped sensitive-pattern scan found no credentials/query URLs/private local paths.
+- Full receipt/ZIP were downloaded locally. They are not added to Git history; only the concise sanitized verification summary and allowlisted job-log excerpts accompany this report, preserving the hosted artifact's seven-day retention.
+- Post-run billing UI showed Actions **2 of 2,000 included minutes used**, storage **0 of 0.5 GB** at displayed precision, and **$0 billable** ($0.19 usage minus $0.19 included discount). This is the observed account-level meter, not an invented line-item charge; later metering may lag. The existing $0 overage budget was not changed. Job timeout remains 20 minutes; the receipt remains below its 512 KiB cap.
+- Final read-only run listing still contained exactly one run, attempt 1; repository deployment listing contained zero. Nine frozen files remained identical, and the worktree was clean before adding this result documentation. No cron, permission expansion, financial edit, frontend edit, data edit or additional execution occurred.
+
+Remaining work is limited to the documented source/data compatibility gaps, independent financial evidence integration and separate private-publication acceptance. This run does not authorize a further dispatch or publication.

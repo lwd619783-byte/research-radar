@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-10-17T16:06:09.487890+00:00",
+  "executionSHA": "c60d9f7f70b01e94b2367e02d4a46ab6ff5420ed",
+  "runID": 39047568864,
+  "dispatchCount": 1,
+  "runAttempt": 1,
+  "allFrozenEqual": true,
+  "frozenSHA256": {
+    "radar/site/app.js": "3c057ca30e8d2e05e58201a3c57f8b0235812ca294e688c2d0f8ced395f2ed2b",
+    "radar/site/index.html": "8cf42a0a00ae434dbdc96e9567e1e6338c28b95dee534f73664ef4473b2ed51d",
+    "radar/site/style.css": "8987b1f2aae01066e7665ebe6d0b5bb1708089a0fc7586c5d1deb67d7c041d36",
+    "radar/data/chokepoints.toml": "89cdf6861602bff2527a562c26dee6ec612553850cafc83582d0da960616463e",
+    "radar/data/companies.toml": "be94fd4cc16df0d6746b9f1819b61972c39626ec2572d64e8b75ff8458b49d51",
+    "radar/data/config.toml": "546b8d6920bc54b3fc70853ecc53acedd013cf04fc958ed5728969fbe47aaffd",
+    "radar/data/industries.toml": "b68578b61566053f5bc03f69f06f2e12cb01102deb3cf3af90aa4b7c1259bdb4",
+    ".github/workflows/radar-deploy.yml.disabled": "4eae830c8fa2eba2025cf819fe9e4635f5f360f6113e71b3c03437fa3b60ce18",
+    ".github/workflows/radar-preview.yml.disabled": "62356402c586d9b4f1b8a1061be6ebd8bf1c6027d3672d24c3d5a0ab483be482"
+  },
+  "resultFilesSHA256": {
+    "audit/INTERFACE-ACCEPTANCE-2026-10-17.md": "25a3f63f02f991e4ae4f003c7665e1dc1f7c614b2fce973531662e0806607115",
+    "audit/acceptance-2026-10-17/run-39047568864-summary.json": "f4ca257facf691fe246a5be4fa17a43cd2aa38abc766c95f4e20b664787de8f6",
+    "audit/acceptance-2026-10-17/run-39047568864-log-excerpts.txt": "c925ecb36f0d0a7552317b15b97fad0c6f5a3eb6ed435fe2238d8fa169f73d87",
+    "audit/acceptance-2026-10-17/run-39047568864-dispatch.json": "c0eea276e3681a16b4ed413f93aca55fdf066b2d315c23b5d0c1fa3cd6b5fe54"
+  },
+  "sensitivePatternFindings": 0,
+  "fullArtifactCommitted": false,
+  "billingObservedAfter": {
+    "includedMinutesUsed": 2,
+    "includedMinutesTotal": 2000,
+    "storageGBUsedDisplayed": 0,
+    "includedStorageGB": 0.5,
+    "billableUSD": 0,
+    "grossUSD": 0.19,
+    "includedDiscountUSD": 0.19
+  },
+  "note": "Finite pattern scan plus explicit receipt allowlist review; only audit documents changed after execution commit."
+}

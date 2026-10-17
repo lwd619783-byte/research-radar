@@ -1,0 +1,28 @@
+{
+  "startedAt": "2026-10-17T16:01:01.304810+00:00",
+  "sha": "c60d9f7f70b01e94b2367e02d4a46ab6ff5420ed",
+  "workflowID": 387767552,
+  "inputs": {
+    "ref": "fix/radar-data-integrity",
+    "inputs": {
+      "reviewed_sha": "c60d9f7f70b01e94b2367e02d4a46ab6ff5420ed",
+      "zero_cost_verified": true
+    }
+  },
+  "preDispatchRuns": 0,
+  "zeroCostReverified": true,
+  "state": "POST_ACCEPTED",
+  "command": [
+    "gh",
+    "api",
+    "--method",
+    "POST",
+    "repos/lwd619783-byte/research-radar/actions/workflows/387767552/dispatches",
+    "--input",
+    "-"
+  ],
+  "exitCode": 0,
+  "finishedAt": "2026-10-17T16:01:03.881215+00:00",
+  "stdout": "",
+  "stderr": ""
+}
