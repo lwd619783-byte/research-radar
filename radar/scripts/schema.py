@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import math
 import re
 import tomllib
 from pathlib import Path
@@ -51,7 +52,7 @@ def _str(rep: Report, where: str, obj: dict, key: str, required: bool = True) ->
 def _num(rep: Report, where: str, v, key: str):
     if v is None:
         return None
-    if isinstance(v, bool) or not isinstance(v, (int, float)):
+    if isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v):
         rep.err(where, f"{key} 必须是数字（不要加引号或 %），现在是 {v!r}")
         return None
     return float(v)
@@ -192,8 +193,15 @@ def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = 
             rep.warn(w, f"next_earnings {nxt} 已过去：更新 fin / flash，并改成下一次财报日（未知就留空）")
         fin = x.get("fin", {})
         for k in fin:
-            if k not in ("period", "revenue_yoy", "profit_yoy", "gross_margin"):
+            if k not in ("period", "revenue_yoy", "profit_yoy", "gross_margin", "source_name", "source_url", "period_end", "published_at", "verified_at", "basis"):
                 rep.err(w, f"fin 里有未知字段 {k}")
+        evidence = {k: _str(rep, w, fin, k, False) for k in ('source_name', 'source_url', 'period_end', 'published_at', 'verified_at', 'basis')}
+        if evidence['source_url'] and not re.match(r'^https://[^/\s]+(?:/[^\s]*)?$', evidence['source_url']):
+            rep.err(w, 'fin.source_url 必须是 HTTPS 来源链接')
+        for k in ('period_end', 'published_at', 'verified_at'):
+            _date(rep, w, evidence[k], f'fin.{k}')
+        if not all(evidence.values()):
+            rep.warn(w, '财务来源/日期/单季口径待核；构建不使用无证据财务数值')
         pct = lambda k: (lambda v: None if v is None else v / 100)(_num(rep, w, fin.get(k), f"fin.{k}"))
         gm = pct("gross_margin")
         if gm is not None and not -1 <= gm <= 1:
@@ -205,6 +213,7 @@ def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = 
             "view": _str(rep, w, x, "view", False), "flash": _str(rep, w, x, "flash", False),
             "next": nxt or None, "period": str(fin.get("period", "")),
             "revg": pct("revenue_yoy"), "earng": pct("profit_yoy"), "gm": gm,
+            "financial": evidence,
             "fallback_pe": _num(rep, w, x.get("fallback_pe"), "fallback_pe"),
             "fallback_mcap_usd_bn": _num(rep, w, x.get("fallback_mcap_usd_bn"), "fallback_mcap_usd_bn"),
             "cur": MARKET_CUR.get(mkt, "USD"), "kb": kb, "url": kb_url(kb, w),

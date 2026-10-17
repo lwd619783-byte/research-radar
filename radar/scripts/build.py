@@ -25,6 +25,7 @@ from zoneinfo import ZoneInfo
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import quotes  # noqa: E402
 from schema import load_and_validate  # noqa: E402
+from integrity import fresh_record, valid_bars, financial_status, release_blockers, number
 
 RADAR = Path(__file__).resolve().parents[1]
 REPO = RADAR.parent
@@ -51,16 +52,18 @@ def r4(v, n=4):
 # ---------------- 指标计算 ----------------
 def metrics(bars: list[list]) -> dict:
     """bars = [[date, close, adjclose], ...]（升序）。收益率用复权价，价格/走势图用原始收盘价。"""
-    if not bars:
+    if not valid_bars(bars):
         return {}
     a = [b[2] for b in bars]
     last, ld = a[-1], bars[-1][0]
 
     def ret(n):
-        return last / a[-1 - n] - 1 if len(a) > n and a[-1 - n] else None
+        return last / a[-1 - n] - 1 if len(a) > n and last is not None and a[-1 - n] else None
 
     base = [b[2] for b in bars if b[0][:4] < ld[:4]]
-    win = a[-252:]
+    cutoff = dt.date.fromisoformat(ld) - dt.timedelta(weeks=52)
+    win = [b for b in bars if b[0] > cutoff.isoformat()]
+    high = max(b[3] for b in win) if bars[0][0] <= cutoff.isoformat() and all(b[3] is not None for b in win) else None
     d0 = dt.date.fromisoformat(bars[0][0])
     sd, prev = [], d0
     for b in bars:
@@ -69,37 +72,40 @@ def metrics(bars: list[list]) -> dict:
         prev = cur
     return {
         "price": round(bars[-1][1], 3 if bars[-1][1] < 10 else 2), "r1d": r4(ret(1), 5), "r5": r4(ret(5)), "r20": r4(ret(20)), "r60": r4(ret(60)),
-        "ytd": r4(last / base[-1] - 1) if base else None, "dd52": r4(last / max(win) - 1) if win else None,
-        "hi52": max(b[1] for b in bars[-252:]), "ld": ld,
+        "ytd": r4(last / base[-1] - 1) if base and base[-1] and last is not None else None,
+        "dd52": r4(bars[-1][1] / high - 1) if high else None,
+        "hi52": high, "ld": ld,
         "s0": d0.isoformat(), "sd": sd, "sc": [sig4(b[1]) for b in bars],
     }
 
 
-def ratio_block(cyb: list[list], hl: list[list]) -> dict:
+def ratio_block(cyb: list[list], hl: list[list], today: dt.date | None = None) -> dict | None:
     """创业板指 ÷ 中证红利 月度比值。分位只和「已走完的月份」比较（当月未走完）。"""
+    today = today or dt.datetime.now(BJ).date()
+    current_month = today.strftime('%Y-%m')
     c, h = dict(cyb), dict(hl)
-    months = sorted(set(c) & set(h))
+    months = sorted(m for m in set(c) & set(h) if m <= current_month and number(c[m]) and number(h[m]) and c[m] > 0 and h[m] > 0)
+    if not months:
+        return None
     series = [[m, round(c[m] / h[m], 4)] for m in months]
     cur = series[-1][1]
-    full = [v for _, v in series[:-1]]
+    full = [c[m] / h[m] for m in months if m < current_month]
+    expected = [f'{(today.year * 12 + today.month - 1 - i) // 12:04}-{(today.year * 12 + today.month - 1 - i) % 12 + 1:02}' for i in range(1, 121)]
+    if not set(expected).issubset(months):
+        return None
     m60, m120 = full[-60:], full[-120:]
-    n60, n120 = sum(v < cur for v in m60), sum(v < cur for v in m120)
+    current_value = c[months[-1]] / h[months[-1]]
+    n60, n120 = sum(v < current_value for v in m60), sum(v < current_value for v in m120)
     return {"series": series, "cur": cur, "cyb": round(c[months[-1]], 2), "hl": round(h[months[-1]], 2),
-            "p60": n60 / len(m60), "p120": n120 / len(m120), "n60": n60, "n120": n120}
+            "p60": n60 / len(m60), "p120": n120 / len(m120), "n60": n60, "n120": n120,
+            "asOfMonth": months[-1], "completedMonths": len(full),
+            "uiCompatible": months[-1] == current_month and max(m120) > min(m120)}
 
 
 def asof_label(asof: str, now: dt.datetime) -> str:
     d = dt.date.fromisoformat(asof)
     md = f"{d.month}/{d.day}"
-    if asof != now.date().isoformat():
-        return f"{md} 收盘"
-    hm = now.hour * 60 + now.minute
-    if hm < 9 * 60 + 30:
-        return f"{md} 开盘前"
-    if hm < 11 * 60 + 30 or 13 * 60 <= hm < 15 * 60:
-        return f"{md} {now:%H:%M} 盘中"
-    if hm < 13 * 60:
-        return f"{md} 午间"
+    # Release gate requires a confirmed common closing date; never use build time.
     return f"{md} 收盘"
 
 
@@ -112,29 +118,30 @@ def fetch_all(data: dict, cache: dict, offline: bool) -> tuple[dict, list[str]]:
     if offline:
         fresh["offline"] = True
         return fresh, ["--offline：全部使用缓存"]
-    h = quotes.Http()
     ratio_cfg = cfg["ratio"] or {}
     jobs = {}
+    def request(fn, *args):
+        return fn(quotes.Http(), *args)
     with cf.ThreadPoolExecutor(max_workers=6) as ex:
         for s in syms:
-            jobs[ex.submit(quotes.daily, h, s)] = ("daily", s)
+            jobs[ex.submit(request, quotes.daily, s)] = ("daily", s)
         for x in cfg["indices"]:
-            jobs[ex.submit(quotes.index_quote, h, x["symbol"], x.get("tencent", ""))] = ("index", x["symbol"])
+            jobs[ex.submit(request, quotes.index_quote, x["symbol"], x.get("tencent", ""))] = ("index", x["symbol"])
         curs = sorted({c["cur"] for c in data["companies"]} - {"USD"})
         for cur in curs:
-            jobs[ex.submit(quotes.fx, h, cur)] = ("fx", cur)
+            jobs[ex.submit(request, quotes.fx, cur)] = ("fx", cur)
         for key, tx, yh in (("cyb", ratio_cfg.get("growth_tencent", "sz399006"), ratio_cfg.get("growth_yahoo", "399006.SZ")),
                             ("hl", ratio_cfg.get("dividend_tencent", "sh000922"), ratio_cfg.get("dividend_yahoo", "000922.SS"))):
-            jobs[ex.submit(quotes.monthly, h, tx, yh)] = ("ratio", key)
+            jobs[ex.submit(request, quotes.monthly, tx, yh)] = ("ratio", key)
         for f in cf.as_completed(jobs):
             kind, key = jobs[f]
             try:
                 fresh[kind][key] = f.result()
             except Exception as e:  # noqa: BLE001
                 notes.append(f"{kind} {key} 抓取失败：{str(e)[:160]}")
-    fresh["quote"] = quotes.yahoo_quotes(h, syms)
+    fresh["quote"] = quotes.yahoo_quotes(quotes.Http(), syms)
     if not fresh["quote"]:
-        notes.append("Yahoo 市值/PE 批量接口不可用，市值与 PE 使用缓存或 companies.toml 的 fallback_*")
+        notes.append("Yahoo 市值/PE 接口不可用；仅接受有时效凭证的缓存，禁用无日期 fallback")
     return fresh, notes
 
 
@@ -143,38 +150,66 @@ def merge(fresh: dict, cache: dict) -> dict:
     out = {}
     for k in ("daily", "quote", "index", "fx", "ratio"):
         out[k] = dict(cache.get(k, {}))
-        out[k].update(fresh.get(k, {}))
+        for key, value in fresh.get(k, {}).items():
+            old = out[k].get(key)
+            field = 'date' if k == 'index' else 'asOf'
+            if isinstance(old, dict) and isinstance(value, dict) and old.get(field) and value.get(field) and old[field] > value[field]:
+                continue
+            out[k][key] = value
     return out
 
 
 # ---------------- 组装 DATA ----------------
 def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict, list[str], list[str]]:
     cfg = data["config"]
-    fxf = {k: float(v) for k, v in (cfg["fx_fallback"] or {}).items()}
     fx = {"USD": 1.0}
-    for cur in ("CNY", "HKD", "TWD", "KRW", "JPY"):
-        fx[cur] = mk["fx"].get(cur) or fxf.get(cur) or 1.0
-    fx["EUR"] = mk["fx"].get("EUR") or (1 / fxf["EURUSD"] if fxf.get("EURUSD") else 0.9)
+    fx_meta = {}
+    for cur, v in mk['fx'].items():
+        if isinstance(v, dict) and v.get('asOf') and fresh_record(v, now, v['asOf']) and quotes.positive(v.get('value')):
+            fx[cur] = v['value']
+            fx_meta[cur] = {k: v.get(k) for k in ('src', 'asOf', 'receivedAt')}
 
     stale, missing, cos = [], [], []
+    blockers, market_dates, issues = [], {}, []
     for c in data["companies"]:
         s = c["sym"]
         d = mk["daily"].get(s)
-        m = metrics(d["bars"]) if d else {}
-        if not d:
+        usable = (isinstance(d, dict) and d.get('schemaVersion') == 2 and d.get('priceBasis') == 'raw'
+                  and valid_bars(d.get('bars')) and d.get('asOf') == d['bars'][-1][0])
+        m = metrics(d['bars']) if usable else {}
+        if not usable:
             missing.append(c["name"])
-        elif s not in fresh["daily"] and not fresh.get("offline"):
+            issues.append({'symbol': s, 'kind': 'daily', 'status': 'missing_or_legacy'})
+        elif d is not fresh['daily'].get(s) or not fresh_record(d, now, m['ld'], c['mkt']):
             stale.append(c["name"])
             m["stale"] = True
+            issues.append({'symbol': s, 'kind': 'daily', 'status': 'stale'})
+        if usable:
+            market_dates.setdefault(c['mkt'], set()).add(m['ld'])
+            if d.get('phase') != 'closed':
+                blockers.append('unconfirmed_close_or_intraday_needs_label_approval')
+            if m.get('stale'):
+                # Ticker/aggregates have no per-row stale marker in frozen frontend.
+                blockers.append('stale_quotes_not_safe_in_all_frozen_views')
+            if len(d['bars']) < 120 or (dt.date.fromisoformat(m['ld']) - dt.date.fromisoformat(d['bars'][0][0])).days < 731:
+                issues.append({'symbol': s, 'kind': 'history', 'status': 'short_history'})
+                blockers.append('short_price_history_fixed_chart_labels')
         q = mk["quote"].get(s) or {}
+        quote_date = None
+        try:
+            from integrity import ZONES
+            quote_date = dt.datetime.fromtimestamp(q['regularMarketTime'], ZoneInfo(ZONES[c['mkt']])).date().isoformat()
+        except (KeyError, TypeError, ValueError, OSError):
+            pass
+        if not quote_date or not fresh_record(q, now, quote_date, c['mkt']) or quote_date != m.get('ld'):
+            q = {}
         cur = (q.get("currency") or (d or {}).get("currency") or c["cur"])
-        if cur not in fx:
-            cur = c["cur"]
         mcap = q.get("marketCap")
-        mcap_usd = round(mcap / fx[cur] / 1e8, 1) if mcap else (round(c["fallback_mcap_usd_bn"] * 10, 1) if c["fallback_mcap_usd_bn"] else None)
+        fx_same_date = cur == 'USD' or fx_meta.get(cur, {}).get('asOf') == quote_date
+        mcap_usd = round(mcap / fx[cur] / 1e8, 1) if quotes.positive(mcap) and cur in fx and fx_same_date else None
         pe = q.get("trailingPE")
-        pe = round(pe, 1) if isinstance(pe, (int, float)) and pe > 0 else c["fallback_pe"]
-        hi52 = q.get("fiftyTwoWeekHigh") or (d or {}).get("hi52") or m.get("hi52")
+        pe = round(pe, 1) if quotes.positive(pe) else None
+        hi52 = m.get("hi52")
         row = {k: c[k] for k in ("id", "name", "code", "sym", "mkt", "role", "ind", "cp", "revg", "earng", "gm",
                                  "period", "flash", "view", "next", "url")}
         row.update({"cur": cur, "pe": pe, "mcapUSD": mcap_usd,
@@ -182,29 +217,60 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
                     "s0": None, "sd": [], "sc": [], "ld": None})
         row.update(m)
         row["hi52"] = round(hi52, 3 if hi52 < 10 else 2) if hi52 else None
+        status = financial_status(c.get('financial'), now.date())
+        row['provenance'] = {'daily': {k: (d or {}).get(k) for k in ('src', 'asOf', 'receivedAt', 'returnBasis', 'phase')},
+                             'valuation': {'source': q.get('src'), 'asOf': quote_date if q else None,
+                                           'receivedAt': q.get('receivedAt'), 'status': 'available' if q else 'missing'},
+                             'financial': {**c.get('financial', {}), 'status': status}}
+        if status != 'verified':
+            for key in ('revg', 'earng', 'gm'):
+                row[key] = None
+            issues.append({'symbol': s, 'kind': 'financial', 'status': status})
+            # Existing flash/period/footer text still asserts current financials.
+            blockers.append('financial_evidence_missing_or_incompatible_with_frozen_text')
+        if mcap_usd is None:
+            blockers.append('missing_market_cap_fixed_area_label')
         cos.append(row)
 
     a_dates = [c["ld"] for c in cos if c["mkt"] == "A股" and c["ld"]]
     all_dates = [c["ld"] for c in cos if c["ld"]]
-    asof = max(a_dates or all_dates or [now.date().isoformat()])
+    asof = min(all_dates) if all_dates else None
+    if len(set(all_dates)) != 1:
+        blockers.append('mixed_or_missing_market_dates_need_label_approval')
 
     idx = []
     for x in cfg["indices"]:
         v = mk["index"].get(x["symbol"])
-        if v:
+        if (isinstance(v, dict) and v.get('date') and fresh_record(v, now, v['date'])
+                and number(v.get('price')) and v['price'] > 0 and number(v.get('chg'))):
             idx.append({"name": x["name"], "price": round(v["price"], 2),
-                        "chg": round(v["chg"], 5)})
+                        "chg": round(v["chg"], 5), 'asOf': v['date'], 'receivedAt': v['receivedAt'], 'source': v.get('src')})
+            if v['date'] != asof or v.get('phase') != 'closed':
+                blockers.append('index_date_or_phase_needs_label_approval')
+        else:
+            issues.append({'symbol': x['symbol'], 'kind': 'index', 'status': 'missing_or_stale'})
     ratio = None
-    if mk["ratio"].get("cyb") and mk["ratio"].get("hl"):
-        ratio = ratio_block(mk["ratio"]["cyb"], mk["ratio"]["hl"])
+    rc, rh = mk['ratio'].get('cyb'), mk['ratio'].get('hl')
+    if fresh_record(rc, now) and fresh_record(rh, now):
+        ratio = ratio_block(rc.get('bars', []), rh.get('bars', []), now.date())
+        if ratio and (not ratio['uiCompatible'] or rc.get('src') != 'tencent' or rh.get('src') != 'tencent'):
+            issues.append({'kind': 'ratio', 'status': 'frozen_text_or_range_incompatible'})
+            ratio = None
+        if ratio and (ratio['p60'] < .2 or ratio['p60'] > .8):
+            # Frozen sentence says "not in extreme zone" unconditionally.
+            blockers.append('ratio_extreme_conflicts_with_frozen_sentence')
+    if ratio is None:
+        issues.append({'kind': 'ratio', 'status': 'unavailable_or_short_history'})
 
     wk = cfg["weekly"] or {}
     meta = {
-        "asOf": asof, "asOfLabel": asof_label(asof, now), "today": now.date().isoformat(),
+        "asOf": asof, "asOfLabel": asof_label(asof, now) if asof else None, "today": now.date().isoformat(),
         "generatedAt": now.isoformat(timespec="minutes"), "repoUrl": cfg["repo_url"], "title": cfg["title"],
         "weekly": {"week": wk.get("week", ""), "focus": wk.get("focus", ""), "lead": wk.get("lead", ""),
                    "calHint": wk.get("calendar_hint", ""), "thermoAction": wk.get("thermo_action", "")},
         "stale": stale, "fx": {k: round(v, 4) for k, v in fx.items()},
+        'asOfByMarket': {k: sorted(v) for k, v in market_dates.items()}, 'fxProvenance': fx_meta,
+        'blockers': sorted(set(blockers)), 'issues': issues, 'offline': bool(fresh.get('offline')),
     }
     out = {"meta": meta, "industries": data["industries"], "chokepoints": data["chokepoints"],
            "companies": cos, "indices": idx, "ratio": ratio}
@@ -216,7 +282,7 @@ def render(D: dict, out_dir: Path) -> Path:
     h = (site / "index.html").read_text("utf-8")
     css = (site / "style.css").read_text("utf-8")
     js = (site / "app.js").read_text("utf-8")
-    data = json.dumps(D, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    data = json.dumps(D, ensure_ascii=False, allow_nan=False, separators=(",", ":")).replace("</", "<\\/")
     title = D["meta"].get("title") or "投研雷达"
     h = h.replace("<title>投研雷达 · Alpha Radar</title>", f"<title>{title} · Alpha Radar</title>")
     h = h.replace("/*__CSS__*/", css).replace("/*__DATA__*/", data).replace("/*__JS__*/", js)
@@ -227,7 +293,7 @@ def render(D: dict, out_dir: Path) -> Path:
         "cleanUrls": True,
         "headers": [{"source": "/(.*)", "headers": [
             {"key": "X-Robots-Tag", "value": "noindex, nofollow"},
-            {"key": "Cache-Control", "value": "public, max-age=0, must-revalidate"}]}],
+            {"key": "Cache-Control", "value": "private, no-store"}]}],
     }, indent=2), "utf-8")
     (out_dir / "robots.txt").write_text("User-agent: *\nDisallow: /\n", "utf-8")
     return p
@@ -265,6 +331,7 @@ def main() -> int:
     ap.add_argument("--force", action="store_true", help="无论行情是否变化都标记 changed=true")
     ap.add_argument("--out", default=str(RADAR / "dist" / "investment-radar"))
     ap.add_argument("--cache", default=str(RADAR / ".cache" / "quotes.json"))
+    ap.add_argument('--audit-json', default=str(REPO / 'audit' / 'runtime' / 'build-report.json'))
     a = ap.parse_args()
 
     now = dt.datetime.now(BJ)
@@ -288,7 +355,19 @@ def main() -> int:
     for n in notes:
         log("·", n)
     mk = merge(fresh, cache)
+    now = dt.datetime.now(BJ)  # receipts were collected after the initial validation time
     D, stale, missing = assemble(data, mk, fresh, now)
+    blockers = release_blockers(D)
+    report_path = Path(a.audit_json)
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps({'generatedAt': now.isoformat(), 'blockers': blockers,
+                                       'data': D, 'notes': notes}, ensure_ascii=False, allow_nan=False, indent=2), encoding='utf-8')
+    if not a.offline:
+        cache_p.parent.mkdir(parents=True, exist_ok=True)
+        tmp = cache_p.with_suffix('.tmp')
+        tmp.write_text(json.dumps({**mk, 'fingerprint': cache.get('fingerprint'), 'savedAt': now.isoformat()},
+                                  ensure_ascii=False, allow_nan=False), encoding='utf-8')
+        tmp.replace(cache_p)
     n = len(data["companies"])
     log(f"行情：新抓 {len(fresh['daily'])}/{n}，用缓存 {len(stale)}，缺失 {len(missing)}；截至 {D['meta']['asOfLabel']}")
     if stale:
@@ -300,6 +379,13 @@ def main() -> int:
         gh_summary(f"### ❌ 行情缺失过多（{len(missing)}/{n}），本次未发布\n" + "\n".join(f"- {x}" for x in notes))
         gh_out(changed="false")
         return 2
+
+    if blockers:
+        for reason in blockers:
+            log('BLOCKED:', reason)
+        gh_out(changed='false')
+        gh_summary('### 构建阻断：冻结前端无法安全表达当前数据\n' + '\n'.join('- ' + b for b in blockers))
+        return 3
 
     p = render(D, Path(a.out))
     fp = fingerprint(D)

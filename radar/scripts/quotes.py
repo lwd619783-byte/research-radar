@@ -7,13 +7,29 @@ from __future__ import annotations
 import datetime as dt
 import http.cookiejar
 import json
+import math
 import time
 import urllib.parse
 import urllib.request
+from zoneinfo import ZoneInfo
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
 YH = ("https://query1.finance.yahoo.com", "https://query2.finance.yahoo.com")
+
+
+def positive(v):
+    return isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v) and v > 0
+
+
+def stamp(**values):
+    return {**values, "schemaVersion": 2, "receivedAt": dt.datetime.now(dt.UTC).isoformat()}
+
+
+def exchange_date(timestamp, meta):
+    zone = meta.get("exchangeTimezoneName")
+    tz = ZoneInfo(zone) if zone else dt.timezone(dt.timedelta(seconds=meta.get("gmtoffset", 0) or 0))
+    return dt.datetime.fromtimestamp(timestamp, tz).date().isoformat()
 
 
 class Http:
@@ -33,7 +49,7 @@ class Http:
             except Exception as e:  # noqa: BLE001
                 err = e
                 code = getattr(e, "code", None)
-                if code in (400, 404):
+                if code in (400, 401, 403, 404):
                     break
                 time.sleep(1.5 * (i + 1) + (3 if code == 429 else 0))
         raise RuntimeError(f"{url[:90]} → {err}")
@@ -64,7 +80,7 @@ class Http:
 
 
 # ---------------- 日线 ----------------
-def yahoo_daily(h: Http, sym: str, rng: str = "2y") -> dict:
+def yahoo_daily(h: Http, sym: str, rng: str = "5y") -> dict:
     """返回 {"bars": [[date, close, adjclose], ...], "currency", "hi52", "src"}。"""
     j = h.yahoo(f"/v8/finance/chart/{urllib.parse.quote(sym)}?range={rng}&interval=1d&includeAdjustedClose=true")
     res = (j.get("chart") or {}).get("result")
@@ -75,26 +91,29 @@ def yahoo_daily(h: Http, sym: str, rng: str = "2y") -> dict:
     off = m.get("gmtoffset", 0) or 0
     q = (r.get("indicators", {}).get("quote") or [{}])[0]
     cl = q.get("close") or []
-    adj = ((r.get("indicators", {}).get("adjclose") or [{}])[0].get("adjclose")) or cl
+    adj = ((r.get("indicators", {}).get("adjclose") or [{}])[0].get("adjclose")) or []
+    highs = q.get("high") or []
     bars: dict[str, list] = {}
-    for t, c, a in zip(r.get("timestamp") or [], cl, adj):
-        if c is None:
+    for i, (t, c) in enumerate(zip(r.get("timestamp") or [], cl)):
+        if not positive(c):
             continue
-        d = dt.datetime.fromtimestamp(t + off, dt.UTC).date().isoformat()
-        bars[d] = [d, float(c), float(a if a is not None else c)]
+        a = adj[i] if i < len(adj) else None
+        high = highs[i] if i < len(highs) else None
+        d = exchange_date(t, m)
+        bars[d] = [d, float(c), float(a) if positive(a) else None,
+                   float(high) if positive(high) and high >= c else None]
     if not bars:
         raise RuntimeError("Yahoo 返回空 K 线")
     out = [bars[k] for k in sorted(bars)]
-    # 盘中：chart 的最后一根可能滞后于 regularMarketPrice，按实时价覆盖当天
-    rp, rt = m.get("regularMarketPrice"), m.get("regularMarketTime")
-    if rp and rt:
-        d = dt.datetime.fromtimestamp(rt + off, dt.UTC).date().isoformat()
-        if d == out[-1][0]:
-            ratio = out[-1][2] / out[-1][1] if out[-1][1] else 1
-            out[-1] = [d, float(rp), float(rp) * ratio]
-        elif d > out[-1][0]:
-            out.append([d, float(rp), float(rp)])
-    return {"bars": out, "currency": m.get("currency"), "hi52": m.get("fiftyTwoWeekHigh"), "src": "yahoo"}
+    # Do not splice realtime raw prices into an adjusted daily series.
+    regular = (m.get("currentTradingPeriod") or {}).get("regular") or {}
+    end = regular.get("end")
+    phase = "unknown"
+    if end:
+        end_date = exchange_date(end, m)
+        phase = "closed" if out[-1][0] < end_date or (out[-1][0] == end_date and time.time() >= end) else "intraday"
+    return stamp(bars=out, currency=m.get("currency"), src="yahoo", asOf=out[-1][0],
+                 priceBasis="raw", returnBasis="yahoo-adjclose", phase=phase)
 
 
 def tencent_code(sym: str) -> str | None:
@@ -118,11 +137,32 @@ def tencent_daily(h: Http, sym: str, n: int = 520) -> dict:
         raise RuntimeError("腾讯不支持该代码")
     j = h.json(f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={code},day,,,{n},")
     node = (j.get("data") or {}).get(code) or {}
-    rows = node.get("day") or node.get("qfqday") or []
+    rows = node.get("day") or []
     if not rows:
         raise RuntimeError("腾讯返回空 K 线")
-    bars = [[x[0], float(x[2]), float(x[2])] for x in rows if len(x) > 2 and x[2] not in ("", None)]
-    return {"bars": bars, "currency": None, "hi52": None, "src": "tencent"}
+    adjusted = {}
+    try:
+        qj = h.json(f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={code},day,,,{n},qfq")
+        qnode = (qj.get("data") or {}).get(code) or {}
+        adjusted = {x[0]: float(x[2]) for x in qnode.get("qfqday", []) if len(x) > 2 and x[2] not in ("", None)}
+    except Exception:
+        pass
+    bars = []
+    for x in rows:
+        if len(x) < 3 or x[2] in ("", None):
+            continue
+        close = float(x[2])
+        if not positive(close):
+            continue
+        high = float(x[3]) if len(x) > 3 and x[3] not in ("", None) else None
+        adj = adjusted.get(x[0])
+        bars.append([x[0], close, adj if positive(adj) else None,
+                     high if positive(high) and high >= close else None])
+    bars.sort(key=lambda x: x[0])
+    if not bars:
+        raise RuntimeError("腾讯返回空 K 线")
+    return stamp(bars=bars, currency=None, src="tencent", asOf=bars[-1][0],
+                 priceBasis="raw", returnBasis="tencent-qfq" if adjusted else None, phase="unknown")
 
 
 def daily(h: Http, sym: str) -> dict:
@@ -146,7 +186,7 @@ def yahoo_quotes(h: Http, syms: list[str]) -> dict[str, dict]:
         crumb = h.crumb()
     except Exception:  # noqa: BLE001
         return out
-    fields = "marketCap,trailingPE,fiftyTwoWeekHigh,currency,regularMarketPrice"
+    fields = "marketCap,trailingPE,currency,regularMarketTime"
     for i in range(0, len(syms), 40):
         part = ",".join(syms[i:i + 40])
         try:
@@ -155,7 +195,7 @@ def yahoo_quotes(h: Http, syms: list[str]) -> dict[str, dict]:
         except Exception:  # noqa: BLE001
             continue
         for q in (j.get("quoteResponse") or {}).get("result") or []:
-            out[q.get("symbol")] = {k: q.get(k) for k in ("marketCap", "trailingPE", "fiftyTwoWeekHigh", "currency")}
+            out[q.get("symbol")] = stamp(**{k: q.get(k) for k in ("marketCap", "trailingPE", "currency", "regularMarketTime")}, src="yahoo")
     return out
 
 
@@ -163,33 +203,42 @@ def yahoo_quotes(h: Http, syms: list[str]) -> dict[str, dict]:
 def index_quote(h: Http, sym: str, tencent: str = "") -> dict:
     """返回 {"price", "chg", "date"}；chg 为相对前一交易日收盘的涨跌幅（小数）。"""
     bars: list = []
+    provenance = {'src': 'tencent', 'phase': 'unknown'}
     try:
-        bars = yahoo_daily(h, sym, "1mo")["bars"]
+        d = yahoo_daily(h, sym, "1mo")
+        bars = d['bars']
+        provenance = {k: d.get(k) for k in ('src', 'phase')}
     except Exception:  # noqa: BLE001
         pass
     code = tencent or tencent_code(sym)
     if len(bars) < 2 and code:  # Yahoo 对部分中国指数只给 1 根或不给
+        provenance = {'src': 'tencent', 'phase': 'unknown'}
         j = h.json(f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={code},day,,,10,")
         node = (j.get("data") or {}).get(code) or {}
         rows = node.get("day") or node.get("qfqday") or []
         bars = [[x[0], float(x[2]), float(x[2])] for x in rows if len(x) > 2]
     if len(bars) < 2:
         raise RuntimeError("指数数据不足")
-    return {"price": bars[-1][1], "chg": bars[-1][1] / bars[-2][1] - 1, "date": bars[-1][0]}
+    if not all(positive(b[1]) for b in bars[-2:]):
+        raise RuntimeError('Invalid index prices')
+    return stamp(price=bars[-1][1], chg=bars[-1][1] / bars[-2][1] - 1, date=bars[-1][0], **provenance)
 
 
 # ---------------- 汇率（每 1 美元兑多少当地货币） ----------------
 FX_SYM = {"CNY": "CNY=X", "HKD": "HKD=X", "TWD": "TWD=X", "KRW": "KRW=X", "JPY": "JPY=X", "EUR": "EURUSD=X"}
 
 
-def fx(h: Http, cur: str) -> float:
+def fx(h: Http, cur: str) -> dict:
     j = h.yahoo(f"/v8/finance/chart/{urllib.parse.quote(FX_SYM[cur])}?range=5d&interval=1d")
-    p = j["chart"]["result"][0]["meta"]["regularMarketPrice"]
-    return 1 / p if cur == "EUR" else p
+    meta = j["chart"]["result"][0]["meta"]
+    p = meta["regularMarketPrice"]
+    if not positive(p) or not meta.get("regularMarketTime"):
+        raise RuntimeError("FX value or source timestamp unavailable")
+    return stamp(value=1 / p if cur == "EUR" else p, src="yahoo", asOf=exchange_date(meta["regularMarketTime"], meta))
 
 
 # ---------------- 创业板指 ÷ 中证红利 月线 ----------------
-def monthly(h: Http, tencent: str, yahoo: str) -> list[list]:
+def monthly(h: Http, tencent: str, yahoo: str) -> dict:
     """返回 [["YYYY-MM", close], ...]。"""
     try:
         j = h.json(f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={tencent},month,,,200,")
@@ -197,7 +246,7 @@ def monthly(h: Http, tencent: str, yahoo: str) -> list[list]:
         rows = node.get("month") or node.get("qfqmonth") or []
         if len(rows) < 24:
             raise RuntimeError("腾讯月线不足")
-        return [[x[0][:7], float(x[2])] for x in rows]
+        return stamp(bars=[[x[0][:7], float(x[2])] for x in rows], src="tencent")
     except Exception:  # noqa: BLE001
         j = h.yahoo(f"/v8/finance/chart/{urllib.parse.quote(yahoo)}?range=max&interval=1mo")
         r = j["chart"]["result"][0]
@@ -206,4 +255,4 @@ def monthly(h: Http, tencent: str, yahoo: str) -> list[list]:
         for t, c in zip(r["timestamp"], r["indicators"]["quote"][0]["close"]):
             if c is not None:
                 m[dt.datetime.fromtimestamp(t + off, dt.UTC).strftime("%Y-%m")] = float(c)
-        return [[k, m[k]] for k in sorted(m)]
+        return stamp(bars=[[k, m[k]] for k in sorted(m)], src="yahoo")
