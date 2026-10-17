@@ -1,0 +1,1 @@
+{"sameDataHtmlByteIdentical": true, "sha256": "4cb781567892b8ee19817316063596a4f72cf4e6173ce92e5aa4d80811d89516", "bytes": 436055, "companies": 42, "synthetic": true}

@@ -1,0 +1,205 @@
+{
+
+  "baseline": "9ca62dc5b2c185158a8c5f28a5fb845899cea4e4",
+
+  "head": "9ca62dc5b2c185158a8c5f28a5fb845899cea4e4",
+
+  "frozen": {
+
+    ".github/workflows/README.md": {
+
+      "baseline": "3bc6d77c640d0852579a6836d9c2e2c7674735dbcb0efd93a591c23482375768",
+
+      "after": "3bc6d77c640d0852579a6836d9c2e2c7674735dbcb0efd93a591c23482375768"
+
+    },
+
+    ".github/workflows/radar-deploy.yml.disabled": {
+
+      "baseline": "4eae830c8fa2eba2025cf819fe9e4635f5f360f6113e71b3c03437fa3b60ce18",
+
+      "after": "4eae830c8fa2eba2025cf819fe9e4635f5f360f6113e71b3c03437fa3b60ce18"
+
+    },
+
+    ".github/workflows/radar-preview.yml.disabled": {
+
+      "baseline": "62356402c586d9b4f1b8a1061be6ebd8bf1c6027d3672d24c3d5a0ab483be482",
+
+      "after": "62356402c586d9b4f1b8a1061be6ebd8bf1c6027d3672d24c3d5a0ab483be482"
+
+    },
+
+    "radar/data/chokepoints.toml": {
+
+      "baseline": "89cdf6861602bff2527a562c26dee6ec612553850cafc83582d0da960616463e",
+
+      "after": "89cdf6861602bff2527a562c26dee6ec612553850cafc83582d0da960616463e"
+
+    },
+
+    "radar/data/companies.toml": {
+
+      "baseline": "be94fd4cc16df0d6746b9f1819b61972c39626ec2572d64e8b75ff8458b49d51",
+
+      "after": "be94fd4cc16df0d6746b9f1819b61972c39626ec2572d64e8b75ff8458b49d51"
+
+    },
+
+    "radar/data/config.toml": {
+
+      "baseline": "546b8d6920bc54b3fc70853ecc53acedd013cf04fc958ed5728969fbe47aaffd",
+
+      "after": "546b8d6920bc54b3fc70853ecc53acedd013cf04fc958ed5728969fbe47aaffd"
+
+    },
+
+    "radar/data/industries.toml": {
+
+      "baseline": "b68578b61566053f5bc03f69f06f2e12cb01102deb3cf3af90aa4b7c1259bdb4",
+
+      "after": "b68578b61566053f5bc03f69f06f2e12cb01102deb3cf3af90aa4b7c1259bdb4"
+
+    },
+
+    "radar/site/app.js": {
+
+      "baseline": "3c057ca30e8d2e05e58201a3c57f8b0235812ca294e688c2d0f8ced395f2ed2b",
+
+      "after": "3c057ca30e8d2e05e58201a3c57f8b0235812ca294e688c2d0f8ced395f2ed2b"
+
+    },
+
+    "radar/site/index.html": {
+
+      "baseline": "8cf42a0a00ae434dbdc96e9567e1e6338c28b95dee534f73664ef4473b2ed51d",
+
+      "after": "8cf42a0a00ae434dbdc96e9567e1e6338c28b95dee534f73664ef4473b2ed51d"
+
+    },
+
+    "radar/site/style.css": {
+
+      "baseline": "8987b1f2aae01066e7665ebe6d0b5bb1708089a0fc7586c5d1deb67d7c041d36",
+
+      "after": "8987b1f2aae01066e7665ebe6d0b5bb1708089a0fc7586c5d1deb67d7c041d36"
+
+    }
+
+  },
+
+  "allFrozenEqual": true,
+
+  "historyBlobsScanned": 37,
+
+  "binaryBlobs": 2,
+
+  "workingFilesScanned": [
+
+    "audit/DEPLOYMENT-CONDITIONS.md",
+
+    "audit/PUSH-PREPARATION.md",
+
+    "audit/REPORT.md",
+
+    "radar/scripts/build.py",
+
+    "radar/scripts/integrity.py",
+
+    "radar/scripts/quotes.py",
+
+    "radar/tests/test_integrity.py",
+
+    "audit/P2-REVIEW-2026-10-17.md",
+
+    "audit/p2-2026-10-17/baseline-confirmed.json",
+
+    "audit/p2-2026-10-17/baseline-confirmed.txt",
+
+    "audit/p2-2026-10-17/baseline-existing.json",
+
+    "audit/p2-2026-10-17/baseline-existing.txt",
+
+    "audit/p2-2026-10-17/baseline-regressions.json",
+
+    "audit/p2-2026-10-17/baseline-regressions.txt",
+
+    "audit/p2-2026-10-17/diff-check.json",
+
+    "audit/p2-2026-10-17/diff-check.txt",
+
+    "audit/p2-2026-10-17/fixed-first-pass.json",
+
+    "audit/p2-2026-10-17/fixed-first-pass.txt",
+
+    "audit/p2-2026-10-17/frozen-and-sensitive.json",
+
+    "audit/p2-2026-10-17/frozen-and-sensitive.txt",
+
+    "audit/p2-2026-10-17/full-tests.json",
+
+    "audit/p2-2026-10-17/full-tests.txt",
+
+    "audit/p2-2026-10-17/mutation-financial.json",
+
+    "audit/p2-2026-10-17/mutation-financial.txt",
+
+    "audit/p2-2026-10-17/mutation_financial.py",
+
+    "audit/p2-2026-10-17/network-approved.json",
+
+    "audit/p2-2026-10-17/network-approved.txt",
+
+    "audit/p2-2026-10-17/network-default.json",
+
+    "audit/p2-2026-10-17/network-default.txt",
+
+    "audit/p2-2026-10-17/offline-force.json",
+
+    "audit/p2-2026-10-17/offline-force.txt",
+
+    "audit/p2-2026-10-17/remote-before-push.json",
+
+    "audit/p2-2026-10-17/remote-before-push.txt",
+
+    "audit/p2-2026-10-17/remote-confirmed.json",
+
+    "audit/p2-2026-10-17/remote-confirmed.txt",
+
+    "audit/p2-2026-10-17/render-compare.json",
+
+    "audit/p2-2026-10-17/render-compare.txt",
+
+    "audit/p2-2026-10-17/run_check.py",
+
+    "audit/p2-2026-10-17/schema-check.json",
+
+    "audit/p2-2026-10-17/schema-check.txt",
+
+    "audit/p2-2026-10-17/verify_render.py",
+
+    "audit/p2-2026-10-17/verify_scope.py",
+
+    "radar/tests/test_review_regressions.py"
+
+  ],
+
+  "patterns": [
+
+    "private_key",
+
+    "github_token",
+
+    "aws_access",
+
+    "credential_url",
+
+    "literal_secret"
+
+  ],
+
+  "findings": [],
+
+  "scopeNote": "Finite pattern scan; no credentials/config/other sessions read. Binary files unchanged."
+
+}

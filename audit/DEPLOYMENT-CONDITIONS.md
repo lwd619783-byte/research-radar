@@ -47,3 +47,8 @@
 
 原 `5 23 * * 0-4` 对应北京时间周一至周五 07:05，漏掉周五美股收盘后的周六刷新。
 最小增量建议：改成 `5 23 * * 0-5` 并同步注释为“北京时间周一至周六 07:05”。这样保留既有时点，只补星期五 UTC 23:05 = 星期六北京 07:05。须父任务另行确认，不能在本轮启用或更改调度。
+
+
+## 2026-10-17 P2 follow-up
+
+This is a historical snapshot. See [P2 review](P2-REVIEW-2026-10-17.md) and its new per-command logs for the current fixes, 55-test run, frozen hashes and successful approved GitHub read-only checks. Earlier network/remote states and the old 28/29-test receipts are not reused as current verification. Deployment remains out of scope.

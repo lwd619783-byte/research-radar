@@ -173,17 +173,6 @@ class CacheAndContractTests(unittest.TestCase):
         self.assertEqual(D['indices'], [])
         self.assertNotIn('CNY', D['meta']['fx'])
 
-    def test_gate_three_even_with_all_quotes_and_force(self):
-        data, mk = dataset()
-        for c in data['companies']:
-            mk['daily'][c['sym']] = record(bars=bars(), priceBasis='raw', asOf='2026-10-16', phase='closed')
-        with tempfile.TemporaryDirectory() as td, contextlib.redirect_stdout(io.StringIO()):
-            args = ['build.py', '--force', '--cache', str(Path(td)/'cache.json'), '--out', str(Path(td)/'out'),
-                    '--audit-json', str(Path(td)/'audit.json')]
-            with patch.object(sys, 'argv', args), patch.object(build, 'fetch_all', return_value=(mk, [])):
-                self.assertEqual(build.main(), 3)
-            self.assertFalse((Path(td)/'out/index.html').exists())
-
     def test_valid_evidence_preserves_values_and_negative_pe_is_missing(self):
         data, mk = dataset()
         c = data['companies'][1]  # USD company

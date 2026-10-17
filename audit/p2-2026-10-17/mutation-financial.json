@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\10750\\Documents\\Codex\\2026-10-17\\task-3\\mutation_financial.py"
+  ],
+  "cwd": "C:\\Users\\10750\\Documents\\Codex\\2026-10-17\\task\\radar-local-audit",
+  "startedAt": "2026-10-17T15:10:51.567896+00:00",
+  "finishedAt": "2026-10-17T15:10:52.524669+00:00",
+  "exitCode": 1,
+  "tests": 1
+}

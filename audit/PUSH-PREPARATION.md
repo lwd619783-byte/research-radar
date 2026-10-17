@@ -52,3 +52,8 @@ https://docs.github.com/en/actions/get-started/quickstart
 - 未调用模型或服务档位修改接口；实际配置以父任务设置为准，不声称工具已独立验证 GPT-6 Astra/high/Standard。
 
 准备提交的完整 SHA 由最终交付列出；不存在已上传分支 URL 或成功上传文件清单。
+
+
+## 2026-10-17 P2 follow-up
+
+This is a historical snapshot. See [P2 review](P2-REVIEW-2026-10-17.md) and its new per-command logs for the current fixes, 55-test run, frozen hashes and successful approved GitHub read-only checks. Earlier network/remote states and the old 28/29-test receipts are not reused as current verification. Deployment remains out of scope.

@@ -25,7 +25,7 @@ from zoneinfo import ZoneInfo
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import quotes  # noqa: E402
 from schema import load_and_validate  # noqa: E402
-from integrity import fresh_record, valid_bars, financial_status, release_blockers, number
+from integrity import fresh_record, valid_bars, financial_status, release_blockers, number, observation_time
 
 RADAR = Path(__file__).resolve().parents[1]
 REPO = RADAR.parent
@@ -152,8 +152,8 @@ def merge(fresh: dict, cache: dict) -> dict:
         out[k] = dict(cache.get(k, {}))
         for key, value in fresh.get(k, {}).items():
             old = out[k].get(key)
-            field = 'date' if k == 'index' else 'asOf'
-            if isinstance(old, dict) and isinstance(value, dict) and old.get(field) and value.get(field) and old[field] > value[field]:
+            observed, previous = observation_time(k, value), observation_time(k, old)
+            if observed is None or (previous is not None and observed < previous):
                 continue
             out[k][key] = value
     return out
@@ -198,7 +198,9 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
         quote_date = None
         try:
             from integrity import ZONES
-            quote_date = dt.datetime.fromtimestamp(q['regularMarketTime'], ZoneInfo(ZONES[c['mkt']])).date().isoformat()
+            observed = observation_time('quote', q)
+            if observed is not None:
+                quote_date = observed.astimezone(ZoneInfo(ZONES[c['mkt']])).date().isoformat()
         except (KeyError, TypeError, ValueError, OSError):
             pass
         if not quote_date or not fresh_record(q, now, quote_date, c['mkt']) or quote_date != m.get('ld'):
@@ -220,7 +222,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
         status = financial_status(c.get('financial'), now.date())
         row['provenance'] = {'daily': {k: (d or {}).get(k) for k in ('src', 'asOf', 'receivedAt', 'returnBasis', 'phase')},
                              'valuation': {'source': q.get('src'), 'asOf': quote_date if q else None,
-                                           'receivedAt': q.get('receivedAt'), 'status': 'available' if q else 'missing'},
+                                           'receivedAt': q.get('receivedAt'), 'observedAt': q.get('regularMarketTime'),
+                                           'status': 'available' if q else 'missing'},
                              'financial': {**c.get('financial', {}), 'status': status}}
         if status != 'verified':
             for key in ('revg', 'earng', 'gm'):
@@ -251,11 +254,17 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
             issues.append({'symbol': x['symbol'], 'kind': 'index', 'status': 'missing_or_stale'})
     ratio = None
     rc, rh = mk['ratio'].get('cyb'), mk['ratio'].get('hl')
-    if fresh_record(rc, now) and fresh_record(rh, now):
+    tc, th = observation_time('ratio', rc), observation_time('ratio', rh)
+    if (tc is not None and th is not None and tc == th and tc.date().isoformat() == asof
+            and fresh_record(rc, now, asof) and fresh_record(rh, now, asof)):
         ratio = ratio_block(rc.get('bars', []), rh.get('bars', []), now.date())
         if ratio and (not ratio['uiCompatible'] or rc.get('src') != 'tencent' or rh.get('src') != 'tencent'):
             issues.append({'kind': 'ratio', 'status': 'frozen_text_or_range_incompatible'})
             ratio = None
+        if ratio:
+            ratio['asOf'] = asof
+            ratio['provenance'] = {key: {k: rec.get(k) for k in ('src', 'asOf', 'receivedAt', 'current')}
+                                   for key, rec in (('cyb', rc), ('hl', rh))}
         if ratio and (ratio['p60'] < .2 or ratio['p60'] > .8):
             # Frozen sentence says "not in extreme zone" unconditionally.
             blockers.append('ratio_extreme_conflicts_with_frozen_sentence')
@@ -300,7 +309,14 @@ def render(D: dict, out_dir: Path) -> Path:
 
 
 def fingerprint(D: dict) -> str:
-    x = json.loads(json.dumps(D))
+    # Receipt timestamps stay in DATA/cache/audit, but are not a market change.
+    def substantive(value):
+        if isinstance(value, dict):
+            return {k: substantive(v) for k, v in value.items() if k != 'receivedAt'}
+        if isinstance(value, list):
+            return [substantive(v) for v in value]
+        return value
+    x = substantive(D)
     for k in ("generatedAt", "today"):
         x["meta"].pop(k, None)
     blob = json.dumps(x, ensure_ascii=False, sort_keys=True)

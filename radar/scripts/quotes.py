@@ -13,6 +13,8 @@ import urllib.parse
 import urllib.request
 from zoneinfo import ZoneInfo
 
+from integrity import observation_time
+
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
 YH = ("https://query1.finance.yahoo.com", "https://query2.finance.yahoo.com")
@@ -180,7 +182,7 @@ def daily(h: Http, sym: str) -> dict:
 
 # ---------------- 估值字段（市值、PE） ----------------
 def yahoo_quotes(h: Http, syms: list[str]) -> dict[str, dict]:
-    """批量取 marketCap / trailingPE / fiftyTwoWeekHigh / currency。失败返回空 dict（用 toml 兜底）。"""
+    """Fetch dated valuation fields; undated values cannot replace cache."""
     out: dict[str, dict] = {}
     try:
         crumb = h.crumb()
@@ -195,7 +197,9 @@ def yahoo_quotes(h: Http, syms: list[str]) -> dict[str, dict]:
         except Exception:  # noqa: BLE001
             continue
         for q in (j.get("quoteResponse") or {}).get("result") or []:
-            out[q.get("symbol")] = stamp(**{k: q.get(k) for k in ("marketCap", "trailingPE", "currency", "regularMarketTime")}, src="yahoo")
+            value = stamp(**{k: q.get(k) for k in ("marketCap", "trailingPE", "currency", "regularMarketTime")}, src="yahoo")
+            if q.get('symbol') and observation_time('quote', value) is not None:
+                out[q['symbol']] = value
     return out
 
 
@@ -239,14 +243,16 @@ def fx(h: Http, cur: str) -> dict:
 
 # ---------------- 创业板指 ÷ 中证红利 月线 ----------------
 def monthly(h: Http, tencent: str, yahoo: str) -> dict:
-    """返回 [["YYYY-MM", close], ...]。"""
+    """Return monthly history and a separately proven current daily observation."""
     try:
         j = h.json(f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={tencent},month,,,200,")
         node = (j.get("data") or {}).get(tencent) or {}
         rows = node.get("month") or node.get("qfqmonth") or []
         if len(rows) < 24:
             raise RuntimeError("腾讯月线不足")
-        return stamp(bars=[[x[0][:7], float(x[2])] for x in rows], src="tencent")
+        # Month labels do not date the closing value, even if formatted YYYY-MM-DD.
+        result = stamp(bars=[[x[0][:7], float(x[2])] for x in rows], src="tencent",
+                       periodDates=[x[0] for x in rows], asOf=None, current=None)
     except Exception:  # noqa: BLE001
         j = h.yahoo(f"/v8/finance/chart/{urllib.parse.quote(yahoo)}?range=max&interval=1mo")
         r = j["chart"]["result"][0]
@@ -255,4 +261,25 @@ def monthly(h: Http, tencent: str, yahoo: str) -> dict:
         for t, c in zip(r["timestamp"], r["indicators"]["quote"][0]["close"]):
             if c is not None:
                 m[dt.datetime.fromtimestamp(t + off, dt.UTC).strftime("%Y-%m")] = float(c)
-        return stamp(bars=[[k, m[k]] for k in sorted(m)], src="yahoo")
+        # Yahoo interval timestamps also label buckets, not observation dates.
+        return stamp(bars=[[k, m[k]] for k in sorted(m)], src="yahoo",
+                     periodTimestamps=r['timestamp'], asOf=None, current=None)
+    try:
+        j = h.json(f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={tencent},day,,,5,")
+        days = (j.get('data') or {}).get(tencent, {}).get('day') or []
+        daily = []
+        for row in days:
+            date = dt.date.fromisoformat(row[0]).isoformat()
+            close = float(row[2])
+            if date != row[0] or not positive(close):
+                raise ValueError('Invalid current daily observation')
+            daily.append((date, close))
+        date, close = max(daily)
+        current = {'date': date, 'close': close, 'src': 'tencent'}
+        # Never backfill a later month with an earlier daily observation.
+        if result['bars'][-1][0] <= date[:7]:
+            result['bars'] = [b for b in result['bars'] if b[0] < date[:7]] + [[date[:7], close]]
+            result.update(asOf=date, current=current)
+    except (KeyError, IndexError, TypeError, ValueError, RuntimeError):
+        pass
+    return result

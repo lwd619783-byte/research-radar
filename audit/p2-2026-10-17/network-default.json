@@ -1,0 +1,14 @@
+{
+  "command": [
+    "gh",
+    "api",
+    "repos/lwd619783-byte/research-radar",
+    "--jq",
+    "{full_name,private,permissions}"
+  ],
+  "cwd": "C:\\Users\\10750\\Documents\\Codex\\2026-10-17\\task\\radar-local-audit",
+  "startedAt": "2026-10-17T15:09:03.146425+00:00",
+  "finishedAt": "2026-10-17T15:09:03.443244+00:00",
+  "exitCode": 1,
+  "tests": null
+}

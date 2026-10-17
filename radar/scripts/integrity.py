@@ -11,6 +11,45 @@ def number(v):
     return isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)
 
 
+def observation_time(kind, record):
+    """Comparable provider observation, never the collection receipt or month label."""
+    if not isinstance(record, dict) or record.get('schemaVersion') != 2:
+        return None
+    try:
+        if kind == 'quote':
+            timestamp = record.get('regularMarketTime')
+            if not number(timestamp) or timestamp <= 0:
+                return None
+            return dt.datetime.fromtimestamp(timestamp, dt.UTC)
+        raw = record.get('date' if kind == 'index' else 'asOf')
+        date = dt.date.fromisoformat(raw)
+        if date.isoformat() != raw:
+            return None
+        if kind == 'daily':
+            if not valid_bars(record.get('bars')) or record['bars'][-1][0] != raw:
+                return None
+        if kind == 'ratio':
+            current = record.get('current')
+            bars = record.get('bars')
+            if (not isinstance(current, dict) or current.get('date') != raw
+                    or current.get('src') != record.get('src') or not current.get('src')
+                    or not number(current.get('close')) or current['close'] <= 0
+                    or not isinstance(bars, list) or not bars):
+                return None
+            previous = ''
+            for bar in bars:
+                if (not isinstance(bar, list) or len(bar) != 2
+                        or dt.date.fromisoformat(bar[0] + '-01').isoformat()[:7] != bar[0]
+                        or bar[0] <= previous or not number(bar[1]) or bar[1] <= 0):
+                    return None
+                previous = bar[0]
+            if bars[-1] != [raw[:7], current['close']]:
+                return None
+        return dt.datetime.combine(date, dt.time(), dt.UTC)
+    except (KeyError, TypeError, ValueError, OverflowError, OSError):
+        return None
+
+
 def fresh_record(record, now, date=None, market='A股'):
     if not isinstance(record, dict) or record.get('schemaVersion') != 2:
         return False

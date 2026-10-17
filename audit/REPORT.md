@@ -66,3 +66,8 @@
 5. Vercel 已连接但没有独立雷达项目；无已核私有 Git remote。全部生产/预览/历史 URL 和静态路径匿名测试尚未执行，不能称私有发布成功。精确批准事项及验收矩阵见 `DEPLOYMENT-CONDITIONS.md`。
 
 曾通过 app 消息接口向源线程报告原件校验完成，但返回 thread not found；之后在本任务持续给出阶段更新。由平台在本任务结束后将本交付通知父任务。没有重建/重启此前停止的云任务。
+
+
+## 2026-10-17 P2 follow-up
+
+This is a historical snapshot. See [P2 review](P2-REVIEW-2026-10-17.md) and its new per-command logs for the current fixes, 55-test run, frozen hashes and successful approved GitHub read-only checks. Earlier network/remote states and the old 28/29-test receipts are not reused as current verification. Deployment remains out of scope.

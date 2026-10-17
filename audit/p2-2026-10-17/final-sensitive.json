@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "-X",
+    "utf8",
+    "C:\\Users\\10750\\Documents\\Codex\\2026-10-17\\task-3\\verify_scope.py"
+  ],
+  "cwd": "C:\\Users\\10750\\Documents\\Codex\\2026-10-17\\task\\radar-local-audit",
+  "startedAt": "2026-10-17T15:15:18.695469+00:00",
+  "finishedAt": "2026-10-17T15:15:32.154246+00:00",
+  "exitCode": 0,
+  "tests": null
+}

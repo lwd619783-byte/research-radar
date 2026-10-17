@@ -1,0 +1,1 @@
+{"default_branch":"fix/radar-data-integrity","full_name":"lwd619783-byte/research-radar","permissions":{"admin":true,"maintain":true,"pull":true,"push":true,"triage":true},"private":true,"visibility":"private"}

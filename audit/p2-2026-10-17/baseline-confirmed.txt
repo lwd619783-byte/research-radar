@@ -1,0 +1,469 @@
+test_close_gate_alone (test_review_regressions.CompleteMainTests.test_close_gate_alone) ... ok
+
+test_complete_successful_main_baseline (test_review_regressions.CompleteMainTests.test_complete_successful_main_baseline) ... ok
+
+test_date_gate_alone (test_review_regressions.CompleteMainTests.test_date_gate_alone) ... ok
+
+test_financial_gate_alone (test_review_regressions.CompleteMainTests.test_financial_gate_alone) ... ok
+
+test_history_gate_alone (test_review_regressions.CompleteMainTests.test_history_gate_alone) ... ok
+
+test_repeated_fetch_saves_receipts_but_reports_unchanged (test_review_regressions.CompleteMainTests.test_repeated_fetch_saves_receipts_but_reports_unchanged) ... FAIL
+
+test_valuation_gate_alone (test_review_regressions.CompleteMainTests.test_valuation_gate_alone) ... ok
+
+test_material_price_date_validity_and_source_changes_change_fingerprint (test_review_regressions.FingerprintTests.test_material_price_date_validity_and_source_changes_change_fingerprint) ... ok
+
+test_only_collection_receipts_do_not_change_fingerprint_or_get_deleted (test_review_regressions.FingerprintTests.test_only_collection_receipts_do_not_change_fingerprint_or_get_deleted) ... FAIL
+
+test_page_code_change_changes_fingerprint_without_touching_frozen_files (test_review_regressions.FingerprintTests.test_page_code_change_changes_fingerprint_without_touching_frozen_files) ... ok
+
+test_quote_advancing_time_is_accepted (test_review_regressions.QuoteMergeTests.test_quote_advancing_time_is_accepted) ... ok
+
+test_quote_missing_or_invalid_time_cannot_replace_or_refresh (test_review_regressions.QuoteMergeTests.test_quote_missing_or_invalid_time_cannot_replace_or_refresh) ...
+
+  test_quote_missing_or_invalid_time_cannot_replace_or_refresh (test_review_regressions.QuoteMergeTests.test_quote_missing_or_invalid_time_cannot_replace_or_refresh) (timestamp=None) ... FAIL
+
+  test_quote_missing_or_invalid_time_cannot_replace_or_refresh (test_review_regressions.QuoteMergeTests.test_quote_missing_or_invalid_time_cannot_replace_or_refresh) (timestamp='1792180801') ... FAIL
+
+  test_quote_missing_or_invalid_time_cannot_replace_or_refresh (test_review_regressions.QuoteMergeTests.test_quote_missing_or_invalid_time_cannot_replace_or_refresh) (timestamp=True) ... FAIL
+
+  test_quote_missing_or_invalid_time_cannot_replace_or_refresh (test_review_regressions.QuoteMergeTests.test_quote_missing_or_invalid_time_cannot_replace_or_refresh) (timestamp=nan) ... FAIL
+
+  test_quote_missing_or_invalid_time_cannot_replace_or_refresh (test_review_regressions.QuoteMergeTests.test_quote_missing_or_invalid_time_cannot_replace_or_refresh) (timestamp=inf) ... FAIL
+
+  test_quote_missing_or_invalid_time_cannot_replace_or_refresh (test_review_regressions.QuoteMergeTests.test_quote_missing_or_invalid_time_cannot_replace_or_refresh) (timestamp=-1) ... FAIL
+
+test_quote_same_day_and_cross_day_regression_preserves_record_and_receipt (test_review_regressions.QuoteMergeTests.test_quote_same_day_and_cross_day_regression_preserves_record_and_receipt) ...
+
+  test_quote_same_day_and_cross_day_regression_preserves_record_and_receipt (test_review_regressions.QuoteMergeTests.test_quote_same_day_and_cross_day_regression_preserves_record_and_receipt) (seconds=60) ... FAIL
+
+  test_quote_same_day_and_cross_day_regression_preserves_record_and_receipt (test_review_regressions.QuoteMergeTests.test_quote_same_day_and_cross_day_regression_preserves_record_and_receipt) (seconds=86400) ... FAIL
+
+test_yahoo_quote_adapter_rejects_undated_observations (test_review_regressions.QuoteMergeTests.test_yahoo_quote_adapter_rejects_undated_observations) ... FAIL
+
+test_both_dates_must_match_page_date (test_review_regressions.RatioObservationTests.test_both_dates_must_match_page_date) ... FAIL
+
+test_legacy_month_only_and_unproven_current_are_unavailable (test_review_regressions.RatioObservationTests.test_legacy_month_only_and_unproven_current_are_unavailable) ...
+
+  test_legacy_month_only_and_unproven_current_are_unavailable (test_review_regressions.RatioObservationTests.test_legacy_month_only_and_unproven_current_are_unavailable) (mutation='date') ... FAIL
+
+  test_legacy_month_only_and_unproven_current_are_unavailable (test_review_regressions.RatioObservationTests.test_legacy_month_only_and_unproven_current_are_unavailable) (mutation='current') ... FAIL
+
+  test_legacy_month_only_and_unproven_current_are_unavailable (test_review_regressions.RatioObservationTests.test_legacy_month_only_and_unproven_current_are_unavailable) (mutation='price') ... FAIL
+
+test_mixed_cached_and_fetched_dates_are_unavailable (test_review_regressions.RatioObservationTests.test_mixed_cached_and_fetched_dates_are_unavailable) ... FAIL
+
+test_monthly_adapter_does_not_invent_day_when_daily_fetch_fails (test_review_regressions.RatioObservationTests.test_monthly_adapter_does_not_invent_day_when_daily_fetch_fails) ... ok
+
+test_monthly_adapter_uses_daily_observation_not_month_bucket_date (test_review_regressions.RatioObservationTests.test_monthly_adapter_uses_daily_observation_not_month_bucket_date) ... FAIL
+
+test_new_receipts_do_not_make_old_values_current (test_review_regressions.RatioObservationTests.test_new_receipts_do_not_make_old_values_current) ... FAIL
+
+test_ratio_regression_does_not_refresh_cached_receipt (test_review_regressions.RatioObservationTests.test_ratio_regression_does_not_refresh_cached_receipt) ... FAIL
+
+test_same_day_current_values_remain_available (test_review_regressions.RatioObservationTests.test_same_day_current_values_remain_available) ... FAIL
+
+test_same_month_different_days_are_unavailable (test_review_regressions.RatioObservationTests.test_same_month_different_days_are_unavailable) ... FAIL
+
+
+
+======================================================================
+
+FAIL: test_repeated_fetch_saves_receipts_but_reports_unchanged (test_review_regressions.CompleteMainTests.test_repeated_fetch_saves_receipts_but_reports_unchanged)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 266, in test_repeated_fetch_saves_receipts_but_reports_unchanged
+
+    self.assertEqual(output['changed'], 'false')
+
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: 'true' != 'false'
+
+- true
+
++ false
+
+
+
+
+
+======================================================================
+
+FAIL: test_only_collection_receipts_do_not_change_fingerprint_or_get_deleted (test_review_regressions.FingerprintTests.test_only_collection_receipts_do_not_change_fingerprint_or_get_deleted)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 160, in test_only_collection_receipts_do_not_change_fingerprint_or_get_deleted
+
+    self.assertEqual(build.fingerprint(D), build.fingerprint(changed))
+
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: '2a5f2131ec4dbe43' != 'cb804a43806153a3'
+
+- 2a5f2131ec4dbe43
+
++ cb804a43806153a3
+
+
+
+
+
+======================================================================
+
+FAIL: test_quote_missing_or_invalid_time_cannot_replace_or_refresh (test_review_regressions.QuoteMergeTests.test_quote_missing_or_invalid_time_cannot_replace_or_refresh) (timestamp=None)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 60, in test_quote_missing_or_invalid_time_cannot_replace_or_refresh
+
+    self.assertIs(build.merge({'quote': {'T': new}}, {'quote': {'T': old}})['quote']['T'], old)
+
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'schemaVersion': 2, 'receivedAt': '2026-10-17T12:00:00+08:00', 'regularMarketTime': None, 'marketCap': 9000000000.0} is not {'schemaVersion': 2, 'receivedAt': '2026-10-17T12:00:00+08:00', 'regularMarketTime': 1792180800, 'marketCap': 10000000000.0}
+
+
+
+======================================================================
+
+FAIL: test_quote_missing_or_invalid_time_cannot_replace_or_refresh (test_review_regressions.QuoteMergeTests.test_quote_missing_or_invalid_time_cannot_replace_or_refresh) (timestamp='1792180801')
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 60, in test_quote_missing_or_invalid_time_cannot_replace_or_refresh
+
+    self.assertIs(build.merge({'quote': {'T': new}}, {'quote': {'T': old}})['quote']['T'], old)
+
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'schemaVersion': 2, 'receivedAt': '2026-10-17T12:00:00+08:00', 'regularMarketTime': '1792180801', 'marketCap': 9000000000.0} is not {'schemaVersion': 2, 'receivedAt': '2026-10-17T12:00:00+08:00', 'regularMarketTime': 1792180800, 'marketCap': 10000000000.0}
+
+
+
+======================================================================
+
+FAIL: test_quote_missing_or_invalid_time_cannot_replace_or_refresh (test_review_regressions.QuoteMergeTests.test_quote_missing_or_invalid_time_cannot_replace_or_refresh) (timestamp=True)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 60, in test_quote_missing_or_invalid_time_cannot_replace_or_refresh
+
+    self.assertIs(build.merge({'quote': {'T': new}}, {'quote': {'T': old}})['quote']['T'], old)
+
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'schemaVersion': 2, 'receivedAt': '2026-10-17T12:00:00+08:00', 'regularMarketTime': True, 'marketCap': 9000000000.0} is not {'schemaVersion': 2, 'receivedAt': '2026-10-17T12:00:00+08:00', 'regularMarketTime': 1792180800, 'marketCap': 10000000000.0}
+
+
+
+======================================================================
+
+FAIL: test_quote_missing_or_invalid_time_cannot_replace_or_refresh (test_review_regressions.QuoteMergeTests.test_quote_missing_or_invalid_time_cannot_replace_or_refresh) (timestamp=nan)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 60, in test_quote_missing_or_invalid_time_cannot_replace_or_refresh
+
+    self.assertIs(build.merge({'quote': {'T': new}}, {'quote': {'T': old}})['quote']['T'], old)
+
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'schemaVersion': 2, 'receivedAt': '2026-10-17T12:00:00+08:00', 'regularMarketTime': nan, 'marketCap': 9000000000.0} is not {'schemaVersion': 2, 'receivedAt': '2026-10-17T12:00:00+08:00', 'regularMarketTime': 1792180800, 'marketCap': 10000000000.0}
+
+
+
+======================================================================
+
+FAIL: test_quote_missing_or_invalid_time_cannot_replace_or_refresh (test_review_regressions.QuoteMergeTests.test_quote_missing_or_invalid_time_cannot_replace_or_refresh) (timestamp=inf)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 60, in test_quote_missing_or_invalid_time_cannot_replace_or_refresh
+
+    self.assertIs(build.merge({'quote': {'T': new}}, {'quote': {'T': old}})['quote']['T'], old)
+
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'schemaVersion': 2, 'receivedAt': '2026-10-17T12:00:00+08:00', 'regularMarketTime': inf, 'marketCap': 9000000000.0} is not {'schemaVersion': 2, 'receivedAt': '2026-10-17T12:00:00+08:00', 'regularMarketTime': 1792180800, 'marketCap': 10000000000.0}
+
+
+
+======================================================================
+
+FAIL: test_quote_missing_or_invalid_time_cannot_replace_or_refresh (test_review_regressions.QuoteMergeTests.test_quote_missing_or_invalid_time_cannot_replace_or_refresh) (timestamp=-1)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 60, in test_quote_missing_or_invalid_time_cannot_replace_or_refresh
+
+    self.assertIs(build.merge({'quote': {'T': new}}, {'quote': {'T': old}})['quote']['T'], old)
+
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'schemaVersion': 2, 'receivedAt': '2026-10-17T12:00:00+08:00', 'regularMarketTime': -1, 'marketCap': 9000000000.0} is not {'schemaVersion': 2, 'receivedAt': '2026-10-17T12:00:00+08:00', 'regularMarketTime': 1792180800, 'marketCap': 10000000000.0}
+
+
+
+======================================================================
+
+FAIL: test_quote_same_day_and_cross_day_regression_preserves_record_and_receipt (test_review_regressions.QuoteMergeTests.test_quote_same_day_and_cross_day_regression_preserves_record_and_receipt) (seconds=60)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 52, in test_quote_same_day_and_cross_day_regression_preserves_record_and_receipt
+
+    self.assertIs(merged['quote']['T'], old)
+
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'schemaVersion': 2, 'receivedAt': '2026-10-17T12:00:00+08:00', 'regularMarketTime': 1792180740.0, 'marketCap': 9000000000.0, 'src': 'yahoo'} is not {'schemaVersion': 2, 'receivedAt': '2026-10-17T10:00:00+08:00', 'regularMarketTime': 1792180800.0, 'marketCap': 10000000000.0, 'src': 'yahoo'}
+
+
+
+======================================================================
+
+FAIL: test_quote_same_day_and_cross_day_regression_preserves_record_and_receipt (test_review_regressions.QuoteMergeTests.test_quote_same_day_and_cross_day_regression_preserves_record_and_receipt) (seconds=86400)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 52, in test_quote_same_day_and_cross_day_regression_preserves_record_and_receipt
+
+    self.assertIs(merged['quote']['T'], old)
+
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'schemaVersion': 2, 'receivedAt': '2026-10-17T12:00:00+08:00', 'regularMarketTime': 1792094400.0, 'marketCap': 9000000000.0, 'src': 'yahoo'} is not {'schemaVersion': 2, 'receivedAt': '2026-10-17T10:00:00+08:00', 'regularMarketTime': 1792180800.0, 'marketCap': 10000000000.0, 'src': 'yahoo'}
+
+
+
+======================================================================
+
+FAIL: test_yahoo_quote_adapter_rejects_undated_observations (test_review_regressions.QuoteMergeTests.test_yahoo_quote_adapter_rejects_undated_observations)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 74, in test_yahoo_quote_adapter_rejects_undated_observations
+
+    self.assertEqual(set(quotes.yahoo_quotes(H(), ['GOOD', 'BAD'])), {'GOOD'})
+
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: Items in the first set but not the second:
+
+'BAD'
+
+
+
+======================================================================
+
+FAIL: test_both_dates_must_match_page_date (test_review_regressions.RatioObservationTests.test_both_dates_must_match_page_date)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 97, in test_both_dates_must_match_page_date
+
+    self.assertIsNone(build.assemble(data, mk, mk, NOW)[0]['ratio'])
+
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'series': [['2016-10', 0.9], ['2016-11', 0.91], ['2016-12', 0.92], ['2017-01', 0.93], ['2017-02', 0.94], ['2017-03', 0.95], ['2017-04', 0.96], ['2017-05', 0.97], ['2017-06', 0.98], ['2017-07', 0.99], ['2017-08', 1.0], ['2017-09', 1.01], ['2017-10', 1.02], ['2017-11', 1.03], ['2017-12', 1.04], ['2018-01', 1.05], ['2018-02', 1.06], ['2018-03', 1.07], ['2018-04', 1.08], ['2018-05', 1.09], ['2018-06', 1.1], ['2018-07', 0.9], ['2018-08', 0.91], ['2018-09', 0.92], ['2018-10', 0.93], ['2018-11', 0.94], ['2018-12', 0.95], ['2019-01', 0.96], ['2019-02', 0.97], ['2019-03', 0.98], ['2019-04', 0.99], ['2019-05', 1.0], ['2019-06', 1.01], ['2019-07', 1.02], ['2019-08', 1.03], ['2019-09', 1.04], ['2019-10', 1.05], ['2019-11', 1.06], ['2019-12', 1.07], ['2020-01', 1.08], ['2020-02', 1.09], ['2020-03', 1.1], ['2020-04', 0.9], ['2020-05', 0.91], ['2020-06', 0.92], ['2020-07', 0.93], ['2020-08', 0.94], ['2020-09', 0.95], ['2020-10', 0.96], ['2020-11', 0.97], ['2020-12', 0.98], ['2021-01', 0.99], ['2021-02', 1.0], ['2021-03', 1.01], ['2021-04', 1.02], ['2021-05', 1.03], ['2021-06', 1.04], ['2021-07', 1.05], ['2021-08', 1.06], ['2021-09', 1.07], ['2021-10', 1.08], ['2021-11', 1.09], ['2021-12', 1.1], ['2022-01', 0.9], ['2022-02', 0.91], ['2022-03', 0.92], ['2022-04', 0.93], ['2022-05', 0.94], ['2022-06', 0.95], ['2022-07', 0.96], ['2022-08', 0.97], ['2022-09', 0.98], ['2022-10', 0.99], ['2022-11', 1.0], ['2022-12', 1.01], ['2023-01', 1.02], ['2023-02', 1.03], ['2023-03', 1.04], ['2023-04', 1.05], ['2023-05', 1.06], ['2023-06', 1.07], ['2023-07', 1.08], ['2023-08', 1.09], ['2023-09', 1.1], ['2023-10', 0.9], ['2023-11', 0.91], ['2023-12', 0.92], ['2024-01', 0.93], ['2024-02', 0.94], ['2024-03', 0.95], ['2024-04', 0.96], ['2024-05', 0.97], ['2024-06', 0.98], ['2024-07', 0.99], ['2024-08', 1.0], ['2024-09', 1.01], ['2024-10', 1.02], ['2024-11', 1.03], ['2024-12', 1.04], ['2025-01', 1.05], ['2025-02', 1.06], ['2025-03', 1.07], ['2025-04', 1.08], ['2025-05', 1.09], ['2025-06', 1.1], ['2025-07', 0.9], ['2025-08', 0.91], ['2025-09', 0.92], ['2025-10', 0.93], ['2025-11', 0.94], ['2025-12', 0.95], ['2026-01', 0.96], ['2026-02', 0.97], ['2026-03', 0.98], ['2026-04', 0.99], ['2026-05', 1.0], ['2026-06', 1.01], ['2026-07', 1.02], ['2026-08', 1.03], ['2026-09', 1.04], ['2026-10', 1.0]], 'cur': 1.0, 'cyb': 100.0, 'hl': 100.0, 'p60': 0.5, 'p120': 0.5, 'n60': 30, 'n120': 60, 'asOfMonth': '2026-10', 'completedMonths': 120, 'uiCompatible': True} is not None
+
+
+
+======================================================================
+
+FAIL: test_legacy_month_only_and_unproven_current_are_unavailable (test_review_regressions.RatioObservationTests.test_legacy_month_only_and_unproven_current_are_unavailable) (mutation='date')
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 114, in test_legacy_month_only_and_unproven_current_are_unavailable
+
+    self.assertIsNone(build.assemble(data, mk, mk, NOW)[0]['ratio'])
+
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'series': [['2016-10', 0.9], ['2016-11', 0.91], ['2016-12', 0.92], ['2017-01', 0.93], ['2017-02', 0.94], ['2017-03', 0.95], ['2017-04', 0.96], ['2017-05', 0.97], ['2017-06', 0.98], ['2017-07', 0.99], ['2017-08', 1.0], ['2017-09', 1.01], ['2017-10', 1.02], ['2017-11', 1.03], ['2017-12', 1.04], ['2018-01', 1.05], ['2018-02', 1.06], ['2018-03', 1.07], ['2018-04', 1.08], ['2018-05', 1.09], ['2018-06', 1.1], ['2018-07', 0.9], ['2018-08', 0.91], ['2018-09', 0.92], ['2018-10', 0.93], ['2018-11', 0.94], ['2018-12', 0.95], ['2019-01', 0.96], ['2019-02', 0.97], ['2019-03', 0.98], ['2019-04', 0.99], ['2019-05', 1.0], ['2019-06', 1.01], ['2019-07', 1.02], ['2019-08', 1.03], ['2019-09', 1.04], ['2019-10', 1.05], ['2019-11', 1.06], ['2019-12', 1.07], ['2020-01', 1.08], ['2020-02', 1.09], ['2020-03', 1.1], ['2020-04', 0.9], ['2020-05', 0.91], ['2020-06', 0.92], ['2020-07', 0.93], ['2020-08', 0.94], ['2020-09', 0.95], ['2020-10', 0.96], ['2020-11', 0.97], ['2020-12', 0.98], ['2021-01', 0.99], ['2021-02', 1.0], ['2021-03', 1.01], ['2021-04', 1.02], ['2021-05', 1.03], ['2021-06', 1.04], ['2021-07', 1.05], ['2021-08', 1.06], ['2021-09', 1.07], ['2021-10', 1.08], ['2021-11', 1.09], ['2021-12', 1.1], ['2022-01', 0.9], ['2022-02', 0.91], ['2022-03', 0.92], ['2022-04', 0.93], ['2022-05', 0.94], ['2022-06', 0.95], ['2022-07', 0.96], ['2022-08', 0.97], ['2022-09', 0.98], ['2022-10', 0.99], ['2022-11', 1.0], ['2022-12', 1.01], ['2023-01', 1.02], ['2023-02', 1.03], ['2023-03', 1.04], ['2023-04', 1.05], ['2023-05', 1.06], ['2023-06', 1.07], ['2023-07', 1.08], ['2023-08', 1.09], ['2023-09', 1.1], ['2023-10', 0.9], ['2023-11', 0.91], ['2023-12', 0.92], ['2024-01', 0.93], ['2024-02', 0.94], ['2024-03', 0.95], ['2024-04', 0.96], ['2024-05', 0.97], ['2024-06', 0.98], ['2024-07', 0.99], ['2024-08', 1.0], ['2024-09', 1.01], ['2024-10', 1.02], ['2024-11', 1.03], ['2024-12', 1.04], ['2025-01', 1.05], ['2025-02', 1.06], ['2025-03', 1.07], ['2025-04', 1.08], ['2025-05', 1.09], ['2025-06', 1.1], ['2025-07', 0.9], ['2025-08', 0.91], ['2025-09', 0.92], ['2025-10', 0.93], ['2025-11', 0.94], ['2025-12', 0.95], ['2026-01', 0.96], ['2026-02', 0.97], ['2026-03', 0.98], ['2026-04', 0.99], ['2026-05', 1.0], ['2026-06', 1.01], ['2026-07', 1.02], ['2026-08', 1.03], ['2026-09', 1.04], ['2026-10', 1.0]], 'cur': 1.0, 'cyb': 100.0, 'hl': 100.0, 'p60': 0.5, 'p120': 0.5, 'n60': 30, 'n120': 60, 'asOfMonth': '2026-10', 'completedMonths': 120, 'uiCompatible': True} is not None
+
+
+
+======================================================================
+
+FAIL: test_legacy_month_only_and_unproven_current_are_unavailable (test_review_regressions.RatioObservationTests.test_legacy_month_only_and_unproven_current_are_unavailable) (mutation='current')
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 114, in test_legacy_month_only_and_unproven_current_are_unavailable
+
+    self.assertIsNone(build.assemble(data, mk, mk, NOW)[0]['ratio'])
+
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'series': [['2016-10', 0.9], ['2016-11', 0.91], ['2016-12', 0.92], ['2017-01', 0.93], ['2017-02', 0.94], ['2017-03', 0.95], ['2017-04', 0.96], ['2017-05', 0.97], ['2017-06', 0.98], ['2017-07', 0.99], ['2017-08', 1.0], ['2017-09', 1.01], ['2017-10', 1.02], ['2017-11', 1.03], ['2017-12', 1.04], ['2018-01', 1.05], ['2018-02', 1.06], ['2018-03', 1.07], ['2018-04', 1.08], ['2018-05', 1.09], ['2018-06', 1.1], ['2018-07', 0.9], ['2018-08', 0.91], ['2018-09', 0.92], ['2018-10', 0.93], ['2018-11', 0.94], ['2018-12', 0.95], ['2019-01', 0.96], ['2019-02', 0.97], ['2019-03', 0.98], ['2019-04', 0.99], ['2019-05', 1.0], ['2019-06', 1.01], ['2019-07', 1.02], ['2019-08', 1.03], ['2019-09', 1.04], ['2019-10', 1.05], ['2019-11', 1.06], ['2019-12', 1.07], ['2020-01', 1.08], ['2020-02', 1.09], ['2020-03', 1.1], ['2020-04', 0.9], ['2020-05', 0.91], ['2020-06', 0.92], ['2020-07', 0.93], ['2020-08', 0.94], ['2020-09', 0.95], ['2020-10', 0.96], ['2020-11', 0.97], ['2020-12', 0.98], ['2021-01', 0.99], ['2021-02', 1.0], ['2021-03', 1.01], ['2021-04', 1.02], ['2021-05', 1.03], ['2021-06', 1.04], ['2021-07', 1.05], ['2021-08', 1.06], ['2021-09', 1.07], ['2021-10', 1.08], ['2021-11', 1.09], ['2021-12', 1.1], ['2022-01', 0.9], ['2022-02', 0.91], ['2022-03', 0.92], ['2022-04', 0.93], ['2022-05', 0.94], ['2022-06', 0.95], ['2022-07', 0.96], ['2022-08', 0.97], ['2022-09', 0.98], ['2022-10', 0.99], ['2022-11', 1.0], ['2022-12', 1.01], ['2023-01', 1.02], ['2023-02', 1.03], ['2023-03', 1.04], ['2023-04', 1.05], ['2023-05', 1.06], ['2023-06', 1.07], ['2023-07', 1.08], ['2023-08', 1.09], ['2023-09', 1.1], ['2023-10', 0.9], ['2023-11', 0.91], ['2023-12', 0.92], ['2024-01', 0.93], ['2024-02', 0.94], ['2024-03', 0.95], ['2024-04', 0.96], ['2024-05', 0.97], ['2024-06', 0.98], ['2024-07', 0.99], ['2024-08', 1.0], ['2024-09', 1.01], ['2024-10', 1.02], ['2024-11', 1.03], ['2024-12', 1.04], ['2025-01', 1.05], ['2025-02', 1.06], ['2025-03', 1.07], ['2025-04', 1.08], ['2025-05', 1.09], ['2025-06', 1.1], ['2025-07', 0.9], ['2025-08', 0.91], ['2025-09', 0.92], ['2025-10', 0.93], ['2025-11', 0.94], ['2025-12', 0.95], ['2026-01', 0.96], ['2026-02', 0.97], ['2026-03', 0.98], ['2026-04', 0.99], ['2026-05', 1.0], ['2026-06', 1.01], ['2026-07', 1.02], ['2026-08', 1.03], ['2026-09', 1.04], ['2026-10', 1.0]], 'cur': 1.0, 'cyb': 100.0, 'hl': 100.0, 'p60': 0.5, 'p120': 0.5, 'n60': 30, 'n120': 60, 'asOfMonth': '2026-10', 'completedMonths': 120, 'uiCompatible': True} is not None
+
+
+
+======================================================================
+
+FAIL: test_legacy_month_only_and_unproven_current_are_unavailable (test_review_regressions.RatioObservationTests.test_legacy_month_only_and_unproven_current_are_unavailable) (mutation='price')
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 114, in test_legacy_month_only_and_unproven_current_are_unavailable
+
+    self.assertIsNone(build.assemble(data, mk, mk, NOW)[0]['ratio'])
+
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'series': [['2016-10', 0.9], ['2016-11', 0.91], ['2016-12', 0.92], ['2017-01', 0.93], ['2017-02', 0.94], ['2017-03', 0.95], ['2017-04', 0.96], ['2017-05', 0.97], ['2017-06', 0.98], ['2017-07', 0.99], ['2017-08', 1.0], ['2017-09', 1.01], ['2017-10', 1.02], ['2017-11', 1.03], ['2017-12', 1.04], ['2018-01', 1.05], ['2018-02', 1.06], ['2018-03', 1.07], ['2018-04', 1.08], ['2018-05', 1.09], ['2018-06', 1.1], ['2018-07', 0.9], ['2018-08', 0.91], ['2018-09', 0.92], ['2018-10', 0.93], ['2018-11', 0.94], ['2018-12', 0.95], ['2019-01', 0.96], ['2019-02', 0.97], ['2019-03', 0.98], ['2019-04', 0.99], ['2019-05', 1.0], ['2019-06', 1.01], ['2019-07', 1.02], ['2019-08', 1.03], ['2019-09', 1.04], ['2019-10', 1.05], ['2019-11', 1.06], ['2019-12', 1.07], ['2020-01', 1.08], ['2020-02', 1.09], ['2020-03', 1.1], ['2020-04', 0.9], ['2020-05', 0.91], ['2020-06', 0.92], ['2020-07', 0.93], ['2020-08', 0.94], ['2020-09', 0.95], ['2020-10', 0.96], ['2020-11', 0.97], ['2020-12', 0.98], ['2021-01', 0.99], ['2021-02', 1.0], ['2021-03', 1.01], ['2021-04', 1.02], ['2021-05', 1.03], ['2021-06', 1.04], ['2021-07', 1.05], ['2021-08', 1.06], ['2021-09', 1.07], ['2021-10', 1.08], ['2021-11', 1.09], ['2021-12', 1.1], ['2022-01', 0.9], ['2022-02', 0.91], ['2022-03', 0.92], ['2022-04', 0.93], ['2022-05', 0.94], ['2022-06', 0.95], ['2022-07', 0.96], ['2022-08', 0.97], ['2022-09', 0.98], ['2022-10', 0.99], ['2022-11', 1.0], ['2022-12', 1.01], ['2023-01', 1.02], ['2023-02', 1.03], ['2023-03', 1.04], ['2023-04', 1.05], ['2023-05', 1.06], ['2023-06', 1.07], ['2023-07', 1.08], ['2023-08', 1.09], ['2023-09', 1.1], ['2023-10', 0.9], ['2023-11', 0.91], ['2023-12', 0.92], ['2024-01', 0.93], ['2024-02', 0.94], ['2024-03', 0.95], ['2024-04', 0.96], ['2024-05', 0.97], ['2024-06', 0.98], ['2024-07', 0.99], ['2024-08', 1.0], ['2024-09', 1.01], ['2024-10', 1.02], ['2024-11', 1.03], ['2024-12', 1.04], ['2025-01', 1.05], ['2025-02', 1.06], ['2025-03', 1.07], ['2025-04', 1.08], ['2025-05', 1.09], ['2025-06', 1.1], ['2025-07', 0.9], ['2025-08', 0.91], ['2025-09', 0.92], ['2025-10', 0.93], ['2025-11', 0.94], ['2025-12', 0.95], ['2026-01', 0.96], ['2026-02', 0.97], ['2026-03', 0.98], ['2026-04', 0.99], ['2026-05', 1.0], ['2026-06', 1.01], ['2026-07', 1.02], ['2026-08', 1.03], ['2026-09', 1.04], ['2026-10', 1.0]], 'cur': 1.0, 'cyb': 100.0, 'hl': 100.0, 'p60': 0.5, 'p120': 0.5, 'n60': 30, 'n120': 60, 'asOfMonth': '2026-10', 'completedMonths': 120, 'uiCompatible': True} is not None
+
+
+
+======================================================================
+
+FAIL: test_mixed_cached_and_fetched_dates_are_unavailable (test_review_regressions.RatioObservationTests.test_mixed_cached_and_fetched_dates_are_unavailable)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 105, in test_mixed_cached_and_fetched_dates_are_unavailable
+
+    self.assertIsNone(build.assemble(data, merged, fresh, NOW)[0]['ratio'])
+
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'series': [['2016-10', 0.9], ['2016-11', 0.91], ['2016-12', 0.92], ['2017-01', 0.93], ['2017-02', 0.94], ['2017-03', 0.95], ['2017-04', 0.96], ['2017-05', 0.97], ['2017-06', 0.98], ['2017-07', 0.99], ['2017-08', 1.0], ['2017-09', 1.01], ['2017-10', 1.02], ['2017-11', 1.03], ['2017-12', 1.04], ['2018-01', 1.05], ['2018-02', 1.06], ['2018-03', 1.07], ['2018-04', 1.08], ['2018-05', 1.09], ['2018-06', 1.1], ['2018-07', 0.9], ['2018-08', 0.91], ['2018-09', 0.92], ['2018-10', 0.93], ['2018-11', 0.94], ['2018-12', 0.95], ['2019-01', 0.96], ['2019-02', 0.97], ['2019-03', 0.98], ['2019-04', 0.99], ['2019-05', 1.0], ['2019-06', 1.01], ['2019-07', 1.02], ['2019-08', 1.03], ['2019-09', 1.04], ['2019-10', 1.05], ['2019-11', 1.06], ['2019-12', 1.07], ['2020-01', 1.08], ['2020-02', 1.09], ['2020-03', 1.1], ['2020-04', 0.9], ['2020-05', 0.91], ['2020-06', 0.92], ['2020-07', 0.93], ['2020-08', 0.94], ['2020-09', 0.95], ['2020-10', 0.96], ['2020-11', 0.97], ['2020-12', 0.98], ['2021-01', 0.99], ['2021-02', 1.0], ['2021-03', 1.01], ['2021-04', 1.02], ['2021-05', 1.03], ['2021-06', 1.04], ['2021-07', 1.05], ['2021-08', 1.06], ['2021-09', 1.07], ['2021-10', 1.08], ['2021-11', 1.09], ['2021-12', 1.1], ['2022-01', 0.9], ['2022-02', 0.91], ['2022-03', 0.92], ['2022-04', 0.93], ['2022-05', 0.94], ['2022-06', 0.95], ['2022-07', 0.96], ['2022-08', 0.97], ['2022-09', 0.98], ['2022-10', 0.99], ['2022-11', 1.0], ['2022-12', 1.01], ['2023-01', 1.02], ['2023-02', 1.03], ['2023-03', 1.04], ['2023-04', 1.05], ['2023-05', 1.06], ['2023-06', 1.07], ['2023-07', 1.08], ['2023-08', 1.09], ['2023-09', 1.1], ['2023-10', 0.9], ['2023-11', 0.91], ['2023-12', 0.92], ['2024-01', 0.93], ['2024-02', 0.94], ['2024-03', 0.95], ['2024-04', 0.96], ['2024-05', 0.97], ['2024-06', 0.98], ['2024-07', 0.99], ['2024-08', 1.0], ['2024-09', 1.01], ['2024-10', 1.02], ['2024-11', 1.03], ['2024-12', 1.04], ['2025-01', 1.05], ['2025-02', 1.06], ['2025-03', 1.07], ['2025-04', 1.08], ['2025-05', 1.09], ['2025-06', 1.1], ['2025-07', 0.9], ['2025-08', 0.91], ['2025-09', 0.92], ['2025-10', 0.93], ['2025-11', 0.94], ['2025-12', 0.95], ['2026-01', 0.96], ['2026-02', 0.97], ['2026-03', 0.98], ['2026-04', 0.99], ['2026-05', 1.0], ['2026-06', 1.01], ['2026-07', 1.02], ['2026-08', 1.03], ['2026-09', 1.04], ['2026-10', 1.0]], 'cur': 1.0, 'cyb': 100.0, 'hl': 100.0, 'p60': 0.5, 'p120': 0.5, 'n60': 30, 'n120': 60, 'asOfMonth': '2026-10', 'completedMonths': 120, 'uiCompatible': True} is not None
+
+
+
+======================================================================
+
+FAIL: test_monthly_adapter_uses_daily_observation_not_month_bucket_date (test_review_regressions.RatioObservationTests.test_monthly_adapter_uses_daily_observation_not_month_bucket_date)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 129, in test_monthly_adapter_uses_daily_observation_not_month_bucket_date
+
+    self.assertEqual(r.get('asOf'), '2026-10-16')
+
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: None != '2026-10-16'
+
+
+
+======================================================================
+
+FAIL: test_new_receipts_do_not_make_old_values_current (test_review_regressions.RatioObservationTests.test_new_receipts_do_not_make_old_values_current)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 92, in test_new_receipts_do_not_make_old_values_current
+
+    self.assertIsNone(build.assemble(data, mk, mk, NOW)[0]['ratio'])
+
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'series': [['2016-10', 0.9], ['2016-11', 0.91], ['2016-12', 0.92], ['2017-01', 0.93], ['2017-02', 0.94], ['2017-03', 0.95], ['2017-04', 0.96], ['2017-05', 0.97], ['2017-06', 0.98], ['2017-07', 0.99], ['2017-08', 1.0], ['2017-09', 1.01], ['2017-10', 1.02], ['2017-11', 1.03], ['2017-12', 1.04], ['2018-01', 1.05], ['2018-02', 1.06], ['2018-03', 1.07], ['2018-04', 1.08], ['2018-05', 1.09], ['2018-06', 1.1], ['2018-07', 0.9], ['2018-08', 0.91], ['2018-09', 0.92], ['2018-10', 0.93], ['2018-11', 0.94], ['2018-12', 0.95], ['2019-01', 0.96], ['2019-02', 0.97], ['2019-03', 0.98], ['2019-04', 0.99], ['2019-05', 1.0], ['2019-06', 1.01], ['2019-07', 1.02], ['2019-08', 1.03], ['2019-09', 1.04], ['2019-10', 1.05], ['2019-11', 1.06], ['2019-12', 1.07], ['2020-01', 1.08], ['2020-02', 1.09], ['2020-03', 1.1], ['2020-04', 0.9], ['2020-05', 0.91], ['2020-06', 0.92], ['2020-07', 0.93], ['2020-08', 0.94], ['2020-09', 0.95], ['2020-10', 0.96], ['2020-11', 0.97], ['2020-12', 0.98], ['2021-01', 0.99], ['2021-02', 1.0], ['2021-03', 1.01], ['2021-04', 1.02], ['2021-05', 1.03], ['2021-06', 1.04], ['2021-07', 1.05], ['2021-08', 1.06], ['2021-09', 1.07], ['2021-10', 1.08], ['2021-11', 1.09], ['2021-12', 1.1], ['2022-01', 0.9], ['2022-02', 0.91], ['2022-03', 0.92], ['2022-04', 0.93], ['2022-05', 0.94], ['2022-06', 0.95], ['2022-07', 0.96], ['2022-08', 0.97], ['2022-09', 0.98], ['2022-10', 0.99], ['2022-11', 1.0], ['2022-12', 1.01], ['2023-01', 1.02], ['2023-02', 1.03], ['2023-03', 1.04], ['2023-04', 1.05], ['2023-05', 1.06], ['2023-06', 1.07], ['2023-07', 1.08], ['2023-08', 1.09], ['2023-09', 1.1], ['2023-10', 0.9], ['2023-11', 0.91], ['2023-12', 0.92], ['2024-01', 0.93], ['2024-02', 0.94], ['2024-03', 0.95], ['2024-04', 0.96], ['2024-05', 0.97], ['2024-06', 0.98], ['2024-07', 0.99], ['2024-08', 1.0], ['2024-09', 1.01], ['2024-10', 1.02], ['2024-11', 1.03], ['2024-12', 1.04], ['2025-01', 1.05], ['2025-02', 1.06], ['2025-03', 1.07], ['2025-04', 1.08], ['2025-05', 1.09], ['2025-06', 1.1], ['2025-07', 0.9], ['2025-08', 0.91], ['2025-09', 0.92], ['2025-10', 0.93], ['2025-11', 0.94], ['2025-12', 0.95], ['2026-01', 0.96], ['2026-02', 0.97], ['2026-03', 0.98], ['2026-04', 0.99], ['2026-05', 1.0], ['2026-06', 1.01], ['2026-07', 1.02], ['2026-08', 1.03], ['2026-09', 1.04], ['2026-10', 1.0]], 'cur': 1.0, 'cyb': 100.0, 'hl': 100.0, 'p60': 0.5, 'p120': 0.5, 'n60': 30, 'n120': 60, 'asOfMonth': '2026-10', 'completedMonths': 120, 'uiCompatible': True} is not None
+
+
+
+======================================================================
+
+FAIL: test_ratio_regression_does_not_refresh_cached_receipt (test_review_regressions.RatioObservationTests.test_ratio_regression_does_not_refresh_cached_receipt)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 120, in test_ratio_regression_does_not_refresh_cached_receipt
+
+    self.assertIs(build.merge({'ratio': {'cyb': new}}, {'ratio': {'cyb': old}})['ratio']['cyb'], old)
+
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'schemaVersion': 2, 'receivedAt': '2026-10-17T12:00:00+08:00', 'bars': [['2016-10', 100.0], ['2016-11', 101.0], ['2016-12', 102.0], ['2017-01', 103.0], ['2017-02', 104.0], ['2017-03', 105.0], ['2017-04', 106.0], ['2017-05', 107.0], ['2017-06', 108.0], ['2017-07', 109.0], ['2017-08', 110.0], ['2017-09', 111.0], ['2017-10', 112.0], ['2017-11', 113.0], ['2017-12', 114.0], ['2018-01', 115.0], ['2018-02', 116.0], ['2018-03', 117.0], ['2018-04', 118.0], ['2018-05', 119.0], ['2018-06', 120.0], ['2018-07', 121.0], ['2018-08', 122.0], ['2018-09', 123.0], ['2018-10', 124.0], ['2018-11', 125.0], ['2018-12', 126.0], ['2019-01', 127.0], ['2019-02', 128.0], ['2019-03', 129.0], ['2019-04', 130.0], ['2019-05', 131.0], ['2019-06', 132.0], ['2019-07', 133.0], ['2019-08', 134.0], ['2019-09', 135.0], ['2019-10', 136.0], ['2019-11', 137.0], ['2019-12', 138.0], ['2020-01', 139.0], ['2020-02', 140.0], ['2020-03', 141.0], ['2020-04', 142.0], ['2020-05', 143.0], ['2020-06', 144.0], ['2020-07', 145.0], ['2020-08', 146.0], ['2020-09', 147.0], ['2020-10', 148.0], ['2020-11', 149.0], ['2020-12', 150.0], ['2021-01', 151.0], ['2021-02', 152.0], ['2021-03', 153.0], ['2021-04', 154.0], ['2021-05', 155.0], ['2021-06', 156.0], ['2021-07', 157.0], ['2021-08', 158.0], ['2021-09', 159.0], ['2021-10', 160.0], ['2021-11', 161.0], ['2021-12', 162.0], ['2022-01', 163.0], ['2022-02', 164.0], ['2022-03', 165.0], ['2022-04', 166.0], ['2022-05', 167.0], ['2022-06', 168.0], ['2022-07', 169.0], ['2022-08', 170.0], ['2022-09', 171.0], ['2022-10', 172.0], ['2022-11', 173.0], ['2022-12', 174.0], ['2023-01', 175.0], ['2023-02', 176.0], ['2023-03', 177.0], ['2023-04', 178.0], ['2023-05', 179.0], ['2023-06', 180.0], ['2023-07', 181.0], ['2023-08', 182.0], ['2023-09', 183.0], ['2023-10', 184.0], ['2023-11', 185.0], ['2023-12', 186.0], ['2024-01', 187.0], ['2024-02', 188.0], ['2024-03', 189.0], ['2024-04', 190.0], ['2024-05', 191.0], ['2024-06', 192.0], ['2024-07', 193.0], ['2024-08', 194.0], ['2024-09', 195.0], ['2024-10', 196.0], ['2024-11', 197.0], ['2024-12', 198.0], ['2025-01', 199.0], ['2025-02', 200.0], ['2025-03', 201.0], ['2025-04', 202.0], ['2025-05', 203.0], ['2025-06', 204.0], ['2025-07', 205.0], ['2025-08', 206.0], ['2025-09', 207.0], ['2025-10', 208.0], ['2025-11', 209.0], ['2025-12', 210.0], ['2026-01', 211.0], ['2026-02', 212.0], ['2026-03', 213.0], ['2026-04', 214.0], ['2026-05', 215.0], ['2026-06', 216.0], ['2026-07', 217.0], ['2026-08', 218.0], ['2026-09', 219.0], ['2026-10', 220.0]], 'src': 'tencent'} is not {'schemaVersion': 2, 'receivedAt': '2026-10-17T10:00:00+08:00', 'bars': [['2016-10', 90.0], ['2016-11', 91.0], ['2016-12', 92.0], ['2017-01', 93.0], ['2017-02', 94.0], ['2017-03', 95.0], ['2017-04', 96.0], ['2017-05', 97.0], ['2017-06', 98.0], ['2017-07', 99.0], ['2017-08', 100.0], ['2017-09', 101.0], ['2017-10', 102.0], ['2017-11', 103.0], ['2017-12', 104.0], ['2018-01', 105.0], ['2018-02', 106.0], ['2018-03', 107.0], ['2018-04', 108.0], ['2018-05', 109.0], ['2018-06', 110.0], ['2018-07', 90.0], ['2018-08', 91.0], ['2018-09', 92.0], ['2018-10', 93.0], ['2018-11', 94.0], ['2018-12', 95.0], ['2019-01', 96.0], ['2019-02', 97.0], ['2019-03', 98.0], ['2019-04', 99.0], ['2019-05', 100.0], ['2019-06', 101.0], ['2019-07', 102.0], ['2019-08', 103.0], ['2019-09', 104.0], ['2019-10', 105.0], ['2019-11', 106.0], ['2019-12', 107.0], ['2020-01', 108.0], ['2020-02', 109.0], ['2020-03', 110.0], ['2020-04', 90.0], ['2020-05', 91.0], ['2020-06', 92.0], ['2020-07', 93.0], ['2020-08', 94.0], ['2020-09', 95.0], ['2020-10', 96.0], ['2020-11', 97.0], ['2020-12', 98.0], ['2021-01', 99.0], ['2021-02', 100.0], ['2021-03', 101.0], ['2021-04', 102.0], ['2021-05', 103.0], ['2021-06', 104.0], ['2021-07', 105.0], ['2021-08', 106.0], ['2021-09', 107.0], ['2021-10', 108.0], ['2021-11', 109.0], ['2021-12', 110.0], ['2022-01', 90.0], ['2022-02', 91.0], ['2022-03', 92.0], ['2022-04', 93.0], ['2022-05', 94.0], ['2022-06', 95.0], ['2022-07', 96.0], ['2022-08', 97.0], ['2022-09', 98.0], ['2022-10', 99.0], ['2022-11', 100.0], ['2022-12', 101.0], ['2023-01', 102.0], ['2023-02', 103.0], ['2023-03', 104.0], ['2023-04', 105.0], ['2023-05', 106.0], ['2023-06', 107.0], ['2023-07', 108.0], ['2023-08', 109.0], ['2023-09', 110.0], ['2023-10', 90.0], ['2023-11', 91.0], ['2023-12', 92.0], ['2024-01', 93.0], ['2024-02', 94.0], ['2024-03', 95.0], ['2024-04', 96.0], ['2024-05', 97.0], ['2024-06', 98.0], ['2024-07', 99.0], ['2024-08', 100.0], ['2024-09', 101.0], ['2024-10', 102.0], ['2024-11', 103.0], ['2024-12', 104.0], ['2025-01', 105.0], ['2025-02', 106.0], ['2025-03', 107.0], ['2025-04', 108.0], ['2025-05', 109.0], ['2025-06', 110.0], ['2025-07', 90.0], ['2025-08', 91.0], ['2025-09', 92.0], ['2025-10', 93.0], ['2025-11', 94.0], ['2025-12', 95.0], ['2026-01', 96.0], ['2026-02', 97.0], ['2026-03', 98.0], ['2026-04', 99.0], ['2026-05', 100.0], ['2026-06', 101.0], ['2026-07', 102.0], ['2026-08', 103.0], ['2026-09', 104.0], ['2026-10', 100.0]], 'src': 'tencent', 'asOf': '2026-10-16', 'current': {'date': '2026-10-16', 'close': 100.0, 'src': 'tencent'}}
+
+
+
+======================================================================
+
+FAIL: test_same_day_current_values_remain_available (test_review_regressions.RatioObservationTests.test_same_day_current_values_remain_available)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 82, in test_same_day_current_values_remain_available
+
+    self.assertEqual(D['ratio'].get('asOf'), D['meta']['asOf'])
+
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: None != '2026-10-16'
+
+
+
+======================================================================
+
+FAIL: test_same_month_different_days_are_unavailable (test_review_regressions.RatioObservationTests.test_same_month_different_days_are_unavailable)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 87, in test_same_month_different_days_are_unavailable
+
+    self.assertIsNone(build.assemble(data, mk, mk, NOW)[0]['ratio'])
+
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: {'series': [['2016-10', 0.9], ['2016-11', 0.91], ['2016-12', 0.92], ['2017-01', 0.93], ['2017-02', 0.94], ['2017-03', 0.95], ['2017-04', 0.96], ['2017-05', 0.97], ['2017-06', 0.98], ['2017-07', 0.99], ['2017-08', 1.0], ['2017-09', 1.01], ['2017-10', 1.02], ['2017-11', 1.03], ['2017-12', 1.04], ['2018-01', 1.05], ['2018-02', 1.06], ['2018-03', 1.07], ['2018-04', 1.08], ['2018-05', 1.09], ['2018-06', 1.1], ['2018-07', 0.9], ['2018-08', 0.91], ['2018-09', 0.92], ['2018-10', 0.93], ['2018-11', 0.94], ['2018-12', 0.95], ['2019-01', 0.96], ['2019-02', 0.97], ['2019-03', 0.98], ['2019-04', 0.99], ['2019-05', 1.0], ['2019-06', 1.01], ['2019-07', 1.02], ['2019-08', 1.03], ['2019-09', 1.04], ['2019-10', 1.05], ['2019-11', 1.06], ['2019-12', 1.07], ['2020-01', 1.08], ['2020-02', 1.09], ['2020-03', 1.1], ['2020-04', 0.9], ['2020-05', 0.91], ['2020-06', 0.92], ['2020-07', 0.93], ['2020-08', 0.94], ['2020-09', 0.95], ['2020-10', 0.96], ['2020-11', 0.97], ['2020-12', 0.98], ['2021-01', 0.99], ['2021-02', 1.0], ['2021-03', 1.01], ['2021-04', 1.02], ['2021-05', 1.03], ['2021-06', 1.04], ['2021-07', 1.05], ['2021-08', 1.06], ['2021-09', 1.07], ['2021-10', 1.08], ['2021-11', 1.09], ['2021-12', 1.1], ['2022-01', 0.9], ['2022-02', 0.91], ['2022-03', 0.92], ['2022-04', 0.93], ['2022-05', 0.94], ['2022-06', 0.95], ['2022-07', 0.96], ['2022-08', 0.97], ['2022-09', 0.98], ['2022-10', 0.99], ['2022-11', 1.0], ['2022-12', 1.01], ['2023-01', 1.02], ['2023-02', 1.03], ['2023-03', 1.04], ['2023-04', 1.05], ['2023-05', 1.06], ['2023-06', 1.07], ['2023-07', 1.08], ['2023-08', 1.09], ['2023-09', 1.1], ['2023-10', 0.9], ['2023-11', 0.91], ['2023-12', 0.92], ['2024-01', 0.93], ['2024-02', 0.94], ['2024-03', 0.95], ['2024-04', 0.96], ['2024-05', 0.97], ['2024-06', 0.98], ['2024-07', 0.99], ['2024-08', 1.0], ['2024-09', 1.01], ['2024-10', 1.02], ['2024-11', 1.03], ['2024-12', 1.04], ['2025-01', 1.05], ['2025-02', 1.06], ['2025-03', 1.07], ['2025-04', 1.08], ['2025-05', 1.09], ['2025-06', 1.1], ['2025-07', 0.9], ['2025-08', 0.91], ['2025-09', 0.92], ['2025-10', 0.93], ['2025-11', 0.94], ['2025-12', 0.95], ['2026-01', 0.96], ['2026-02', 0.97], ['2026-03', 0.98], ['2026-04', 0.99], ['2026-05', 1.0], ['2026-06', 1.01], ['2026-07', 1.02], ['2026-08', 1.03], ['2026-09', 1.04], ['2026-10', 1.0]], 'cur': 1.0, 'cyb': 100.0, 'hl': 100.0, 'p60': 0.5, 'p120': 0.5, 'n60': 30, 'n120': 60, 'asOfMonth': '2026-10', 'completedMonths': 120, 'uiCompatible': True} is not None
+
+
+
+----------------------------------------------------------------------
+
+Ran 23 tests in 3.996s
+
+
+
+FAILED (failures=21)

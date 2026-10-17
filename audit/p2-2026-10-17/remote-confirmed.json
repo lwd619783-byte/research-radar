@@ -1,0 +1,15 @@
+{
+  "command": [
+    "git",
+    "-c",
+    "safe.directory=C:/Users/10750/Documents/Codex/2026-10-17/task/radar-local-audit",
+    "ls-remote",
+    "origin",
+    "refs/heads/fix/radar-data-integrity"
+  ],
+  "cwd": "C:\\Users\\10750\\Documents\\Codex\\2026-10-17\\task\\radar-local-audit",
+  "startedAt": "2026-10-17T15:13:05.422327+00:00",
+  "finishedAt": "2026-10-17T15:13:08.648922+00:00",
+  "exitCode": 0,
+  "tests": null
+}

@@ -1,0 +1,22 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "-X",
+    "utf8",
+    "radar/scripts/build.py",
+    "--offline",
+    "--force",
+    "--cache",
+    "C:\\Users\\10750\\Documents\\Codex\\2026-10-17\\task-3\\empty-cache.json",
+    "--out",
+    "C:\\Users\\10750\\Documents\\Codex\\2026-10-17\\task-3\\offline-out",
+    "--audit-json",
+    "C:\\Users\\10750\\Documents\\Codex\\2026-10-17\\task-3\\offline-audit.json"
+  ],
+  "cwd": "C:\\Users\\10750\\Documents\\Codex\\2026-10-17\\task\\radar-local-audit",
+  "startedAt": "2026-10-17T15:09:03.931060+00:00",
+  "finishedAt": "2026-10-17T15:09:04.211706+00:00",
+  "exitCode": 2,
+  "tests": null
+}

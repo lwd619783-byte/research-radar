@@ -1,0 +1,79 @@
+test_financial_gate_alone (test_review_regressions.CompleteMainTests.test_financial_gate_alone) ...
+
+  test_financial_gate_alone (test_review_regressions.CompleteMainTests.test_financial_gate_alone) (force=False) ... FAIL
+
+  test_financial_gate_alone (test_review_regressions.CompleteMainTests.test_financial_gate_alone) (force=True) ... FAIL
+
+
+
+======================================================================
+
+FAIL: test_financial_gate_alone (test_review_regressions.CompleteMainTests.test_financial_gate_alone) (force=False)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 269, in assert_gate
+
+    self.assertEqual(report['blockers'], [blocker])
+
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: Lists differ: [] != ['financial_evidence_missing_or_incompatible_with_frozen_text']
+
+
+
+Second list contains 1 additional elements.
+
+First extra element 0:
+
+'financial_evidence_missing_or_incompatible_with_frozen_text'
+
+
+
+- []
+
++ ['financial_evidence_missing_or_incompatible_with_frozen_text']
+
+
+
+======================================================================
+
+FAIL: test_financial_gate_alone (test_review_regressions.CompleteMainTests.test_financial_gate_alone) (force=True)
+
+----------------------------------------------------------------------
+
+Traceback (most recent call last):
+
+  File "C:\Users\10750\Documents\Codex\2026-10-17\task\radar-local-audit\radar\tests\test_review_regressions.py", line 269, in assert_gate
+
+    self.assertEqual(report['blockers'], [blocker])
+
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+AssertionError: Lists differ: [] != ['financial_evidence_missing_or_incompatible_with_frozen_text']
+
+
+
+Second list contains 1 additional elements.
+
+First extra element 0:
+
+'financial_evidence_missing_or_incompatible_with_frozen_text'
+
+
+
+- []
+
++ ['financial_evidence_missing_or_incompatible_with_frozen_text']
+
+
+
+----------------------------------------------------------------------
+
+Ran 1 test in 0.600s
+
+
+
+FAILED (failures=2)
