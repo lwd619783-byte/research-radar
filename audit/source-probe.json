@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-10-17T13:15:29.895108+00:00",
+  "readOnly": true,
+  "results": [
+    {
+      "source": "yahoo",
+      "symbol": "NVDA",
+      "status": "failed",
+      "errorType": "URLError",
+      "error": "<urlopen error [WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。>"
+    }
+  ]
+}
