@@ -1,0 +1,71 @@
+# 投研雷达 · 全局配置。改完运行 python radar/scripts/build.py --check 校验。
+
+[site]
+title = "投研雷达"
+# GitHub 仓库地址（形如 https://github.com/用户名/仓库名）。留空则页面不显示「知识库笔记」与「打开 GitHub 仓库」按钮。
+# 注意：私有仓库的链接只有登录且有权限的人能打开。
+repo_url = ""
+kb_branch = "main"
+
+# 每周更新：本周结论。focus 必须是 industries.toml 里的行业名；留空则自动取总分最高的行业。
+# lead 只在 focus 行业作为首屏时显示；留空则自动用该行业的 logic + 最紧卡点。
+[weekly]
+week = "2026-W42"
+focus = "AI网络与光互连"
+lead = "AI集群800G→1.6T/CPO升级，光芯片与光模块产能是最紧卡点，量价齐升。最紧的卡点是「光芯片与激光器」；龙头近期大幅回调，但业绩仍在高增，三季报是验证窗口。"
+calendar_hint = "三季报季：先看预告与快报，再看正式报告"
+thermo_action = "按原计划定投，不加不减"
+
+# 跑马灯指数。symbol 用 Yahoo 代码；tencent 为腾讯备用代码（可省略）。
+[[index]]
+symbol = "000001.SS"
+name = "上证指数"
+tencent = "sh000001"
+
+[[index]]
+symbol = "399006.SZ"
+name = "创业板指"
+tencent = "sz399006"
+
+[[index]]
+symbol = "000922.SS"
+name = "中证红利"
+tencent = "sh000922"
+
+[[index]]
+symbol = "^HSI"
+name = "恒生指数"
+tencent = "hkHSI"
+
+[[index]]
+symbol = "HSTECH.HK"
+name = "恒生科技"
+tencent = "hkHSTECH"
+
+[[index]]
+symbol = "^IXIC"
+name = "纳斯达克"
+
+[[index]]
+symbol = "^GSPC"
+name = "标普500"
+
+[[index]]
+symbol = "^SOX"
+name = "费城半导体"
+
+# 红利定投温度计：创业板指 ÷ 中证红利 月线。一般不用改。
+[ratio]
+growth_tencent = "sz399006"
+growth_yahoo = "399006.SZ"
+dividend_tencent = "sh000922"
+dividend_yahoo = "000922.SS"
+
+# 汇率抓取失败时的兜底值（1 美元兑当地货币；EURUSD 为 1 欧元兑美元）。只用于市值折算，偶尔更新即可。
+[fx_fallback]
+CNY = 6.6862
+HKD = 7.8479
+TWD = 32.428
+KRW = 1329.6
+JPY = 157.987
+EURUSD = 1.1244

@@ -1,0 +1,715 @@
+# 细分龙头：每个 [[company]] 属于一个卡点（chokepoint 必须与 chokepoints.toml 里的 name 完全一致，且 industry 与该卡点所属行业一致）。
+# 字段说明见 radar/docs/HANDOFF.md 第 4 节。百分比字段一律写「百分数」：+174.6% 写成 174.6，−35% 写成 -35。
+# 行情（价格、涨跌幅、52周高点、市值、PE）由脚本自动抓取，不要写在这里；fallback_* 只在抓取失败时兜底使用。
+
+[[company]]
+id = "YJKJ"
+name = "源杰科技"
+symbol = "688498.SS"
+code = "SH688498"
+market = "A股"
+role = "国产替代"
+industry = "AI网络与光互连"
+chokepoint = "光芯片与激光器"
+view = "国产高速光芯片（CW/EML）龙头，业绩爆发"
+flash = "Q3预告：单季营收6.5–7.0亿、归母4.03–4.53亿（+579%~663%）；⏳ 三季报10/31"
+next_earnings = "2026-10-31"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 372.7, profit_yoy = 1238.7, gross_margin = 82.1 }
+fallback_pe = 170.9
+fallback_mcap_usd_bn = 19.1
+
+[[company]]
+id = "LITE"
+name = "Lumentum"
+symbol = "LITE"
+code = "LITE"
+market = "美股"
+role = "全球龙头"
+industry = "AI网络与光互连"
+chokepoint = "光芯片与激光器"
+view = "EML/CW激光器全球核心供应商，处在最紧卡点"
+flash = "部分器件订单排至2029（转述）；⏳ 11/5发财报"
+next_earnings = "2026-11-05"
+kb = ""
+fin = { period = "26Q2", revenue_yoy = 109.3, gross_margin = 44.2 }
+fallback_mcap_usd_bn = 74.7
+
+[[company]]
+id = "COHR"
+name = "Coherent"
+symbol = "COHR"
+code = "COHR"
+market = "美股"
+role = "全球龙头"
+industry = "AI网络与光互连"
+chokepoint = "光芯片与激光器"
+view = "光芯片+光模块一体化，InP产能扩张"
+flash = "⏳ 11/4发财报"
+next_earnings = "2026-11-04"
+kb = ""
+fin = { period = "26Q2", revenue_yoy = 33.7, gross_margin = 37.5 }
+fallback_pe = 56.5
+fallback_mcap_usd_bn = 45.9
+
+[[company]]
+id = "ZJXC"
+name = "中际旭创"
+symbol = "300308.SZ"
+code = "SZ300308"
+market = "A股"
+role = "全球龙头"
+industry = "AI网络与光互连"
+chokepoint = "高速光模块产能与良率"
+view = "全球光模块龙头，800G/1.6T份额领先"
+flash = "H1营收+182%、归母+242%；⏳ 三季报10/30"
+next_earnings = "2026-10-30"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 174.6, profit_yoy = 228.2, gross_margin = 46.4 }
+fallback_pe = 36.6
+fallback_mcap_usd_bn = 117.2
+
+[[company]]
+id = "XYS"
+name = "新易盛"
+symbol = "300502.SZ"
+code = "SZ300502"
+market = "A股"
+role = "全球龙头"
+industry = "AI网络与光互连"
+chokepoint = "高速光模块产能与良率"
+view = "高速光模块第二极，毛利率领先"
+flash = "H1营收+100%、归母+91%；⏳ 三季报10/30"
+next_earnings = "2026-10-30"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 96.9, profit_yoy = 100.4, gross_margin = 48 }
+fallback_pe = 32.7
+fallback_mcap_usd_bn = 64
+
+[[company]]
+id = "AVGO"
+name = "博通 Broadcom"
+symbol = "AVGO"
+code = "AVGO"
+market = "美股"
+role = "全球龙头"
+industry = "AI网络与光互连"
+chokepoint = "网络芯片与交换系统"
+view = "AI ASIC + 交换芯片双龙头，CPO领先"
+flash = "CPO 51.2T交换芯片已交付；⏳ 12/9发财报"
+next_earnings = "2026-12-09"
+kb = ""
+fin = { period = "FQ3(至8/2)", revenue_yoy = 85.5, profit_yoy = 215.3, gross_margin = 75.5 }
+fallback_pe = 43.3
+fallback_mcap_usd_bn = 1569.3
+
+[[company]]
+id = "MRVL"
+name = "迈威尔 Marvell"
+symbol = "MRVL"
+code = "MRVL"
+market = "美股"
+role = "全球龙头"
+industry = "AI网络与光互连"
+chokepoint = "网络芯片与交换系统"
+view = "定制ASIC与光DSP，受益1.6T升级"
+flash = "⏳ 12/1发财报"
+next_earnings = "2026-12-01"
+kb = ""
+fin = { period = "FQ2(至8/1)", revenue_yoy = 36.5, profit_yoy = 50, gross_margin = 52.2 }
+fallback_pe = 74.9
+fallback_mcap_usd_bn = 204.8
+
+[[company]]
+id = "ANET"
+name = "Arista"
+symbol = "ANET"
+code = "ANET"
+market = "美股"
+role = "全球龙头"
+industry = "AI网络与光互连"
+chokepoint = "网络芯片与交换系统"
+view = "AI后端以太网交换机龙头"
+flash = "⏳ 11/3发财报"
+next_earnings = "2026-11-03"
+kb = ""
+fin = { period = "26Q2", revenue_yoy = 37.7, profit_yoy = 35.7, gross_margin = 63 }
+fallback_pe = 55.8
+fallback_mcap_usd_bn = 223.2
+
+[[company]]
+id = "TFTX"
+name = "天孚通信"
+symbol = "300394.SZ"
+code = "SZ300394"
+market = "A股"
+role = "国内龙头"
+industry = "AI网络与光互连"
+chokepoint = "光引擎与精密光器件"
+view = "光引擎与精密光器件平台，CPO核心配套"
+flash = "H1营收+15%、归母+34%；⏳ 三季报10/29"
+next_earnings = "2026-10-29"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = -0.9, profit_yoy = 26.8, gross_margin = 64.7 }
+fallback_pe = 99.9
+fallback_mcap_usd_bn = 34.7
+
+[[company]]
+id = "TSM"
+name = "台积电"
+symbol = "TSM"
+code = "TSM"
+market = "美股"
+role = "全球龙头"
+industry = "AI核心半导体"
+chokepoint = "先进制程与先进封装"
+view = "先进制程+CoWoS近乎垄断，AI芯片总闸门"
+flash = "Q3营收467.2亿美元（+41%）、毛利率66.4%；Q4指引523–543亿美元；⏳ 1/14发财报"
+next_earnings = "2027-01-14"
+kb = ""
+fin = { period = "26Q3", revenue_yoy = 41.1, profit_yoy = 68.7, gross_margin = 66.4 }
+fallback_pe = 26.7
+fallback_mcap_usd_bn = 2140
+
+[[company]]
+id = "ASMPT"
+name = "ASMPT"
+symbol = "0522.HK"
+code = "HK0522"
+market = "港股"
+role = "全球龙头"
+industry = "AI核心半导体"
+chokepoint = "先进制程与先进封装"
+view = "TCB热压键合设备，受益HBM与先进封装"
+flash = "⏳ 10/28发财报"
+next_earnings = "2026-10-28"
+kb = ""
+fin = { period = "26Q2", revenue_yoy = 45.1, profit_yoy = 158.1, gross_margin = 39.1 }
+fallback_pe = 36.7
+fallback_mcap_usd_bn = 7.4
+
+[[company]]
+id = "SKH"
+name = "SK海力士"
+symbol = "000660.KS"
+code = "KR000660"
+market = "韩股"
+role = "全球龙头"
+industry = "AI核心半导体"
+chokepoint = "HBM与存储"
+view = "HBM市占第一，存储超级周期核心"
+flash = "⏳ 10/27发财报"
+next_earnings = "2026-10-27"
+kb = ""
+fin = { period = "26Q2", revenue_yoy = 256.8, profit_yoy = 1272.4, gross_margin = 76.3 }
+fallback_mcap_usd_bn = 697.3
+
+[[company]]
+id = "MU"
+name = "美光 Micron"
+symbol = "MU"
+code = "MU"
+market = "美股"
+role = "全球龙头"
+industry = "AI核心半导体"
+chokepoint = "HBM与存储"
+view = "HBM第三极，存储涨价弹性大"
+flash = "⏳ 12/23发财报"
+next_earnings = "2026-12-23"
+kb = ""
+fin = { period = "FQ4(至9/3)", revenue_yoy = 379.3, profit_yoy = 1059.5, gross_margin = 80.7 }
+fallback_pe = 11.8
+fallback_mcap_usd_bn = 994.3
+
+[[company]]
+id = "CXMT"
+name = "长鑫科技"
+symbol = "688825.SS"
+code = "SH688825"
+market = "A股"
+role = "国产替代"
+industry = "AI核心半导体"
+chokepoint = "HBM与存储"
+view = "国产DRAM龙头，量价齐升扭亏"
+flash = "Q3预告：前三季营收2650–2700亿（+726%~742%）、归母1310–1325亿（扭亏）；⏳ 三季报10/31"
+next_earnings = "2026-10-31"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 977.4, gross_margin = 87.6 }
+fallback_pe = 34.9
+fallback_mcap_usd_bn = 457.1
+
+[[company]]
+id = "NVDA"
+name = "英伟达 NVIDIA"
+symbol = "NVDA"
+code = "NVDA"
+market = "美股"
+role = "全球龙头"
+industry = "AI核心半导体"
+chokepoint = "算力芯片 GPU/ASIC"
+view = "AI GPU绝对龙头，整条链的需求总开关"
+flash = "FQ3财报是AI链风向标；⏳ 11/17发财报"
+next_earnings = "2026-11-17"
+kb = ""
+fin = { period = "FQ2(至7/26)", revenue_yoy = 105.9, profit_yoy = 127.8, gross_margin = 74.7 }
+fallback_pe = 27.1
+fallback_mcap_usd_bn = 5170.6
+
+[[company]]
+id = "ASML"
+name = "阿斯麦 ASML"
+symbol = "ASML"
+code = "ASML"
+market = "美股"
+role = "全球龙头"
+industry = "AI核心半导体"
+chokepoint = "前道设备与材料"
+view = "EUV光刻唯一供应商"
+flash = "Q3营收116.6亿欧元（+55%）、净利49.6亿欧元（+133%）、毛利率57.5%"
+next_earnings = ""
+kb = ""
+fin = { period = "26Q3", revenue_yoy = 55, profit_yoy = 133, gross_margin = 57.5 }
+fallback_pe = 40.4
+fallback_mcap_usd_bn = 630.5
+
+[[company]]
+id = "NAURA"
+name = "北方华创"
+symbol = "002371.SZ"
+code = "SZ002371"
+market = "A股"
+role = "国产替代"
+industry = "AI核心半导体"
+chokepoint = "前道设备与材料"
+view = "国产刻蚀/沉积平台型设备龙头"
+flash = "H1营收+25%、归母+5%；⏳ 三季报10/30"
+next_earnings = "2026-10-30"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 24, profit_yoy = 6.6, gross_margin = 39.3 }
+fallback_pe = 75.7
+fallback_mcap_usd_bn = 64.4
+
+[[company]]
+id = "AMEC"
+name = "中微公司"
+symbol = "688012.SS"
+code = "SH688012"
+market = "A股"
+role = "国产替代"
+industry = "AI核心半导体"
+chokepoint = "前道设备与材料"
+view = "国产刻蚀龙头，先进制程份额提升"
+flash = "H1营收+35%、归母+300%；⏳ 三季报10/31"
+next_earnings = "2026-10-31"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 35.5, profit_yoy = 382.3, gross_margin = 39.6 }
+fallback_pe = 50.6
+fallback_mcap_usd_bn = 42.3
+
+[[company]]
+id = "NTB"
+name = "日东纺 Nittobo"
+symbol = "3110.T"
+code = "JP3110"
+market = "日股"
+role = "全球龙头"
+industry = "PCB与覆铜板"
+chokepoint = "上游特种玻纤布与树脂"
+view = "低介电玻纤布全球主导，上游最紧环节"
+flash = "⏳ 11/5发财报"
+next_earnings = "2026-11-05"
+kb = ""
+fin = { period = "26Q2", revenue_yoy = 20.6, profit_yoy = 84.2, gross_margin = 41.7 }
+fallback_pe = 13
+fallback_mcap_usd_bn = 3.4
+
+[[company]]
+id = "HHKJ"
+name = "宏和科技"
+symbol = "603256.SS"
+code = "SH603256"
+market = "A股"
+role = "国产替代"
+industry = "PCB与覆铜板"
+chokepoint = "上游特种玻纤布与树脂"
+view = "国产高端电子布，低介电玻纤布替代"
+flash = "H1营收+90%、归母+334%；⏳ 三季报10/23"
+next_earnings = "2026-10-23"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 99, profit_yoy = 323.4, gross_margin = 62 }
+fallback_pe = 183.9
+fallback_mcap_usd_bn = 13.7
+
+[[company]]
+id = "DCKJ"
+name = "东材科技"
+symbol = "601208.SS"
+code = "SH601208"
+market = "A股"
+role = "国产替代"
+industry = "PCB与覆铜板"
+chokepoint = "上游特种玻纤布与树脂"
+view = "高速树脂国产替代"
+flash = "H1营收+27%、归母+64%；⏳ 三季报10/28"
+next_earnings = "2026-10-28"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 27.3, profit_yoy = 26.9, gross_margin = 16.5 }
+fallback_pe = 106
+fallback_mcap_usd_bn = 6.4
+
+[[company]]
+id = "EMC"
+name = "台光电子"
+symbol = "2383.TW"
+code = "TW2383"
+market = "台股"
+role = "全球龙头"
+industry = "PCB与覆铜板"
+chokepoint = "高端覆铜板 CCL"
+view = "高速CCL全球龙头，AI服务器主供"
+flash = "⏳ 10/28发财报"
+next_earnings = "2026-10-28"
+kb = ""
+fin = { period = "26Q2", revenue_yoy = 110, profit_yoy = 186.5, gross_margin = 31 }
+fallback_pe = 80.8
+fallback_mcap_usd_bn = 57.1
+
+[[company]]
+id = "SYST"
+name = "生益科技"
+symbol = "600183.SS"
+code = "SH600183"
+market = "A股"
+role = "国内龙头"
+industry = "PCB与覆铜板"
+chokepoint = "高端覆铜板 CCL"
+view = "国内CCL龙头，高速材料放量"
+flash = "Q3预告：前三季归母64.6–68.7亿（+164%~181%），推算Q3单季+212%~252%；⏳ 三季报10/30"
+next_earnings = "2026-10-30"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 54, profit_yoy = 146.7, gross_margin = 32.6 }
+fallback_pe = 53.3
+fallback_mcap_usd_bn = 41.6
+
+[[company]]
+id = "KBL"
+name = "建滔积层板"
+symbol = "1888.HK"
+code = "HK1888"
+market = "港股"
+role = "全球龙头"
+industry = "PCB与覆铜板"
+chokepoint = "高端覆铜板 CCL"
+view = "全球CCL产能龙头，涨价传导受益"
+flash = "—"
+next_earnings = ""
+kb = ""
+fin = { period = "26H1", revenue_yoy = 55.4, profit_yoy = 204, gross_margin = 26.5 }
+fallback_pe = 28.4
+fallback_mcap_usd_bn = 15.8
+
+[[company]]
+id = "HDGF"
+name = "沪电股份"
+symbol = "002463.SZ"
+code = "SZ002463"
+market = "A股"
+role = "全球龙头"
+industry = "PCB与覆铜板"
+chokepoint = "高多层高速PCB产能"
+view = "AI服务器/交换机高多层PCB龙头"
+flash = "Q3预告：前三季归母54.5–57亿（+101%~110%），推算Q3单季+144%~168%；⏳ 三季报10/28"
+next_earnings = "2026-10-28"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 67.8, profit_yoy = 82.7, gross_margin = 41.3 }
+fallback_pe = 43.6
+fallback_mcap_usd_bn = 32.6
+
+[[company]]
+id = "SHKJ"
+name = "胜宏科技"
+symbol = "300476.SZ"
+code = "SZ300476"
+market = "A股"
+role = "全球龙头"
+industry = "PCB与覆铜板"
+chokepoint = "高多层高速PCB产能"
+view = "AI加速卡HDI/高多层PCB快速扩产"
+flash = "H1营收+29%、归母+33%；⏳ 三季报10/30"
+next_earnings = "2026-10-30"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 29.5, profit_yoy = 28.3, gross_margin = 32.1 }
+fallback_pe = 32.3
+fallback_mcap_usd_bn = 26.8
+
+[[company]]
+id = "SNDL"
+name = "深南电路"
+symbol = "002916.SZ"
+code = "SZ002916"
+market = "A股"
+role = "国内龙头"
+industry = "PCB与覆铜板"
+chokepoint = "高多层高速PCB产能"
+view = "高端PCB+封装基板双主业"
+flash = "Q3预告：前三季归母40.5–41.5亿（+74%~78%），推算Q3单季+86%~97%；⏳ 三季报10/23"
+next_earnings = "2026-10-23"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 53.4, profit_yoy = 61.3, gross_margin = 32.4 }
+fallback_pe = 50.1
+fallback_mcap_usd_bn = 31.6
+
+[[company]]
+id = "DZSK"
+name = "大族数控"
+symbol = "301200.SZ"
+code = "SZ301200"
+market = "A股"
+role = "国内龙头"
+industry = "PCB与覆铜板"
+chokepoint = "钻孔设备与钻针"
+view = "PCB钻孔/曝光设备龙头，随扩产放量"
+flash = "三季报快报：前三季营收78.4亿（+101%）、归母15.4亿（+214%）；Q3营收环比-6%；⏳ 三季报10/21"
+next_earnings = "2026-10-21"
+kb = ""
+fin = { period = "26Q3单季", revenue_yoy = 87.8, profit_yoy = 157.1 }
+fallback_pe = 54.5
+fallback_mcap_usd_bn = 13.2
+
+[[company]]
+id = "DTGK"
+name = "鼎泰高科"
+symbol = "301377.SZ"
+code = "SZ301377"
+market = "A股"
+role = "全球龙头"
+industry = "PCB与覆铜板"
+chokepoint = "钻孔设备与钻针"
+view = "PCB钻针全球龙头，涂层微钻放量"
+flash = "H1营收+115%、归母+325%；⏳ 三季报10/28"
+next_earnings = "2026-10-28"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 134.7, profit_yoy = 380.2, gross_margin = 57.9 }
+fallback_pe = 115.7
+fallback_mcap_usd_bn = 17.1
+
+[[company]]
+id = "ZWGX"
+name = "中钨高新"
+symbol = "000657.SZ"
+code = "SZ000657"
+market = "A股"
+role = "国内龙头"
+industry = "PCB与覆铜板"
+chokepoint = "钻孔设备与钻针"
+view = "钨材+PCB微钻（金洲精工）"
+flash = "Q3预告：前三季归母29–31亿（+219%~241%），推算Q3单季+174%~241%；⏳ 三季报10/23"
+next_earnings = "2026-10-23"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 110.1, profit_yoy = 294.4, gross_margin = 30.3 }
+fallback_pe = 34.7
+fallback_mcap_usd_bn = 14.9
+
+[[company]]
+id = "GEV"
+name = "GE Vernova"
+symbol = "GEV"
+code = "GEV"
+market = "美股"
+role = "全球龙头"
+industry = "电力与数据中心"
+chokepoint = "燃气轮机与现场发电"
+view = "燃气轮机+电网设备，缺电主线核心"
+flash = "⏳ 10/28发财报"
+next_earnings = "2026-10-28"
+kb = ""
+fin = { period = "26Q2", revenue_yoy = 21.9, profit_yoy = 32.8, gross_margin = 20.6 }
+fallback_pe = 26.4
+fallback_mcap_usd_bn = 245.3
+
+[[company]]
+id = "ENR"
+name = "西门子能源"
+symbol = "ENR.DE"
+code = "ENR"
+market = "欧股"
+role = "全球龙头"
+industry = "电力与数据中心"
+chokepoint = "燃气轮机与现场发电"
+view = "燃机+电网设备双轮驱动"
+flash = "⏳ 11/11发财报"
+next_earnings = "2026-11-11"
+kb = ""
+fin = { period = "26Q2", revenue_yoy = 17.5, profit_yoy = 80, gross_margin = 20.8 }
+fallback_pe = 44.4
+fallback_mcap_usd_bn = 129.1
+
+[[company]]
+id = "DFDQ"
+name = "东方电气"
+symbol = "600875.SS"
+code = "SH600875"
+market = "A股"
+role = "国内龙头"
+industry = "电力与数据中心"
+chokepoint = "燃气轮机与现场发电"
+view = "国内燃机/火电/核电装备龙头，估值低"
+flash = "H1营收+1%、归母+42%；⏳ 三季报10/30"
+next_earnings = "2026-10-30"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = -2.1, profit_yoy = 49.2, gross_margin = 14.7 }
+fallback_pe = 16.6
+fallback_mcap_usd_bn = 11.4
+
+[[company]]
+id = "SYDQ"
+name = "思源电气"
+symbol = "002028.SZ"
+code = "SZ002028"
+market = "A股"
+role = "国内龙头"
+industry = "电力与数据中心"
+chokepoint = "变压器与电网设备"
+view = "民营电网设备平台型龙头"
+flash = "H1营收+27%、归母+13%；⏳ 三季报10/24"
+next_earnings = "2026-10-24"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 18.1, profit_yoy = 8, gross_margin = 31.6 }
+fallback_pe = 28.1
+fallback_mcap_usd_bn = 13.8
+
+[[company]]
+id = "ZGXD"
+name = "中国西电"
+symbol = "601179.SS"
+code = "SH601179"
+market = "A股"
+role = "国内龙头"
+industry = "电力与数据中心"
+chokepoint = "变压器与电网设备"
+view = "特高压与变压器国家队"
+flash = "H1营收+8%、归母+15%；⏳ 三季报10/22"
+next_earnings = "2026-10-22"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 10.5, profit_yoy = 12.6, gross_margin = 25.5 }
+fallback_pe = 42.2
+fallback_mcap_usd_bn = 8.4
+
+[[company]]
+id = "JPKJ"
+name = "金盘科技"
+symbol = "688676.SS"
+code = "SH688676"
+market = "A股"
+role = "国内龙头"
+industry = "电力与数据中心"
+chokepoint = "变压器与电网设备"
+view = "干式变压器+数据中心电源"
+flash = "三季报已出：前三季营收+17.5%、归母+12.0%"
+next_earnings = ""
+kb = ""
+fin = { period = "26Q3单季", revenue_yoy = 24.9, profit_yoy = 9.4, gross_margin = 26.9 }
+fallback_pe = 34
+fallback_mcap_usd_bn = 3.6
+
+[[company]]
+id = "ETN"
+name = "伊顿 Eaton"
+symbol = "ETN"
+code = "ETN"
+market = "美股"
+role = "全球龙头"
+industry = "电力与数据中心"
+chokepoint = "数据中心供配电"
+view = "数据中心配电/UPS全球龙头"
+flash = "⏳ 11/3发财报"
+next_earnings = "2026-11-03"
+kb = ""
+fin = { period = "26Q2", revenue_yoy = 21.4, profit_yoy = -15.9, gross_margin = 36 }
+fallback_pe = 39.8
+fallback_mcap_usd_bn = 152
+
+[[company]]
+id = "SU"
+name = "施耐德电气"
+symbol = "SU.PA"
+code = "SU"
+market = "欧股"
+role = "全球龙头"
+industry = "电力与数据中心"
+chokepoint = "数据中心供配电"
+view = "全球配电与数据中心基础设施龙头"
+flash = "—"
+next_earnings = ""
+kb = ""
+fin = { period = "26H1", revenue_yoy = 9.8, profit_yoy = 29.3, gross_margin = 42.1 }
+fallback_pe = 29.9
+fallback_mcap_usd_bn = 160.4
+
+[[company]]
+id = "KHSJ"
+name = "科华数据"
+symbol = "002335.SZ"
+code = "SZ002335"
+market = "A股"
+role = "国内龙头"
+industry = "电力与数据中心"
+chokepoint = "数据中心供配电"
+view = "国内UPS/数据中心电源龙头"
+flash = "H1营收+4%、归母+63%；⏳ 三季报10/29"
+next_earnings = "2026-10-29"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = -2.5, profit_yoy = 82.2, gross_margin = 22.3 }
+fallback_pe = 33.7
+fallback_mcap_usd_bn = 2.9
+
+[[company]]
+id = "VRT"
+name = "维谛 Vertiv"
+symbol = "VRT"
+code = "VRT"
+market = "美股"
+role = "全球龙头"
+industry = "电力与数据中心"
+chokepoint = "液冷与热管理"
+view = "数据中心电源+液冷全球龙头"
+flash = "⏳ 10/28发财报"
+next_earnings = "2026-10-28"
+kb = ""
+fin = { period = "26Q2", revenue_yoy = 24.1, profit_yoy = 53, gross_margin = 38 }
+fallback_pe = 46.7
+fallback_mcap_usd_bn = 79.5
+
+[[company]]
+id = "YWK"
+name = "英维克"
+symbol = "002837.SZ"
+code = "SZ002837"
+market = "A股"
+role = "国内龙头"
+industry = "电力与数据中心"
+chokepoint = "液冷与热管理"
+view = "国内数据中心液冷龙头，利润待兑现"
+flash = "H1营收+17%、归母-14%；⏳ 三季报10/27"
+next_earnings = "2026-10-27"
+kb = ""
+fin = { period = "26Q2单季", revenue_yoy = 12.2, profit_yoy = 5.1, gross_margin = 25.3 }
+fallback_pe = 114.6
+fallback_mcap_usd_bn = 8.6
+
+[[company]]
+id = "MOD"
+name = "Modine"
+symbol = "MOD"
+code = "MOD"
+market = "美股"
+role = "全球龙头"
+industry = "电力与数据中心"
+chokepoint = "液冷与热管理"
+view = "数据中心热管理转型，高增长"
+flash = "⏳ 10/27发财报"
+next_earnings = "2026-10-27"
+kb = ""
+fin = { period = "26Q2", revenue_yoy = 28, profit_yoy = 44.2, gross_margin = 22.2 }
+fallback_pe = 56
+fallback_mcap_usd_bn = 7.9

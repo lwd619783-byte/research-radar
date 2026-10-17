@@ -1,0 +1,87 @@
+# 投研雷达：定时抓行情 → 生成页面 → 部署到 Vercel（生产环境）。
+# 说明见 radar/docs/DEPLOY.md 与 radar/docs/HANDOFF.md。
+name: radar-deploy
+
+on:
+  schedule:
+    # GitHub 用 UTC 时间；定时任务常有 5–30 分钟延迟，属正常现象。
+    - cron: "5 23 * * 0-4"   # 北京时间 周一至周五 07:05（美股收盘后）
+    - cron: "40 3 * * 1-5"   # 北京时间 周一至周五 11:40（A股午间）
+    - cron: "20 8 * * 1-5"   # 北京时间 周一至周五 16:20（A股收盘后）
+  push:
+    branches: [main]
+    paths:
+      - "radar/**"
+      - "!radar/docs/**"
+      - "!radar/**/*.md"
+      - ".github/workflows/radar-deploy.yml"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "即使行情没变化也重新部署"
+        type: boolean
+        default: true
+
+concurrency:
+  group: radar-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 恢复行情缓存
+        uses: actions/cache/restore@v4
+        with:
+          path: radar/.cache
+          key: radar-quotes-${{ github.run_id }}
+          restore-keys: radar-quotes-
+
+      - name: 校验数据并生成页面
+        id: build
+        env:
+          FORCE: ${{ (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.force)) && '--force' || '' }}
+        run: python radar/scripts/build.py $FORCE
+
+      - name: 上传页面（备用下载）
+        if: steps.build.outputs.changed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: investment-radar
+          path: radar/dist/investment-radar
+          retention-days: 7
+
+      - name: 部署到 Vercel（生产）
+        if: steps.build.outputs.changed == 'true'
+        working-directory: radar/dist/investment-radar
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          ORG: ${{ secrets.VERCEL_ORG_ID }}
+          PRJ: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::缺少 GitHub Secret「VERCEL_TOKEN」，按 radar/docs/DEPLOY.md 第 2 步添加。"
+            exit 1
+          fi
+          # 两个 ID 都配置了才使用；否则 CLI 按目录名「investment-radar」自动关联 / 创建项目
+          if [ -n "$ORG" ] && [ -n "$PRJ" ]; then export VERCEL_ORG_ID="$ORG" VERCEL_PROJECT_ID="$PRJ"; fi
+          url=$(npx --yes vercel@latest deploy --prod --yes --token "$VERCEL_TOKEN")
+          echo "### 🚀 已部署：$url" >> "$GITHUB_STEP_SUMMARY"
+          echo "（自定义域名会自动指向最新的生产部署）" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: 保存行情缓存
+        if: success() && steps.build.outputs.changed == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: radar/.cache
+          key: radar-quotes-${{ github.run_id }}

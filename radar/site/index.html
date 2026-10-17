@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark" data-conv="cn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>投研雷达 · Alpha Radar</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="一屏看清：最值得追踪的行业、关键卡点、细分龙头与近期走势财务">
+<style>/*__CSS__*/</style>
+</head>
+<body>
+<div class="bg-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <linearGradient id="g-up" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="s-up" stop-opacity=".34"/><stop offset="1" class="s-up" stop-opacity="0"/></linearGradient>
+  <linearGradient id="g-down" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="s-down" stop-opacity=".34"/><stop offset="1" class="s-down" stop-opacity="0"/></linearGradient>
+  <linearGradient id="g-score" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b7bff"/><stop offset="1" stop-color="#45c4ff"/></linearGradient>
+  <radialGradient id="g-radar" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#45c4ff" stop-opacity=".45"/><stop offset="1" stop-color="#8b7bff" stop-opacity=".18"/></radialGradient>
+  <linearGradient id="g-gauge" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffc857"/><stop offset=".5" stop-color="#7d8597"/><stop offset="1" stop-color="#8b7bff"/></linearGradient>
+</defs></svg>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="#overview" aria-label="投研雷达">
+      <span class="brand-mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9" opacity=".45"/><circle cx="12" cy="12" r="4.5" opacity=".75"/><g class="sweep"><path d="M12 12 18.4 5.6"/></g><circle cx="12" cy="12" r="1.3" fill="#fff" stroke="none"/></svg></span>
+      <span>投研雷达</span><span class="brand-tag">ALPHA RADAR</span>
+    </a>
+    <nav class="nav" id="nav">
+      <span class="nav-ind" id="navInd"></span>
+      <a href="#overview" data-sec="overview">总览</a>
+      <a href="#radar" data-sec="radar">行业雷达</a>
+      <a href="#choke" data-sec="choke">卡点地图</a>
+      <a href="#leaders" data-sec="leaders">龙头公司</a>
+      <a href="#calendar" data-sec="calendar">财报日历</a>
+    </nav>
+    <div class="actions">
+      <button class="search-trigger" id="openPalette" aria-label="搜索"><span id="icSearch"></span><span class="txt">搜索公司、代码、行业、卡点</span><kbd id="kbdHint">⌘K</kbd></button>
+      <button class="icon-btn" id="convBtn" title="切换涨跌配色"><span class="conv-dots"><i></i><i></i></span><span id="convLabel">红涨绿跌</span></button>
+      <button class="icon-btn sq" id="themeBtn" title="切换深色 / 浅色"></button>
+    </div>
+  </div>
+  <div class="ticker" aria-label="行情跑马灯"><div class="ticker-label"><span class="live"></span><span id="tickerLabel"></span></div><div class="ticker-vp"><div class="ticker-track" id="tickerTrack"></div></div></div>
+</header>
+
+<main class="wrap">
+  <!-- 总览 -->
+  <section id="overview" class="section">
+    <div class="hero-head reveal">
+      <div class="eyebrow"><span class="live"></span><span id="heroDate">本周结论</span></div>
+      <h1 class="h1" id="heroTitle"></h1>
+      <p class="lead" id="heroLead"></p>
+      <div class="kpis" id="kpis"></div>
+    </div>
+    <div class="bento">
+      <article class="card c-top reveal" id="topCard"></article>
+      <article class="card c-rank reveal" id="rankCard"></article>
+      <article class="card c-thermo reveal" id="thermoCard"></article>
+      <article class="card c-soon reveal" id="soonCard"></article>
+    </div>
+  </section>
+
+  <!-- 行业雷达 -->
+  <section id="radar" class="section">
+    <div class="sec-head reveal">
+      <div><div class="eyebrow">01 · 行业雷达</div><h2 class="h2">哪个行业最值得追踪？</h2><p class="sub">景气度 · 业绩兑现 · 卡点强度 · 估值位置，各 1–5 分，满分 20 · 点击行业查看详情</p></div>
+      <div class="seg" id="levelSeg"></div>
+    </div>
+    <div class="radar-grid">
+      <div class="card ind-list reveal" id="indList"></div>
+      <aside class="card ind-detail reveal" id="indDetail"></aside>
+    </div>
+  </section>
+
+  <!-- 卡点地图 -->
+  <section id="choke" class="section">
+    <div class="sec-head reveal">
+      <div><div class="eyebrow">02 · 卡点地图</div><h2 class="h2">卡脖子的环节在哪？</h2><p class="sub">每条主线拆成 4 个关键卡点（细分领域），按紧缺程度排序 · 点击龙头查看走势与财务</p></div>
+      <div class="seg" id="cpSeg"></div>
+    </div>
+    <div class="flow" id="flow"></div>
+  </section>
+
+  <!-- 龙头公司 -->
+  <section id="leaders" class="section">
+    <div class="sec-head reveal">
+      <div><div class="eyebrow">03 · 龙头公司</div><h2 class="h2">细分龙头最近怎么样？</h2><p class="sub" id="leadSub">按行业 → 卡点分组 · 面积≈市值（压缩显示）· 颜色=所选指标</p></div>
+      <div class="seg" id="viewSeg"></div>
+    </div>
+    <div class="filters reveal">
+      <div class="seg" id="metricSeg"></div>
+      <div class="seg" id="indSeg"></div>
+      <div class="seg" id="mktSeg"></div>
+    </div>
+    <div class="card map-card reveal" id="mapCard"><div class="treemap" id="treemap"><div id="mapLabels"></div><div id="mapTiles"></div></div><div class="map-legend" id="mapLegend"></div></div>
+    <div class="card table-card" id="tableCard" hidden><div class="table-wrap"><table class="tbl" id="tbl"></table></div><div class="legend-sig" id="sigLegend"></div></div>
+  </section>
+
+  <!-- 财报日历 -->
+  <section id="calendar" class="section">
+    <div class="sec-head reveal">
+      <div><div class="eyebrow">04 · 财报日历</div><h2 class="h2">接下来要验证什么？</h2><p class="sub" id="calSub"></p></div>
+    </div>
+    <div class="card cal-card reveal"><div class="cal-head"><div class="ind-legend" id="calLegend"></div><span class="hint">横向滑动查看更多 →</span></div><div class="cal" id="cal"></div></div>
+  </section>
+
+  <footer class="foot" id="foot"></footer>
+</main>
+
+<div class="mask" id="mask"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" role="dialog" aria-label="公司详情"></aside>
+<div class="palette" id="palette" hidden>
+  <div class="pbox" role="dialog" aria-label="搜索">
+    <div class="pin"><span id="icSearch2"></span><input id="pq" placeholder="搜索公司、代码、行业、卡点…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <div class="plist" id="plist"></div>
+    <div class="pfoot"><span>↑↓ 选择</span><span>↵ 打开</span><span>Esc 关闭</span></div>
+  </div>
+</div>
+<div class="tip" id="tip"></div>
+<script>const DATA=/*__DATA__*/;</script>
+<script>/*__JS__*/</script>
+</body>
+</html>

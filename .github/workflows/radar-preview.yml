@@ -1,0 +1,78 @@
+# 投研雷达：PR 预览。改了 radar/ 下的文件时，校验数据并部署一个预览地址，评论到 PR 里。
+# 预览地址默认受 Vercel 登录保护（需登录你的 Vercel 账号才能打开）。
+name: radar-preview
+
+on:
+  pull_request:
+    paths:
+      - "radar/**"
+      - ".github/workflows/radar-*.yml"
+
+concurrency:
+  group: radar-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 校验数据
+        run: python radar/scripts/build.py --check
+
+      - name: 恢复行情缓存（只读）
+        uses: actions/cache/restore@v4
+        with:
+          path: radar/.cache
+          key: radar-quotes-preview-${{ github.run_id }}
+          restore-keys: radar-quotes-
+
+      - name: 生成页面
+        run: python radar/scripts/build.py --force
+
+      - name: 上传页面（可下载后本地打开）
+        uses: actions/upload-artifact@v4
+        with:
+          name: investment-radar-pr${{ github.event.pull_request.number }}
+          path: radar/dist/investment-radar
+          retention-days: 7
+
+      - name: 部署 Vercel 预览
+        id: deploy
+        # 来自 fork 的 PR 拿不到 secrets，跳过部署
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        working-directory: radar/dist/investment-radar
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          ORG: ${{ secrets.VERCEL_ORG_ID }}
+          PRJ: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then echo "未配置 VERCEL_TOKEN，跳过预览部署"; exit 0; fi
+          if [ -n "$ORG" ] && [ -n "$PRJ" ]; then export VERCEL_ORG_ID="$ORG" VERCEL_PROJECT_ID="$PRJ"; fi
+          url=$(npx --yes vercel@latest deploy --yes --token "$VERCEL_TOKEN")
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+      - name: 在 PR 里评论预览地址
+        if: steps.deploy.outputs.url != ''
+        uses: actions/github-script@v7
+        env:
+          URL: ${{ steps.deploy.outputs.url }}
+        with:
+          script: |
+            const marker = '<!-- radar-preview -->';
+            const body = `${marker}\n🔍 **投研雷达预览**：${process.env.URL}\n\n提交：${context.payload.pull_request.head.sha.slice(0, 7)} · 数据校验通过。合并到 main 后自动发布到正式地址。`;
+            const { owner, repo } = context.repo, issue_number = context.issue.number;
+            const list = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number });
+            const old = list.find(c => c.body && c.body.includes(marker));
+            if (old) await github.rest.issues.updateComment({ owner, repo, comment_id: old.id, body });
+            else await github.rest.issues.createComment({ owner, repo, issue_number, body });

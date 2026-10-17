@@ -1,0 +1,143 @@
+# 行业雷达：每个 [[industry]] 是一个行业。页面按总分（四项之和）从高到低排序。
+# 评分口径（各 1–5 分，整数）：
+#   boom      景气度：需求增速与资本开支强度，5 = 最强
+#   delivery  业绩兑现：龙头最近财报是否已兑现高增长，5 = 大幅兑现
+#   choke     卡点强度：供给瓶颈是否清晰并带来定价权，5 = 极紧
+#   valuation 估值位置：相对历史与增速的性价比，5 = 回调最充分 / 最便宜
+# 级别（自动计算）：总分 ≥ 17 重点追踪；14–16 持续观察；≤ 13 低频跟踪。
+# kb：知识库笔记在仓库里的相对路径（相对仓库根目录），留空则页面不显示「知识库笔记」按钮。
+
+[[industry]]
+name = "AI网络与光互连"
+scores = { boom = 5, delivery = 5, choke = 5, valuation = 4 }
+logic = "AI集群800G→1.6T/CPO升级，光芯片与光模块产能是最紧卡点，量价齐升"
+signal = "1.6T放量；博通CPO 51.2T已交付；源杰Q3单季归母预告约+6倍；天孚称上游材料供应Q2末起改善"
+risk = "龙头近20日跌20%–25%、距高点约-50%；云厂资本开支预期、价格年降、CPO替代节奏"
+reps = "中际旭创、新易盛、天孚通信、源杰科技、Lumentum、Coherent、博通、Marvell、Arista"
+kb = "投研知识库/行业研究/AI网络与光互连｜交换、光模块、CPO与高速连接.md"
+
+[[industry]]
+name = "AI核心半导体"
+scores = { boom = 5, delivery = 5, choke = 5, valuation = 3 }
+logic = "算力需求拉动先进制程、CoWoS、HBM与设备全线紧缺，龙头业绩已大幅兑现"
+signal = "台积电Q3营收+41%、Q4指引523–543亿美元；ASML Q3营收+55%；长鑫前三季预告扭亏"
+risk = "存储周期见顶担忧（海力士距高点-56%）、出口管制、估值偏高"
+reps = "英伟达、台积电、ASMPT、SK海力士、美光、长鑫科技、ASML、北方华创、中微公司"
+kb = "投研知识库/行业研究/AI核心半导体｜GPU ASIC、HBM、先进制程与半导体设备.md"
+
+[[industry]]
+name = "PCB与覆铜板"
+scores = { boom = 5, delivery = 5, choke = 4, valuation = 3 }
+logic = "AI服务器拉动高多层PCB与高速CCL，上游玻纤布/树脂/钻针供给紧，涨价沿链传导"
+signal = "Q3预告密集高增：生益前三季归母+164%~181%、沪电+101%~110%、深南+74%~78%、中钨+219%~241%"
+risk = "股价大幅回调（多数距高点-40%~-60%）、扩产后价格回落、客户集中"
+reps = "台光电子、生益科技、建滔积层板、日东纺、宏和科技、东材科技、沪电股份、胜宏科技、深南电路、大族数控、鼎泰高科、中钨高新"
+kb = "投研知识库/行业研究/PCB与覆铜板（CCL）｜AI算力、高速材料与供给约束.md"
+
+[[industry]]
+name = "电力与数据中心"
+scores = { boom = 4, delivery = 3, choke = 5, valuation = 3 }
+logic = "AI数据中心“缺电”：燃机、变压器、供配电、液冷交付周期长，订单确定性强"
+signal = "IEA：全球数据中心用电2025年485TWh→2030年950TWh；海外龙头10/27–11/11密集发财报"
+risk = "国内公司利润与现金流滞后（8家中6家H1自由现金流为负）；液冷需求成立但利润未成熟"
+reps = "GE Vernova、西门子能源、东方电气、思源电气、中国西电、金盘科技、伊顿、施耐德、科华数据、Vertiv、英维克、Modine"
+kb = "投研知识库/行业研究/全球电力与数据中心基础设施｜电网、供配电、液冷与燃机.md"
+
+[[industry]]
+name = "探针卡与半导体测试"
+scores = { boom = 4, delivery = 4, choke = 4, valuation = 2 }
+logic = "HBM与先进封装提升晶圆测试难度，探针卡量价齐升并有国产替代空间"
+signal = "强一股份H1营收+67%、净利+61%"
+risk = "估值偏高；国产份额小、客户验证周期长"
+reps = "FormFactor、强一股份、和林微纳、精智达"
+kb = "投研知识库/行业研究/探针卡｜AI HBM 先进封装驱动晶圆测试升级与国产替代.md"
+
+[[industry]]
+name = "光纤光缆"
+scores = { boom = 4, delivery = 4, choke = 3, valuation = 3 }
+logic = "AI数据中心与DCI拉动高端光纤（多芯/空芯等），传统运营商需求偏弱"
+signal = "长飞H1光传输业务收入+59%"
+risk = "运营商集采价格周期；高端产品放量节奏"
+reps = "长飞光纤、康宁、藤仓、Prysmian"
+kb = "投研知识库/行业研究/光纤光缆｜AI数据中心、运营商需求与高端光纤升级.md"
+
+[[industry]]
+name = "MLCC与精密时钟"
+scores = { boom = 4, delivery = 3, choke = 4, valuation = 3 }
+logic = "AI服务器单机MLCC与高精度时钟用量数倍提升，高端品偏紧"
+signal = "麦高证券测算AI服务器MLCC需求2026–2028年约680/1378/3125亿颗（模型值，非已实现）"
+risk = "高端需求仍需ASP/毛利兑现；消费电子需求偏弱"
+reps = "村田、太阳诱电、三星电机、三环集团、风华高科、SiTime、NDK、泰晶科技"
+kb = "投研知识库/行业研究/MLCC｜多层陶瓷电容器：高端供需、盈利兑现与估值边界.md"
+
+[[industry]]
+name = "AI服务器"
+scores = { boom = 5, delivery = 3, choke = 2, valuation = 3 }
+logic = "出货高增但整机毛利薄，价值主要被芯片与网络环节拿走"
+signal = "整机厂利润率显著低于上游；SMCI自由现金流为负"
+risk = "低毛利、营运资金占用、客户议价强"
+reps = "Dell、HPE、SMCI、联想、浪潮信息、中科曙光、纬颖"
+kb = "投研知识库/行业研究/AI服务器与企业IT基础设施.md"
+
+[[industry]]
+name = "创新药（GLP-1/CXO/AI制药）"
+scores = { boom = 4, delivery = 3, choke = 3, valuation = 3 }
+logic = "GLP-1减重大单品与中国创新药出海；AI制药仍处临床验证早期"
+signal = "多靶点与口服小分子成为下一竞争焦点；AI制药以临床里程碑为准"
+risk = "临床失败、医保降价、专利到期；AI制药收入兑现慢"
+reps = "礼来、诺和诺德、恒瑞医药、信达生物、晶泰控股、英矽智能、Schrödinger"
+kb = "投研知识库/行业研究/肥胖与代谢创新药｜GLP-1 GIP、多靶点与口服小分子.md"
+
+[[industry]]
+name = "航空航天与国防"
+scores = { boom = 3, delivery = 3, choke = 3, valuation = 3 }
+logic = "民航发动机售后（MRO）长周期 + 商业航天/军工，确定性较高但与AI主线弱相关"
+signal = "暂无新增强信号"
+risk = "供应链交付瓶颈、军工订单节奏"
+reps = "GE Aerospace、赛峰、商业航天与军工链"
+kb = "投研知识库/行业研究/航空航天与国防｜研究导航与六篇研报台账.md"
+
+[[industry]]
+name = "电池与储能"
+scores = { boom = 3, delivery = 3, choke = 3, valuation = 3 }
+logic = "储能需求旺盛，但锂电整体产能过剩；全固态仍处产业化早期"
+signal = "全固态处中试/小批量阶段"
+risk = "价格战、技术路线不确定"
+reps = "宁德时代、比亚迪、LG新能源"
+kb = "投研知识库/行业研究/电池行业｜全固态产业化、先进锂电与储能：政策技术路线研究基线.md"
+
+[[industry]]
+name = "网络安全"
+scores = { boom = 3, delivery = 3, choke = 2, valuation = 3 }
+logic = "AI带来新攻击面，安全支出向平台化与身份/云安全集中"
+signal = "暂无新增强信号"
+risk = "估值高、增速放缓、平台整合竞争"
+reps = "Palo Alto、CrowdStrike、Zscaler"
+kb = "投研知识库/行业研究/网络安全｜云安全、身份安全与AI Security.md"
+
+[[industry]]
+name = "玻璃基板"
+scores = { boom = 3, delivery = 1, choke = 3, valuation = 3 }
+logic = "下一代先进封装基板（TGV），工程推进中，规模化交付与盈利待验证"
+signal = "LPKF相关收入确认延期"
+risk = "量产时间表推迟、良率与成本"
+reps = "LPKF、康宁等"
+kb = "投研知识库/行业研究/玻璃基板行业 V1｜先进封装、TGV与全球产业链.md"
+
+[[industry]]
+name = "消费"
+scores = { boom = 2, delivery = 3, choke = 1, valuation = 4 }
+logic = "结构分化：新消费（潮玩/IP/黄金珠宝）强，传统消费弱"
+signal = "暂无新增强信号"
+risk = "总需求偏弱、高位新消费估值回落"
+reps = "泡泡玛特、布鲁可、贵州茅台、周大福"
+kb = "投研知识库/行业研究/消费行业｜结构分化、全球比较与投资研究总览.md"
+
+[[industry]]
+name = "房地产"
+scores = { boom = 1, delivery = 2, choke = 1, valuation = 4 }
+logic = "政策筑底、行业仍在出清，龙头分化"
+signal = "暂无新增强信号"
+risk = "销售与房价继续下行"
+reps = "华润置地、D.R. Horton"
+kb = "投研知识库/行业研究/房地产｜政策筑底、结构分化与A H龙头投资框架.md"
