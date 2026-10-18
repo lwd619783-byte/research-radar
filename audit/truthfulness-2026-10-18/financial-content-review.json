@@ -1,0 +1,2521 @@
+[
+  {
+    "id": "YJKJ",
+    "reports": [
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225527905.PDF",
+        "values": {
+          "revenue": [
+            "925,150,462.56",
+            "204,950,879.23"
+          ],
+          "operating_revenue": [
+            "925,150,462.56",
+            "204,950,879.23"
+          ],
+          "cost": [
+            "181,101,193.87",
+            "104,938,904.67"
+          ],
+          "profit": [
+            "607,072,892.98",
+            "46,263,909.26"
+          ]
+        }
+      },
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-04-28/1225208649.PDF",
+        "values": {
+          "revenue": [
+            "355,278,486.49",
+            "84,401,229.37"
+          ],
+          "operating_revenue": [
+            "355,278,486.49",
+            "84,401,229.37"
+          ],
+          "cost": [
+            "78,843,893.33",
+            "46,723,352.39"
+          ],
+          "profit": [
+            "179,441,968.61",
+            "14,320,164.13"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        569871976.0699999,
+        120549649.85999998
+      ],
+      "operating_revenue": [
+        569871976.0699999,
+        120549649.85999998
+      ],
+      "cost": [
+        102257300.54,
+        58215552.28
+      ],
+      "profit": [
+        427630924.37,
+        31943745.129999995
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 372.72802262953,
+      "profit_yoy": 1238.7000260291647,
+      "gross_margin": 82.0560924498875
+    },
+    "delta": {
+      "revenue_yoy": 0.028023,
+      "profit_yoy": 2.6e-05,
+      "gross_margin": -0.043908
+    },
+    "candidate": {
+      "revenue_yoy": 372.7,
+      "profit_yoy": 1238.7,
+      "gross_margin": 82.1
+    },
+    "deltas": {
+      "revenue_yoy": 0.028022629530028098,
+      "profit_yoy": 2.6029164700958063e-05,
+      "gross_margin": -0.043907550112493254
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-29/1225527905.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-28/1225208649.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-09-03/1225543133.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.082877+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "ZJXC",
+    "reports": [
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-22/1225491753.PDF",
+        "values": {
+          "revenue": [
+            "41,777,861,795.03",
+            "14,789,074,837.80"
+          ],
+          "operating_revenue": [
+            "41,777,861,795.03",
+            "14,789,074,837.80"
+          ],
+          "cost": [
+            "22,454,688,140.44",
+            "8,972,966,839.76"
+          ],
+          "profit": [
+            "13,651,149,693.27",
+            "3,995,115,384.70"
+          ]
+        }
+      },
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225111941.PDF",
+        "values": {
+          "revenue": [
+            "19,496,398,083.95",
+            "6,674,176,487.23"
+          ],
+          "operating_revenue": [
+            "19,496,398,083.95",
+            "6,674,176,487.23"
+          ],
+          "cost": [
+            "10,516,721,119.21",
+            "4,224,687,051.60"
+          ],
+          "profit": [
+            "5,734,501,526.83",
+            "1,582,876,128.67"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        22281463711.079998,
+        8114898350.57
+      ],
+      "operating_revenue": [
+        22281463711.079998,
+        8114898350.57
+      ],
+      "cost": [
+        11937967021.23,
+        4748279788.16
+      ],
+      "profit": [
+        7916648166.440001,
+        2412239256.0299997
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 174.57477282528035,
+      "profit_yoy": 228.18668988369808,
+      "gross_margin": 46.42198027908931
+    },
+    "delta": {
+      "revenue_yoy": -0.025227,
+      "profit_yoy": -0.01331,
+      "gross_margin": 0.02198
+    },
+    "candidate": {
+      "revenue_yoy": 174.6,
+      "profit_yoy": 228.2,
+      "gross_margin": 46.4
+    },
+    "deltas": {
+      "revenue_yoy": -0.025227174719645973,
+      "profit_yoy": -0.013310116301909147,
+      "gross_margin": 0.02198027908931266
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-22/1225491753.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-17/1225111941.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-08-22/1225491756.PDF",
+      "https://www.cninfo.com.cn/new/hisAnnouncement/query"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.082900+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "XYS",
+    "reports": [
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-25/1225499406.PDF",
+        "values": {
+          "revenue": [
+            "20,909,746,962.20",
+            "10,437,170,265.50"
+          ],
+          "operating_revenue": [
+            "20,909,746,962.20",
+            "10,437,170,265.50"
+          ],
+          "cost": [
+            "10,781,121,465.77",
+            "5,487,204,465.82"
+          ],
+          "profit": [
+            "7,529,168,039.39",
+            "3,942,294,268.37"
+          ]
+        }
+      },
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-04-24/1225172606.PDF",
+        "values": {
+          "revenue": [
+            "8,337,902,040.74",
+            "4,052,256,538.37"
+          ],
+          "operating_revenue": [
+            "8,337,902,040.74",
+            "4,052,256,538.37"
+          ],
+          "cost": [
+            "4,238,909,758.12",
+            "2,080,439,291.73"
+          ],
+          "profit": [
+            "2,780,222,960.23",
+            "1,572,525,789.22"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        12571844921.460001,
+        6384913727.13
+      ],
+      "operating_revenue": [
+        12571844921.460001,
+        6384913727.13
+      ],
+      "cost": [
+        6542211707.650001,
+        3406765174.0899997
+      ],
+      "profit": [
+        4748945079.16,
+        2369768479.1499996
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 96.89921365798952,
+      "profit_yoy": 100.39700590765621,
+      "gross_margin": 47.961403051651416
+    },
+    "delta": {
+      "revenue_yoy": -0.000786,
+      "profit_yoy": -0.002994,
+      "gross_margin": -0.038597
+    },
+    "candidate": {
+      "revenue_yoy": 96.9,
+      "profit_yoy": 100.4,
+      "gross_margin": 48
+    },
+    "deltas": {
+      "revenue_yoy": -0.0007863420104854413,
+      "profit_yoy": -0.0029940923437976608,
+      "gross_margin": -0.03859694834858374
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-25/1225499406.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-24/1225172606.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-08-25/1225499412.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.082910+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "TFTX",
+    "reports": [
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-19/1225480328.PDF",
+        "values": {
+          "revenue": [
+            "2,827,938,748.37",
+            "2,455,890,299.50"
+          ],
+          "operating_revenue": [
+            "2,827,938,748.37",
+            "2,455,890,299.50"
+          ],
+          "cost": [
+            "1,106,583,801.94",
+            "1,208,582,310.73"
+          ],
+          "profit": [
+            "1,204,285,104.14",
+            "899,241,294.92"
+          ]
+        }
+      },
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-04-21/1225128020.PDF",
+        "values": {
+          "revenue": [
+            "1,330,270,175.36",
+            "944,631,274.77"
+          ],
+          "operating_revenue": [
+            "1,330,270,175.36",
+            "944,631,274.77"
+          ],
+          "cost": [
+            "577,284,926.96",
+            "443,551,103.58"
+          ],
+          "profit": [
+            "492,218,878.05",
+            "337,626,696.86"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        1497668573.01,
+        1511259024.73
+      ],
+      "operating_revenue": [
+        1497668573.01,
+        1511259024.73
+      ],
+      "cost": [
+        529298874.98,
+        765031207.1500001
+      ],
+      "profit": [
+        712066226.0900002,
+        561614598.06
+      ]
+    },
+    "computed": {
+      "revenue_yoy": -0.8992801033845366,
+      "profit_yoy": 26.789123457564877,
+      "gross_margin": 64.65847754845919
+    },
+    "delta": {
+      "revenue_yoy": 0.00072,
+      "profit_yoy": -0.010877,
+      "gross_margin": -0.041522
+    },
+    "candidate": {
+      "revenue_yoy": -0.9,
+      "profit_yoy": 26.8,
+      "gross_margin": 64.7
+    },
+    "deltas": {
+      "revenue_yoy": 0.0007198966154634556,
+      "profit_yoy": -0.010876542435124037,
+      "gross_margin": -0.04152245154081413
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-19/1225480328.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-21/1225128020.PDF",
+      "https://www.tfcsz.com/finace_report.html"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.082918+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "NAURA",
+    "reports": [
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225501903.PDF",
+        "values": {
+          "revenue": [
+            "20,161,416,890.56",
+            "16,141,546,184.74"
+          ],
+          "operating_revenue": [
+            "20,161,416,890.56",
+            "16,141,546,184.74"
+          ],
+          "cost": [
+            "12,083,082,667.68",
+            "9,334,918,557.14"
+          ],
+          "profit": [
+            "3,370,020,676.75",
+            "3,207,978,523.58"
+          ]
+        }
+      },
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259650.PDF",
+        "values": {
+          "revenue": [
+            "10,322,863,908.82",
+            "8,206,029,208.83"
+          ],
+          "operating_revenue": [
+            "10,322,863,908.82",
+            "8,206,029,208.83"
+          ],
+          "cost": [
+            "6,113,944,336.44",
+            "4,676,152,385.65"
+          ],
+          "profit": [
+            "1,634,739,048.68",
+            "1,580,707,286.38"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        9838552981.740002,
+        7935516975.91
+      ],
+      "operating_revenue": [
+        9838552981.740002,
+        7935516975.91
+      ],
+      "cost": [
+        5969138331.240001,
+        4658766171.49
+      ],
+      "profit": [
+        1735281628.07,
+        1627271237.1999998
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 23.98124799691166,
+      "profit_yoy": 6.637516131351928,
+      "gross_margin": 39.329103148415165
+    },
+    "delta": {
+      "revenue_yoy": -0.0,
+      "profit_yoy": 0.0,
+      "gross_margin": 0.0
+    },
+    "candidate": {
+      "revenue_yoy": 23.981248,
+      "profit_yoy": 6.637516,
+      "gross_margin": 39.329103
+    },
+    "deltas": {
+      "revenue_yoy": -3.0883420265581663e-09,
+      "profit_yoy": 1.3135192844515586e-07,
+      "gross_margin": 1.4841516104979746e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-26/1225501903.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259650.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.082927+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "AMEC",
+    "reports": [
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-20/1225482884.PDF",
+        "values": {
+          "revenue": [
+            "6,691,287,327.67",
+            "4,960,601,270.04"
+          ],
+          "operating_revenue": [
+            "6,691,287,327.67",
+            "4,960,601,270.04"
+          ],
+          "cost": [
+            "4,032,053,493.18",
+            "2,983,547,721.77"
+          ],
+          "profit": [
+            "2,825,194,624.91",
+            "705,916,536.34"
+          ]
+        }
+      },
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-04-28/1225215453.PDF",
+        "values": {
+          "revenue": [
+            "2,914,986,518.73",
+            "2,173,278,385.62"
+          ],
+          "operating_revenue": [
+            "2,914,986,518.73",
+            "2,173,278,385.62"
+          ],
+          "cost": [
+            "1,752,123,631.66",
+            "1,270,562,411.05"
+          ],
+          "profit": [
+            "930,487,319.17",
+            "313,082,457.72"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        3776300808.94,
+        2787322884.42
+      ],
+      "operating_revenue": [
+        3776300808.94,
+        2787322884.42
+      ],
+      "cost": [
+        2279929861.5199995,
+        1712985310.72
+      ],
+      "profit": [
+        1894707305.7399998,
+        392834078.62
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 35.48128313544097,
+      "profit_yoy": 382.3174487294943,
+      "gross_margin": 39.625311200778754
+    },
+    "delta": {
+      "revenue_yoy": 0.0,
+      "profit_yoy": -0.0,
+      "gross_margin": 0.0
+    },
+    "candidate": {
+      "revenue_yoy": 35.481283,
+      "profit_yoy": 382.317449,
+      "gross_margin": 39.625311
+    },
+    "deltas": {
+      "revenue_yoy": 1.3544097043904912e-07,
+      "profit_yoy": -2.70505722710368e-07,
+      "gross_margin": 2.007787500701852e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-20/1225482884.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-28/1225215453.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.082936+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "HHKJ",
+    "reports": [
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-14/1225471942.PDF",
+        "values": {
+          "revenue": [
+            "1,047,839,470.58",
+            "550,367,816.90"
+          ],
+          "operating_revenue": [
+            "1,047,839,470.58",
+            "550,367,816.90"
+          ],
+          "cost": [
+            "426,020,016.60",
+            "377,773,936.98"
+          ],
+          "profit": [
+            "379,486,597.65",
+            "87,375,105.69"
+          ]
+        }
+      },
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225110573.PDF",
+        "values": {
+          "revenue": [
+            "442,100,400.00",
+            "245,995,124.27"
+          ],
+          "operating_revenue": [
+            "442,100,400.00",
+            "245,995,124.27"
+          ],
+          "cost": [
+            "196,051,319.62",
+            "176,962,748.18"
+          ],
+          "profit": [
+            "140,230,750.90",
+            "30,873,170.08"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        605739070.58,
+        304372692.63
+      ],
+      "operating_revenue": [
+        605739070.58,
+        304372692.63
+      ],
+      "cost": [
+        229968696.98000002,
+        200811188.8
+      ],
+      "profit": [
+        239255846.74999997,
+        56501935.61
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 99.01229159093636,
+      "profit_yoy": 323.4471689632793,
+      "gross_margin": 62.03502330470393
+    },
+    "delta": {
+      "revenue_yoy": -0.0,
+      "profit_yoy": -0.0,
+      "gross_margin": 0.0
+    },
+    "candidate": {
+      "revenue_yoy": 99.012292,
+      "profit_yoy": 323.447169,
+      "gross_margin": 62.035023
+    },
+    "deltas": {
+      "revenue_yoy": -4.0906364517923066e-07,
+      "profit_yoy": -3.6720678053825395e-08,
+      "gross_margin": 3.0470392431425353e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-14/1225471942.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-17/1225110573.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.082944+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "DCKJ",
+    "reports": [
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486300.PDF",
+        "values": {
+          "revenue": [
+            "3,094,871,633.96",
+            "2,431,397,155.11"
+          ],
+          "operating_revenue": [
+            "3,094,871,633.96",
+            "2,431,397,155.11"
+          ],
+          "cost": [
+            "2,574,724,409.65",
+            "2,030,530,826.06"
+          ],
+          "profit": [
+            "311,714,541.87",
+            "190,323,166.11"
+          ]
+        }
+      },
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-04-23/1225148309.PDF",
+        "values": {
+          "revenue": [
+            "1,443,571,552.58",
+            "1,134,488,921.38"
+          ],
+          "operating_revenue": [
+            "1,443,571,552.58",
+            "1,134,488,921.38"
+          ],
+          "cost": [
+            "1,196,290,715.49",
+            "948,495,506.27"
+          ],
+          "profit": [
+            "186,832,252.74",
+            "91,877,310.20"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        1651300081.38,
+        1296908233.73
+      ],
+      "operating_revenue": [
+        1651300081.38,
+        1296908233.73
+      ],
+      "cost": [
+        1378433694.16,
+        1082035319.79
+      ],
+      "profit": [
+        124882289.13,
+        98445855.91000001
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 27.325900046971242,
+      "profit_yoy": 26.853779649362174,
+      "gross_margin": 16.524336811754058
+    },
+    "delta": {
+      "revenue_yoy": 0.0,
+      "profit_yoy": -0.0,
+      "gross_margin": -0.0
+    },
+    "candidate": {
+      "revenue_yoy": 27.3259,
+      "profit_yoy": 26.85378,
+      "gross_margin": 16.524337
+    },
+    "deltas": {
+      "revenue_yoy": 4.697124111885387e-08,
+      "profit_yoy": -3.5063782632960283e-07,
+      "gross_margin": -1.8824594150146368e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486300.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-23/1225148309.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.082952+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "SYST",
+    "reports": [
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-15/1225475783.PDF",
+        "values": {
+          "revenue": [
+            "19,025,611,766.13",
+            "12,679,896,704.94"
+          ],
+          "operating_revenue": [
+            "19,025,611,766.13",
+            "12,679,896,704.94"
+          ],
+          "cost": [
+            "13,186,218,676.71",
+            "9,401,399,615.02"
+          ],
+          "profit": [
+            "3,286,977,278.33",
+            "1,426,490,859.25"
+          ]
+        }
+      },
+      {
+        "url": "https://www.syst.com.cn/Ajax/Download.aspx?name=2026/04/20260429142025111.pdf",
+        "values": {
+          "revenue": [
+            "8,141,455,910.40",
+            "5,611,370,948.47"
+          ],
+          "operating_revenue": [
+            "8,141,455,910.40",
+            "5,611,370,948.47"
+          ],
+          "cost": [
+            "5,853,599,297.38",
+            "4,230,924,443.02"
+          ],
+          "profit": [
+            "1,158,139,324.56",
+            "563,647,263.06"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        10884155855.730001,
+        7068525756.47
+      ],
+      "operating_revenue": [
+        10884155855.730001,
+        7068525756.47
+      ],
+      "cost": [
+        7332619379.329999,
+        5170475172.0
+      ],
+      "profit": [
+        2128837953.77,
+        862843596.19
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 53.980564416384254,
+      "profit_yoy": 146.7235039084911,
+      "gross_margin": 32.630334621038
+    },
+    "delta": {
+      "revenue_yoy": 0.0,
+      "profit_yoy": -0.0,
+      "gross_margin": -0.0
+    },
+    "candidate": {
+      "revenue_yoy": 53.980564,
+      "profit_yoy": 146.723504,
+      "gross_margin": 32.630335
+    },
+    "deltas": {
+      "revenue_yoy": 4.1638425329892925e-07,
+      "profit_yoy": -9.150889468401147e-08,
+      "gross_margin": -3.7896199955866905e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-15/1225475783.PDF",
+      "https://www.syst.com.cn/Ajax/Download.aspx?name=2026/04/20260429142025111.pdf"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.082959+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "SHKJ",
+    "reports": [
+      {
+        "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-28/296a3692-b153-48c1-9201-2bbb41886183.PDF",
+        "values": {
+          "revenue": [
+            "11,629,367,290.81",
+            "9,030,866,364.08"
+          ],
+          "operating_revenue": [
+            "11,629,367,290.81",
+            "9,030,866,364.08"
+          ],
+          "cost": [
+            "7,765,934,717.93",
+            "5,759,665,083.00"
+          ],
+          "profit": [
+            "2,856,778,938.24",
+            "2,143,119,809.25"
+          ]
+        }
+      },
+      {
+        "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-29/74f20b93-58e2-4e54-b46c-11ccaf116614.PDF",
+        "values": {
+          "revenue": [
+            "5,519,485,066.85",
+            "4,312,340,862.19"
+          ],
+          "operating_revenue": [
+            "5,519,485,066.85",
+            "4,312,340,862.19"
+          ],
+          "cost": [
+            "3,617,553,672.77",
+            "2,873,109,795.11"
+          ],
+          "profit": [
+            "1,288,427,592.46",
+            "920,647,385.47"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        6109882223.959999,
+        4718525501.89
+      ],
+      "operating_revenue": [
+        6109882223.959999,
+        4718525501.89
+      ],
+      "cost": [
+        4148381045.1600003,
+        2886555287.89
+      ],
+      "profit": [
+        1568351345.7799997,
+        1222472423.78
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 29.48710823990868,
+      "profit_yoy": 28.293392576538423,
+      "gross_margin": 32.10374777942431
+    },
+    "delta": {
+      "revenue_yoy": 0.0,
+      "profit_yoy": -0.0,
+      "gross_margin": -0.0
+    },
+    "candidate": {
+      "revenue_yoy": 29.487108,
+      "profit_yoy": 28.293393,
+      "gross_margin": 32.103748
+    },
+    "deltas": {
+      "revenue_yoy": 2.399086795890071e-07,
+      "profit_yoy": -4.2346157513861726e-07,
+      "gross_margin": -2.205756928219671e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-28/296a3692-b153-48c1-9201-2bbb41886183.PDF",
+      "https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-29/74f20b93-58e2-4e54-b46c-11ccaf116614.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.082967+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "SNDL",
+    "reports": [
+      {
+        "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-27/99646b65-8037-44b1-9cd8-61351de243a2.PDF",
+        "values": {
+          "revenue": [
+            "15,296,361,440.43",
+            "10,453,454,733.49"
+          ],
+          "operating_revenue": [
+            "15,296,361,440.43",
+            "10,453,454,733.49"
+          ],
+          "cost": [
+            "10,552,208,603.63",
+            "7,705,828,659.32"
+          ],
+          "profit": [
+            "2,251,458,836.99",
+            "1,360,017,775.49"
+          ]
+        }
+      },
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-04-24/1225163815.PDF",
+        "values": {
+          "revenue": [
+            "6,595,587,902.38",
+            "4,782,896,546.25"
+          ],
+          "operating_revenue": [
+            "6,595,587,902.38",
+            "4,782,896,546.25"
+          ],
+          "cost": [
+            "4,671,720,128.06",
+            "3,599,594,509.15"
+          ],
+          "profit": [
+            "850,230,796.58",
+            "491,448,182.06"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        8700773538.05,
+        5670558187.24
+      ],
+      "operating_revenue": [
+        8700773538.05,
+        5670558187.24
+      ],
+      "cost": [
+        5880488475.569999,
+        4106234150.1699996
+      ],
+      "profit": [
+        1401228040.4099998,
+        868569593.4300001
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 53.43769080138616,
+      "profit_yoy": 61.32593761157583,
+      "gross_margin": 32.4141876598259
+    },
+    "delta": {
+      "revenue_yoy": -0.0,
+      "profit_yoy": -0.0,
+      "gross_margin": -0.0
+    },
+    "candidate": {
+      "revenue_yoy": 53.437691,
+      "profit_yoy": 61.325938,
+      "gross_margin": 32.414188
+    },
+    "deltas": {
+      "revenue_yoy": -1.986138400411619e-07,
+      "profit_yoy": -3.8842416927309387e-07,
+      "gross_margin": -3.4017410399656e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-27/99646b65-8037-44b1-9cd8-61351de243a2.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-24/1225163815.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.082974+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "DTGK",
+    "reports": [
+      {
+        "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-20/0a1eab9d-fc2b-42b4-9abb-10b3f85a920d.PDF",
+        "values": {
+          "revenue": [
+            "1,942,851,207.14",
+            "904,268,854.04"
+          ],
+          "operating_revenue": [
+            "1,942,851,207.14",
+            "904,268,854.04"
+          ],
+          "cost": [
+            "856,338,279.83",
+            "549,393,553.48"
+          ],
+          "profit": [
+            "679,131,331.85",
+            "159,752,338.41"
+          ]
+        }
+      },
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107645.PDF",
+        "values": {
+          "revenue": [
+            "814,116,509.93",
+            "423,285,501.23"
+          ],
+          "operating_revenue": [
+            "814,116,509.93",
+            "423,285,501.23"
+          ],
+          "cost": [
+            "380,563,935.72",
+            "262,239,300.75"
+          ],
+          "profit": [
+            "260,575,088.03",
+            "72,584,358.60"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        1128734697.21,
+        480983352.80999994
+      ],
+      "operating_revenue": [
+        1128734697.21,
+        480983352.80999994
+      ],
+      "cost": [
+        475774344.11,
+        287154252.73
+      ],
+      "profit": [
+        418556243.82000005,
+        87167979.81
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 134.6723001151097,
+      "profit_yoy": 380.17201354479806,
+      "gross_margin": 57.84887757184958
+    },
+    "delta": {
+      "revenue_yoy": 0.0,
+      "profit_yoy": -0.0,
+      "gross_margin": -0.0
+    },
+    "candidate": {
+      "revenue_yoy": 134.6723,
+      "profit_yoy": 380.172014,
+      "gross_margin": 57.848878
+    },
+    "deltas": {
+      "revenue_yoy": 1.1510968533912092e-07,
+      "profit_yoy": -4.55201927707094e-07,
+      "gross_margin": -4.281504217829024e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-20/0a1eab9d-fc2b-42b4-9abb-10b3f85a920d.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107645.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.082982+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "ZWGX",
+    "reports": [
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-24/1225490814.PDF",
+        "values": {
+          "revenue": [
+            "16,384,925,470.67",
+            "7,857,953,688.63"
+          ],
+          "operating_revenue": [
+            "16,384,925,470.67",
+            "7,857,953,688.63"
+          ],
+          "cost": [
+            "11,406,985,963.83",
+            "6,096,075,713.56"
+          ],
+          "profit": [
+            "2,076,226,297.96",
+            "545,608,466.37"
+          ]
+        }
+      },
+      {
+        "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-27/bbe5bc76-51d5-4696-86cf-b0cb7b2227db.PDF",
+        "values": {
+          "revenue": [
+            "7,006,834,056.84",
+            "3,393,606,235.72"
+          ],
+          "operating_revenue": [
+            "7,006,834,056.84",
+            "3,393,606,235.72"
+          ],
+          "cost": [
+            "4,873,234,547.18",
+            "2,642,944,833.08"
+          ],
+          "profit": [
+            "921,090,515.67",
+            "252,738,310.16"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        9378091413.83,
+        4464347452.91
+      ],
+      "operating_revenue": [
+        9378091413.83,
+        4464347452.91
+      ],
+      "cost": [
+        6533751416.65,
+        3453130880.4800005
+      ],
+      "profit": [
+        1155135782.29,
+        292870156.21000004
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 110.06634256742424,
+      "profit_yoy": 294.4190822439825,
+      "gross_margin": 30.32962541808254
+    },
+    "delta": {
+      "revenue_yoy": -0.0,
+      "profit_yoy": 0.0,
+      "gross_margin": 0.0
+    },
+    "candidate": {
+      "revenue_yoy": 110.066343,
+      "profit_yoy": 294.419082,
+      "gross_margin": 30.329625
+    },
+    "deltas": {
+      "revenue_yoy": -4.3257576010091725e-07,
+      "profit_yoy": 2.4398246978307725e-07,
+      "gross_margin": 4.1808253925523786e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-24/1225490814.PDF",
+      "https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-27/bbe5bc76-51d5-4696-86cf-b0cb7b2227db.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.082989+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "DFDQ",
+    "reports": [
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225505169.PDF",
+        "values": {
+          "revenue": [
+            "38,624,191,006.09",
+            "38,150,951,534.17"
+          ],
+          "operating_revenue": [
+            "38,122,958,912.16",
+            "37,623,627,306.41"
+          ],
+          "cost": [
+            "32,092,819,683.15",
+            "31,805,881,127.97"
+          ],
+          "profit": [
+            "2,713,249,266.86",
+            "1,909,795,846.06"
+          ]
+        }
+      },
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225257541.PDF",
+        "values": {
+          "revenue": [
+            "17,469,928,079.52",
+            "16,548,081,132.37"
+          ],
+          "operating_revenue": [
+            "17,216,348,066.85",
+            "16,290,954,843.58"
+          ],
+          "cost": [
+            "14,258,214,289.18",
+            "13,582,721,836.65"
+          ],
+          "profit": [
+            "1,585,458,964.30",
+            "1,153,823,686.96"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        21154262926.569996,
+        21602870401.799995
+      ],
+      "operating_revenue": [
+        20906610845.310005,
+        21332672462.83
+      ],
+      "cost": [
+        17834605393.97,
+        18223159291.32
+      ],
+      "profit": [
+        1127790302.5600002,
+        755972159.0999999
+      ]
+    },
+    "computed": {
+      "revenue_yoy": -2.0766105007629987,
+      "profit_yoy": 49.18410539121669,
+      "gross_margin": 14.693942858888331
+    },
+    "delta": {
+      "revenue_yoy": 0.0,
+      "profit_yoy": 0.0,
+      "gross_margin": -0.0
+    },
+    "candidate": {
+      "revenue_yoy": -2.076611,
+      "profit_yoy": 49.184105,
+      "gross_margin": 14.693943
+    },
+    "deltas": {
+      "revenue_yoy": 4.992370015166614e-07,
+      "profit_yoy": 3.9121668748975935e-07,
+      "gross_margin": -1.4111166990460333e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-26/1225505169.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-30/1225257541.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.082996+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "SYDQ",
+    "reports": [
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-15/1225473691.PDF",
+        "values": {
+          "revenue": [
+            "10,795,207,710.32",
+            "8,496,879,187.48"
+          ],
+          "operating_revenue": [
+            "10,795,207,710.32",
+            "8,496,879,187.48"
+          ],
+          "cost": [
+            "7,507,207,563.94",
+            "5,800,374,842.60"
+          ],
+          "profit": [
+            "1,463,716,011.88",
+            "1,292,697,963.66"
+          ]
+        }
+      },
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-04-25/1225177123.PDF",
+        "values": {
+          "revenue": [
+            "4,568,663,867.62",
+            "3,226,557,969.19"
+          ],
+          "operating_revenue": [
+            "4,568,663,867.62",
+            "3,226,557,969.19"
+          ],
+          "cost": [
+            "3,246,018,126.56",
+            "2,248,557,111.44"
+          ],
+          "profit": [
+            "549,952,870.75",
+            "446,499,519.83"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        6226543842.7,
+        5270321218.289999
+      ],
+      "operating_revenue": [
+        6226543842.7,
+        5270321218.289999
+      ],
+      "cost": [
+        4261189437.3799996,
+        3551817731.1600003
+      ],
+      "profit": [
+        913763141.1300001,
+        846198443.8300002
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 18.143535940305643,
+      "profit_yoy": 7.9844979381188175,
+      "gross_margin": 31.564130197592387
+    },
+    "delta": {
+      "revenue_yoy": -0.0,
+      "profit_yoy": -0.0,
+      "gross_margin": 0.0
+    },
+    "candidate": {
+      "revenue_yoy": 18.143536,
+      "profit_yoy": 7.984498,
+      "gross_margin": 31.56413
+    },
+    "deltas": {
+      "revenue_yoy": -5.96943579012077e-08,
+      "profit_yoy": -6.188118284455868e-08,
+      "gross_margin": 1.9759238867322892e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-15/1225473691.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-25/1225177123.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083004+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "ZGXD",
+    "reports": [
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-20/1225482387.PDF",
+        "values": {
+          "revenue": [
+            "12,232,947,022.33",
+            "11,331,466,190.92"
+          ],
+          "operating_revenue": [
+            "12,213,036,214.61",
+            "11,301,291,103.09"
+          ],
+          "cost": [
+            "9,216,391,062.90",
+            "8,859,113,629.08"
+          ],
+          "profit": [
+            "688,068,060.24",
+            "598,187,171.85"
+          ]
+        }
+      },
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-04-28/1225200541.PDF",
+        "values": {
+          "revenue": [
+            "5,523,905,943.52",
+            "5,261,196,450.00"
+          ],
+          "operating_revenue": [
+            "5,511,548,057.55",
+            "5,244,634,177.81"
+          ],
+          "cost": [
+            "4,224,484,272.47",
+            "4,142,096,093.84"
+          ],
+          "profit": [
+            "346,600,770.07",
+            "294,887,908.89"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        6709041078.809999,
+        6070269740.92
+      ],
+      "operating_revenue": [
+        6701488157.06,
+        6056656925.28
+      ],
+      "cost": [
+        4991906790.43,
+        4717017535.24
+      ],
+      "profit": [
+        341467290.17,
+        303299262.96000004
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 10.522948158036694,
+      "profit_yoy": 12.584279578362745,
+      "gross_margin": 25.510473592778947
+    },
+    "delta": {
+      "revenue_yoy": 0.0,
+      "profit_yoy": -0.0,
+      "gross_margin": -0.0
+    },
+    "candidate": {
+      "revenue_yoy": 10.522948,
+      "profit_yoy": 12.58428,
+      "gross_margin": 25.510474
+    },
+    "deltas": {
+      "revenue_yoy": 1.5803669484171223e-07,
+      "profit_yoy": -4.2163725488819637e-07,
+      "gross_margin": -4.0722105154600285e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-20/1225482387.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-28/1225200541.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083038+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "JPKJ",
+    "reports": [
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-10-14/1225603297.PDF",
+        "values": {
+          "revenue": [
+            "6,104,276,876.31",
+            "5,194,303,709.34"
+          ],
+          "operating_revenue": [
+            "6,104,276,876.31",
+            "5,194,303,709.34"
+          ],
+          "cost": [
+            "4,444,235,726.85",
+            "3,839,747,099.66"
+          ],
+          "profit": [
+            "544,012,340.26",
+            "485,644,896.76"
+          ]
+        }
+      },
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486537.PDF",
+        "values": {
+          "revenue": [
+            "3,555,743,162.95",
+            "3,154,247,915.24"
+          ],
+          "operating_revenue": [
+            "3,555,743,162.95",
+            "3,154,247,915.24"
+          ],
+          "cost": [
+            "2,581,169,857.26",
+            "2,338,096,668.18"
+          ],
+          "profit": [
+            "302,666,839.27",
+            "264,960,571.16"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        2548533713.3600006,
+        2040055794.1000004
+      ],
+      "operating_revenue": [
+        2548533713.3600006,
+        2040055794.1000004
+      ],
+      "cost": [
+        1863065869.5900002,
+        1501650431.48
+      ],
+      "profit": [
+        241345500.99,
+        220684325.6
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 24.924706507074855,
+      "profit_yoy": 9.362321195139756,
+      "gross_margin": 26.896557819762013
+    },
+    "delta": {
+      "revenue_yoy": 0.004707,
+      "profit_yoy": 0.002321,
+      "gross_margin": -0.0
+    },
+    "candidate": {
+      "revenue_yoy": 24.92,
+      "profit_yoy": 9.36,
+      "gross_margin": 26.896558
+    },
+    "deltas": {
+      "revenue_yoy": 0.004706507074853761,
+      "profit_yoy": 0.0023211951397570374,
+      "gross_margin": -1.8023798631361387e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-10-14/1225603297.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486537.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083047+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "KHSJ",
+    "reports": [
+      {
+        "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-28/546247bf-7c7f-4a0b-9f83-f6b37c8a10d9.PDF",
+        "values": {
+          "revenue": [
+            "3,883,879,016.10",
+            "3,732,695,220.08"
+          ],
+          "operating_revenue": [
+            "3,883,879,016.10",
+            "3,732,695,220.08"
+          ],
+          "cost": [
+            "2,938,149,426.44",
+            "2,798,899,346.81"
+          ],
+          "profit": [
+            "396,206,519.40",
+            "243,539,408.57"
+          ]
+        }
+      },
+      {
+        "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-27/3ca00555-fa6a-4007-b504-355f39d80b35.PDF",
+        "values": {
+          "revenue": [
+            "1,430,062,407.61",
+            "1,216,323,160.43"
+          ],
+          "operating_revenue": [
+            "1,430,062,407.61",
+            "1,216,323,160.43"
+          ],
+          "cost": [
+            "1,031,737,693.41",
+            "849,673,033.71"
+          ],
+          "profit": [
+            "78,008,800.49",
+            "68,944,329.58"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        2453816608.49,
+        2516372059.6499996
+      ],
+      "operating_revenue": [
+        2453816608.49,
+        2516372059.6499996
+      ],
+      "cost": [
+        1906411733.0300002,
+        1949226313.1
+      ],
+      "profit": [
+        318197718.90999997,
+        174595078.99
+      ]
+    },
+    "computed": {
+      "revenue_yoy": -2.48593807581462,
+      "profit_yoy": 82.24896185546262,
+      "gross_margin": 22.308304278568524
+    },
+    "delta": {
+      "revenue_yoy": -0.0,
+      "profit_yoy": -0.0,
+      "gross_margin": 0.0
+    },
+    "candidate": {
+      "revenue_yoy": -2.485938,
+      "profit_yoy": 82.248962,
+      "gross_margin": 22.308304
+    },
+    "deltas": {
+      "revenue_yoy": -7.581461991534866e-08,
+      "profit_yoy": -1.4453738117481407e-07,
+      "gross_margin": 2.785685246919911e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-28/546247bf-7c7f-4a0b-9f83-f6b37c8a10d9.PDF",
+      "https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-27/3ca00555-fa6a-4007-b504-355f39d80b35.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083055+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "YWK",
+    "reports": [
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-25/1225495981.PDF",
+        "values": {
+          "revenue": [
+            "3,016,714,649.18",
+            "2,573,139,460.90"
+          ],
+          "operating_revenue": [
+            "3,016,714,649.18",
+            "2,573,139,460.90"
+          ],
+          "cost": [
+            "2,264,528,834.12",
+            "1,900,373,241.80"
+          ],
+          "profit": [
+            "184,767,516.83",
+            "215,640,426.56"
+          ]
+        }
+      },
+      {
+        "url": "https://static.cninfo.com.cn/finalpage/2026-04-21/1225131821.PDF",
+        "values": {
+          "revenue": [
+            "1,175,329,313.61",
+            "932,585,781.26"
+          ],
+          "operating_revenue": [
+            "1,175,329,313.61",
+            "932,585,781.26"
+          ],
+          "cost": [
+            "889,801,134.41",
+            "685,885,751.25"
+          ],
+          "profit": [
+            "8,657,602.27",
+            "48,010,475.41"
+          ]
+        }
+      }
+    ],
+    "quarter": {
+      "revenue": [
+        1841385335.57,
+        1640553679.64
+      ],
+      "operating_revenue": [
+        1841385335.57,
+        1640553679.64
+      ],
+      "cost": [
+        1374727699.71,
+        1214487490.55
+      ],
+      "profit": [
+        176109914.56,
+        167629951.15
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 12.241699764074166,
+      "profit_yoy": 5.058740011450502,
+      "gross_margin": 25.34274748720893
+    },
+    "delta": {
+      "revenue_yoy": -0.0,
+      "profit_yoy": 0.0,
+      "gross_margin": 0.0
+    },
+    "candidate": {
+      "revenue_yoy": 12.2417,
+      "profit_yoy": 5.05874,
+      "gross_margin": 25.342747
+    },
+    "deltas": {
+      "revenue_yoy": -2.3592583353604368e-07,
+      "profit_yoy": 1.1450501880005959e-08,
+      "gross_margin": 4.872089292007331e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-25/1225495981.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-21/1225131821.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083063+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "HDGF",
+    "inputs": {
+      "h1": {
+        "revenue": [
+          13689427504,
+          8493871883
+        ],
+        "cost": [
+          8389487706,
+          5508789969
+        ],
+        "profit": [
+          2923361746,
+          1682780947
+        ]
+      },
+      "q1": {
+        "revenue": [
+          6214156406,
+          4037627327
+        ],
+        "cost": [
+          3999902225,
+          2715105615
+        ],
+        "profit": [
+          1242081367,
+          762465400
+        ]
+      }
+    },
+    "quarter": {
+      "revenue": [
+        7475271098,
+        4456244556
+      ],
+      "cost": [
+        4389585481,
+        2793684354
+      ],
+      "profit": [
+        1681280379,
+        920315547
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 67.74822395990603,
+      "profit_yoy": 82.68520883739889,
+      "gross_margin": 41.278578081610604
+    },
+    "candidate": {
+      "revenue_yoy": 67.748224,
+      "profit_yoy": 82.685209,
+      "gross_margin": 41.278578
+    },
+    "deltas": {
+      "revenue_yoy": -4.0093965480991756e-08,
+      "profit_yoy": -1.6260111124211107e-07,
+      "gross_margin": 8.161060094380446e-08
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-26/1225502252.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-23/1225147393.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083071+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "CXMT",
+    "inputs": {
+      "h1": {
+        "revenue": [
+          150310076758.0,
+          15437924611.51
+        ],
+        "cost": [
+          22934480656.8,
+          13430877836.86
+        ],
+        "profit": [
+          77605227520.0,
+          -2332058185.65
+        ]
+      },
+      "q1": {
+        "revenue": [
+          50800145545.85,
+          6201690535.94
+        ],
+        "cost": [
+          10587996319.55,
+          5386882851.7
+        ],
+        "profit": [
+          24762031466.04,
+          -1559027880.1
+        ]
+      }
+    },
+    "quarter": {
+      "revenue": [
+        99509931212.15,
+        9236234075.57
+      ],
+      "cost": [
+        12346484337.25,
+        8043994985.160001
+      ],
+      "profit": [
+        52843196053.96,
+        -773030305.5500002
+      ]
+    },
+    "computed": {
+      "revenue_yoy": 977.386415263722,
+      "profit_yoy": null,
+      "gross_margin": 87.5927114139714
+    },
+    "candidate": {
+      "revenue_yoy": 977.386415,
+      "profit_yoy": null,
+      "gross_margin": 87.592711
+    },
+    "deltas": {
+      "revenue_yoy": 2.637219722601003e-07,
+      "profit_yoy": null,
+      "gross_margin": 4.139714064876898e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-08-29/1225529543.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-07-09/1225416304.PDF"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083079+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "LITE",
+    "statementInputs": [
+      1006.3,
+      480.7,
+      -7161.7,
+      213.3,
+      477.3
+    ],
+    "computed": {
+      "revenue_yoy": 109.34054503848554,
+      "profit_yoy": -3457.571495546179,
+      "gross_margin": 47.431183543674855
+    },
+    "candidate": {
+      "revenue_yoy": 109.3,
+      "profit_yoy": -3457.6,
+      "gross_margin": 47.4
+    },
+    "deltas": {
+      "revenue_yoy": 0.040545038485547025,
+      "profit_yoy": 0.028504453820914932,
+      "gross_margin": 0.03118354367485665
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://investor.lumentum.com/financial-news-releases/news-details/2026/Lumentum-Announces-Fourth-Quarter-and-Full-Fiscal-Year-2026-Results/default.aspx"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083086+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "AVGO",
+    "statementInputs": [
+      29591,
+      15952,
+      13088,
+      4140,
+      20456
+    ],
+    "computed": {
+      "revenue_yoy": 85.50025075225678,
+      "profit_yoy": 216.1352657004831,
+      "gross_margin": 69.12912709945591
+    },
+    "candidate": {
+      "revenue_yoy": 85.5,
+      "profit_yoy": 216.1,
+      "gross_margin": 69.1
+    },
+    "deltas": {
+      "revenue_yoy": 0.0002507522567753995,
+      "profit_yoy": 0.03526570048310873,
+      "gross_margin": 0.029127099455919847
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083093+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "MRVL",
+    "statementInputs": [
+      2739.3,
+      2006.1,
+      308.0,
+      194.8,
+      1455.6
+    ],
+    "computed": {
+      "revenue_yoy": 36.54852699267237,
+      "profit_yoy": 58.110882956878854,
+      "gross_margin": 53.13766290658196
+    },
+    "candidate": {
+      "revenue_yoy": 36.5,
+      "profit_yoy": 58.1,
+      "gross_margin": 53.1
+    },
+    "deltas": {
+      "revenue_yoy": 0.048526992672371705,
+      "profit_yoy": 0.010882956878852212,
+      "gross_margin": 0.037662906581957145
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://investor.marvell.com/sec-filings/all-sec-filings/content/0001835632-26-000022/q227_8kx812026ex-991.htm"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083099+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "ANET",
+    "statementInputs": [
+      3035.7,
+      2204.8,
+      1212.9,
+      888.8,
+      1910.3
+    ],
+    "computed": {
+      "revenue_yoy": 37.6859579100145,
+      "profit_yoy": 36.46489648964899,
+      "gross_margin": 62.92782554270844
+    },
+    "candidate": {
+      "revenue_yoy": 37.7,
+      "profit_yoy": 36.5,
+      "gross_margin": 62.9
+    },
+    "deltas": {
+      "revenue_yoy": -0.014042089985501605,
+      "profit_yoy": -0.03510351035100712,
+      "gross_margin": 0.02782554270844173
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://www.sec.gov/Archives/edgar/data/1596532/000159653226000174/ex991q226-earningsrelease.htm"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083105+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "TSM",
+    "statementInputs": [
+      1494243,
+      989918,
+      763064,
+      452302,
+      992379
+    ],
+    "computed": {
+      "revenue_yoy": 50.94613897312708,
+      "profit_yoy": 68.70674903051501,
+      "gross_margin": 66.41349499378614
+    },
+    "candidate": {
+      "revenue_yoy": 50.9,
+      "profit_yoy": 68.7,
+      "gross_margin": 66.4
+    },
+    "deltas": {
+      "revenue_yoy": 0.046138973127078486,
+      "profit_yoy": 0.00674903051501019,
+      "gross_margin": 0.013494993786139275
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/3a94d1034b9e6b22446b674f7aaf3d088a12a193/FS.pdf",
+      "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/526b65af7305df2dde6b9ece6812b1fdf1e49f9b/3Q26%20EarningsRelease.pdf"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083111+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "ASMPT",
+    "statementInputs": [
+      4935800,
+      3244331,
+      335136,
+      131214,
+      2092487
+    ],
+    "computed": {
+      "revenue_yoy": 52.136141472617936,
+      "profit_yoy": 155.41177008550915,
+      "gross_margin": 42.394079987033514
+    },
+    "candidate": {
+      "revenue_yoy": 52.1,
+      "profit_yoy": 155.4,
+      "gross_margin": 42.4
+    },
+    "deltas": {
+      "revenue_yoy": 0.03614147261793477,
+      "profit_yoy": 0.011770085509141381,
+      "gross_margin": -0.005920012966484478
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://www.asmpt.com/site/assets/files/85468/q2_2026_en_announcement.pdf",
+      "https://www.asmpt.com/en/investor-relations/financial-information/"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083117+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "SKH",
+    "statementInputs": [
+      79318746,
+      22231952,
+      93820236,
+      6997228,
+      65991356
+    ],
+    "computed": {
+      "revenue_yoy": 256.77814525688075,
+      "profit_yoy": 1240.8200504542656,
+      "gross_margin": 83.19767939851192
+    },
+    "candidate": {
+      "revenue_yoy": 256.8,
+      "profit_yoy": 1240.8,
+      "gross_margin": 83.2
+    },
+    "deltas": {
+      "revenue_yoy": -0.021854743119263276,
+      "profit_yoy": 0.020050454265629014,
+      "gross_margin": -0.0023206014880798875
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://www.sec.gov/Archives/edgar/data/2120882/000119312526354777/d147827d6k.htm",
+      "https://www.sec.gov/Archives/edgar/data/2120882/000119312526354777/0001193125-26-354777-index.html"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083124+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "MU",
+    "statementInputs": [
+      54229,
+      11315,
+      37701,
+      3201,
+      47047
+    ],
+    "computed": {
+      "revenue_yoy": 379.26646045072914,
+      "profit_yoy": 1077.7881911902532,
+      "gross_margin": 86.75616367626178
+    },
+    "candidate": {
+      "revenue_yoy": 379.26646,
+      "profit_yoy": 1077.788191,
+      "gross_margin": 86.8
+    },
+    "deltas": {
+      "revenue_yoy": 4.5072914645061246e-07,
+      "profit_yoy": 1.9025310393772088e-07,
+      "gross_margin": -0.04383632373821911
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://www.sec.gov/Archives/edgar/data/723125/000072312526000018/a2026q4ex991-pressrelease.htm"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083156+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "NVDA",
+    "statementInputs": [
+      96221,
+      46743,
+      59688,
+      26422,
+      72142
+    ],
+    "computed": {
+      "revenue_yoy": 105.85114348672526,
+      "profit_yoy": 125.90265687684506,
+      "gross_margin": 74.97531723844068
+    },
+    "candidate": {
+      "revenue_yoy": 105.9,
+      "profit_yoy": 125.9,
+      "gross_margin": 75
+    },
+    "deltas": {
+      "revenue_yoy": -0.0488565132747425,
+      "profit_yoy": 0.00265687684505167,
+      "gross_margin": -0.024682761559319033
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083164+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "ASML",
+    "statementInputs": [
+      11662.0,
+      7516.0,
+      4960.4,
+      2124.5,
+      6699.8
+    ],
+    "computed": {
+      "revenue_yoy": 55.16232038318254,
+      "profit_yoy": 133.48552600611904,
+      "gross_margin": 57.5
+    },
+    "rawCalculatedGrossMargin": 57.449837077688215,
+    "review": "Use explicitly reported US GAAP margin 57.5%; displayed 6699.8/11662=57.449837%, crossing one-decimal rounding boundary. Preserve discrepancy.",
+    "candidate": {
+      "revenue_yoy": 55.16232,
+      "profit_yoy": 133.485526,
+      "gross_margin": 57.5
+    },
+    "deltas": {
+      "revenue_yoy": 3.8318253814395575e-07,
+      "profit_yoy": 6.119051931818831e-09,
+      "gross_margin": 0.0
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://www.investor.asml.com/static-files/d310262b-d037-485d-83b5-92c93cc462f0",
+      "https://www.investor.asml.com/news-releases/news-release-details/asml-reports-eu11.7-billion-total-net-sales-and-eu5.0-billion-net-income-q3-2026"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083171+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "NTB",
+    "statementInputs": [
+      34033,
+      28231,
+      5797,
+      3147,
+      14914
+    ],
+    "computed": {
+      "revenue_yoy": 20.55187559774716,
+      "profit_yoy": 84.20718144264379,
+      "gross_margin": 43.82217259718508
+    },
+    "candidate": {
+      "revenue_yoy": 20.6,
+      "profit_yoy": 84.2,
+      "gross_margin": 43.822173
+    },
+    "deltas": {
+      "revenue_yoy": -0.0481244022528422,
+      "profit_yoy": 0.007181442643783953,
+      "gross_margin": -4.028149191981356e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://www2.jpx.co.jp/disc/31100/140120260805509788.pdf"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083177+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "EMC",
+    "statementInputs": [
+      47275194,
+      22507694,
+      9873398,
+      3477879,
+      16002991
+    ],
+    "computed": {
+      "revenue_yoy": 110.04014893751442,
+      "profit_yoy": 183.89136022271043,
+      "gross_margin": 33.85071460521135
+    },
+    "candidate": {
+      "revenue_yoy": 110.040149,
+      "profit_yoy": 183.89136,
+      "gross_margin": 33.850715
+    },
+    "deltas": {
+      "revenue_yoy": -6.24855829300941e-08,
+      "profit_yoy": 2.2271044031185738e-07,
+      "gross_margin": -3.947886497712716e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Quarterly_Results/Consolidated/CH/115/273512_115Q2_%E5%90%88%E4%BD%B5_%E5%AE%8C%E7%A8%BF%E8%B2%A1%E5%A0%B1_IMSv1-%E9%9B%BB%E5%AD%90%E6%9B%B8_IMSv1.pdf",
+      "https://www.emctw.com/zh-TW/investors_news/detail/2026072901/3"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083184+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "GEV",
+    "statementInputs": [
+      11104,
+      9111,
+      668,
+      514,
+      2360
+    ],
+    "computed": {
+      "revenue_yoy": 21.8746570080123,
+      "profit_yoy": 29.961089494163428,
+      "gross_margin": 21.253602305475503
+    },
+    "candidate": {
+      "revenue_yoy": 21.874657,
+      "profit_yoy": 29.961089,
+      "gross_margin": 21.253602
+    },
+    "deltas": {
+      "revenue_yoy": 8.012300156678975e-09,
+      "profit_yoy": 4.941634266231176e-07,
+      "gross_margin": 3.054755026710154e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://www.gevernova.com/sites/default/files/gev_webcast_10q_07222026.pdf"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083190+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "ENR",
+    "statementInputs": [
+      11447,
+      9745,
+      1083,
+      615,
+      2669
+    ],
+    "computed": {
+      "revenue_yoy": 17.465366854797338,
+      "profit_yoy": 76.09756097560975,
+      "gross_margin": 23.316152703765177
+    },
+    "candidate": {
+      "revenue_yoy": 17.465367,
+      "profit_yoy": 76.097561,
+      "gross_margin": 23.316153
+    },
+    "deltas": {
+      "revenue_yoy": -1.4520266233830625e-07,
+      "profit_yoy": -2.4390246267103066e-08,
+      "gross_margin": -2.9623482333818174e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://assets.siemens-energy.com/dam/30018eed-275d-4e73-811e-b49d004cdc3d/2026-08-05-Earnings_Release_Q3_FY26_EN-pdf_Original%20file.pdf"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083197+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "ETN",
+    "statementInputs": [
+      8531,
+      7028,
+      821,
+      982,
+      2855
+    ],
+    "computed": {
+      "revenue_yoy": 21.385885031303363,
+      "profit_yoy": -16.39511201629328,
+      "gross_margin": 33.46618215918416
+    },
+    "candidate": {
+      "revenue_yoy": 21.385885,
+      "profit_yoy": -16.395112,
+      "gross_margin": 33.466182
+    },
+    "deltas": {
+      "revenue_yoy": 3.13033652332706e-08,
+      "profit_yoy": -1.6293277838030917e-08,
+      "gross_margin": 1.591841538584049e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://www.eaton.com/content/dam/eaton/company/investor-relations/quarterly-earnings/filings/2026/q2/q2-2026-financials-only.pdf"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083203+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "VRT",
+    "statementInputs": [
+      3274.3,
+      2638.1,
+      497.8,
+      324.2,
+      1234.9
+    ],
+    "computed": {
+      "revenue_yoy": 24.11584094613548,
+      "profit_yoy": 53.547193090684765,
+      "gross_margin": 37.714931435726726
+    },
+    "candidate": {
+      "revenue_yoy": 24.115841,
+      "profit_yoy": 53.547193,
+      "gross_margin": 37.714931
+    },
+    "deltas": {
+      "revenue_yoy": -5.38645181791253e-08,
+      "profit_yoy": 9.068476458651276e-08,
+      "gross_margin": 4.3572672581149163e-07
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://s205.q4cdn.com/554782763/files/doc_financials/2026/q2/Vertiv-Second-Quarter-2026-Earnings-Release.pdf"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083209+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "MOD",
+    "statementInputs": [
+      874.1,
+      682.8,
+      73.9,
+      51.2,
+      182.0
+    ],
+    "computed": {
+      "revenue_yoy": 28.01698886936146,
+      "profit_yoy": 44.3359375,
+      "gross_margin": 20.821416313922892
+    },
+    "candidate": {
+      "revenue_yoy": 28.016989,
+      "profit_yoy": 44.335938,
+      "gross_margin": 20.8
+    },
+    "deltas": {
+      "revenue_yoy": -1.3063853998573904e-07,
+      "profit_yoy": -4.999999987376214e-07,
+      "gross_margin": 0.02141631392289156
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://s205.q4cdn.com/270741342/files/doc_financials/2027/q1/Modine-Reports-First-Quarter-Fiscal-2027-Results.pdf"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083215+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "COHR",
+    "computed": {
+      "revenue_yoy": 33.8,
+      "profit_yoy": null,
+      "gross_margin": 38.5
+    },
+    "review": "Use issuer reported revenue +33.8%; displayed decimals recompute +33.7453%, rounding discrepancy retained. Prior parent loss; no growth percentage.",
+    "displayedParentEarnings": [
+      241,
+      -96
+    ],
+    "candidate": {
+      "revenue_yoy": 33.8,
+      "profit_yoy": null,
+      "gross_margin": 38.5
+    },
+    "deltas": {
+      "revenue_yoy": 0.0,
+      "profit_yoy": null,
+      "gross_margin": 0.0
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://www.sec.gov/Archives/edgar/data/820318/000119312526346860/d128030dex991.htm"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083220+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  },
+  {
+    "id": "SU",
+    "computed": {
+      "revenue_yoy": 17.9,
+      "profit_yoy": null,
+      "gross_margin": null
+    },
+    "review": "Revenue-only Q3; reported +17.9%, not organic +16.9%. No H1 profit or margin carried into Q3.",
+    "candidate": {
+      "revenue_yoy": 17.9,
+      "profit_yoy": null,
+      "gross_margin": null
+    },
+    "deltas": {
+      "revenue_yoy": 0.0,
+      "profit_yoy": null,
+      "gross_margin": null
+    },
+    "conditionsReviewed": true,
+    "source_urls": [
+      "https://www.se.com/ww/en/assets/pdf/release-Q3-revenues-2026"
+    ],
+    "checkedAt": "2026-10-18T02:22:14.083225+00:00",
+    "candidateVerifiedAtUnchanged": "2026-10-17",
+    "status": "arithmetic_and_scope_checked; publication_date_provenance_retained_from_candidate"
+  }
+]

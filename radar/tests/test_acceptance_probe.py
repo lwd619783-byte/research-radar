@@ -158,6 +158,7 @@ class QualityTests(unittest.TestCase):
 class CollectionTests(unittest.TestCase):
     def test_complete_failed_source_inventory_and_redaction_still_yields_blockers(self):
         data,_=dataset()
+        for c in data['companies']: c['financial'] = {}
         # Every adapter fails; the complete diagnostic receipt must still be made.
         # This is intentionally synthetic and never opens a socket.
         secret=RuntimeError('crumb=DO_NOT_LEAK C:/private/research.md')

@@ -1,0 +1,5463 @@
+{
+  "purpose": "local-interface-diagnostics-not-publication",
+  "startedAt": "2026-10-18T02:17:26.854657+00:00",
+  "finishedAt": "2026-10-18T02:20:41.553297+00:00",
+  "python": "3.12.14",
+  "executionSHA": "814eea7b0a6a1de54859c072855f397f4075b26f",
+  "workingTree": "uncommitted approved repairs; final code committed after verification",
+  "results": [
+    {
+      "category": "company-yahoo-daily",
+      "code": "688498.SS",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:17:26.870057+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 923,
+        "firstDate": "2022-12-21",
+        "asOf": "2026-10-16",
+        "adjustedCount": 923,
+        "highCount": 923,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:17:29.811490+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:17:26.870119+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 99516,
+          "receivedAt": "2026-10-18T02:17:29.808214+00:00",
+          "sha256": "82db06725fc6c2cf02440531bed8dfda49d7e442fca65166cdd3fa14d94995f6"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:17:29.814499+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "LITE",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:17:29.821314+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1255,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1255,
+        "highCount": 1255,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:17:32.201583+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:17:29.821375+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 131205,
+          "receivedAt": "2026-10-18T02:17:32.195339+00:00",
+          "sha256": "612446ced466695a1a27aafe8fbe93283ab6f912ba5a791eb271b03bf104d612"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:17:32.205620+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "COHR",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:17:32.212371+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1255,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1255,
+        "highCount": 1255,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:17:34.989608+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:17:32.212417+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 133148,
+          "receivedAt": "2026-10-18T02:17:34.984423+00:00",
+          "sha256": "cec319ca97f6a0e94664a903072a70a4edc06795ae2f61da0802dfbedfab66d2"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:17:34.993982+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "300308.SZ",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:17:35.001542+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:17:37.529753+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:17:35.001593+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 124694,
+          "receivedAt": "2026-10-18T02:17:37.525459+00:00",
+          "sha256": "43acff9120f41a7bbe5b1d4c3010b6692899274e7e2d588b99b7d7db76f254f9"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:17:37.533691+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "300502.SZ",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:17:37.540890+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:17:40.193816+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:17:37.540940+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 133131,
+          "receivedAt": "2026-10-18T02:17:40.189764+00:00",
+          "sha256": "d7c7098e6a28cf9f0ef16aac6fa9185abc5be168bb0957fee96d05d71feea179"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:17:40.197846+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "AVGO",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:17:40.204740+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1255,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1255,
+        "highCount": 1255,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:17:43.075040+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:17:40.204790+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 137362,
+          "receivedAt": "2026-10-18T02:17:43.070194+00:00",
+          "sha256": "e509946b12258c5fa45bf800a45c72fd671e2bd97f400a6ccab148ef5fd6e25a"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:17:43.079273+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "MRVL",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:17:43.088625+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1255,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1255,
+        "highCount": 1255,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:17:45.446925+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:17:43.088680+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 135638,
+          "receivedAt": "2026-10-18T02:17:45.442759+00:00",
+          "sha256": "253e2096e16352f8055255c217f72298be92031ef2c3284e90ca7dda89e436bd"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:17:45.450988+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "ANET",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:17:45.457983+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1255,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1255,
+        "highCount": 1255,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:17:50.565922+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:17:45.458062+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 134085,
+          "receivedAt": "2026-10-18T02:17:50.556589+00:00",
+          "sha256": "854efbef49eff54ee711f746d4563b6b417d25ea5fd761aad7589b579453479b"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:17:50.570051+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "300394.SZ",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:17:50.576675+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1211,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:17:53.297780+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:17:50.576723+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 134437,
+          "receivedAt": "2026-10-18T02:17:53.293584+00:00",
+          "sha256": "ec61478b8bd249aba899efe81c7cfcbbc43a558621551b3b9b7544760112d6fc"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:17:53.301758+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "TSM",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:17:53.308373+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1255,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1255,
+        "highCount": 1255,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:17:55.941949+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:17:53.308422+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 135187,
+          "receivedAt": "2026-10-18T02:17:55.937509+00:00",
+          "sha256": "68705a35defe3ededcecf30231d4bdf3f108492ed5acfab5a961381cdd032d27"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:17:55.946094+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "0522.HK",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:17:55.952614+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1230,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1230,
+        "highCount": 1230,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:17:58.561725+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:17:55.952663+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 116605,
+          "receivedAt": "2026-10-18T02:17:58.557326+00:00",
+          "sha256": "0a08943dd75e3784cc4d01e29e42791fd891d1d0b1c2062aff803d1738a757d8"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:17:58.565939+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "000660.KS",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:17:58.572460+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1220,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1220,
+        "highCount": 1219,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:17:59.743650+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:17:58.572510+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 83446,
+          "receivedAt": "2026-10-18T02:17:59.739834+00:00",
+          "sha256": "7536702aa49da8bc1cb5290007ffc1b6f23488c3c8eefb3b93a0f32b5038ddfa"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:17:59.747520+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "MU",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:17:59.754328+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1255,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1255,
+        "highCount": 1255,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:02.248697+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:17:59.754376+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 135108,
+          "receivedAt": "2026-10-18T02:18:02.244048+00:00",
+          "sha256": "b948913f2dfe58fddf445a79209766cd9f4b12d8f2f1c0fe704b088ba4923701"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:02.252836+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "688825.SS",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:02.259894+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": false,
+        "historySufficient": false,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 54,
+        "firstDate": "2026-07-27",
+        "asOf": "2026-10-16",
+        "adjustedCount": 54,
+        "highCount": 54,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:04.128115+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:02.259944+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 6758,
+          "receivedAt": "2026-10-18T02:18:04.127775+00:00",
+          "sha256": "60906f3295eb0323e8a1f84662a9caf6efc3a404a2ff582ebaaf97872d759223"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:04.128372+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "NVDA",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:04.135858+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1255,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1255,
+        "highCount": 1255,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:06.929728+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:04.135907+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 141130,
+          "receivedAt": "2026-10-18T02:18:06.924447+00:00",
+          "sha256": "9ecb45068b00cc5218a25c426733e6a55976bb4c2be16e8c33c3df400cdfe6f5"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:06.933849+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "ASML",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:06.940467+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1255,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1255,
+        "highCount": 1255,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:09.784209+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:06.940517+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 130797,
+          "receivedAt": "2026-10-18T02:18:09.771897+00:00",
+          "sha256": "45dc5bde13b162dc71141afc17f4b8af33f4fd883f1496835e431550f723976c"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:09.790334+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "002371.SZ",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:09.801367+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:11.261085+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:09.801419+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 129893,
+          "receivedAt": "2026-10-18T02:18:11.256430+00:00",
+          "sha256": "5699a5304ccf6ec1f1ae4f12f035f2d4226b209eefc1fac90d384820dd1016c6"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:11.265051+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "688012.SS",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:11.271723+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:13.666976+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:11.271772+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 133035,
+          "receivedAt": "2026-10-18T02:18:13.662864+00:00",
+          "sha256": "4dddcc6d7aebf43cc4b3882c3dced763117ad7c7252abd9e194df38680580873"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:13.670903+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "3110.T",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:13.677621+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1221,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1221,
+        "highCount": 1221,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:14.936560+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:13.677670+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 91671,
+          "receivedAt": "2026-10-18T02:18:14.932752+00:00",
+          "sha256": "b4814bea8d3526cc0f280aeb535b5884db107b6530140e85144435842f17e2a5"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:14.940413+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "603256.SS",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:14.947501+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:17.644772+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:14.947570+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 128536,
+          "receivedAt": "2026-10-18T02:18:17.640085+00:00",
+          "sha256": "1db463cc5e4ba03567e2e9c6f91717ef588ad0117ca5ce0253a373cdd15cedb6"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:17.648826+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "601208.SS",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:17.655376+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:20.336827+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:17.655425+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 131948,
+          "receivedAt": "2026-10-18T02:18:20.332766+00:00",
+          "sha256": "df357640b064a0a0f0552eb8ddd950ac2318e13b6713b2bd2f1e1cbd7758482c"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:20.340754+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "2383.TW",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:20.347385+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1213,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1213,
+        "highCount": 1213,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:22.806472+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:20.347433+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 75807,
+          "receivedAt": "2026-10-18T02:18:22.797646+00:00",
+          "sha256": "205c1a5d49b8aac4409532d817ef38aa569c335adedc1934c2ca8923ea58242e"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:22.810410+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "600183.SS",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:22.817060+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:25.380387+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:22.817115+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 132165,
+          "receivedAt": "2026-10-18T02:18:25.375928+00:00",
+          "sha256": "20bcc6f61f68ace982be706b8b92e04d6060358ac1b72969b6e2ffcce5229267"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:25.384759+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "1888.HK",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:25.391591+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1230,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1230,
+        "highCount": 1230,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:27.685170+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:25.391639+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 131867,
+          "receivedAt": "2026-10-18T02:18:27.680867+00:00",
+          "sha256": "5d06a2da804d7a820b5ed427b7a86a87a70a43be0e7648869600c8e2089d457f"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:27.689164+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "002463.SZ",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:27.695709+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:29.190490+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:27.695758+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 131484,
+          "receivedAt": "2026-10-18T02:18:29.186461+00:00",
+          "sha256": "4a9bd14ae064877cfadf5bfaec414699d2b6dfa56fe0c0dd4baf5fbf342b7957"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:29.194836+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "300476.SZ",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:29.201555+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:30.746116+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:29.201603+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 128454,
+          "receivedAt": "2026-10-18T02:18:30.742141+00:00",
+          "sha256": "7954da26d3ee555e3da96ab042bdb7405429aa11966c1c2d3e57c46df0c07dde"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:30.749996+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "002916.SZ",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:30.757665+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:32.264281+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:30.757715+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 128390,
+          "receivedAt": "2026-10-18T02:18:32.260102+00:00",
+          "sha256": "ce8f395bbfe354c8546c57ed079ae94aae3ef6650bd6ecc4ed8de08aa92ed9a5"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:32.268237+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "301200.SZ",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:32.275240+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1123,
+        "firstDate": "2022-02-28",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1123,
+        "highCount": 1122,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:33.800926+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:32.275289+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 118456,
+          "receivedAt": "2026-10-18T02:18:33.797242+00:00",
+          "sha256": "90c82af3366c0e6c7b1be30a1dd12b08eb965a39ed9ec53209f719d905380c05"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:33.804573+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "301377.SZ",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:33.811383+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 944,
+        "firstDate": "2022-11-22",
+        "asOf": "2026-10-16",
+        "adjustedCount": 944,
+        "highCount": 944,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:35.182183+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:33.811433+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 100903,
+          "receivedAt": "2026-10-18T02:18:35.172673+00:00",
+          "sha256": "b2372e8045b9a79ba312069b68ddf461e8ff76fe18acab161a4d7bd7e1de7f92"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:35.185291+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "000657.SZ",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:35.191920+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:37.759501+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:35.191967+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 132843,
+          "receivedAt": "2026-10-18T02:18:37.755306+00:00",
+          "sha256": "7c926f51f8903ab406783000acaff8107fb8bcf23ced507b450062e645ad996c"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:37.763475+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "GEV",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:37.770130+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 642,
+        "firstDate": "2024-03-27",
+        "asOf": "2026-10-16",
+        "adjustedCount": 642,
+        "highCount": 642,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:38.932679+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:37.770179+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 65508,
+          "receivedAt": "2026-10-18T02:18:38.930485+00:00",
+          "sha256": "f7471c563334679b718bad1af49cf4d7a12656960a6ac7fc30f2ec426b2daf3e"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:38.935032+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "ENR.DE",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:38.941794+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1275,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1275,
+        "highCount": 1275,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:41.102456+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:38.941849+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 137680,
+          "receivedAt": "2026-10-18T02:18:41.097644+00:00",
+          "sha256": "ea636d5b36a62359482e89bfb05a833a29eeb9a186cfb3c4d5e2577e1721423f"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:41.106675+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "600875.SS",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:41.113216+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:42.620546+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:41.113264+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 134764,
+          "receivedAt": "2026-10-18T02:18:42.616508+00:00",
+          "sha256": "3832fc03d31a2de9ba1745b51717776aaf61e0d5e07a9534f9ab1be1dda07d93"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:42.624527+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "002028.SZ",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:42.631079+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:44.141481+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:42.631157+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 127023,
+          "receivedAt": "2026-10-18T02:18:44.137500+00:00",
+          "sha256": "0a99a6d080442a5d0e1bedf6337fad6db875489332648783fd243af917b89749"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:44.145414+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "601179.SS",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:44.152068+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:45.565380+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:44.152117+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 131573,
+          "receivedAt": "2026-10-18T02:18:45.561284+00:00",
+          "sha256": "32b7d387c5041172db7207e53bacdb41f882c359acc6a5957b39e10dbb5bcaab"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:45.569288+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "688676.SS",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:45.576344+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:47.187471+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:45.576401+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 128544,
+          "receivedAt": "2026-10-18T02:18:47.176881+00:00",
+          "sha256": "dd99af38a1cd5a11b3e12cbcb13b2f8b92ba32f1db84ed8825b69bc43449a65d"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:47.191466+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "ETN",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:47.198590+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1255,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1255,
+        "highCount": 1255,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:53.000490+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:47.198638+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 135187,
+          "receivedAt": "2026-10-18T02:18:52.996096+00:00",
+          "sha256": "fadd317b3908b3fb81886637d0977db8b5d8884027b40187345176aab23a77d6"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:53.004590+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "SU.PA",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:53.011366+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1281,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1281,
+        "highCount": 1281,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:54.694972+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:53.011415+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 133157,
+          "receivedAt": "2026-10-18T02:18:54.690568+00:00",
+          "sha256": "8b16359f79dd462eed511e21de5182acad28bd11f402ace31345557b95b1629d"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:54.699152+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "002335.SZ",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:54.705943+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:56.612911+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:54.705992+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 136466,
+          "receivedAt": "2026-10-18T02:18:56.608677+00:00",
+          "sha256": "08c67991aefb776aa76d1c7e43c75bf2284917591237028d28cc6cfe685b7c1a"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:56.616879+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "VRT",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:56.623755+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1255,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1255,
+        "highCount": 1255,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:18:59.251410+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:56.623806+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 135574,
+          "receivedAt": "2026-10-18T02:18:59.246925+00:00",
+          "sha256": "066c1462f153270cfcc00fdf39378a4604cbb8d7a9965762a7328b7101be634a"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:18:59.255593+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "002837.SZ",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:18:59.262230+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1212,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1212,
+        "highCount": 1212,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:19:01.796411+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:18:59.262279+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 136081,
+          "receivedAt": "2026-10-18T02:19:01.792202+00:00",
+          "sha256": "87b5bd867bd7196d5311d4b959a55e9c0aeacc5779e0a165ef661df17e8a2b07"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:01.800539+00:00"
+    },
+    {
+      "category": "company-yahoo-daily",
+      "code": "MOD",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:19:01.807301+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": true,
+        "timezoneValidAndOffsetMatches": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1255,
+        "firstDate": "2021-10-18",
+        "asOf": "2026-10-16",
+        "adjustedCount": 1255,
+        "highCount": 1255,
+        "phase": "closed",
+        "receivedAt": "2026-10-18T02:19:03.112212+00:00",
+        "currencyMatches": true,
+        "timezonePresent": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:01.807349+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 133691,
+          "receivedAt": "2026-10-18T02:19:03.107966+00:00",
+          "sha256": "2ba05ff12344531a63b2fd845308b6578bd2b425a01ef61b8b8f98bb208b7f06"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:03.116256+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "688498.SS",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:03.123092+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:10.396570+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:03.123171+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 38445,
+          "receivedAt": "2026-10-18T02:19:07.721875+00:00",
+          "sha256": "90086d50f86a2e34b528f2d275d4ab555d319aeec0c645439a624b3f49fbad2a"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:07.728668+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 37869,
+          "receivedAt": "2026-10-18T02:19:10.395459+00:00",
+          "sha256": "966f54f176ff69ef42a9b12e4e99a561f6752c5193a22eff2a1f8e4bd65ece01"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:10.398371+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "300308.SZ",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:10.405493+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:14.469367+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:10.405540+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 37366,
+          "receivedAt": "2026-10-18T02:19:12.748699+00:00",
+          "sha256": "367e94856561bb1c7172583c53465835c8ecb907cf7f5ac63bfff64f73ad1e6d"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:12.749106+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 37337,
+          "receivedAt": "2026-10-18T02:19:14.468212+00:00",
+          "sha256": "44bdfe53bc789b92a23b9553a8e2c3cf71770d79712c6eed48e60062664384c2"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:14.471231+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "300502.SZ",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:14.477930+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:18.802356+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:14.477977+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 36889,
+          "receivedAt": "2026-10-18T02:19:16.532932+00:00",
+          "sha256": "3bc944976f84f3c5a43faf8753b3c66388f88c00050c62556664164b1293a2a8"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:16.533350+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 36351,
+          "receivedAt": "2026-10-18T02:19:18.801219+00:00",
+          "sha256": "6cb8b539f869e87d55945c5d3293ffcc56f14aa578c442bbc71a7c39b818f10a"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:18.804174+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "300394.SZ",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:18.810815+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:20.582524+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:18.810861+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 36785,
+          "receivedAt": "2026-10-18T02:19:19.537437+00:00",
+          "sha256": "7385d3a1eeda78c1d347a609f185f0d6c443630637ac63749d04f891ec72f5bc"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:19.537799+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 36500,
+          "receivedAt": "2026-10-18T02:19:20.581398+00:00",
+          "sha256": "2e81c53296e6d76aabf86c0153f61f47f6ec7f9c37bf49b11b08a7dd6d1e11ee"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:20.584351+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "0522.HK",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:20.590886+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": false,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-09-04",
+        "asOf": "2026-10-16",
+        "adjustedCount": 0,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:22.202387+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:20.590932+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 36588,
+          "receivedAt": "2026-10-18T02:19:21.371398+00:00",
+          "sha256": "d4e1d4090da56c794a0d6a51aa6c9821507f52f815d86c08e733cd4229b69472"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:21.371865+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 36588,
+          "receivedAt": "2026-10-18T02:19:22.201424+00:00",
+          "sha256": "d4e1d4090da56c794a0d6a51aa6c9821507f52f815d86c08e733cd4229b69472"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:22.206934+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "688825.SS",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:22.221888+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": false,
+        "high52Available": false,
+        "historySufficient": false,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 54,
+        "firstDate": "2026-07-27",
+        "asOf": "2026-10-16",
+        "adjustedCount": 0,
+        "highCount": 54,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:24.821402+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:22.221945+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 5248,
+          "receivedAt": "2026-10-18T02:19:22.741200+00:00",
+          "sha256": "a0f6cceb58656225dd9251fa34914adce5db8991e903862e0bf160e29d7c2c69"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:22.741334+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 5248,
+          "receivedAt": "2026-10-18T02:19:24.821205+00:00",
+          "sha256": "f4174a7310433b166f59532c2a64e8cd07d784b704c9b66a90a14597229ba502"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:24.821644+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "002371.SZ",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:24.828360+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:29.344765+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:24.828408+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 36778,
+          "receivedAt": "2026-10-18T02:19:26.623089+00:00",
+          "sha256": "ed90708754eeba6e6a750a5dae0226b2b1e6fc0bbf04a0b7b97093fcba315f86"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:26.623500+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 36813,
+          "receivedAt": "2026-10-18T02:19:29.342512+00:00",
+          "sha256": "316a28560c4175b9ad7689c3ba14d088478a2b2d8af162b1f3bfc5ce9784ff6f"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:29.346542+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "688012.SS",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:29.353490+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-07",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:32.145976+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:29.353538+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 37995,
+          "receivedAt": "2026-10-18T02:19:31.061982+00:00",
+          "sha256": "4c2c230b82446c172d7bc4f2da688ed2da5c7d51037cef889fb441d43c5379b5"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:31.062388+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 37906,
+          "receivedAt": "2026-10-18T02:19:32.144863+00:00",
+          "sha256": "5ea14eab3a06b4374252b25c5cdc38ffa2791438c57cbbe6c97684e481d08fe1"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:32.147875+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "603256.SS",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:32.155732+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:34.211203+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:32.155782+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 34626,
+          "receivedAt": "2026-10-18T02:19:32.993783+00:00",
+          "sha256": "cfd24b58f43248237bad355666b1920237985fab384b09c16077467c25509ef2"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:32.994173+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 34654,
+          "receivedAt": "2026-10-18T02:19:34.209978+00:00",
+          "sha256": "98b66072d30bdabf5f1db5fea2429a5794ce3f6f78cc3b842b993ae067317782"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:34.212947+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "601208.SS",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:34.220451+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:35.692949+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:34.220500+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 34432,
+          "receivedAt": "2026-10-18T02:19:34.965901+00:00",
+          "sha256": "134f226cc90b3d092e2fd33ca9dc64d61f482e500d6225381fc9982d469ac974"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:34.966314+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 34459,
+          "receivedAt": "2026-10-18T02:19:35.691823+00:00",
+          "sha256": "96a7e8339dd787ddf3bae921defb697cf9dc493c6d8a2d75d83e19b908da87d2"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:35.694718+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "600183.SS",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:35.701760+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:37.279006+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:35.701806+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35576,
+          "receivedAt": "2026-10-18T02:19:36.455353+00:00",
+          "sha256": "774eaf1beedca22a1b72efcb1232d8aa80016f9b03278ed761d29783dfe0a40e"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:36.455748+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35608,
+          "receivedAt": "2026-10-18T02:19:37.277891+00:00",
+          "sha256": "19e687e29b46de16714dee244e1b0087d9a11b85a32a70c877a9eac28de2ef2a"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:37.280863+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "1888.HK",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:37.287857+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": false,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-09-04",
+        "asOf": "2026-10-16",
+        "adjustedCount": 0,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:38.900873+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:37.287905+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35467,
+          "receivedAt": "2026-10-18T02:19:38.092241+00:00",
+          "sha256": "240fd381bb1a1da680d31ab7ee6e9e4bc89c5b9a9fc48b756a6f79b9b22c274c"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:38.092694+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35467,
+          "receivedAt": "2026-10-18T02:19:38.899796+00:00",
+          "sha256": "240fd381bb1a1da680d31ab7ee6e9e4bc89c5b9a9fc48b756a6f79b9b22c274c"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:38.902351+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "002463.SZ",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:38.909511+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:40.360896+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:38.909564+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35575,
+          "receivedAt": "2026-10-18T02:19:39.642083+00:00",
+          "sha256": "a4a280c34dcda795dd5c0f34bc9ee936708de1b0d81b64081b0ed3d54176f036"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:39.642515+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35610,
+          "receivedAt": "2026-10-18T02:19:40.349526+00:00",
+          "sha256": "b27cf1314713647c5979e3dce71935dba13a97bad55ece9974fec3eaaf0bcd5e"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:40.362806+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "300476.SZ",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:40.369619+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:41.883339+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:40.369668+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 36412,
+          "receivedAt": "2026-10-18T02:19:41.162925+00:00",
+          "sha256": "e01fa7bca09bb4e8b7d784a77ee1e919b91525eb6fbee017cc60b3615106ffd6"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:41.163487+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 36441,
+          "receivedAt": "2026-10-18T02:19:41.881932+00:00",
+          "sha256": "1ee0cde1e8bf7b98dbf4d6baf7e227e4b33aab2d95bff13958dc3fe759308697"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:41.885133+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "002916.SZ",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:41.891936+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:43.532424+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:41.891984+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 36679,
+          "receivedAt": "2026-10-18T02:19:42.728197+00:00",
+          "sha256": "5cfd9111fb293e973756152129bdbf45bd49bff7cfba88a09e4d9d5f3231387f"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:42.728612+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 36181,
+          "receivedAt": "2026-10-18T02:19:43.531098+00:00",
+          "sha256": "16e7672560af6e46ca8a15973d45efe27792707e889c957f9f26e397eaa6f797"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:43.534210+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "301200.SZ",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:43.540917+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:45.007439+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:43.540964+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35507,
+          "receivedAt": "2026-10-18T02:19:44.278185+00:00",
+          "sha256": "56c67eb338e14f923584e844838e50340c9bbdd7246088a72a528fa61c5bba62"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:44.278581+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35538,
+          "receivedAt": "2026-10-18T02:19:45.006141+00:00",
+          "sha256": "5ffe2cdfe2694ab76a789b0a1d25b1cfaf39e2bad620a7835e6d9367cb85a269"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:45.009198+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "301377.SZ",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:45.015867+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:46.547488+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:45.015914+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35819,
+          "receivedAt": "2026-10-18T02:19:45.820817+00:00",
+          "sha256": "b332694d2cb40ee6a0a262cb829bd4564100c6b13bf3246a8f55468da73eb8a1"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:45.821302+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35843,
+          "receivedAt": "2026-10-18T02:19:46.546190+00:00",
+          "sha256": "fa10098d5df5c4261ed2e1352d755ec164b5eb94f6f3b74a00208b66ac5df45c"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:46.549259+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "000657.SZ",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:46.556372+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:48.057896+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:46.556495+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 34663,
+          "receivedAt": "2026-10-18T02:19:47.294311+00:00",
+          "sha256": "1a266b75d73a00c19fde530c872b458efd6906647611de0e7eda7aaad5c1fd86"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:47.294703+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 34599,
+          "receivedAt": "2026-10-18T02:19:48.056597+00:00",
+          "sha256": "8bcbf11a5abdf3f3087405d5d5d7a423fbde65ee4f0bdf024e21589f494a11f2"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:48.059726+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "600875.SS",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:48.066322+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:49.677845+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:48.066369+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35121,
+          "receivedAt": "2026-10-18T02:19:48.867894+00:00",
+          "sha256": "9b072a246fc62efbd3ab4ae7ac6fedd82090b873fed08cbfd50ee87fad6280aa"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:48.868408+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35156,
+          "receivedAt": "2026-10-18T02:19:49.676464+00:00",
+          "sha256": "ab508f025cd54950c7619cf6a3d53b695a5af51e3f0fa75a753d6431d3eb59ad"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:49.679716+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "002028.SZ",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:49.687228+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:51.236576+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:49.687277+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35734,
+          "receivedAt": "2026-10-18T02:19:50.470502+00:00",
+          "sha256": "253e5713f3d12f0bec39510fa51f241c856a5fb402e5caf76757aadeead8e432"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:50.471000+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35767,
+          "receivedAt": "2026-10-18T02:19:51.234921+00:00",
+          "sha256": "c6963c9fbcff6db99c683e09e3bb77e492c22b332547e9ec84acc1924806f53a"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:51.238938+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "601179.SS",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:51.245635+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:52.743083+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:51.245685+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 34367,
+          "receivedAt": "2026-10-18T02:19:52.001660+00:00",
+          "sha256": "7bba964f15179989fee566d7f5681d3f555fe7875cc8acea38cf4455879e47e6"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:52.002210+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 34400,
+          "receivedAt": "2026-10-18T02:19:52.741757+00:00",
+          "sha256": "5fd8c3440523b2a1f19beaebc2e8b982025210dcc961ca234247bb895cacbef3"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:52.744941+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "688676.SS",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:52.751839+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:54.238910+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:52.751885+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 36141,
+          "receivedAt": "2026-10-18T02:19:53.495361+00:00",
+          "sha256": "2e4c930166f7f05d518569012cae292830c96ee5053e9956048b7c2e68fa0aeb"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:53.495825+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 36160,
+          "receivedAt": "2026-10-18T02:19:54.237641+00:00",
+          "sha256": "2094566589396575e5163c50cb6d3a24a233ef9089868dfcb9aa2569b6cb0324"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:54.240713+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "002335.SZ",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:54.247327+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:55.736979+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:54.247375+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35013,
+          "receivedAt": "2026-10-18T02:19:54.973268+00:00",
+          "sha256": "18a238aec1e4e1c86158273330b2ab6ec56c51bdab64b6b70f41eeaef202c11e"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:54.973674+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35048,
+          "receivedAt": "2026-10-18T02:19:55.735733+00:00",
+          "sha256": "9b12e17770d3647db01626327f27687046c774f2aa22bda41521df1714128e15"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:55.738725+00:00"
+    },
+    {
+      "category": "company-tencent-backup",
+      "code": "002837.SZ",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:19:55.745694+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "validBars": true,
+        "adjustmentComplete": true,
+        "high52Available": true,
+        "historySufficient": true,
+        "currencyMatches": false,
+        "timezoneValidAndOffsetMatches": false,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 520,
+        "firstDate": "2024-08-20",
+        "asOf": "2026-10-16",
+        "adjustedCount": 520,
+        "highCount": 520,
+        "phase": "unknown",
+        "receivedAt": "2026-10-18T02:19:57.297715+00:00",
+        "currencyMatches": false,
+        "timezonePresent": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:55.745741+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35326,
+          "receivedAt": "2026-10-18T02:19:56.565866+00:00",
+          "sha256": "1872d7d6affcb9cbc673b1fee42e1de7d73c725c812c8627dc5461bb3b8243ab"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:19:56.566357+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 35120,
+          "receivedAt": "2026-10-18T02:19:57.296451+00:00",
+          "sha256": "661cdf91d3769064a54f89202af07b949af7f9585e97172d5dc20679a3803cac"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:19:57.299528+00:00"
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "688498.SS",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:00:00+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432102+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "LITE",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": false,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T20:00:01+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432119+00:00",
+        "peStatus": "missing"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "COHR",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T20:00:02+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432126+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "300308.SZ",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:04:19+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432130+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "300502.SZ",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:04:37+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432133+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "AVGO",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T20:00:01+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432137+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "MRVL",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T20:00:02+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432140+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "ANET",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T20:00:03+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432143+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "300394.SZ",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:04:43+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432147+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "TSM",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T20:00:02+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432150+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "0522.HK",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T08:08:14+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432153+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "000660.KS",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": false,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T06:30:25+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432156+00:00",
+        "peStatus": "missing"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "MU",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T20:00:00+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432160+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "688825.SS",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:00:02+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432162+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "NVDA",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T20:00:00+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432166+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "ASML",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T20:00:01+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432169+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "002371.SZ",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:04:33+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432172+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "688012.SS",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:00:01+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432175+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "3110.T",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T06:30:00+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432178+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "603256.SS",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:00:02+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432181+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "601208.SS",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:00:02+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432184+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "2383.TW",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T05:30:07+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432187+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "600183.SS",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:00:00+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432190+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "1888.HK",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T08:08:14+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432193+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "002463.SZ",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:04:27+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432196+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "300476.SZ",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:04:34+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432199+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "002916.SZ",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:04:27+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432202+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "301200.SZ",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:04:34+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432205+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "301377.SZ",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:04:49+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432209+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "000657.SZ",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:04:21+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432211+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "GEV",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T20:00:02+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432214+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "ENR.DE",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T15:38:11+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432217+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "600875.SS",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:00:00+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432221+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "002028.SZ",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:04:51+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432224+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "601179.SS",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:00:01+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432227+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "688676.SS",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:00:01+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432230+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "ETN",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T20:00:02+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432233+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "SU.PA",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T15:36:32+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432236+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "002335.SZ",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:04:57+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432239+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "VRT",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T20:00:03+00:00",
+        "receivedAt": "2026-10-18T02:20:04.432242+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "002837.SZ",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T07:04:57+00:00",
+        "receivedAt": "2026-10-18T02:20:06.325270+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "company-yahoo-quote",
+      "code": "MOD",
+      "source": "yahoo",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "marketCap": true,
+        "trailingPE": true,
+        "sourceTime": true,
+        "currencyMatches": true,
+        "dateMatchesDaily": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "observedAt": "2026-10-16T20:00:02+00:00",
+        "receivedAt": "2026-10-18T02:20:06.325285+00:00",
+        "peStatus": "available"
+      },
+      "requests": []
+    },
+    {
+      "category": "index-yahoo",
+      "code": "000001.SS",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:06.332635+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "positivePrice": true,
+        "changePresent": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "receivedAt": "2026-10-18T02:20:10.639456+00:00",
+        "phase": "closed"
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:06.332689+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 2938,
+          "receivedAt": "2026-10-18T02:20:10.639205+00:00",
+          "sha256": "1dbd395a8ad8745f40c4ecf4550a13768a7a22fb840811bfbdf4147e971a0bd1"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:10.639489+00:00"
+    },
+    {
+      "category": "index-tencent",
+      "code": "000001.SS",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:20:10.648158+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": false,
+      "checks": {
+        "positivePrice": true,
+        "changePresent": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "receivedAt": "2026-10-18T02:20:11.138256+00:00",
+        "phase": "unknown"
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:10.648216+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 2413,
+          "receivedAt": "2026-10-18T02:20:11.138147+00:00",
+          "sha256": "b3fa5396eec9ac731d90d8b06fc53ad6826ba2a5920461396d6c268b601605a5"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:11.138294+00:00"
+    },
+    {
+      "category": "index-yahoo",
+      "code": "399006.SZ",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:11.145322+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {},
+      "details": {
+        "count": 1
+      },
+      "failure": "yahoo_index_insufficient_daily_bars",
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:11.145376+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 1263,
+          "receivedAt": "2026-10-18T02:20:12.850905+00:00",
+          "sha256": "e8e8dd919886393aa7a9cd4cd1eb4631fe4b99128e3d0a9d6b2bbf6ca310ea86"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:12.851090+00:00"
+    },
+    {
+      "category": "index-tencent",
+      "code": "399006.SZ",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:20:12.858141+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": false,
+      "checks": {
+        "positivePrice": true,
+        "changePresent": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "receivedAt": "2026-10-18T02:20:13.365050+00:00",
+        "phase": "unknown"
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:12.858190+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 2348,
+          "receivedAt": "2026-10-18T02:20:13.364889+00:00",
+          "sha256": "0333d07ff781fe9f0ffa5bcae6bf07509e0552438462fb0e19fabcd665ce438c"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:13.365087+00:00"
+    },
+    {
+      "category": "index-yahoo",
+      "code": "000922.SS",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:13.371945+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {},
+      "details": {
+        "count": 1
+      },
+      "failure": "yahoo_index_insufficient_daily_bars",
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:13.371997+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 1266,
+          "receivedAt": "2026-10-18T02:20:15.240398+00:00",
+          "sha256": "1b4a1759bcf14864ccfe94d15530bfbf521dd47c059d1866912644491601349c"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:15.240531+00:00"
+    },
+    {
+      "category": "index-tencent",
+      "code": "000922.SS",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:20:15.247685+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": false,
+      "checks": {
+        "positivePrice": true,
+        "changePresent": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "receivedAt": "2026-10-18T02:20:15.798878+00:00",
+        "phase": "unknown"
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:15.247737+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 2262,
+          "receivedAt": "2026-10-18T02:20:15.798775+00:00",
+          "sha256": "d85f3afb46cfe87c328b69069d9d3a5dc6447a4b0e39f7b8d6604c91b1e69cad"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:15.798911+00:00"
+    },
+    {
+      "category": "index-yahoo",
+      "code": "^HSI",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:15.805888+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "positivePrice": true,
+        "changePresent": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "receivedAt": "2026-10-18T02:20:17.644939+00:00",
+        "phase": "closed"
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:15.805948+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3279,
+          "receivedAt": "2026-10-18T02:20:17.644745+00:00",
+          "sha256": "6a96885f68bda83befe19ee2bd248a822b04d4ae65185cdf1e31114c281b54a8"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:17.644965+00:00"
+    },
+    {
+      "category": "index-tencent",
+      "code": "^HSI",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:20:17.652210+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": false,
+      "checks": {
+        "positivePrice": true,
+        "changePresent": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "receivedAt": "2026-10-18T02:20:18.198819+00:00",
+        "phase": "unknown"
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:17.652255+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 2333,
+          "receivedAt": "2026-10-18T02:20:18.198710+00:00",
+          "sha256": "a0d0ce4182bce5d3c58173fb78eb2a3b2ff214af58059302d2d6a7d573fb999f"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:18.198855+00:00"
+    },
+    {
+      "category": "index-yahoo",
+      "code": "HSTECH.HK",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:18.205842+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {},
+      "details": {
+        "count": 1
+      },
+      "failure": "yahoo_index_insufficient_daily_bars",
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:18.205893+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 1239,
+          "receivedAt": "2026-10-18T02:20:19.829340+00:00",
+          "sha256": "04667e50d5cba916ebb3e9224825ffe61e130ecb903705a6c9a6421805527b5c"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:19.829463+00:00"
+    },
+    {
+      "category": "index-tencent",
+      "code": "HSTECH.HK",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:20:19.836365+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": false,
+      "checks": {
+        "positivePrice": true,
+        "changePresent": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "receivedAt": "2026-10-18T02:20:20.326247+00:00",
+        "phase": "unknown"
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:19.836412+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 2197,
+          "receivedAt": "2026-10-18T02:20:20.326129+00:00",
+          "sha256": "a9dfa0474774280d30bfe4b279a0576b3826d23719e540a35548353bca198209"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:20.326283+00:00"
+    },
+    {
+      "category": "index-yahoo",
+      "code": "^IXIC",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:20.333262+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "positivePrice": true,
+        "changePresent": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "receivedAt": "2026-10-18T02:20:21.935754+00:00",
+        "phase": "closed"
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:20.333320+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3381,
+          "receivedAt": "2026-10-18T02:20:21.935548+00:00",
+          "sha256": "f250dc00072a584546f1f6b0b8dcf008839e739e9de3b594d2f0f2a1c433317b"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:21.935779+00:00"
+    },
+    {
+      "category": "index-yahoo",
+      "code": "^GSPC",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:21.942681+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "positivePrice": true,
+        "changePresent": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "receivedAt": "2026-10-18T02:20:23.885423+00:00",
+        "phase": "closed"
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:21.942736+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3433,
+          "receivedAt": "2026-10-18T02:20:23.885206+00:00",
+          "sha256": "265c99aa2adaf68a5c9c51c1c973876874e9a1bb8e014bee25b2cc5cae853026"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:23.885450+00:00"
+    },
+    {
+      "category": "index-yahoo",
+      "code": "^SOX",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:23.892961+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "positivePrice": true,
+        "changePresent": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 1,
+        "asOf": "2026-10-16",
+        "receivedAt": "2026-10-18T02:20:25.806423+00:00",
+        "phase": "closed"
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:23.893044+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3256,
+          "receivedAt": "2026-10-18T02:20:25.806211+00:00",
+          "sha256": "31b106b210e77f516fccfdbc5dbc6c01b99755b17ca356386112f87942799565"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:25.806448+00:00"
+    },
+    {
+      "category": "fx",
+      "code": "CNY",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:25.813190+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "positiveRate": true,
+        "sourcePricePresent": true,
+        "directionVerified": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 24,
+        "asOf": "2026-10-17",
+        "dates": [
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16",
+          "2026-10-17"
+        ],
+        "direction": "USD-to-local",
+        "inverted": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:25.813251+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3641,
+          "receivedAt": "2026-10-18T02:20:27.379600+00:00",
+          "sha256": "66d6371c992fa0bd7404dfae0a0142184107b397f38261dd236d52a69d3b8a65"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:27.380147+00:00"
+    },
+    {
+      "category": "fx",
+      "code": "EUR",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:27.386730+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "positiveRate": true,
+        "sourcePricePresent": true,
+        "directionVerified": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 24,
+        "asOf": "2026-10-17",
+        "dates": [
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16",
+          "2026-10-17"
+        ],
+        "direction": "USD-to-local",
+        "inverted": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:27.386783+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3727,
+          "receivedAt": "2026-10-18T02:20:28.021747+00:00",
+          "sha256": "482d06d173024b523ec02458a57b965895b26476e88083051e0f2adf2413ef74"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:28.021969+00:00"
+    },
+    {
+      "category": "fx",
+      "code": "HKD",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:28.028648+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "positiveRate": true,
+        "sourcePricePresent": true,
+        "directionVerified": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 24,
+        "asOf": "2026-10-17",
+        "dates": [
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16",
+          "2026-10-17"
+        ],
+        "direction": "USD-to-local",
+        "inverted": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:28.028701+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3637,
+          "receivedAt": "2026-10-18T02:20:29.815839+00:00",
+          "sha256": "724d3ed02f48a663a8ee5d1f55c8fb382c9310819a16a2da96ee14881ae10c6b"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:29.816096+00:00"
+    },
+    {
+      "category": "fx",
+      "code": "JPY",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:29.822905+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "positiveRate": true,
+        "sourcePricePresent": true,
+        "directionVerified": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 23,
+        "asOf": "2026-10-16",
+        "dates": [
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16"
+        ],
+        "direction": "USD-to-local",
+        "inverted": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:29.822961+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3725,
+          "receivedAt": "2026-10-18T02:20:31.787881+00:00",
+          "sha256": "f3e553c224672b7bf568692a9b089b0a7253bb3cc2e45c7290a9ac213e81eb06"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:31.788128+00:00"
+    },
+    {
+      "category": "fx",
+      "code": "KRW",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:31.794747+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "positiveRate": true,
+        "sourcePricePresent": true,
+        "directionVerified": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 24,
+        "asOf": "2026-10-17",
+        "dates": [
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16",
+          "2026-10-17"
+        ],
+        "direction": "USD-to-local",
+        "inverted": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:31.794803+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3603,
+          "receivedAt": "2026-10-18T02:20:33.842556+00:00",
+          "sha256": "a7ed74f85013afeb039e0b53c301c8189743e631b5281fb5feae7e9cea5041bb"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:33.842809+00:00"
+    },
+    {
+      "category": "fx",
+      "code": "TWD",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:33.849829+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "positiveRate": true,
+        "sourcePricePresent": true,
+        "directionVerified": true,
+        "dateValid": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 23,
+        "asOf": "2026-10-16",
+        "dates": [
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16"
+        ],
+        "direction": "USD-to-local",
+        "inverted": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:33.849915+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3698,
+          "receivedAt": "2026-10-18T02:20:35.341535+00:00",
+          "sha256": "829cd3148522fa5a224750f201b28313eef8cc3bdd328c7bd776932f6f874a08"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:35.341762+00:00"
+    },
+    {
+      "category": "ratio-tencent",
+      "code": "cyb",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:20:35.348593+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "history120Completed": true,
+        "currentDated": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 197,
+        "completedMonths": 196,
+        "asOf": "2026-10-16",
+        "currentDated": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:35.348663+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 16334,
+          "receivedAt": "2026-10-18T02:20:36.080305+00:00",
+          "sha256": "0d88b0b3ef3ba7fd2e53c1135cb3d351fb52bf2ff6e6e77a2b0e4721d1310e61"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:36.110376+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 1973,
+          "receivedAt": "2026-10-18T02:20:36.624684+00:00",
+          "sha256": "9579ac8c4adae1257707dd1d890905424598bc985f9a0e135e300d353cfc0ea3"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:36.625631+00:00"
+    },
+    {
+      "category": "ratio-yahoo",
+      "code": "cyb",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:36.633647+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "history120Completed": false,
+        "currentDated": false,
+        "dateFresh": false
+      },
+      "details": {
+        "count": 1,
+        "completedMonths": 0,
+        "asOf": null,
+        "currentDated": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:36.633709+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 1263,
+          "receivedAt": "2026-10-18T02:20:38.399916+00:00",
+          "sha256": "6874e65e66156423397aa95f8c8ec23fa0ca245e00e9481db40366b7525df3a5"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:38.400323+00:00"
+    },
+    {
+      "category": "ratio-tencent",
+      "code": "hl",
+      "source": "tencent",
+      "startedAt": "2026-10-18T02:20:38.409706+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": true,
+      "publicationGate": true,
+      "checks": {
+        "history120Completed": true,
+        "currentDated": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 200,
+        "completedMonths": 199,
+        "asOf": "2026-10-16",
+        "currentDated": true
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:38.409756+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 16565,
+          "receivedAt": "2026-10-18T02:20:39.120880+00:00",
+          "sha256": "9fb3597a90bbb89235f4d850e97514315ab11fa4cd1e34a721329e1738a0a905"
+        },
+        {
+          "host": "web.ifzq.gtimg.cn",
+          "pathClass": "kline",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:39.121328+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 1892,
+          "receivedAt": "2026-10-18T02:20:39.642202+00:00",
+          "sha256": "eee3ae48559c4fedd6aa2a87028934ae25288c6b0eb6ee79bdc81270e373d129"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:39.644230+00:00"
+    },
+    {
+      "category": "ratio-yahoo",
+      "code": "hl",
+      "source": "yahoo",
+      "startedAt": "2026-10-18T02:20:39.651068+00:00",
+      "connection": true,
+      "parse": true,
+      "quality": false,
+      "publicationGate": false,
+      "checks": {
+        "history120Completed": false,
+        "currentDated": false,
+        "dateFresh": false
+      },
+      "details": {
+        "count": 1,
+        "completedMonths": 0,
+        "asOf": null,
+        "currentDated": false
+      },
+      "failure": null,
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:20:39.651166+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 1266,
+          "receivedAt": "2026-10-18T02:20:41.416101+00:00",
+          "sha256": "3ac3370db09df03e3345f91ca9b30904559f2f12ea478ef852555a17f03cb0c1"
+        }
+      ],
+      "finishedAt": "2026-10-18T02:20:41.416368+00:00"
+    }
+  ],
+  "summary": {
+    "company-tencent-backup": {
+      "planned": 24,
+      "connection": 24,
+      "parse": 24,
+      "quality": 0,
+      "publicationGate": 0
+    },
+    "company-yahoo-daily": {
+      "planned": 42,
+      "connection": 42,
+      "parse": 42,
+      "quality": 41,
+      "publicationGate": 41
+    },
+    "company-yahoo-quote": {
+      "planned": 42,
+      "connection": 42,
+      "parse": 42,
+      "quality": 40,
+      "publicationGate": 40
+    },
+    "fx": {
+      "planned": 6,
+      "connection": 6,
+      "parse": 6,
+      "quality": 6,
+      "publicationGate": 6
+    },
+    "index-tencent": {
+      "planned": 5,
+      "connection": 5,
+      "parse": 5,
+      "quality": 5,
+      "publicationGate": 0
+    },
+    "index-yahoo": {
+      "planned": 8,
+      "connection": 8,
+      "parse": 8,
+      "quality": 5,
+      "publicationGate": 5
+    },
+    "ratio-tencent": {
+      "planned": 2,
+      "connection": 2,
+      "parse": 2,
+      "quality": 2,
+      "publicationGate": 2
+    },
+    "ratio-yahoo": {
+      "planned": 2,
+      "connection": 2,
+      "parse": 2,
+      "quality": 0,
+      "publicationGate": 0
+    }
+  },
+  "quoteSession": {
+    "failure": null,
+    "requests": [
+      {
+        "host": "fc.yahoo.com",
+        "pathClass": "cookie-seed",
+        "attempt": 1,
+        "startedAt": "2026-10-18T02:19:57.306515+00:00",
+        "httpStatus": 404,
+        "status": "cookie_seed_404",
+        "receivedAt": "2026-10-18T02:19:59.632073+00:00"
+      },
+      {
+        "host": "query1.finance.yahoo.com",
+        "pathClass": "crumb",
+        "attempt": 1,
+        "startedAt": "2026-10-18T02:19:59.632253+00:00",
+        "httpStatus": 200,
+        "status": "connected",
+        "bytes": 11,
+        "receivedAt": "2026-10-18T02:20:02.405913+00:00"
+      },
+      {
+        "host": "query1.finance.yahoo.com",
+        "pathClass": "quote",
+        "attempt": 1,
+        "startedAt": "2026-10-18T02:20:02.406307+00:00",
+        "httpStatus": 200,
+        "status": "connected",
+        "bytes": 32755,
+        "receivedAt": "2026-10-18T02:20:04.431747+00:00",
+        "sha256": "901a584304d1e4a2ebe9ab69884c3bf75ffd499bbc1de9ebb90be9fe6baee754"
+      },
+      {
+        "host": "query1.finance.yahoo.com",
+        "pathClass": "quote",
+        "attempt": 1,
+        "startedAt": "2026-10-18T02:20:04.432341+00:00",
+        "httpStatus": 200,
+        "status": "connected",
+        "bytes": 1674,
+        "receivedAt": "2026-10-18T02:20:06.325190+00:00",
+        "sha256": "983e404914930b55c940a60548c574d46fad1b00bd33e7664ceb186633a354a0"
+      }
+    ],
+    "batches": [
+      {
+        "batch": 1,
+        "requested": 40,
+        "attempts": 1,
+        "connection": true,
+        "parse": true
+      },
+      {
+        "batch": 2,
+        "requested": 2,
+        "attempts": 1,
+        "connection": true,
+        "parse": true
+      }
+    ],
+    "expectedBatchSizes": [
+      40,
+      2
+    ],
+    "returned": 42,
+    "cookieAvailable": true,
+    "crumbAvailable": true
+  },
+  "publication": {
+    "blockers": [
+      "financial_evidence_incomplete"
+    ],
+    "missingDailyCount": 0,
+    "staleDailyCount": 0,
+    "asOf": "2026-10-16",
+    "asOfByMarket": {
+      "A股": [
+        "2026-10-16"
+      ],
+      "美股": [
+        "2026-10-16"
+      ],
+      "港股": [
+        "2026-10-16"
+      ],
+      "韩股": [
+        "2026-10-16"
+      ],
+      "日股": [
+        "2026-10-16"
+      ],
+      "台股": [
+        "2026-10-16"
+      ],
+      "欧股": [
+        "2026-10-16"
+      ]
+    },
+    "ratioAvailable": true,
+    "financialVerified": 0,
+    "financialRequired": 42,
+    "primaryOnlyAssembly": true
+  },
+  "requestsMade": 119,
+  "deniedPaths": []
+}

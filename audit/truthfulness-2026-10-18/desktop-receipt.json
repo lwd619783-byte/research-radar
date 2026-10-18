@@ -1,0 +1,94 @@
+{
+  "checkedAt": "2026-10-18T02:26:42.370811+00:00",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "browser": "system Chromium via installed Playwright",
+  "results": [
+    {
+      "version": "before",
+      "layout": {
+        "sections": [
+          "overview",
+          "radar",
+          "choke",
+          "leaders",
+          "calendar"
+        ],
+        "topCards": 4,
+        "companies": 42,
+        "cssBytes": 42581,
+        "overflow": false
+      },
+      "pageErrors": [],
+      "urlKind": "localhost-http",
+      "realFetchedMarket": true
+    },
+    {
+      "version": "after",
+      "layout": {
+        "sections": [
+          "overview",
+          "radar",
+          "choke",
+          "leaders",
+          "calendar"
+        ],
+        "topCards": 4,
+        "companies": 42,
+        "cssBytes": 42581,
+        "overflow": false
+      },
+      "pageErrors": [],
+      "urlKind": "localhost-http",
+      "realFetchedMarket": true
+    }
+  ],
+  "screenshots": {
+    "before-su.png": {
+      "bytes": 340138,
+      "sha256": "58c6419885d9720e538eabcc7e95ae11cad3b977bcd828e19fff3d38e33b5366"
+    },
+    "before-cxmt.png": {
+      "bytes": 345070,
+      "sha256": "4b5aa8e068b45eea66c29e5371f4b82963961b49f22da5956c0287d4a332d232"
+    },
+    "after-su.png": {
+      "bytes": 358716,
+      "sha256": "4cf5e7fb036795c7a33af14d2b80892f8d4f7a8bb4313b54a177fbc6aadcec14"
+    },
+    "before-desktop.png": {
+      "bytes": 1291942,
+      "sha256": "c44ffc4c3af9e3dbca73495402cdf3f5d53f58b74c5827588548b7ae402ade86"
+    },
+    "after-lite.png": {
+      "bytes": 369688,
+      "sha256": "bef1596f77e05c069b115e2af3268f8b10819034782fb33e044cda5803d0d11c"
+    },
+    "before-lite.png": {
+      "bytes": 347217,
+      "sha256": "1b705043db70b516683b423368cd5380bf80d9598fb6db742cf98ebeb1490d6f"
+    },
+    "after-cxmt.png": {
+      "bytes": 366452,
+      "sha256": "ec23b23152a72417afd6149f07890bfaac54592f429cd453e1cb47c73d6dbc9b"
+    },
+    "after-desktop.png": {
+      "bytes": 1348979,
+      "sha256": "f1429c1421238f4a3d8e2b6414cf22c4378bbac9960f4cef9ed99b8d96f9dea5"
+    },
+    "before-asmpt.png": {
+      "bytes": 342350,
+      "sha256": "87cd968091b009467eca2c08cdfdb1d7ccaf9771c3dd982e9764cc53a93247be"
+    },
+    "after-cxmt-tooltip.png": {
+      "bytes": 357778,
+      "sha256": "d777d5e6e56f8dec31cb6c170c8bafcee6139ebfdf209a8b4f9c6961add4061c"
+    },
+    "after-asmpt.png": {
+      "bytes": 364252,
+      "sha256": "d3cb2c7148da48b327bded3a1d675c497da6b6544fdbd726d232b6492499d9fd"
+    }
+  }
+}

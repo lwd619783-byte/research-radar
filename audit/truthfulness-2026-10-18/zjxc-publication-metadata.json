@@ -1,0 +1,41 @@
+{
+  "startedAt": "2026-10-18T02:20:54.921315+00:00",
+  "url": "https://www.cninfo.com.cn/new/hisAnnouncement/query",
+  "method": "POST public read-only search",
+  "httpStatus": 200,
+  "bytes": 5847,
+  "sha256": "74ce48ec024e3a104b01de0a77b72c379a83ec38bc00ac328e5acd02e7b14587",
+  "announcements": [
+    {
+      "secCode": "300308",
+      "announcementTitle": "2026年半年度报告披露的提示性公告",
+      "announcementTime": 1787328000000,
+      "adjunctUrl": "finalpage/2026-08-22/1225491756.PDF"
+    },
+    {
+      "secCode": "300308",
+      "announcementTitle": "2026年半年度非经营性资金占用及其他关联资金往来情况汇总表",
+      "announcementTime": 1787328000000,
+      "adjunctUrl": "finalpage/2026-08-22/1225491754.PDF"
+    },
+    {
+      "secCode": "300308",
+      "announcementTitle": "2026年半年度报告",
+      "announcementTime": 1787328000000,
+      "adjunctUrl": "finalpage/2026-08-22/1225491753.PDF"
+    },
+    {
+      "secCode": "300308",
+      "announcementTitle": "2026年半年度报告摘要",
+      "announcementTime": 1787328000000,
+      "adjunctUrl": "finalpage/2026-08-22/1225491752.PDF"
+    },
+    {
+      "secCode": "300308",
+      "announcementTitle": "关于2026年半年度利润分配方案的公告",
+      "announcementTime": 1787328000000,
+      "adjunctUrl": "finalpage/2026-08-22/1225491751.PDF"
+    }
+  ],
+  "finishedAt": "2026-10-18T02:20:59.329807+00:00"
+}

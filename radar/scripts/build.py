@@ -167,10 +167,6 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
     cfg = data["config"]
     fx = {"USD": 1.0}
     fx_meta = {}
-    for cur, v in mk['fx'].items():
-        if isinstance(v, dict) and v.get('asOf') and fresh_record(v, now, v['asOf']) and quotes.positive(v.get('value')):
-            fx[cur] = v['value']
-            fx_meta[cur] = {k: v.get(k) for k in ('src', 'asOf', 'receivedAt')}
 
     stale, missing, cos = [], [], []
     blockers, market_dates, issues = [], {}, []
@@ -258,6 +254,11 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
     a_dates = [c["ld"] for c in cos if c["mkt"] == "A股" and c["ld"]]
     all_dates = [c["ld"] for c in cos if c["ld"]]
     asof = min(all_dates) if all_dates else None
+    for cur, record in mk['fx'].items():
+        selected = dated_fx(record, cur, asof, now)
+        if selected:
+            fx[cur] = selected['value']
+            fx_meta[cur] = {k: selected.get(k) for k in ('src', 'asOf', 'receivedAt', 'direction')}
     if len(set(all_dates)) != 1:
         blockers.append('mixed_or_missing_market_dates_need_label_approval')
 

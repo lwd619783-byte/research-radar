@@ -1,0 +1,9 @@
+{
+  "received_on": "2026-10-18",
+  "kind": "parent clarification; separate from original 40-item payload",
+  "DFDQ": {"total_revenue_yoy": -2.076611, "alternative_metrics": {"operating_revenue_yoy": -1.997226}, "gross_margin_denominator": "operating_revenue"},
+  "ZGXD": {"total_revenue_yoy": 10.522948, "alternative_metrics": {"operating_revenue_yoy": 10.646653}, "gross_margin_denominator": "operating_revenue"},
+  "excluded": {"DZSK": "preliminary results, not formal complete single-quarter scoring", "KBL": "half-year cumulative, not single-quarter scoring"},
+  "verified_at_policy": "Preserve received 2026-10-17; record actual new checks separately. No automatic update.",
+  "authorization": "The prior requires_no_automatic_write flag describes the research stage; this repair is authorized only after per-item condition review."
+}

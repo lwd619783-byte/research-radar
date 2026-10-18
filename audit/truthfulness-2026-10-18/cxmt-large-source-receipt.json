@@ -1,0 +1,12 @@
+{
+  "url": "https://static.cninfo.com.cn/finalpage/2026-07-09/1225416304.PDF",
+  "key": "02eb469e006ac4b9",
+  "startedAt": "2026-10-18T02:19:41.422615+00:00",
+  "finishedAt": "2026-10-18T02:19:53.967380+00:00",
+  "httpStatus": 200,
+  "bytes": 53555300,
+  "sha256": "172d00fd985a87ca07c71e5e91aa7ca539168062c14ed7e2153998010dab08cc",
+  "parseExit": 0,
+  "reason": "12 MiB and 32 MiB local caps exceeded; bounded 96 MiB attempt; no access refusal",
+  "contentVerified": false
+}

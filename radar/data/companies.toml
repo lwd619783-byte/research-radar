@@ -15,7 +15,7 @@ view = "国产高速光芯片（CW/EML）龙头，业绩爆发"
 flash = "Q3预告：单季营收6.5–7.0亿、归母4.03–4.53亿（+579%~663%）；⏳ 三季报10/31"
 next_earnings = "2026-10-31"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 372.7, profit_yoy = 1238.7, gross_margin = 82.1 }
+fin = { period = "2026Q2单季（H1−Q1）", revenue_yoy = 372.7, profit_yoy = 1238.7, gross_margin = 82.1, source_name = "2026H1＋Q1官方合并财报；Q2差额；CNY中国准则归母", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-29/1225527905.PDF", period_end = "2026-06-30", published_at = "2026-08-29", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "China Accounting Standards; consolidated; unaudited", profit_metric = "net_profit_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-29/1225527905.PDF", "https://static.cninfo.com.cn/finalpage/2026-04-28/1225208649.PDF", "https://static.cninfo.com.cn/finalpage/2026-09-03/1225543133.PDF"], conditions = ["Q2 is derived from two first-hand statutory reports, not an H1 growth rate relabeled as a quarter. All three rounded existing figures reconcile.", "No exact auxiliary-Notion company page was found; official disclosure PDFs were used directly."], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 170.9
 fallback_mcap_usd_bn = 19.1
 
@@ -32,7 +32,7 @@ view = "EML/CW激光器全球核心供应商，处在最紧卡点"
 flash = "部分器件订单排至2029（转述）；⏳ 11/5发财报"
 next_earnings = "2026-11-05"
 kb = ""
-fin = { period = "26Q2", revenue_yoy = 109.3, gross_margin = 44.2 }
+fin = { period = "FY2026Q4（截至2026-06-27）", revenue_yoy = 109.3, profit_yoy = -3457.6, gross_margin = 47.4, source_name = "Lumentum FY2026Q4官方业绩公告；USD US GAAP", source_url = "https://investor.lumentum.com/financial-news-releases/news-details/2026/Lumentum-Announces-Fourth-Quarter-and-Full-Fiscal-Year-2026-Results/default.aspx", period_end = "2026-06-27", published_at = "2026-08-11", verified_at = "2026-10-17", basis = "single_quarter", currency = "USD", accounting_basis = "US GAAP; consolidated; unaudited", profit_metric = "GAAP_net_income_loss", source_urls = ["https://investor.lumentum.com/financial-news-releases/news-details/2026/Lumentum-Announces-Fourth-Quarter-and-Full-Fiscal-Year-2026-Results/default.aspx"], conditions = ["Existing 44.2% gross margin is the preceding fiscal quarter, not current FY2026Q4; current GAAP margin is 47.4%.", "New GAAP profit growth is arithmetically -3457.6% against a positive prior-year base, caused by a large one-time noncash debt-extinguishment charge. Do not present as recurring operating deterioration or replace with non-GAAP without changing the label.", "Existing label 26Q2 is a calendar shorthand; official fiscal identity is FY2026Q4."], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q4", revenue_scope = "合并营业收入", profit_scope = "合并净利润（见profit_metric定义；非EPS、非non-GAAP）", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "one_off", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_mcap_usd_bn = 74.7
 
 [[company]]
@@ -48,7 +48,7 @@ view = "光芯片+光模块一体化，InP产能扩张"
 flash = "⏳ 11/4发财报"
 next_earnings = "2026-11-04"
 kb = ""
-fin = { period = "26Q2", revenue_yoy = 33.7, gross_margin = 37.5 }
+fin = { period = "FY2026Q4（截至2026-06-30）", revenue_yoy = 33.8, gross_margin = 38.5, source_name = "Coherent FY2026Q4官方SEC业绩公告；USD US GAAP", source_url = "https://www.sec.gov/Archives/edgar/data/820318/000119312526346860/d128030dex991.htm", period_end = "2026-06-30", published_at = "2026-08-12", verified_at = "2026-10-17", basis = "single_quarter", currency = "USD", accounting_basis = "US GAAP; consolidated; unaudited", profit_metric = "net_earnings_attributable_to_parent; negative prior-year base", source_urls = ["https://www.sec.gov/Archives/edgar/data/820318/000119312526346860/d128030dex991.htm"], conditions = ["Current quarterly GAAP margin is 38.5%; the existing 37.5% is full fiscal year.", "Issuer reports revenue growth 33.8%; recomputation from displayed one-decimal revenue gives 33.7453%, rounding to 33.7. Preserve this rounding discrepancy rather than call the old revenue figure conclusively false.", "Profit moves from loss to profit. Signed denominator yields a misleading negative growth percentage; leave scoring profit_yoy null and preserve raw earnings/issuer signed arithmetic separately."], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q4", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "turnaround", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 56.5
 fallback_mcap_usd_bn = 45.9
 
@@ -65,7 +65,7 @@ view = "全球光模块龙头，800G/1.6T份额领先"
 flash = "H1营收+182%、归母+242%；⏳ 三季报10/30"
 next_earnings = "2026-10-30"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 174.6, profit_yoy = 228.2, gross_margin = 46.4 }
+fin = { period = "2026Q2单季（H1−Q1）", revenue_yoy = 174.6, profit_yoy = 228.2, gross_margin = 46.4, source_name = "2026H1＋Q1官方合并财报；Q2差额；CNY中国准则归母", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-22/1225491753.PDF", period_end = "2026-06-30", published_at = "2026-08-22", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "China Accounting Standards; consolidated; unaudited", profit_metric = "net_profit_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-22/1225491753.PDF", "https://static.cninfo.com.cn/finalpage/2026-04-17/1225111941.PDF", "https://static.cninfo.com.cn/finalpage/2026-08-22/1225491756.PDF", "https://www.cninfo.com.cn/new/hisAnnouncement/query"], conditions = ["Q2 is derived from two first-hand statutory reports, not an H1 growth rate relabeled as a quarter. All three rounded existing figures reconcile.", "Use CNINFO official announcementTime metadata for published_at=2026-08-22. The issuer notification text says 2026-08-24; preserve that textual discrepancy, but disclosure-system metadata independently resolves the publication date. This is not inferred merely from the URL path or board approval date."], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。 本轮公开POST查询announcementTime确认8/22；提示性公告正文8/24差异保留。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 36.6
 fallback_mcap_usd_bn = 117.2
 
@@ -82,7 +82,7 @@ view = "高速光模块第二极，毛利率领先"
 flash = "H1营收+100%、归母+91%；⏳ 三季报10/30"
 next_earnings = "2026-10-30"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 96.9, profit_yoy = 100.4, gross_margin = 48 }
+fin = { period = "2026Q2单季（H1−Q1）", revenue_yoy = 96.9, profit_yoy = 100.4, gross_margin = 48, source_name = "2026H1＋Q1官方合并财报；Q2差额；CNY中国准则归母", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-25/1225499406.PDF", period_end = "2026-06-30", published_at = "2026-08-25", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "China Accounting Standards; consolidated; unaudited", profit_metric = "net_profit_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-25/1225499406.PDF", "https://static.cninfo.com.cn/finalpage/2026-04-24/1225172606.PDF", "https://static.cninfo.com.cn/finalpage/2026-08-25/1225499412.PDF"], conditions = ["Q2 is derived from two first-hand statutory reports, not an H1 growth rate relabeled as a quarter. All three rounded existing figures reconcile."], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 32.7
 fallback_mcap_usd_bn = 64
 
@@ -99,7 +99,7 @@ view = "AI ASIC + 交换芯片双龙头，CPO领先"
 flash = "CPO 51.2T交换芯片已交付；⏳ 12/9发财报"
 next_earnings = "2026-12-09"
 kb = ""
-fin = { period = "FQ3(至8/2)", revenue_yoy = 85.5, profit_yoy = 215.3, gross_margin = 75.5 }
+fin = { period = "FY2026Q3（截至2026-08-02）", revenue_yoy = 85.5, profit_yoy = 216.1, gross_margin = 69.1, source_name = "Broadcom FY2026Q3官方业绩公告；USD US GAAP", source_url = "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial", period_end = "2026-08-02", published_at = "2026-09-02", verified_at = "2026-10-17", basis = "single_quarter", currency = "USD", accounting_basis = "US GAAP; consolidated; unaudited", profit_metric = "GAAP_net_income", source_urls = ["https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"], conditions = ["Existing profit growth 215.3% matches diluted EPS 2.68/0.85−1, not net income growth 216.1%.", "GAAP gross margin uses all cost-of-revenue components, including acquisition-intangible amortization and restructuring: 20456/29591=69.1%; existing 75.5% is unsupported for this GAAP quarter."], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q3", revenue_scope = "合并营业收入", profit_scope = "合并净利润（见profit_metric定义；非EPS、非non-GAAP）", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 43.3
 fallback_mcap_usd_bn = 1569.3
 
@@ -116,7 +116,7 @@ view = "定制ASIC与光DSP，受益1.6T升级"
 flash = "⏳ 12/1发财报"
 next_earnings = "2026-12-01"
 kb = ""
-fin = { period = "FQ2(至8/1)", revenue_yoy = 36.5, profit_yoy = 50, gross_margin = 52.2 }
+fin = { period = "FY2027Q2（截至2026-08-01）", revenue_yoy = 36.5, profit_yoy = 58.1, gross_margin = 53.1, source_name = "Marvell FY2027Q2官方SEC业绩公告；USD US GAAP", source_url = "https://investor.marvell.com/sec-filings/all-sec-filings/content/0001835632-26-000022/q227_8kx812026ex-991.htm", period_end = "2026-08-01", published_at = "2026-08-27", verified_at = "2026-10-17", basis = "single_quarter", currency = "USD", accounting_basis = "US GAAP; consolidated; unaudited", profit_metric = "GAAP_net_income", source_urls = ["https://investor.marvell.com/sec-filings/all-sec-filings/content/0001835632-26-000022/q227_8kx812026ex-991.htm"], conditions = ["Existing 50.0% equals diluted EPS 0.33/0.22−1; GAAP net income growth is 58.1%.", "Current quarterly GAAP gross margin is 53.1%, not 52.2%."], conditions_reviewed = true, fiscal_year = "FY2027", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并净利润（见profit_metric定义；非EPS、非non-GAAP）", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 74.9
 fallback_mcap_usd_bn = 204.8
 
@@ -133,7 +133,7 @@ view = "AI后端以太网交换机龙头"
 flash = "⏳ 11/3发财报"
 next_earnings = "2026-11-03"
 kb = ""
-fin = { period = "26Q2", revenue_yoy = 37.7, profit_yoy = 35.7, gross_margin = 63 }
+fin = { period = "2026Q2", revenue_yoy = 37.7, profit_yoy = 36.5, gross_margin = 62.9, source_name = "Arista 2026Q2官方SEC业绩公告；USD US GAAP", source_url = "https://www.sec.gov/Archives/edgar/data/1596532/000159653226000174/ex991q226-earningsrelease.htm", period_end = "2026-06-30", published_at = "2026-08-04", verified_at = "2026-10-17", basis = "single_quarter", currency = "USD", accounting_basis = "US GAAP; consolidated; unaudited", profit_metric = "GAAP_net_income", source_urls = ["https://www.sec.gov/Archives/edgar/data/1596532/000159653226000174/ex991q226-earningsrelease.htm"], conditions = ["Existing 35.7% equals diluted EPS 0.95/0.70−1, not net income growth 36.5%.", "GAAP gross margin is reported 62.9%; raw 1910.3/3035.7=62.93%, not 63.0 at one decimal."], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并净利润（见profit_metric定义；非EPS、非non-GAAP）", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 55.8
 fallback_mcap_usd_bn = 223.2
 
@@ -150,7 +150,7 @@ view = "光引擎与精密光器件平台，CPO核心配套"
 flash = "H1营收+15%、归母+34%；⏳ 三季报10/29"
 next_earnings = "2026-10-29"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = -0.9, profit_yoy = 26.8, gross_margin = 64.7 }
+fin = { period = "2026Q2单季（H1−Q1）", revenue_yoy = -0.9, profit_yoy = 26.8, gross_margin = 64.7, source_name = "2026H1＋Q1官方合并财报；Q2差额；CNY中国准则归母", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-19/1225480328.PDF", period_end = "2026-06-30", published_at = "2026-08-19", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "China Accounting Standards; consolidated; unaudited", profit_metric = "net_profit_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-19/1225480328.PDF", "https://static.cninfo.com.cn/finalpage/2026-04-21/1225128020.PDF", "https://www.tfcsz.com/finace_report.html"], conditions = ["Q2 is derived from two first-hand statutory reports, not an H1 growth rate relabeled as a quarter. All three rounded existing figures reconcile."], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 99.9
 fallback_mcap_usd_bn = 34.7
 
@@ -167,7 +167,7 @@ view = "先进制程+CoWoS近乎垄断，AI芯片总闸门"
 flash = "Q3营收467.2亿美元（+41%）、毛利率66.4%；Q4指引523–543亿美元；⏳ 1/14发财报"
 next_earnings = "2027-01-14"
 kb = ""
-fin = { period = "26Q3", revenue_yoy = 41.1, profit_yoy = 68.7, gross_margin = 66.4 }
+fin = { period = "2026Q3", revenue_yoy = 50.9, profit_yoy = 68.7, gross_margin = 66.4, source_name = "TSMC 2026Q3官方财务报表；TWD TIFRS归母", source_url = "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/3a94d1034b9e6b22446b674f7aaf3d088a12a193/FS.pdf", period_end = "2026-09-30", published_at = "2026-10-15", verified_at = "2026-10-17", basis = "single_quarter", currency = "TWD", accounting_basis = "Taiwan-endorsed IFRS; consolidated; unaudited", profit_metric = "net_income_attributable_to_shareholders_of_parent", source_urls = ["https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/3a94d1034b9e6b22446b674f7aaf3d088a12a193/FS.pdf", "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/526b65af7305df2dde6b9ece6812b1fdf1e49f9b/3Q26%20EarningsRelease.pdf"], conditions = ["Existing revenue_yoy 41.1% is the nine-month cumulative TWD growth, not Q3. Current single-quarter TWD growth is 50.9%.", "USD quarterly revenue growth 41.2% is an alternative translated-currency series; do not mix it silently with TWD parent profit growth.", "The Q3 report is newer than September Notion Q2 research and was read directly."], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q3", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 26.7
 fallback_mcap_usd_bn = 2140
 
@@ -184,7 +184,7 @@ view = "TCB热压键合设备，受益HBM与先进封装"
 flash = "⏳ 10/28发财报"
 next_earnings = "2026-10-28"
 kb = ""
-fin = { period = "26Q2", revenue_yoy = 45.1, profit_yoy = 158.1, gross_margin = 39.1 }
+fin = { period = "2026Q2（持续经营收入/毛利；含终止经营归母净利）", revenue_yoy = 52.1, profit_yoy = 155.4, gross_margin = 42.4, source_name = "ASMPT 2026Q2官方业绩公告；HKD HKFRS；持续经营收入及毛利、总归母利润", source_url = "https://www.asmpt.com/site/assets/files/85468/q2_2026_en_announcement.pdf", period_end = "2026-06-30", published_at = "2026-07-29", verified_at = "2026-10-17", basis = "single_quarter", currency = "HKD", accounting_basis = "HKFRS; consolidated; unaudited; comparative continuing operations restated", profit_metric = "profit_attributable_to_owners_including_continuing_and_discontinued_operations", source_urls = ["https://www.asmpt.com/site/assets/files/85468/q2_2026_en_announcement.pdf", "https://www.asmpt.com/en/investor-relations/financial-information/"], conditions = ["The official document directly reports Q2; this is not inferred from H1 alone.", "Existing profit growth 158.1% matches diluted EPS 0.80/0.31−1; parent profit including discontinued operations grows 155.4%.", "Revenue and gross margin cover continuing operations after NEXX disposal and restated comparatives. Profit is total parent profit including discontinued operation; these scopes are deliberately spelled out in period/source_name.", "Continuing-operations parent profit growth is 184.9%; group total profit 147.3%; group continuing profit 177.1%. None may be substituted without changing the profit definition."], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "持续经营收入（比较期重列）", profit_scope = "含终止经营的总归母利润", margin_scope = "持续经营毛利 / 持续经营收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 36.7
 fallback_mcap_usd_bn = 7.4
 
@@ -201,7 +201,7 @@ view = "HBM市占第一，存储超级周期核心"
 flash = "⏳ 10/27发财报"
 next_earnings = "2026-10-27"
 kb = ""
-fin = { period = "26Q2", revenue_yoy = 256.8, profit_yoy = 1272.4, gross_margin = 76.3 }
+fin = { period = "2026Q2", revenue_yoy = 256.8, profit_yoy = 1240.8, gross_margin = 83.2, source_name = "SK hynix 2026H1 SEC 6-K内Q2合并报表；KRW K-IFRS归母", source_url = "https://www.sec.gov/Archives/edgar/data/2120882/000119312526354777/d147827d6k.htm", period_end = "2026-06-30", published_at = "2026-08-18", verified_at = "2026-10-17", basis = "single_quarter", currency = "KRW", accounting_basis = "K-IFRS; consolidated interim financial statements; unaudited/reviewed", profit_metric = "profit_attributable_to_owners_of_parent", source_urls = ["https://www.sec.gov/Archives/edgar/data/2120882/000119312526354777/d147827d6k.htm", "https://www.sec.gov/Archives/edgar/data/2120882/000119312526354777/0001193125-26-354777-index.html"], conditions = ["Native HTML readback SHA-256 matches the existing source manifest: 8ec870211ada26436c22d034b25adfd36e3d240d12b7047e7ae8e2c5f040d648; size 4,238,861 bytes. This confirms archived byte consistency, not a fresh public download.", "Earlier readable English PDF is a user browser-print derivative; it is not used alone as original-source proof. Korean statutory DART PDF was separately read.", "Existing 76.3% is operating margin, not gross margin. Gross margin is 83.2%.", "Existing profit growth 1272.4% follows EPS arithmetic; parent profit grows 1240.8%, total consolidated profit 1242.5%.", "Large financial income makes reported profit unsuitable as normalized operating earnings; no normalization or tax-effect assumption has been made."], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。 本轮重新下载原生SEC HTML；旧conditions关于非新下载的说明仅描述10/17研究阶段。" }
 fallback_mcap_usd_bn = 697.3
 
 [[company]]
@@ -217,7 +217,7 @@ view = "HBM第三极，存储涨价弹性大"
 flash = "⏳ 12/23发财报"
 next_earnings = "2026-12-23"
 kb = ""
-fin = { period = "FQ4(至9/3)", revenue_yoy = 379.3, profit_yoy = 1059.5, gross_margin = 80.7 }
+fin = { period = "FY2026Q4", revenue_yoy = 379.26646, profit_yoy = 1077.788191, gross_margin = 86.8, source_name = "Micron FY2026 Q4 earnings release, Exhibit 99.1；USD US_GAAP；归母/股东净利润", source_url = "https://www.sec.gov/Archives/edgar/data/723125/000072312526000018/a2026q4ex991-pressrelease.htm", period_end = "2026-09-03", published_at = "2026-09-30", verified_at = "2026-10-17", basis = "single_quarter", currency = "USD", accounting_basis = "US_GAAP", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://www.sec.gov/Archives/edgar/data/723125/000072312526000018/a2026q4ex991-pressrelease.htm"], conditions = ["原gross_margin80.7为FY26全年毛利率，也等于Q4营业利润率；Q4 GAAP毛利率86.8%。", "profit_yoy采用GAAP净利润，不采用EPS或non-GAAP。", "复用既有MU原件及来源清单，不重复归档。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q4", revenue_scope = "合并营业收入", profit_scope = "合并净利润（见profit_metric定义；非EPS、非non-GAAP）", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 11.8
 fallback_mcap_usd_bn = 994.3
 
@@ -234,7 +234,7 @@ view = "国产DRAM龙头，量价齐升扭亏"
 flash = "Q3预告：前三季营收2650–2700亿（+726%~742%）、归母1310–1325亿（扭亏）；⏳ 三季报10/31"
 next_earnings = "2026-10-31"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 977.4, gross_margin = 87.6 }
+fin = { period = "2026Q2 derived from H1-Q1", revenue_yoy = 977.386415, gross_margin = 87.592711, source_name = "长鑫科技2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls；上年亏损，本期扭亏，利润同比不适用", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-29/1225529543.PDF", period_end = "2026-06-30", published_at = "2026-08-29", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-29/1225529543.PDF", "https://static.cninfo.com.cn/finalpage/2026-07-09/1225416304.PDF"], conditions = ["单季金额=H1累计-Q1累计；本期与同期均单独相减，毛利率再由Q2收入/成本计算。", "Q1数据实际读自德勤审阅报告附录；招股说明书万元摘要仅交叉检查，不代替精确元数据。", "上年Q2归母亏损，本期转盈；profit_yoy保留null，不填正百分数。", "保留null，在TOML中省略该键；不得以0或正增长百分数补空。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "turnaround", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 34.9
 fallback_mcap_usd_bn = 457.1
 
@@ -251,7 +251,7 @@ view = "AI GPU绝对龙头，整条链的需求总开关"
 flash = "FQ3财报是AI链风向标；⏳ 11/17发财报"
 next_earnings = "2026-11-17"
 kb = ""
-fin = { period = "FQ2(至7/26)", revenue_yoy = 105.9, profit_yoy = 127.8, gross_margin = 74.7 }
+fin = { period = "FY2027Q2（截至2026-07-26）", revenue_yoy = 105.9, profit_yoy = 125.9, gross_margin = 75, source_name = "NVIDIA FY2027Q2官方业绩公告；USD US GAAP", source_url = "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/", period_end = "2026-07-26", published_at = "2026-08-26", verified_at = "2026-10-17", basis = "single_quarter", currency = "USD", accounting_basis = "US GAAP; consolidated; unaudited", profit_metric = "GAAP_net_income", source_urls = ["https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/"], conditions = ["Existing 127.8% is diluted EPS 2.46/1.08−1; GAAP net income growth is 125.9%.", "Quarterly GAAP gross margin is 75.0%, not 74.7%."], conditions_reviewed = true, fiscal_year = "FY2027", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并净利润（见profit_metric定义；非EPS、非non-GAAP）", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 27.1
 fallback_mcap_usd_bn = 5170.6
 
@@ -268,7 +268,7 @@ view = "EUV光刻唯一供应商"
 flash = "Q3营收116.6亿欧元（+55%）、净利49.6亿欧元（+133%）、毛利率57.5%"
 next_earnings = ""
 kb = ""
-fin = { period = "26Q3", revenue_yoy = 55, profit_yoy = 133, gross_margin = 57.5 }
+fin = { period = "FY2026Q3", revenue_yoy = 55.16232, profit_yoy = 133.485526, gross_margin = 57.5, source_name = "ASML Q3 2026 US GAAP financial statements；EUR US_GAAP；归母/股东净利润", source_url = "https://www.investor.asml.com/static-files/d310262b-d037-485d-83b5-92c93cc462f0", period_end = "2026-09-27", published_at = "2026-10-14", verified_at = "2026-10-17", basis = "single_quarter", currency = "EUR", accounting_basis = "US_GAAP", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://www.investor.asml.com/static-files/d310262b-d037-485d-83b5-92c93cc462f0", "https://www.investor.asml.com/news-releases/news-release-details/asml-reports-eu11.7-billion-total-net-sales-and-eu5.0-billion-net-income-q3-2026"], conditions = ["原55%/133%为整数近似；保留精确重算值与US GAAP口径。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q3", revenue_scope = "合并营业收入", profit_scope = "合并净利润（见profit_metric定义；非EPS、非non-GAAP）", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。 采用发行人直接披露毛利率57.5%；展示金额6699.8/11662复算57.449837%，保留临界舍入差异。" }
 fallback_pe = 40.4
 fallback_mcap_usd_bn = 630.5
 
@@ -285,7 +285,7 @@ view = "国产刻蚀/沉积平台型设备龙头"
 flash = "H1营收+25%、归母+5%；⏳ 三季报10/30"
 next_earnings = "2026-10-30"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 24, profit_yoy = 6.6, gross_margin = 39.3 }
+fin = { period = "2026Q2 derived from H1-Q1", revenue_yoy = 23.981248, profit_yoy = 6.637516, gross_margin = 39.329103, source_name = "北方华创2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-26/1225501903.PDF", period_end = "2026-06-30", published_at = "2026-08-26", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-26/1225501903.PDF", "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259650.PDF"], conditions = ["单季金额=H1累计-Q1累计；本期与同期均单独相减，毛利率再由Q2收入/成本计算。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 75.7
 fallback_mcap_usd_bn = 64.4
 
@@ -302,7 +302,7 @@ view = "国产刻蚀龙头，先进制程份额提升"
 flash = "H1营收+35%、归母+300%；⏳ 三季报10/31"
 next_earnings = "2026-10-31"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 35.5, profit_yoy = 382.3, gross_margin = 39.6 }
+fin = { period = "2026Q2 derived from H1-Q1", revenue_yoy = 35.481283, profit_yoy = 382.317449, gross_margin = 39.625311, source_name = "中微公司2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-20/1225482884.PDF", period_end = "2026-06-30", published_at = "2026-08-20", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-20/1225482884.PDF", "https://static.cninfo.com.cn/finalpage/2026-04-28/1225215453.PDF"], conditions = ["单季金额=H1累计-Q1累计；本期与同期均单独相减，毛利率再由Q2收入/成本计算。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 50.6
 fallback_mcap_usd_bn = 42.3
 
@@ -319,7 +319,7 @@ view = "低介电玻纤布全球主导，上游最紧环节"
 flash = "⏳ 11/5发财报"
 next_earnings = "2026-11-05"
 kb = ""
-fin = { period = "26Q2", revenue_yoy = 20.6, profit_yoy = 84.2, gross_margin = 41.7 }
+fin = { period = "FY2027Q1 (CY2026Q2)", revenue_yoy = 20.6, profit_yoy = 84.2, gross_margin = 43.822173, source_name = "Nitto Boseki FY ending March 2027 Q1 consolidated financial results；JPY Japanese_GAAP；归母/股东净利润", source_url = "https://www2.jpx.co.jp/disc/31100/140120260805509788.pdf", period_end = "2026-06-30", published_at = "2026-08-05", verified_at = "2026-10-17", basis = "single_quarter", currency = "JPY", accounting_basis = "Japanese_GAAP", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://www2.jpx.co.jp/disc/31100/140120260805509788.pdf"], conditions = ["日东纺自然年2026Q2对应FY2027Q1，不能标FY2026Q2。", "金额不足百万部分截断；reported gross profit14914与收入减成本14915相差1，毛利采用已报14914。"], conditions_reviewed = true, fiscal_year = "FY2027", fiscal_period = "Q1", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 13
 fallback_mcap_usd_bn = 3.4
 
@@ -336,7 +336,7 @@ view = "国产高端电子布，低介电玻纤布替代"
 flash = "H1营收+90%、归母+334%；⏳ 三季报10/23"
 next_earnings = "2026-10-23"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 99, profit_yoy = 323.4, gross_margin = 62 }
+fin = { period = "2026Q2 derived from H1-Q1", revenue_yoy = 99.012292, profit_yoy = 323.447169, gross_margin = 62.035023, source_name = "宏和科技2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-14/1225471942.PDF", period_end = "2026-06-30", published_at = "2026-08-14", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-14/1225471942.PDF", "https://static.cninfo.com.cn/finalpage/2026-04-17/1225110573.PDF"], conditions = ["单季金额=H1累计-Q1累计；本期与同期均单独相减，毛利率再由Q2收入/成本计算。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 183.9
 fallback_mcap_usd_bn = 13.7
 
@@ -353,7 +353,7 @@ view = "高速树脂国产替代"
 flash = "H1营收+27%、归母+64%；⏳ 三季报10/28"
 next_earnings = "2026-10-28"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 27.3, profit_yoy = 26.9, gross_margin = 16.5 }
+fin = { period = "2026Q2 derived from H1-Q1", revenue_yoy = 27.3259, profit_yoy = 26.85378, gross_margin = 16.524337, source_name = "东材科技2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486300.PDF", period_end = "2026-06-30", published_at = "2026-08-21", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-21/1225486300.PDF", "https://static.cninfo.com.cn/finalpage/2026-04-23/1225148309.PDF"], conditions = ["单季金额=H1累计-Q1累计；本期与同期均单独相减，毛利率再由Q2收入/成本计算。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 106
 fallback_mcap_usd_bn = 6.4
 
@@ -370,7 +370,7 @@ view = "高速CCL全球龙头，AI服务器主供"
 flash = "⏳ 10/28发财报"
 next_earnings = "2026-10-28"
 kb = ""
-fin = { period = "26Q2", revenue_yoy = 110, profit_yoy = 186.5, gross_margin = 31 }
+fin = { period = "2026Q2", revenue_yoy = 110.040149, profit_yoy = 183.89136, gross_margin = 33.850715, source_name = "Elite Material 2026Q2 consolidated financial report；TWD Taiwan_IFRS；归母/股东净利润", source_url = "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Quarterly_Results/Consolidated/CH/115/273512_115Q2_%E5%90%88%E4%BD%B5_%E5%AE%8C%E7%A8%BF%E8%B2%A1%E5%A0%B1_IMSv1-%E9%9B%BB%E5%AD%90%E6%9B%B8_IMSv1.pdf", period_end = "2026-06-30", published_at = "2026-07-29", verified_at = "2026-10-17", basis = "single_quarter", currency = "TWD", accounting_basis = "Taiwan_IFRS", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://www.emctw.com/upload/media/New_Investors/Financial_Information/Quarterly_Results/Consolidated/CH/115/273512_115Q2_%E5%90%88%E4%BD%B5_%E5%AE%8C%E7%A8%BF%E8%B2%A1%E5%A0%B1_IMSv1-%E9%9B%BB%E5%AD%90%E6%9B%B8_IMSv1.pdf", "https://www.emctw.com/zh-TW/investors_news/detail/2026072901/3"], conditions = ["原110%营收同比接近正确，原186.5%利润同比与归母表不符；毛利31%与Q2不符。", "母公司业主净利润9873398，对比合并总净利润9871646；不混用。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 80.8
 fallback_mcap_usd_bn = 57.1
 
@@ -387,7 +387,7 @@ view = "国内CCL龙头，高速材料放量"
 flash = "Q3预告：前三季归母64.6–68.7亿（+164%~181%），推算Q3单季+212%~252%；⏳ 三季报10/30"
 next_earnings = "2026-10-30"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 54, profit_yoy = 146.7, gross_margin = 32.6 }
+fin = { period = "2026Q2 derived from H1-Q1", revenue_yoy = 53.980564, profit_yoy = 146.723504, gross_margin = 32.630335, source_name = "生益科技2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-15/1225475783.PDF", period_end = "2026-06-30", published_at = "2026-08-15", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-15/1225475783.PDF", "https://www.syst.com.cn/Ajax/Download.aspx?name=2026/04/20260429142025111.pdf"], conditions = ["单季金额=H1累计-Q1累计；本期与同期均单独相减，毛利率再由Q2收入/成本计算。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 53.3
 fallback_mcap_usd_bn = 41.6
 
@@ -404,7 +404,7 @@ view = "全球CCL产能龙头，涨价传导受益"
 flash = "—"
 next_earnings = ""
 kb = ""
-fin = { period = "26H1", revenue_yoy = 55.4, profit_yoy = 204, gross_margin = 26.5 }
+fin = { period = "26H1", revenue_yoy = 55.4, profit_yoy = 204, gross_margin = 26.5, basis = "half_year", report_status = "final" }
 fallback_pe = 28.4
 fallback_mcap_usd_bn = 15.8
 
@@ -421,7 +421,7 @@ view = "AI服务器/交换机高多层PCB龙头"
 flash = "Q3预告：前三季归母54.5–57亿（+101%~110%），推算Q3单季+144%~168%；⏳ 三季报10/28"
 next_earnings = "2026-10-28"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 67.8, profit_yoy = 82.7, gross_margin = 41.3 }
+fin = { period = "2026Q2 derived from H1-Q1", revenue_yoy = 67.748224, profit_yoy = 82.685209, gross_margin = 41.278578, source_name = "沪电股份2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-26/1225502252.PDF", period_end = "2026-06-30", published_at = "2026-08-26", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-26/1225502252.PDF", "https://static.cninfo.com.cn/finalpage/2026-04-23/1225147393.PDF"], conditions = ["单季金额=H1累计-Q1累计；本期与同期均单独相减，毛利率再由Q2收入/成本计算。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 43.6
 fallback_mcap_usd_bn = 32.6
 
@@ -438,7 +438,7 @@ view = "AI加速卡HDI/高多层PCB快速扩产"
 flash = "H1营收+29%、归母+33%；⏳ 三季报10/30"
 next_earnings = "2026-10-30"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 29.5, profit_yoy = 28.3, gross_margin = 32.1 }
+fin = { period = "2026Q2 derived from H1-Q1", revenue_yoy = 29.487108, profit_yoy = 28.293393, gross_margin = 32.103748, source_name = "胜宏科技2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls", source_url = "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-28/296a3692-b153-48c1-9201-2bbb41886183.PDF", period_end = "2026-06-30", published_at = "2026-08-28", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-28/296a3692-b153-48c1-9201-2bbb41886183.PDF", "https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-29/74f20b93-58e2-4e54-b46c-11ccaf116614.PDF"], conditions = ["单季金额=H1累计-Q1累计；本期与同期均单独相减，毛利率再由Q2收入/成本计算。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 32.3
 fallback_mcap_usd_bn = 26.8
 
@@ -455,7 +455,7 @@ view = "高端PCB+封装基板双主业"
 flash = "Q3预告：前三季归母40.5–41.5亿（+74%~78%），推算Q3单季+86%~97%；⏳ 三季报10/23"
 next_earnings = "2026-10-23"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 53.4, profit_yoy = 61.3, gross_margin = 32.4 }
+fin = { period = "2026Q2 derived from H1-Q1", revenue_yoy = 53.437691, profit_yoy = 61.325938, gross_margin = 32.414188, source_name = "深南电路2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls", source_url = "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-27/99646b65-8037-44b1-9cd8-61351de243a2.PDF", period_end = "2026-06-30", published_at = "2026-08-27", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-27/99646b65-8037-44b1-9cd8-61351de243a2.PDF", "https://static.cninfo.com.cn/finalpage/2026-04-24/1225163815.PDF"], conditions = ["单季金额=H1累计-Q1累计；本期与同期均单独相减，毛利率再由Q2收入/成本计算。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 50.1
 fallback_mcap_usd_bn = 31.6
 
@@ -472,7 +472,7 @@ view = "PCB钻孔/曝光设备龙头，随扩产放量"
 flash = "三季报快报：前三季营收78.4亿（+101%）、归母15.4亿（+214%）；Q3营收环比-6%；⏳ 三季报10/21"
 next_earnings = "2026-10-21"
 kb = ""
-fin = { period = "26Q3单季", revenue_yoy = 87.8, profit_yoy = 157.1 }
+fin = { period = "26Q3单季", revenue_yoy = 87.8, profit_yoy = 157.1, basis = "single_quarter", report_status = "preliminary" }
 fallback_pe = 54.5
 fallback_mcap_usd_bn = 13.2
 
@@ -489,7 +489,7 @@ view = "PCB钻针全球龙头，涂层微钻放量"
 flash = "H1营收+115%、归母+325%；⏳ 三季报10/28"
 next_earnings = "2026-10-28"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 134.7, profit_yoy = 380.2, gross_margin = 57.9 }
+fin = { period = "2026Q2 derived from H1-Q1", revenue_yoy = 134.6723, profit_yoy = 380.172014, gross_margin = 57.848878, source_name = "鼎泰高科2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls", source_url = "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-20/0a1eab9d-fc2b-42b4-9abb-10b3f85a920d.PDF", period_end = "2026-06-30", published_at = "2026-08-20", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-20/0a1eab9d-fc2b-42b4-9abb-10b3f85a920d.PDF", "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107645.PDF"], conditions = ["单季金额=H1累计-Q1累计；本期与同期均单独相减，毛利率再由Q2收入/成本计算。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 115.7
 fallback_mcap_usd_bn = 17.1
 
@@ -506,7 +506,7 @@ view = "钨材+PCB微钻（金洲精工）"
 flash = "Q3预告：前三季归母29–31亿（+219%~241%），推算Q3单季+174%~241%；⏳ 三季报10/23"
 next_earnings = "2026-10-23"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 110.1, profit_yoy = 294.4, gross_margin = 30.3 }
+fin = { period = "2026Q2 derived from H1-Q1", revenue_yoy = 110.066343, profit_yoy = 294.419082, gross_margin = 30.329625, source_name = "中钨高新2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-24/1225490814.PDF", period_end = "2026-06-30", published_at = "2026-08-24", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-24/1225490814.PDF", "https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-27/bbe5bc76-51d5-4696-86cf-b0cb7b2227db.PDF"], conditions = ["单季金额=H1累计-Q1累计；本期与同期均单独相减，毛利率再由Q2收入/成本计算。", "H1/Q1均用同一控制合并追溯后的同期，不能混用调整前数。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 34.7
 fallback_mcap_usd_bn = 14.9
 
@@ -523,7 +523,7 @@ view = "燃气轮机+电网设备，缺电主线核心"
 flash = "⏳ 10/28发财报"
 next_earnings = "2026-10-28"
 kb = ""
-fin = { period = "26Q2", revenue_yoy = 21.9, profit_yoy = 32.8, gross_margin = 20.6 }
+fin = { period = "2026Q2", revenue_yoy = 21.874657, profit_yoy = 29.961089, gross_margin = 21.253602, source_name = "GE Vernova 2026 Q2 Form 10-Q；USD US_GAAP；归母/股东净利润", source_url = "https://www.gevernova.com/sites/default/files/gev_webcast_10q_07222026.pdf", period_end = "2026-06-30", published_at = "2026-07-22", verified_at = "2026-10-17", basis = "single_quarter", currency = "USD", accounting_basis = "US_GAAP", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://www.gevernova.com/sites/default/files/gev_webcast_10q_07222026.pdf"], conditions = ["仓库profit_yoy 32.8%与稀释EPS同比吻合，不是归母净利润同比；若字段语义是净利润，应改29.961089%。", "毛利率20.6%不能由本期报表复算，官方已报毛利2360/收入11104=21.253602%。", "报表百万美元四舍五入使收入减两项成本与单列毛利相差1，采用单列reported gross profit。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 26.4
 fallback_mcap_usd_bn = 245.3
 
@@ -540,7 +540,7 @@ view = "燃机+电网设备双轮驱动"
 flash = "⏳ 11/11发财报"
 next_earnings = "2026-11-11"
 kb = ""
-fin = { period = "26Q2", revenue_yoy = 17.5, profit_yoy = 80, gross_margin = 20.8 }
+fin = { period = "FY2026Q3 (calendar 2026Q2)", revenue_yoy = 17.465367, profit_yoy = 76.097561, gross_margin = 23.316153, source_name = "Siemens Energy Earnings Release Q3 FY2026；EUR IFRS；归母/股东净利润", source_url = "https://assets.siemens-energy.com/dam/30018eed-275d-4e73-811e-b49d004cdc3d/2026-08-05-Earnings_Release_Q3_FY26_EN-pdf_Original%20file.pdf", period_end = "2026-06-30", published_at = "2026-08-05", verified_at = "2026-10-17", basis = "single_quarter", currency = "EUR", accounting_basis = "IFRS", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://assets.siemens-energy.com/dam/30018eed-275d-4e73-811e-b49d004cdc3d/2026-08-05-Earnings_Release_Q3_FY26_EN-pdf_Original%20file.pdf"], conditions = ["26Q2若指自然年窗口必须明示；发行人正式期间为FY2026Q3。", "旧80%与EPS同比近似吻合，归母同比76.097561%，集团总净利同比70.444763%。", "正式集团毛利率23.316153%，旧20.8%不获本期毛利表支持。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q3", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 44.4
 fallback_mcap_usd_bn = 129.1
 
@@ -557,7 +557,7 @@ view = "国内燃机/火电/核电装备龙头，估值低"
 flash = "H1营收+1%、归母+42%；⏳ 三季报10/30"
 next_earnings = "2026-10-30"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = -2.1, profit_yoy = 49.2, gross_margin = 14.7 }
+fin = { period = "2026Q2", revenue_yoy = -2.076611, profit_yoy = 49.184105, gross_margin = 14.693943, source_name = "东方电气2026年半年度报告；CNY PRC_ASBE；归母/股东净利润", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-26/1225505169.PDF", period_end = "2026-06-30", published_at = "2026-08-26", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-26/1225505169.PDF", "https://static.cninfo.com.cn/finalpage/2026-04-30/1225257541.PDF"], conditions = ["仓库收入同比按营业总收入可复算；若统一改营业收入，则采用alternative_metrics.operating_revenue_yoy。毛利率分母仍为营业收入，必须显示此口径差异。", "辅Notion指向8/25版本；主证据改用巨潮A股8/26正式披露，金额已复核一致。披露日期以官方公告metadata为准，不用董事会批准日。", "Q2由同一年度H1减Q1、上年比较H1减Q1逐项推导；没有把H1累计直接标成Q2。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业总收入（含利息等）；毛利分母为营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。 若用营业收入，替代同比为-1.997226%；当前保留营业总收入同比，二者不混用。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 16.6
 fallback_mcap_usd_bn = 11.4
 
@@ -574,7 +574,7 @@ view = "民营电网设备平台型龙头"
 flash = "H1营收+27%、归母+13%；⏳ 三季报10/24"
 next_earnings = "2026-10-24"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 18.1, profit_yoy = 8, gross_margin = 31.6 }
+fin = { period = "2026Q2", revenue_yoy = 18.143536, profit_yoy = 7.984498, gross_margin = 31.56413, source_name = "思源电气2026年半年度报告；CNY PRC_ASBE；归母/股东净利润", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-15/1225473691.PDF", period_end = "2026-06-30", published_at = "2026-08-15", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-15/1225473691.PDF", "https://static.cninfo.com.cn/finalpage/2026-04-25/1225177123.PDF"], conditions = ["Q2由同一年度H1减Q1、上年比较H1减Q1逐项推导；没有把H1累计直接标成Q2。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 28.1
 fallback_mcap_usd_bn = 13.8
 
@@ -591,7 +591,7 @@ view = "特高压与变压器国家队"
 flash = "H1营收+8%、归母+15%；⏳ 三季报10/22"
 next_earnings = "2026-10-22"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 10.5, profit_yoy = 12.6, gross_margin = 25.5 }
+fin = { period = "2026Q2", revenue_yoy = 10.522948, profit_yoy = 12.58428, gross_margin = 25.510474, source_name = "中国西电2026年半年度报告；CNY PRC_ASBE；归母/股东净利润", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-20/1225482387.PDF", period_end = "2026-06-30", published_at = "2026-08-20", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-20/1225482387.PDF", "https://static.cninfo.com.cn/finalpage/2026-04-28/1225200541.PDF"], conditions = ["仓库收入同比按营业总收入可复算；若统一改营业收入，则采用alternative_metrics.operating_revenue_yoy。毛利率分母仍为营业收入，必须显示此口径差异。", "Q2由同一年度H1减Q1、上年比较H1减Q1逐项推导；没有把H1累计直接标成Q2。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业总收入（含利息等）；毛利分母为营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。 若用营业收入，替代同比为10.646653%；当前保留营业总收入同比，二者不混用。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 42.2
 fallback_mcap_usd_bn = 8.4
 
@@ -608,7 +608,7 @@ view = "干式变压器+数据中心电源"
 flash = "三季报已出：前三季营收+17.5%、归母+12.0%"
 next_earnings = ""
 kb = ""
-fin = { period = "26Q3单季", revenue_yoy = 24.9, profit_yoy = 9.4, gross_margin = 26.9 }
+fin = { period = "2026Q3", revenue_yoy = 24.92, profit_yoy = 9.36, gross_margin = 26.896558, source_name = "金盘科技2026年第三季度报告；CNY PRC_ASBE；归母/股东净利润", source_url = "https://static.cninfo.com.cn/finalpage/2026-10-14/1225603297.PDF", period_end = "2026-09-30", published_at = "2026-10-14", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-10-14/1225603297.PDF", "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486537.PDF"], conditions = ["仓库三项四舍五入到1位小数均可复算。", "上交所原PDF网址返回JavaScript挑战；没有绕过，改用巨潮官方公开检索定位并实际下载同名发行人PDF。新浪正文仅作检索旁证，不作为adoptable source_url。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q3", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以9个月累计减H1，毛利率由单季收入减单季成本后除以单季收入；收入/利润同比用发行人Q3已报数。" }
 fallback_pe = 34
 fallback_mcap_usd_bn = 3.6
 
@@ -625,7 +625,7 @@ view = "数据中心配电/UPS全球龙头"
 flash = "⏳ 11/3发财报"
 next_earnings = "2026-11-03"
 kb = ""
-fin = { period = "26Q2", revenue_yoy = 21.4, profit_yoy = -15.9, gross_margin = 36 }
+fin = { period = "2026Q2", revenue_yoy = 21.385885, profit_yoy = -16.395112, gross_margin = 33.466182, source_name = "Eaton 2026 Q2 financial statements；USD US_GAAP；归母/股东净利润", source_url = "https://www.eaton.com/content/dam/eaton/company/investor-relations/quarterly-earnings/filings/2026/q2/q2-2026-financials-only.pdf", period_end = "2026-06-30", published_at = "2026-07-31", verified_at = "2026-10-17", basis = "single_quarter", currency = "USD", accounting_basis = "US_GAAP", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://www.eaton.com/content/dam/eaton/company/investor-relations/quarterly-earnings/filings/2026/q2/q2-2026-financials-only.pdf"], conditions = ["仓库profit_yoy -15.9%符合EPS同比，归母净利同比为-16.395112%。", "本期官方收入减成本对应毛利率33.466182%，旧36.0%不受支持。", "百万美元表格本身四舍五入，使用reported parent net income 821与982，不对823减NCI另改。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 39.8
 fallback_mcap_usd_bn = 152
 
@@ -642,7 +642,7 @@ view = "全球配电与数据中心基础设施龙头"
 flash = "—"
 next_earnings = ""
 kb = ""
-fin = { period = "26H1", revenue_yoy = 9.8, profit_yoy = 29.3, gross_margin = 42.1 }
+fin = { period = "2026Q3", revenue_yoy = 17.9, source_name = "Schneider Electric Q3 2026 revenues；EUR IFRS；归母/股东净利润；仅收入，利润与毛利未披露", source_url = "https://www.se.com/ww/en/assets/pdf/release-Q3-revenues-2026", period_end = "2026-09-30", published_at = "2026-10-16", verified_at = "2026-10-17", basis = "single_quarter", currency = "EUR", accounting_basis = "IFRS", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://www.se.com/ww/en/assets/pdf/release-Q3-revenues-2026"], conditions = ["仓库26H1是半年累计，不能进入single_quarter门禁。", "H1 profit_yoy29.3%与稀释EPS同比吻合；归母净利润同比30.057501%。", "旧H1毛利率42.1%与FY2025年度率吻合，H1正式为42.5%（未舍入复算42.466786%）。", "10/16已披露Q3收入报告同比17.9%；有机16.9%不能混作reported revenue。Q3实际利润/毛利未披露。", "可采用收入及留空状态，不能进入要求三项齐备的评分；H1利润/毛利保留独立，不搬入Q3。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q3", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "revenue_only", profit_comparison = "not_disclosed", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 29.9
 fallback_mcap_usd_bn = 160.4
 
@@ -659,7 +659,7 @@ view = "国内UPS/数据中心电源龙头"
 flash = "H1营收+4%、归母+63%；⏳ 三季报10/29"
 next_earnings = "2026-10-29"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = -2.5, profit_yoy = 82.2, gross_margin = 22.3 }
+fin = { period = "2026Q2", revenue_yoy = -2.485938, profit_yoy = 82.248962, gross_margin = 22.308304, source_name = "科华数据2026年半年度报告；CNY PRC_ASBE；归母/股东净利润", source_url = "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-28/546247bf-7c7f-4a0b-9f83-f6b37c8a10d9.PDF", period_end = "2026-06-30", published_at = "2026-08-28", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-28/546247bf-7c7f-4a0b-9f83-f6b37c8a10d9.PDF", "https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-27/3ca00555-fa6a-4007-b504-355f39d80b35.PDF"], conditions = ["Q2由同一年度H1减Q1、上年比较H1减Q1逐项推导；没有把H1累计直接标成Q2。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 33.7
 fallback_mcap_usd_bn = 2.9
 
@@ -676,7 +676,7 @@ view = "数据中心电源+液冷全球龙头"
 flash = "⏳ 10/28发财报"
 next_earnings = "2026-10-28"
 kb = ""
-fin = { period = "26Q2", revenue_yoy = 24.1, profit_yoy = 53, gross_margin = 38 }
+fin = { period = "2026Q2", revenue_yoy = 24.115841, profit_yoy = 53.547193, gross_margin = 37.714931, source_name = "Vertiv Second Quarter 2026 Earnings Release；USD US_GAAP；归母/股东净利润", source_url = "https://s205.q4cdn.com/554782763/files/doc_financials/2026/q2/Vertiv-Second-Quarter-2026-Earnings-Release.pdf", period_end = "2026-06-30", published_at = "2026-07-29", verified_at = "2026-10-17", basis = "single_quarter", currency = "USD", accounting_basis = "US_GAAP", profit_metric = "GAAP_consolidated_net_income (no separate NCI profit line in consolidated statement)", source_urls = ["https://s205.q4cdn.com/554782763/files/doc_financials/2026/q2/Vertiv-Second-Quarter-2026-Earnings-Release.pdf"], conditions = ["仓库profit_yoy53%与稀释EPS同比吻合；本期净利润同比53.547193%。", "毛利率37.714931%，旧38%不是按一位小数应有的37.7%。若原来只保留整数，38属四舍五入，仍建议统一精度。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并净利润（见profit_metric定义；非EPS、非non-GAAP）", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 46.7
 fallback_mcap_usd_bn = 79.5
 
@@ -693,7 +693,7 @@ view = "国内数据中心液冷龙头，利润待兑现"
 flash = "H1营收+17%、归母-14%；⏳ 三季报10/27"
 next_earnings = "2026-10-27"
 kb = ""
-fin = { period = "26Q2单季", revenue_yoy = 12.2, profit_yoy = 5.1, gross_margin = 25.3 }
+fin = { period = "2026Q2", revenue_yoy = 12.2417, profit_yoy = 5.05874, gross_margin = 25.342747, source_name = "英维克2026年半年度报告；CNY PRC_ASBE；归母/股东净利润", source_url = "https://static.cninfo.com.cn/finalpage/2026-08-25/1225495981.PDF", period_end = "2026-06-30", published_at = "2026-08-25", verified_at = "2026-10-17", basis = "single_quarter", currency = "CNY", accounting_basis = "PRC_ASBE", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://static.cninfo.com.cn/finalpage/2026-08-25/1225495981.PDF", "https://static.cninfo.com.cn/finalpage/2026-04-21/1225131821.PDF"], conditions = ["Q2由同一年度H1减Q1、上年比较H1减Q1逐项推导；没有把H1累计直接标成Q2。"], conditions_reviewed = true, fiscal_year = "FY2026", fiscal_period = "Q2", revenue_scope = "合并营业收入", profit_scope = "合并归母净利润", margin_scope = "合并毛利 / 营业收入", report_status = "final", profit_comparison = "comparable", derivation = "cumulative_difference", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。", calculation_note = "本年及上年分别以H1减Q1，毛利率由单季收入减单季成本后除以单季营业收入；不以累计同比冒充单季。" }
 fallback_pe = 114.6
 fallback_mcap_usd_bn = 8.6
 
@@ -710,6 +710,6 @@ view = "数据中心热管理转型，高增长"
 flash = "⏳ 10/27发财报"
 next_earnings = "2026-10-27"
 kb = ""
-fin = { period = "26Q2", revenue_yoy = 28, profit_yoy = 44.2, gross_margin = 22.2 }
+fin = { period = "FY2027Q1 (calendar 2026Q2; pre-spin group)", revenue_yoy = 28.016989, profit_yoy = 44.335938, gross_margin = 20.8, source_name = "Modine First Quarter Fiscal 2027 Results；USD US_GAAP；归母/股东净利润；分拆前集团范围", source_url = "https://s205.q4cdn.com/270741342/files/doc_financials/2027/q1/Modine-Reports-First-Quarter-Fiscal-2027-Results.pdf", period_end = "2026-06-30", published_at = "2026-07-29", verified_at = "2026-10-17", basis = "single_quarter", currency = "USD", accounting_basis = "US_GAAP", profit_metric = "net_income_attributable_to_parent", source_urls = ["https://s205.q4cdn.com/270741342/files/doc_financials/2027/q1/Modine-Reports-First-Quarter-Fiscal-2027-Results.pdf"], conditions = ["仓库26Q2应改明确FY2027Q1/自然2026Q2。", "仓库profit_yoy44.2%与稀释EPS同比吻合；归母净利同比44.335938%，集团总净利同比43.713733%。", "官方报告直接毛利率20.8%，旧22.2%不获支持。", "本期是Performance Technologies分拆前合并集团实绩；Notion索引提示10月分拆事件，但本次没有用历史交易pro-forma当实际当期业绩。"], conditions_reviewed = true, fiscal_year = "FY2027", fiscal_period = "Q1", revenue_scope = "分拆前合并集团实绩", profit_scope = "分拆前集团归母净利润", margin_scope = "分拆前集团毛利 / 收入", report_status = "final", profit_comparison = "comparable", derivation = "reported", review_note = "2026-10-18 本轮下载公开原文并核对季度金额/发行人已报比率；核验日期字段保留候选的2026-10-17，逐项记录见 audit/truthfulness-2026-10-18/financial-content-review.json。" }
 fallback_pe = 56
 fallback_mcap_usd_bn = 7.9

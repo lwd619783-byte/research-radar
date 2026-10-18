@@ -49,7 +49,7 @@ const mean=a=>{a=a.filter(fin);return a.length?a.reduce((s,v)=>s+v,0)/a.length:n
 const median=a=>{a=a.filter(fin).sort((x,y)=>x-y);if(!a.length)return null;const m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2};
 const dObj=iso=>new Date(iso+'T00:00:00Z');
 const md=iso=>{const d=dObj(iso);return(d.getUTCMonth()+1)+'/'+d.getUTCDate()};
-const ASOFL=D.meta.asOfLabel||md(ASOF)+' 收盘';
+const ASOFL=D.meta.asOfLabel||(ASOF?md(ASOF)+' 收盘':'行情待核实');
 const wd=iso=>'周'+WD[dObj(iso).getUTCDay()];
 const daysTo=iso=>Math.round((dObj(iso)-dObj(TODAY))/864e5);
 const addDays=(iso,n)=>new Date(dObj(iso).getTime()+n*864e5).toISOString().slice(0,10);
@@ -100,7 +100,7 @@ function renderTicker(){const idx=D.indices.map(x=>`<div class="tk idx"><b>${esc
 
 /* ---------- hero ---------- */
 function renderHero(){
-  const d0=dObj(TODAY);$('#heroDate').textContent=`本周结论 · ${d0.getUTCFullYear()}年${d0.getUTCMonth()+1}月${d0.getUTCDate()}日 ${wd(TODAY)} · 行情截至 ${ASOFL}`;
+  const d0=dObj(TODAY);$('#heroDate').textContent=`${D.meta.reviewPreview?'本地验收 · 未发布 · ':''}本周结论 · ${d0.getUTCFullYear()}年${d0.getUTCMonth()+1}月${d0.getUTCDate()}日 ${wd(TODAY)} · 行情截至 ${ASOFL}`;
   $('#heroTitle').innerHTML=`本周最值得追踪：<span class="grad">${esc(TOP.name)}</span>`;
   const cps=cpsOf(TOP.name);
   $('#heroLead').textContent=WK.lead&&TOP.name===WK.focus?WK.lead:`${TOP.logic}。${cps[0]?`最紧的卡点是「${cps[0].name}」。`:''}`;
@@ -276,7 +276,7 @@ function renderCal(){const list=CO.filter(c=>c.next&&c.next>=TODAY).sort((a,b)=>
 
 /* ---------- drawer ---------- */
 const FIN_BASIS={single_quarter:'单季',half_year:'半年累计',cumulative:'累计',annual:'全年'};
-function finLabel(c){const f=c.provenance?.financial||{};if(f.status!=='verified')return'财务待核实';return[c.period,FIN_BASIS[f.basis]||'口径待核',f.currency,f.report_status==='preliminary'?'初步结果':f.report_status==='revenue_only'?'仅收入':f.profit_comparison==='turnaround'?'扭亏·利润同比不适用':f.profit_comparison==='one_off'?'利润含一次性项目':''].filter(Boolean).join(' · ')}
+function finLabel(c){const f=c.provenance?.financial||{};if(f.status!=='verified')return['财务待核实',f.basis==='half_year'?'半年累计':'',f.report_status==='preliminary'?'初步结果':''].filter(Boolean).join(' · ');return[c.period,FIN_BASIS[f.basis]||'口径待核',f.currency,(f.accounting_basis||'').split(';')[0],f.report_status==='preliminary'?'初步结果':f.report_status==='revenue_only'?'仅收入':f.profit_comparison==='turnaround'?'扭亏·利润同比不适用':f.profit_comparison==='one_off'?'利润含一次性项目':''].filter(Boolean).join(' · ')}
 function finDetail(c){const f=c.provenance?.financial||{};return[finLabel(c),f.accounting_basis,f.profit_metric,f.revenue_scope,f.profit_scope,f.margin_scope,f.source_name,`披露 ${f.published_at||'未知'} · 核验 ${f.verified_at||'未知'}`,...(f.source_urls||[]),...(f.conditions||[])].filter(Boolean).join('；')}
 function peLabel(c){const s=c.provenance?.valuation?.peStatus;return s==='nonpositive'?'PE(TTM) 非正':s==='invalid'?'PE(TTM) 无效':s==='missing'?'PE(TTM) 缺失':'PE(TTM)'}
 function rangeComplete(c,r){if(c.t.length<2)return false;const last=c.t[c.t.length-1],cut=r==='ytd'?Date.UTC(new Date(last).getUTCFullYear(),0,1):last-({'1m':31,'3m':92,'6m':183,'1y':366,'2y':731}[r]||0)*864e5;return c.t[0]<=cut}

@@ -1,4 +1,4 @@
-"""Regression cases from the actual 2026-10-17 acceptance gaps. All synthetic."""
+"""Synthetic gap regressions plus the reviewed public financial-data contract."""
 import copy
 import datetime as dt
 import json
@@ -108,5 +108,33 @@ class DiagnosticTests(unittest.TestCase):
         m=build.metrics(bars(54))
         self.assertEqual(m['history']['count'],54)
         for key in ('hi52','dd52','r60','ytd'): self.assertIsNone(m[key])
+
+class ActualFinancialContractTests(unittest.TestCase):
+    def test_reviewed_values_keep_all_sources_conditions_and_original_verification_date(self):
+        from pathlib import Path
+        root=Path(__file__).resolve().parents[2]
+        pack=json.loads((root/'audit/truthfulness-2026-10-18/financial-candidates-received.json').read_text())
+        self.assertEqual(len({c['id'] for c in pack['candidates']}),40)
+        data,_=build.load_and_validate(build.RADAR,root,dt.date(2026,10,18))
+        companies={c['id']:c for c in data['companies']}
+        for c in pack['candidates']:
+            actual=companies[c['id']];f=actual['financial'];given=c['fin_schema_compatible_candidate']
+            self.assertEqual(f['source_urls'],c['source_urls'])
+            self.assertEqual(f['conditions'],c['conditions'])
+            self.assertEqual(f['currency'],c['currency'])
+            self.assertEqual(f['accounting_basis'],c['accounting_basis'])
+            self.assertEqual(f['verified_at'],given['verified_at'])
+            for field,key in [('revg','revenue_yoy'),('earng','profit_yoy'),('gm','gross_margin')]:
+                self.assertEqual(actual[field],None if given[key] is None else given[key]/100)
+        for cid in ('DZSK','KBL'):
+            self.assertNotEqual(financial_status(companies[cid]['financial'],dt.date(2026,10,18)),'verified')
+        self.assertEqual(companies['KBL']['financial']['basis'],'half_year')
+        self.assertEqual(companies['DZSK']['financial']['report_status'],'preliminary')
+        self.assertIn('营业总收入',companies['DFDQ']['financial']['revenue_scope'])
+        self.assertIn('营业收入',companies['ZGXD']['financial']['margin_scope'])
+
+    def test_review_preview_remains_blocked(self):
+        from integrity import release_blockers
+        self.assertIn('local_review_not_publishable',release_blockers({'meta':{'reviewPreview':True}}))
 
 if __name__=='__main__': unittest.main()

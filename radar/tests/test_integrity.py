@@ -237,6 +237,7 @@ class CacheAndContractTests(unittest.TestCase):
 
     def test_financial_and_valuation_fallbacks_not_used(self):
         data, mk = dataset()
+        for c in data['companies']: c['financial'] = {}
         D, _, _ = build.assemble(data, mk, mk, NOW)
         self.assertEqual([len(D[k]) for k in ('industries','chokepoints','companies')], [15,16,42])
         for c in D['companies']:

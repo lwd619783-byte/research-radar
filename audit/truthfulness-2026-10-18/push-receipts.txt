@@ -1,0 +1,4 @@
+UTC 2026-10-18T02:20:15.056631+00:00
+First normal push confirmed (no force):
+414eb80626d3200dfebe4a010507c5fe74d7ca31	refs/heads/fix/radar-data-integrity
+814eea7b0a6a1de54859c072855f397f4075b26f	refs/heads/fix/radar-truthfulness-2026-10-18

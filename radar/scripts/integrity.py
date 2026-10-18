@@ -172,6 +172,8 @@ def release_blockers(D):
     blockers = list(D['meta'].get('blockers', []))
     if D['meta'].get('fixture'):
         blockers.append('synthetic_fixture_not_publishable')
+    if D['meta'].get('reviewPreview'):
+        blockers.append('local_review_not_publishable')
     if D['meta'].get('offline'):
         blockers.append('offline_not_publishable')
     return sorted(set(blockers))
