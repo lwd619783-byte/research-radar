@@ -324,7 +324,8 @@ def collect(data, budget, market_sink=None):
     D,stale,missing=build.assemble(data,mk,mk,dt.datetime.now(build.BJ))
     gates={'blockers':build.release_blockers(D),'missingDailyCount':len(missing),'staleDailyCount':len(stale),
            'asOf':D['meta']['asOf'],'asOfByMarket':D['meta']['asOfByMarket'], 'ratioAvailable':D['ratio'] is not None,
-           'financialVerified':sum(financial_status(c.get('financial'),dt.date.today())=='verified' for c in data['companies']),
+           'financialVerified':sum(financial_status(c.get('financial'),dt.date.today(),c)=='verified' for c in data['companies']),
+           'financialPartial':sum(financial_status(c.get('financial'),dt.date.today(),c)=='verified_partial' for c in data['companies']),
            'financialRequired':len(companies),'primaryOnlyAssembly':True}
     summary={}
     for category in sorted({r['category'] for r in rows}):

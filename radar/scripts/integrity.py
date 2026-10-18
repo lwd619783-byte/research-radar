@@ -1,5 +1,8 @@
 """Conservative data gates. Age tolerance is not an exchange-calendar guarantee."""
 import datetime as dt
+import hashlib
+import json
+from pathlib import Path
 import math
 import re
 from urllib.parse import urlsplit
@@ -89,7 +92,28 @@ def valid_bars(bars):
     return True
 
 
-def financial_status(fin, today):
+# Deliberately narrow, reviewed exceptions. A new period or value needs new
+# source review and an explicit contract update, not an arbitrary "partial" flag.
+PARTIAL_DISCLOSURES = {
+    'KBL': ('1888.HK', 'reviewed_h1_cumulative', '57eaad8a8211738ea54985d32d41a3c8b6b4d38d7fbfd12619093fd7a422213e'),
+    'DZSK': ('301200.SZ', 'reviewed_q3_preliminary', 'd61396c13e857b33c3f8574f68287a19972cdf30e67a88fdc95f7149aa9196ca'),
+}
+PARTIAL_EVIDENCE_SHA256 = 'e795211867e6592d2e05179a2c9c83a1d31935127398b95031d7080c71f15de3'
+
+
+def partial_payload(company):
+    return {k: company.get(k) for k in ('id', 'sym', 'period', 'revg', 'earng', 'gm', 'financial')}
+
+
+def partial_evidence_valid():
+    path = Path(__file__).resolve().parents[2] / 'audit/partial-financial-2026-10-18/public-evidence.json'
+    try:
+        return hashlib.sha256(path.read_bytes()).hexdigest() == PARTIAL_EVIDENCE_SHA256
+    except OSError:
+        return False
+
+
+def financial_status(fin, today, company=None):
     if not fin or not fin.get('source_url') or not fin.get('source_name'):
         return 'missing_source'
     try:
@@ -127,6 +151,21 @@ def financial_status(fin, today):
         return 'missing_derivation_evidence'
     if fin.get('conditions') and not fin.get('conditions_reviewed'):
         return 'conditions_unreviewed'
+    cid = company.get('id') if isinstance(company, dict) else None
+    symbol = company.get('sym') if isinstance(company, dict) else None
+    if fin.get('disclosure_state') or cid in PARTIAL_DISCLOSURES or symbol in {r[0] for r in PARTIAL_DISCLOSURES.values()}:
+        approved = PARTIAL_DISCLOSURES.get(cid)
+        if not approved or symbol != approved[0] or fin.get('disclosure_state') != approved[1]:
+            return 'unapproved_partial_disclosure'
+        try:
+            payload = json.dumps(partial_payload(company), sort_keys=True, ensure_ascii=False, allow_nan=False, separators=(',', ':')).encode()
+        except (TypeError, ValueError):
+            return 'partial_disclosure_mismatch'
+        if hashlib.sha256(payload).hexdigest() != approved[2]:
+            return 'partial_disclosure_mismatch'
+        if not partial_evidence_valid():
+            return 'partial_evidence_missing_or_tampered'
+        return 'verified_partial'
     return 'verified'
 
 

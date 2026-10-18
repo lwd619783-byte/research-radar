@@ -1,9 +1,9 @@
 {
-  "radar/site/app.js": "933924760591f3d759182f48eb2b1ee229519b1861d40ef3d72051dc58d9e92c",
+  "radar/site/app.js": "e111047767e32ed8b7f46214f9bb28b6061fd6529b762907a060c0169d04d7e3",
   "radar/site/index.html": "8cf42a0a00ae434dbdc96e9567e1e6338c28b95dee534f73664ef4473b2ed51d",
   "radar/site/style.css": "8987b1f2aae01066e7665ebe6d0b5bb1708089a0fc7586c5d1deb67d7c041d36",
   "radar/data/chokepoints.toml": "89cdf6861602bff2527a562c26dee6ec612553850cafc83582d0da960616463e",
-  "radar/data/companies.toml": "33057b740c600fde6c8690ee583dd3a8a19e5205cd285eeecdf03e10545577c9",
+  "radar/data/companies.toml": "a20538f2e71b0a13b72207cb46ece0d2cc63fde81d6c2ed563ee6ea93ed2bc70",
   "radar/data/config.toml": "546b8d6920bc54b3fc70853ecc53acedd013cf04fc958ed5728969fbe47aaffd",
   "radar/data/industries.toml": "b68578b61566053f5bc03f69f06f2e12cb01102deb3cf3af90aa4b7c1259bdb4",
   ".github/workflows/radar-deploy.yml.disabled": "4eae830c8fa2eba2025cf819fe9e4635f5f360f6113e71b3c03437fa3b60ce18",

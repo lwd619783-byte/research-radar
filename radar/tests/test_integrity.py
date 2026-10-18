@@ -18,7 +18,7 @@ import build
 import quotes
 from integrity import fresh_record, financial_status, release_blockers
 
-NOW = dt.datetime(2026, 10, 17, 12, tzinfo=build.BJ)
+NOW = dt.datetime(2026, 10, 18, 10, tzinfo=build.BJ)
 
 
 def record(**kw):
@@ -219,7 +219,7 @@ class CacheAndContractTests(unittest.TestCase):
         self.assertTrue(fresh_record(record(), NOW, '2026-10-16', '美股'))
         self.assertFalse(fresh_record(record(), NOW, '2026-09-30', '美股'))
         self.assertFalse(fresh_record({'schemaVersion': 2, 'receivedAt': '2026-10-12T12:00:00+08:00'}, NOW, '2026-10-16'))
-        self.assertFalse(fresh_record(record(), NOW, '2026-10-18'))
+        self.assertFalse(fresh_record(record(), NOW, '2026-10-19'))
 
     def test_offline_and_successful_but_old_response_are_stale(self):
         data, mk = dataset()
@@ -245,7 +245,7 @@ class CacheAndContractTests(unittest.TestCase):
         self.assertEqual(D['meta']['asOfByMarket']['A股'], ['2026-10-16'])
         self.assertEqual(D['meta']['asOfByMarket']['美股'], ['2026-10-15'])
         self.assertIn('mixed_or_missing_market_dates_need_label_approval', release_blockers(D))
-        self.assertTrue(D['meta']['generatedAt'].startswith('2026-10-17'))
+        self.assertTrue(D['meta']['generatedAt'].startswith('2026-10-18'))
 
     def test_financial_and_valuation_fallbacks_not_used(self):
         data, mk = dataset()

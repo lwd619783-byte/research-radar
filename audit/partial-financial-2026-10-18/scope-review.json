@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-18T03:32:02.277972+00:00",
+  "baselineSHA": "4dda8a751c2dd5957efb88fcaa7bca14447b3e42",
+  "byteIdentical": [
+    "radar/site/style.css",
+    "radar/site/index.html",
+    "radar/data/industries.toml",
+    "radar/data/config.toml",
+    "radar/data/chokepoints.toml",
+    "radar/scripts/quotes.py",
+    ".github/workflows/README.md",
+    ".github/workflows/radar-deploy.yml.disabled",
+    ".github/workflows/radar-interface-acceptance.yml",
+    ".github/workflows/radar-preview.yml.disabled"
+  ],
+  "fxFinalityAndReleaseHelpersUnchanged": true,
+  "companiesChangedFinancialOnly": [
+    "KBL",
+    "DZSK"
+  ],
+  "other40FinancialsUnchanged": true,
+  "all42NonFinancialFieldsUnchanged": true,
+  "checkedFiles": 28,
+  "credentialPatternHits": [],
+  "manualEvidenceReview": "Only supplied public reports, public financial amounts/conditions, local screenshots and test receipts added. No private research contents, accounts, credentials or HTTP secrets copied.",
+  "publicEvidenceSHA256": "e795211867e6592d2e05179a2c9c83a1d31935127398b95031d7080c71f15de3"
+}

@@ -1,0 +1,101 @@
+{
+  "checkedAt": "2026-10-18T03:30:28.392237+00:00",
+  "replayAt": "2026-10-18T03:23:56.028584+00:00",
+  "snapshotSHA256": "8bfc4755070254fff382230457c68293865cd17aecbbe8647ebf9ac9dc429365",
+  "sourceEvidenceSHA256": "e795211867e6592d2e05179a2c9c83a1d31935127398b95031d7080c71f15de3",
+  "networkRequests": 0,
+  "runs": [
+    {
+      "force": false,
+      "exit": 0,
+      "blockers": [],
+      "htmlGenerated": true,
+      "githubOutput": [
+        "changed=true",
+        "asof=10/16 收盘",
+        "fingerprint=b1aa74ab6b1998b1"
+      ],
+      "stdout": [
+        "[提醒] companies.toml「建滔积层板」：已核实部分披露；仅展示对应口径，不参与完整评分或普通增长排名",
+        "[提醒] companies.toml「大族数控」：已核实部分披露；仅展示对应口径，不参与完整评分或普通增长排名",
+        "校验通过：15 个行业 · 16 个卡点 · 42 家公司 · 17 条提醒",
+        "· Recorded public snapshot replay; no new network request",
+        "行情：新抓 42/42，用缓存 0，缺失 0；截至 10/16 收盘",
+        "已生成 /tmp/radar-partial-review/normal/built/index.html（622 KB）· 指纹 b1aa74ab6b1998b1 · 有变化，需要部署"
+      ],
+      "omittedUnchangedKBPathWarnings": 15,
+      "partial": [
+        {
+          "id": "KBL",
+          "period": "2026H1累计",
+          "revg": 0.5544179499999999,
+          "earng": 2.0927980500000003,
+          "gm": 0.30731963,
+          "financialPartial": true,
+          "financialSignalEligible": false,
+          "financialRevenueComparable": false
+        },
+        {
+          "id": "DZSK",
+          "period": "2026Q3初步推算",
+          "revg": 0.87774951,
+          "earng": 1.57080484,
+          "gm": null,
+          "financialPartial": true,
+          "financialSignalEligible": false,
+          "financialRevenueComparable": false
+        }
+      ]
+    },
+    {
+      "force": true,
+      "exit": 0,
+      "blockers": [],
+      "htmlGenerated": true,
+      "githubOutput": [
+        "changed=true",
+        "asof=10/16 收盘",
+        "fingerprint=b1aa74ab6b1998b1"
+      ],
+      "stdout": [
+        "[提醒] companies.toml「建滔积层板」：已核实部分披露；仅展示对应口径，不参与完整评分或普通增长排名",
+        "[提醒] companies.toml「大族数控」：已核实部分披露；仅展示对应口径，不参与完整评分或普通增长排名",
+        "校验通过：15 个行业 · 16 个卡点 · 42 家公司 · 17 条提醒",
+        "· Recorded public snapshot replay; no new network request",
+        "行情：新抓 42/42，用缓存 0，缺失 0；截至 10/16 收盘",
+        "已生成 /tmp/radar-partial-review/force/built/index.html（622 KB）· 指纹 b1aa74ab6b1998b1 · 有变化，需要部署"
+      ],
+      "omittedUnchangedKBPathWarnings": 15,
+      "partial": [
+        {
+          "id": "KBL",
+          "period": "2026H1累计",
+          "revg": 0.5544179499999999,
+          "earng": 2.0927980500000003,
+          "gm": 0.30731963,
+          "financialPartial": true,
+          "financialSignalEligible": false,
+          "financialRevenueComparable": false
+        },
+        {
+          "id": "DZSK",
+          "period": "2026Q3初步推算",
+          "revg": 0.87774951,
+          "earng": 1.57080484,
+          "gm": null,
+          "financialPartial": true,
+          "financialSignalEligible": false,
+          "financialRevenueComparable": false
+        }
+      ]
+    }
+  ],
+  "companies": 42,
+  "financialVerified": 40,
+  "financialPartial": 2,
+  "original40Complete": 37,
+  "signalEligible": 36,
+  "mcapAvailable": 42,
+  "sameDateFX": 42,
+  "deployed": false
+}

@@ -17,7 +17,7 @@ MARKET_CUR = {"A股": "CNY", "港股": "HKD", "美股": "USD", "台股": "TWD", 
 FIN_STRINGS = ('source_name', 'source_url', 'period_end', 'published_at', 'verified_at', 'basis',
                'currency', 'accounting_basis', 'fiscal_year', 'fiscal_period', 'profit_metric',
                'revenue_scope', 'profit_scope', 'margin_scope', 'report_status', 'profit_comparison',
-               'derivation', 'calculation_note', 'review_note')
+               'derivation', 'calculation_note', 'review_note', 'disclosure_state')
 FIN_LISTS = ('source_urls', 'conditions')
 
 
@@ -215,9 +215,6 @@ def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = 
         for k in ('period_end', 'published_at', 'verified_at'):
             _date(rep, w, evidence[k], f'fin.{k}')
         from integrity import financial_status
-        status = financial_status(evidence, today)
-        if status != 'verified':
-            rep.warn(w, f'财务证据/口径待核（{status}）；构建不使用未核实财务数值')
         pct = lambda k: (lambda v: None if v is None else v / 100)(_num(rep, w, fin.get(k), f"fin.{k}"))
         gm = pct("gross_margin")
         if gm is not None and not -1 <= gm <= 1:
@@ -234,6 +231,11 @@ def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = 
             "fallback_mcap_usd_bn": _num(rep, w, x.get("fallback_mcap_usd_bn"), "fallback_mcap_usd_bn"),
             "cur": MARKET_CUR.get(mkt, "USD"), "kb": kb, "url": kb_url(kb, w),
         })
+        status = financial_status(evidence, today, companies[-1])
+        if status == 'verified_partial':
+            rep.warn(w, '已核实部分披露；仅展示对应口径，不参与完整评分或普通增长排名')
+        elif status != 'verified':
+            rep.warn(w, f'财务证据/口径待核（{status}）；构建不使用未核实财务数值')
     for c in chokepoints:
         if c["name"] not in used_cp:
             rep.warn(f"chokepoints.toml「{c['name']}」", "没有任何公司挂在这个卡点下")

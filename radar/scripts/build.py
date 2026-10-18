@@ -221,7 +221,7 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
                     "s0": None, "sd": [], "sc": [], "ld": None, "history": {"count": 0}})
         row.update(m)
         row["hi52"] = round(hi52, 3 if hi52 < 10 else 2) if hi52 else None
-        status = financial_status(c.get('financial'), now.date())
+        status = financial_status(c.get('financial'), now.date(), c)
         row['provenance'] = {'daily': {k: (d or {}).get(k) for k in ('src', 'asOf', 'receivedAt', 'returnBasis', 'phase')},
                              'valuation': {'source': q.get('src'), 'asOf': quote_date if q else None,
                                            'receivedAt': q.get('receivedAt'), 'observedAt': q.get('regularMarketTime'),
@@ -230,7 +230,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
                                            'fx': selected_fx,
                                            'marketCapStatus': 'available' if mcap_usd is not None else 'missing_or_incompatible'},
                              'financial': {**c.get('financial', {}), 'status': status}}
-        if status != 'verified':
+        row['financialPartial'] = status == 'verified_partial'
+        if status not in ('verified', 'verified_partial'):
             for key in ('revg', 'earng', 'gm'):
                 row[key] = None
             issues.append({'symbol': s, 'kind': 'financial', 'status': status})

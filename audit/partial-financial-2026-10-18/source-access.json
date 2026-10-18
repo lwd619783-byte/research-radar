@@ -1,0 +1,76 @@
+{
+  "startedAt": "2026-10-18T03:21:55.125557+00:00",
+  "finishedAt": "2026-10-18T03:22:07.359661+00:00",
+  "reports": [
+    {
+      "url": "https://www.kblaminates.com/en/upload/portal/20260824/202608241223596609.pdf",
+      "key": "778010a6f589b4a6",
+      "startedAt": "2026-10-18T03:21:55.142863+00:00",
+      "contentVerified": false,
+      "httpStatus": 200,
+      "bytes": 90756,
+      "sha256": "885ad5f83bf72683415f6c32fb4a561adc50121e836a529334819cb0ecb8889c",
+      "format": "pdf",
+      "textCharacters": 51084,
+      "status": "parsed_requires_content_review",
+      "finishedAt": "2026-10-18T03:21:59.036775+00:00",
+      "id": "KBL-results"
+    },
+    {
+      "url": "https://www.kblaminates.com/en/upload/portal/20260918/202609180905142933.pdf",
+      "key": "7ce01cca16df71e0",
+      "startedAt": "2026-10-18T03:21:59.036799+00:00",
+      "contentVerified": false,
+      "httpStatus": 200,
+      "bytes": 1484891,
+      "sha256": "c2ed557cf87dcdb139bb5eaef09ea21e9051a8caadb589939c82f762b85abcb2",
+      "format": "pdf",
+      "textCharacters": 97603,
+      "status": "parsed_requires_content_review",
+      "finishedAt": "2026-10-18T03:22:04.763005+00:00",
+      "id": "KBL-interim"
+    },
+    {
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-15/1225606787.PDF",
+      "key": "51bd9c334939977d",
+      "startedAt": "2026-10-18T03:21:55.138496+00:00",
+      "contentVerified": false,
+      "httpStatus": 200,
+      "bytes": 109175,
+      "sha256": "0550fb94731df7196ca2f496fce7ee4e0ae03429ef847a9aca8a428c82e3ac3c",
+      "format": "pdf",
+      "textCharacters": 2054,
+      "status": "parsed_requires_content_review",
+      "finishedAt": "2026-10-18T03:22:00.609888+00:00",
+      "id": "DZSK-9M-preliminary"
+    },
+    {
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486321.PDF",
+      "key": "e4b34f53a588988f",
+      "startedAt": "2026-10-18T03:22:00.609906+00:00",
+      "contentVerified": false,
+      "httpStatus": 200,
+      "bytes": 1235070,
+      "sha256": "9e8207dad6ca3d55dfd12c7abe8a176d1e4450bb3137962a66f797b5ddcb31ae",
+      "format": "pdf",
+      "textCharacters": 386821,
+      "status": "parsed_requires_content_review",
+      "finishedAt": "2026-10-18T03:22:07.359087+00:00",
+      "id": "DZSK-H1"
+    },
+    {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2025-10-21/7573d795-1085-45c8-803c-511d9e66f2d4.PDF",
+      "key": "2b84df466b94da73",
+      "startedAt": "2026-10-18T03:21:55.142556+00:00",
+      "contentVerified": false,
+      "httpStatus": 200,
+      "bytes": 240069,
+      "sha256": "1faa51d42cb7bea2c8e9f15011ca715e1d8dd5a5b979916d23658775e2e41a6e",
+      "format": "pdf",
+      "textCharacters": 30912,
+      "status": "parsed_requires_content_review",
+      "finishedAt": "2026-10-18T03:22:00.158561+00:00",
+      "id": "DZSK-2025Q3"
+    }
+  ]
+}

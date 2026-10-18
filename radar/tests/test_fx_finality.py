@@ -88,8 +88,9 @@ class FxFinalityTests(unittest.TestCase):
 
     def test_waiting_cannot_turn_an_intraday_cached_value_into_a_close(self):
         r=historical_fx(receivedAt='2026-10-16T12:00:00+00:00')
-        self.assertTrue(fresh_record(r,NOW,'2026-10-16'))
-        self.assertIsNone(dated_fx(r,'CNY','2026-10-16',NOW))
+        cache_now=dt.datetime(2026,10,17,4,tzinfo=dt.UTC)
+        self.assertTrue(fresh_record(r,cache_now,'2026-10-16'))
+        self.assertIsNone(dated_fx(r,'CNY','2026-10-16',cache_now))
         r['receivedAt']='2026-10-17T00:00:00+00:00'
         self.assertIsNotNone(dated_fx(r,'CNY','2026-10-16',NOW))
 
@@ -111,7 +112,7 @@ class FxFinalityTests(unittest.TestCase):
         self.assertEqual(sum(c['mcapUSD'] is not None for c in D['companies']),42)
         self.assertTrue(all(c['provenance']['valuation']['fx']['asOf']==c['ld'] for c in D['companies']))
         self.assertEqual(sum(c['provenance']['financial']['status']=='verified' for c in D['companies']),40)
-        self.assertEqual(sum(all(c[k] is not None for k in ('revg','earng','gm')) for c in D['companies']),37)
+        self.assertEqual(sum(all(c[k] is not None for k in ('revg','earng','gm')) for c in D['companies']),38)  # Includes KBL H1; only 37 are complete within the original 40.
         self.assertEqual(sum(c['financialSignalEligible'] for c in D['companies']),36)
 
 if __name__=='__main__':unittest.main()

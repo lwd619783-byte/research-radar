@@ -24,8 +24,9 @@ def monthly_record(day='2026-10-16', denominator=False):
 def complete_dataset():
     data, mk = dataset()
     for c in data['companies']:
-        c.update(revg=20., earng=15., gm=30.)  # Synthetic inputs; never written to TOML.
-        c['financial'] = financial_evidence()
+        if c['id'] not in ('KBL', 'DZSK'):
+            c.update(revg=20., earng=15., gm=30.)  # Synthetic inputs; never written to TOML.
+            c['financial'] = financial_evidence()
         mk['daily'][c['sym']] = record(bars=bars(), priceBasis='raw', returnBasis='synthetic-adjusted',
                                       asOf='2026-10-16', phase='closed', src='synthetic')
         mk['quote'][c['sym']] = record(marketCap=1e10, trailingPE=20., currency=c['cur'], src='yahoo',
@@ -254,8 +255,9 @@ class CompleteMainTests(unittest.TestCase):
             self.assertIsNotNone(report['data']['ratio'])
             for c in report['data']['companies']:
                 for key in ('price', 'mcapUSD', 'pe', 'revg', 'earng', 'gm'):
-                    self.assertIsNotNone(c[key], (c['sym'], key))
-                self.assertEqual(c['provenance']['financial']['status'], 'verified')
+                    if not (c['id']=='DZSK' and key=='gm'):
+                        self.assertIsNotNone(c[key], (c['sym'], key))
+                self.assertEqual(c['provenance']['financial']['status'], 'verified_partial' if c['id'] in ('KBL','DZSK') else 'verified')
 
     def assert_gate(self, mutate, blocker):
         for force in (False, True):

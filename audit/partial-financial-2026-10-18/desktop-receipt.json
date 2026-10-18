@@ -1,0 +1,84 @@
+{
+  "checkedAt": "2026-10-18T03:29:32.727580+00:00",
+  "browser": "system Chromium with installed Playwright",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "pageErrors": [],
+  "layout": {
+    "sections": [
+      "overview",
+      "radar",
+      "choke",
+      "leaders",
+      "calendar"
+    ],
+    "topCards": 4,
+    "companies": 42,
+    "cssBytes": 42581,
+    "overflow": false
+  },
+  "rankingChecks": [
+    {
+      "metric": "revg",
+      "sortDirectionIndex": 0,
+      "lastIds": [
+        "KBL",
+        "DZSK"
+      ]
+    },
+    {
+      "metric": "revg",
+      "sortDirectionIndex": 1,
+      "lastIds": [
+        "KBL",
+        "DZSK"
+      ]
+    },
+    {
+      "metric": "earng",
+      "sortDirectionIndex": 0,
+      "lastIds": [
+        "COHR",
+        "CXMT",
+        "KBL",
+        "DZSK",
+        "SU"
+      ]
+    },
+    {
+      "metric": "earng",
+      "sortDirectionIndex": 1,
+      "lastIds": [
+        "COHR",
+        "CXMT",
+        "KBL",
+        "DZSK",
+        "SU"
+      ]
+    }
+  ],
+  "partialRevenueHeatmapColors": [
+    "rgb(42, 46, 57)",
+    "rgb(42, 46, 57)"
+  ],
+  "screenshots": {
+    "kbl-partial.png": {
+      "bytes": 359156,
+      "sha256": "238228d13f4f5b12cb1fce03626f6484bc14074a52802ad3a1fa0ba60b40a094"
+    },
+    "dzsk-partial.png": {
+      "bytes": 370770,
+      "sha256": "7a8be9f4f3958008756120f0a7885c5b8411acf4a3b22460dde987e21e63f875"
+    },
+    "partial-excluded-from-ranking.png": {
+      "bytes": 285496,
+      "sha256": "3fb4ee9fce834559a1d0d17cc02b60852c9865a7d5eb5bceb018fb453986e1e5"
+    },
+    "dzsk-scope-tooltip.png": {
+      "bytes": 436050,
+      "sha256": "a0fe666a82ccc756cb11c5c69c6d8b0565ab9b4475f070ca3922ececeae73c30"
+    }
+  }
+}
