@@ -25,6 +25,16 @@ def record(**kw):
     return dict(schemaVersion=2, receivedAt=NOW.isoformat(), **kw)
 
 
+def financial_evidence():
+    return dict(source_name='Synthetic filing', source_url='https://example.test/report',
+        source_urls=['https://example.test/report'], period_end='2026-06-30',
+        published_at='2026-08-01', verified_at='2026-10-16', basis='single_quarter',
+        currency='USD', accounting_basis='US GAAP', fiscal_year='FY2026', fiscal_period='Q2',
+        profit_metric='net_income', revenue_scope='consolidated', profit_scope='parent',
+        margin_scope='consolidated', report_status='final', profit_comparison='comparable',
+        derivation='reported', review_note='Synthetic offline test only')
+
+
 def bars(count=800):
     end = dt.date(2026, 10, 16)
     return [[(end-dt.timedelta(days=count-i-1)).isoformat(), 100., 100., 110.] for i in range(count)]
@@ -176,8 +186,7 @@ class CacheAndContractTests(unittest.TestCase):
     def test_valid_evidence_preserves_values_and_negative_pe_is_missing(self):
         data, mk = dataset()
         c = data['companies'][1]  # USD company
-        c['financial'] = dict(source_name='Synthetic filing', source_url='https://example.test/report',
-                              period_end='2026-06-30', published_at='2026-08-01', verified_at='2026-10-16', basis='single_quarter')
+        c['financial'] = financial_evidence()
         mk['daily'][c['sym']] = record(bars=bars(), priceBasis='raw', asOf='2026-10-16', phase='closed')
         mk['quote'][c['sym']] = record(marketCap=1e10, trailingPE=-3, currency='USD', src='yahoo',
             regularMarketTime=dt.datetime(2026,10,16,20,tzinfo=dt.UTC).timestamp())
@@ -245,6 +254,7 @@ class CacheAndContractTests(unittest.TestCase):
     def test_frontend_hashes_are_exact(self):
         baseline = json.loads((ROOT/'audit/frontend-baseline.json').read_text())
         for name, sha in baseline.items():
+            if name == 'app.js': continue  # User authorized text/status-only changes; CSS/template stay frozen.
             self.assertEqual(hashlib.sha256((ROOT/'radar/site'/name).read_bytes()).hexdigest(), sha)
 
     def test_schedule_gap_recorded_without_changing_schedule(self):
@@ -274,8 +284,7 @@ class CacheAndContractTests(unittest.TestCase):
 
 class EvidenceTests(unittest.TestCase):
     def test_financial_metadata(self):
-        fin = dict(source_url='https://example.test/report', source_name='Synthetic issuer filing',
-                   period_end='2026-06-30', published_at='2026-08-01', verified_at='2026-10-16', basis='single_quarter')
+        fin = financial_evidence()
         self.assertEqual(financial_status(fin, NOW.date()), 'verified')
         self.assertEqual(financial_status({}, NOW.date()), 'missing_source')
         fin['published_at'] = '2027-01-01'

@@ -87,7 +87,7 @@ def yahoo_daily(h: Http, sym: str, rng: str = "5y") -> dict:
     j = h.yahoo(f"/v8/finance/chart/{urllib.parse.quote(sym)}?range={rng}&interval=1d&includeAdjustedClose=true")
     res = (j.get("chart") or {}).get("result")
     if not res:
-        raise RuntimeError(f"Yahoo 无数据：{(j.get('chart') or {}).get('error')}")
+        raise SourceDataError('yahoo_chart_no_result')
     r = res[0]
     m = r.get("meta", {})
     off = m.get("gmtoffset", 0) or 0
@@ -105,7 +105,7 @@ def yahoo_daily(h: Http, sym: str, rng: str = "5y") -> dict:
         bars[d] = [d, float(c), float(a) if positive(a) else None,
                    float(high) if positive(high) and high >= c else None]
     if not bars:
-        raise RuntimeError("Yahoo 返回空 K 线")
+        raise SourceDataError('yahoo_chart_empty_daily_bars')
     out = [bars[k] for k in sorted(bars)]
     # Do not splice realtime raw prices into an adjusted daily series.
     regular = (m.get("currentTradingPeriod") or {}).get("regular") or {}
@@ -204,28 +204,46 @@ def yahoo_quotes(h: Http, syms: list[str]) -> dict[str, dict]:
 
 
 # ---------------- 指数 ----------------
-def index_quote(h: Http, sym: str, tencent: str = "") -> dict:
-    """返回 {"price", "chg", "date"}；chg 为相对前一交易日收盘的涨跌幅（小数）。"""
-    bars: list = []
-    provenance = {'src': 'tencent', 'phase': 'unknown'}
-    try:
-        d = yahoo_daily(h, sym, "1mo")
-        bars = d['bars']
-        provenance = {k: d.get(k) for k in ('src', 'phase')}
-    except Exception:  # noqa: BLE001
-        pass
+class SourceDataError(RuntimeError):
+    """Fixed safe code plus numeric diagnostics, never a remote error body."""
+    def __init__(self, code, count=0):
+        self.code, self.count = code, count
+        super().__init__(code)
+
+
+def index_quote(h: Http, sym: str, tencent: str = "", source: str | None = None) -> dict:
+    """Independent source mode preserves Yahoo semantic failures before fallback."""
+    bars, diagnostics = [], []
+    provenance = {'src': 'yahoo', 'phase': 'unknown'}
+    if source != 'tencent':
+        try:
+            d = yahoo_daily(h, sym, "1mo")
+            bars = d['bars']
+            provenance = {k: d.get(k) for k in ('src', 'phase')}
+            if len(bars) < 2:
+                raise SourceDataError('yahoo_index_insufficient_daily_bars', len(bars))
+        except Exception as exc:
+            if source == 'yahoo': raise
+            diagnostics.append({'source': 'yahoo', 'code': getattr(exc, 'code', type(exc).__name__)})
     code = tencent or tencent_code(sym)
-    if len(bars) < 2 and code:  # Yahoo 对部分中国指数只给 1 根或不给
+    if source == 'tencent' or len(bars) < 2:
+        if not code: raise SourceDataError('index_no_backup')
         provenance = {'src': 'tencent', 'phase': 'unknown'}
         j = h.json(f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={code},day,,,10,")
-        node = (j.get("data") or {}).get(code) or {}
-        rows = node.get("day") or node.get("qfqday") or []
-        bars = [[x[0], float(x[2]), float(x[2])] for x in rows if len(x) > 2]
+        node = (j.get('data') or {}).get(code) or {}
+        rows = node.get('day') or node.get('qfqday') or []
+        bars = [[x[0], float(x[2]), None, None] for x in rows if len(x) > 2]
     if len(bars) < 2:
-        raise RuntimeError("指数数据不足")
-    if not all(positive(b[1]) for b in bars[-2:]):
-        raise RuntimeError('Invalid index prices')
-    return stamp(price=bars[-1][1], chg=bars[-1][1] / bars[-2][1] - 1, date=bars[-1][0], **provenance)
+        raise SourceDataError('index_insufficient_daily_bars', len(bars))
+    if not valid_index_bars(bars):
+        raise SourceDataError('index_invalid_prices_or_dates', len(bars))
+    return stamp(price=bars[-1][1], chg=bars[-1][1] / bars[-2][1] - 1, date=bars[-1][0],
+                 sourceDiagnostics=diagnostics, **provenance)
+
+
+def valid_index_bars(bars):
+    from integrity import valid_bars
+    return valid_bars(bars)
 
 
 # ---------------- 汇率（每 1 美元兑多少当地货币） ----------------
@@ -233,12 +251,24 @@ FX_SYM = {"CNY": "CNY=X", "HKD": "HKD=X", "TWD": "TWD=X", "KRW": "KRW=X", "JPY":
 
 
 def fx(h: Http, cur: str) -> dict:
-    j = h.yahoo(f"/v8/finance/chart/{urllib.parse.quote(FX_SYM[cur])}?range=5d&interval=1d")
-    meta = j["chart"]["result"][0]["meta"]
-    p = meta["regularMarketPrice"]
-    if not positive(p) or not meta.get("regularMarketTime"):
-        raise RuntimeError("FX value or source timestamp unavailable")
-    return stamp(value=1 / p if cur == "EUR" else p, src="yahoo", asOf=exchange_date(meta["regularMarketTime"], meta))
+    # Preserve actual dated daily closes. Realtime metadata may already be on
+    # tomorrow's FX session while equities still refer to yesterday's close.
+    j = h.yahoo(f"/v8/finance/chart/{urllib.parse.quote(FX_SYM[cur])}?range=1mo&interval=1d")
+    r = j["chart"]["result"][0]
+    meta = r.get('meta') or {}
+    if not meta.get('exchangeTimezoneName'):
+        raise ValueError('fx_timezone_missing')
+    rates = {}
+    for timestamp, price in zip(r.get('timestamp') or [], r['indicators']['quote'][0].get('close') or []):
+        if positive(timestamp) and positive(price):
+            day = exchange_date(timestamp, meta)
+            rates[day] = [day, 1 / price if cur == 'EUR' else price, price]
+    if not rates:
+        raise ValueError('fx_daily_history_missing')
+    history = [rates[day] for day in sorted(rates)]
+    return stamp(value=history[-1][1], src='yahoo', asOf=history[-1][0], rates=history,
+                 currency=cur, direction='USD-to-local', priceBasis='daily-close',
+                 timezone=meta['exchangeTimezoneName'])
 
 
 # ---------------- 创业板指 ÷ 中证红利 月线 ----------------

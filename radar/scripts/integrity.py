@@ -1,6 +1,8 @@
 """Conservative data gates. Age tolerance is not an exchange-calendar guarantee."""
 import datetime as dt
 import math
+import re
+from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo
 
 ZONES = {'A股': 'Asia/Shanghai', '港股': 'Asia/Hong_Kong', '美股': 'America/New_York',
@@ -98,9 +100,72 @@ def financial_status(fin, today):
         return 'invalid_dates'
     if (today - end).days > 200 or (today - checked).days > 100:
         return 'stale'
-    if fin.get('basis') != 'single_quarter':
+    if fin.get('basis') not in ('single_quarter', 'half_year', 'cumulative', 'annual'):
         return 'unsupported_period_basis'
+    required = ('currency', 'accounting_basis', 'fiscal_year', 'fiscal_period',
+                'profit_metric', 'revenue_scope', 'profit_scope', 'margin_scope',
+                'report_status', 'profit_comparison', 'derivation', 'review_note')
+    if not all(isinstance(fin.get(k), str) and fin[k].strip() for k in required):
+        return 'missing_scope'
+    urls = fin.get('source_urls')
+    if not isinstance(urls, list) or not urls or fin['source_url'] not in urls:
+        return 'missing_source_set'
+    for url in urls:
+        if not isinstance(url, str): return 'invalid_source'
+        p = urlsplit(url)
+        if p.scheme != 'https' or not p.hostname or p.username or p.password:
+            return 'invalid_source'
+    if not re.fullmatch(r'[A-Z]{3}', fin['currency']):
+        return 'invalid_currency'
+    if fin['report_status'] not in ('final', 'preliminary', 'revenue_only'):
+        return 'invalid_report_status'
+    if fin['profit_comparison'] not in ('comparable', 'turnaround', 'loss_base', 'not_disclosed', 'one_off'):
+        return 'invalid_profit_comparison'
+    if fin['derivation'] not in ('reported', 'cumulative_difference'):
+        return 'invalid_derivation'
+    if fin['derivation'] == 'cumulative_difference' and (len(set(urls)) < 2 or not fin.get('calculation_note')):
+        return 'missing_derivation_evidence'
+    if fin.get('conditions') and not fin.get('conditions_reviewed'):
+        return 'conditions_unreviewed'
     return 'verified'
+
+
+def pe_status(value):
+    if value is None: return 'missing'
+    if not number(value): return 'invalid'
+    return 'available' if value > 0 else 'nonpositive'
+
+
+def dated_fx(record, currency, day, now):
+    """Select the exact observed day; never backfill with a future/nearest rate."""
+    if not day or not isinstance(record, dict) or not fresh_record(record, now, day):
+        return None
+    if record.get('currency', currency) != currency:
+        return None
+    if 'rates' in record:
+        rates = record['rates']
+        if not isinstance(rates, list): return None
+        previous = ''
+        selected = None
+        for row in rates:
+            if not isinstance(row, list) or len(row) != 3: return None
+            try:
+                if dt.date.fromisoformat(row[0]).isoformat() != row[0] or row[0] <= previous: return None
+            except (ValueError, TypeError): return None
+            if not number(row[1]) or row[1] <= 0 or not number(row[2]) or row[2] <= 0: return None
+            expected = 1 / row[2] if currency == 'EUR' else row[2]
+            if not math.isclose(row[1], expected, rel_tol=1e-12): return None
+            if row[0] == day: selected = row
+            previous = row[0]
+        if selected is None: return None
+        value = selected[1]
+    else:
+        # Legacy receipts are usable only on their original observed date.
+        if record.get('asOf') != day: return None
+        value = record.get('value')
+        if not number(value) or value <= 0: return None
+    return {'value': value, 'asOf': day, 'src': record.get('src'),
+            'receivedAt': record.get('receivedAt'), 'direction': 'USD-to-local'}
 
 
 def release_blockers(D):

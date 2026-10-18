@@ -11,7 +11,7 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
-from test_integrity import NOW, bars, build, dataset, months, quotes, record
+from test_integrity import NOW, bars, build, dataset, months, quotes, record, financial_evidence
 
 
 def monthly_record(day='2026-10-16', denominator=False):
@@ -25,9 +25,7 @@ def complete_dataset():
     data, mk = dataset()
     for c in data['companies']:
         c.update(revg=20., earng=15., gm=30.)  # Synthetic inputs; never written to TOML.
-        c['financial'] = dict(source_name='Synthetic filing', source_url='https://example.test/report',
-                              period_end='2026-06-30', published_at='2026-08-01',
-                              verified_at='2026-10-16', basis='single_quarter')
+        c['financial'] = financial_evidence()
         mk['daily'][c['sym']] = record(bars=bars(), priceBasis='raw', returnBasis='synthetic-adjusted',
                                       asOf='2026-10-16', phase='closed', src='synthetic')
         mk['quote'][c['sym']] = record(marketCap=1e10, trailingPE=20., currency=c['cur'], src='yahoo',
@@ -273,11 +271,14 @@ class CompleteMainTests(unittest.TestCase):
 
     def test_financial_gate_alone(self):
         self.assert_gate(lambda d, m: d['companies'][0].update(financial={}),
-                         'financial_evidence_missing_or_incompatible_with_frozen_text')
+                         'financial_evidence_incomplete')
 
     def test_valuation_gate_alone(self):
-        self.assert_gate(lambda d, m: m['quote'][d['companies'][0]['sym']].update(marketCap=None),
-                         'missing_market_cap_fixed_area_label')
+        data, mk = complete_dataset()
+        mk['quote'][data['companies'][0]['sym']]['marketCap'] = None
+        D = build.assemble(data, mk, mk, NOW)[0]
+        self.assertIsNone(D['companies'][0]['mcapUSD'])
+        self.assertIn({'symbol': data['companies'][0]['sym'], 'kind': 'valuation', 'status': 'market_cap_unavailable'}, D['meta']['issues'])
 
     def test_close_gate_alone(self):
         self.assert_gate(lambda d, m: m['daily'][d['companies'][0]['sym']].update(phase='unknown'),
@@ -288,8 +289,12 @@ class CompleteMainTests(unittest.TestCase):
                          'index_date_or_phase_needs_label_approval')
 
     def test_history_gate_alone(self):
-        self.assert_gate(lambda d, m: m['daily'][d['companies'][0]['sym']].update(bars=bars(700)),
-                         'short_price_history_fixed_chart_labels')
+        data, mk = complete_dataset()
+        mk['daily'][data['companies'][0]['sym']]['bars'] = bars(54)
+        D = build.assemble(data, mk, mk, NOW)[0]
+        self.assertEqual(D['companies'][0]['history']['count'], 54)
+        self.assertFalse(D['companies'][0]['history']['high52Available'])
+        self.assertNotIn('short_price_history_fixed_chart_labels', D['meta']['blockers'])
 
     def test_repeated_fetch_saves_receipts_but_reports_unchanged(self):
         data, mk = complete_dataset()

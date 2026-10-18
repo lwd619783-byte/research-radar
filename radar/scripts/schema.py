@@ -14,6 +14,11 @@ MARKETS = {"A股", "港股", "美股", "台股", "韩股", "日股", "欧股"}
 TIGHTNESS = {"极紧": "🔴极紧", "偏紧": "🟠偏紧", "缓解中": "🟢缓解中"}
 SCORE_KEYS = ("boom", "delivery", "choke", "valuation")
 MARKET_CUR = {"A股": "CNY", "港股": "HKD", "美股": "USD", "台股": "TWD", "韩股": "KRW", "日股": "JPY", "欧股": "EUR"}
+FIN_STRINGS = ('source_name', 'source_url', 'period_end', 'published_at', 'verified_at', 'basis',
+               'currency', 'accounting_basis', 'fiscal_year', 'fiscal_period', 'profit_metric',
+               'revenue_scope', 'profit_scope', 'margin_scope', 'report_status', 'profit_comparison',
+               'derivation', 'calculation_note', 'review_note')
+FIN_LISTS = ('source_urls', 'conditions')
 
 
 class Report:
@@ -193,15 +198,26 @@ def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = 
             rep.warn(w, f"next_earnings {nxt} 已过去：更新 fin / flash，并改成下一次财报日（未知就留空）")
         fin = x.get("fin", {})
         for k in fin:
-            if k not in ("period", "revenue_yoy", "profit_yoy", "gross_margin", "source_name", "source_url", "period_end", "published_at", "verified_at", "basis"):
+            if k not in ('period', 'revenue_yoy', 'profit_yoy', 'gross_margin', 'conditions_reviewed', *FIN_STRINGS, *FIN_LISTS):
                 rep.err(w, f"fin 里有未知字段 {k}")
-        evidence = {k: _str(rep, w, fin, k, False) for k in ('source_name', 'source_url', 'period_end', 'published_at', 'verified_at', 'basis')}
+        evidence = {k: _str(rep, w, fin, k, False) for k in FIN_STRINGS}
+        for k in FIN_LISTS:
+            value = fin.get(k, [])
+            if not isinstance(value, list) or any(not isinstance(v, str) or not v.strip() for v in value):
+                rep.err(w, f'fin.{k} 必须是非空字符串数组')
+                value = []
+            evidence[k] = value
+        evidence['conditions_reviewed'] = fin.get('conditions_reviewed', False)
+        if not isinstance(evidence['conditions_reviewed'], bool):
+            rep.err(w, 'fin.conditions_reviewed 必须是布尔值')
         if evidence['source_url'] and not re.match(r'^https://[^/\s]+(?:/[^\s]*)?$', evidence['source_url']):
             rep.err(w, 'fin.source_url 必须是 HTTPS 来源链接')
         for k in ('period_end', 'published_at', 'verified_at'):
             _date(rep, w, evidence[k], f'fin.{k}')
-        if not all(evidence.values()):
-            rep.warn(w, '财务来源/日期/单季口径待核；构建不使用无证据财务数值')
+        from integrity import financial_status
+        status = financial_status(evidence, today)
+        if status != 'verified':
+            rep.warn(w, f'财务证据/口径待核（{status}）；构建不使用未核实财务数值')
         pct = lambda k: (lambda v: None if v is None else v / 100)(_num(rep, w, fin.get(k), f"fin.{k}"))
         gm = pct("gross_margin")
         if gm is not None and not -1 <= gm <= 1:

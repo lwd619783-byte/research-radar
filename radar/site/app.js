@@ -64,7 +64,7 @@ const hlDates=s=>s.replace(/(\d{1,2}\/\d{1,2})/g,'<span class="dt">$1</span>');
 
 /* ---------- data ---------- */
 const CO=D.companies,byId={},byInd={},byCp={};
-function perfSig(c){const g=fin(c.earng)?c.earng:c.revg;if(!fin(g))return{k:'na',l:'—',r:0};if(g>=.5)return{k:'p1',l:'高增',r:4};if(g>=.1)return{k:'p2',l:'增长',r:3};if(g>-.1)return{k:'p3',l:'平稳',r:2};return{k:'p4',l:'下滑',r:1}}
+function perfSig(c){if(!c.financialSignalEligible)return{k:'na',l:'待核/不适用',r:0};const g=fin(c.earng)?c.earng:c.revg;if(!fin(g))return{k:'na',l:'—',r:0};if(g>=.5)return{k:'p1',l:'高增',r:4};if(g>=.1)return{k:'p2',l:'增长',r:3};if(g>-.1)return{k:'p3',l:'平稳',r:2};return{k:'p4',l:'下滑',r:1}}
 function pxSig(c){const r=c.r20,d=c.dd52;if(!fin(r))return{k:'na',l:'—',r:0};if(r>=.05)return{k:'x1',l:'走强',r:4};if(fin(d)&&d<=-.4)return{k:'x4',l:'深度回调',r:1};if(r<=-.1)return{k:'x3',l:'回调',r:2};return{k:'x2',l:'震荡',r:3}}
 CO.forEach(c=>{c.sd=c.sd||[];c.sc=c.sc||[];let t=Date.parse((c.s0||TODAY)+'T00:00:00Z');c.t=c.sd.map(d=>(t+=d*864e5));c.short=/[\u4e00-\u9fff]/.test(c.name)?c.name.split(' ')[0]:c.name;c.perf=perfSig(c);c.px=pxSig(c);byId[c.id]=c;(byInd[c.ind]=byInd[c.ind]||[]).push(c);(byCp[c.cp]=byCp[c.cp]||[]).push(c)});
 const IND=D.industries.slice().sort((a,b)=>b.total-a.total);
@@ -116,7 +116,7 @@ function renderHero(){
 function nextEvents(cos,n){const m={};cos.filter(c=>c.next&&c.next>=TODAY).forEach(c=>{(m[c.next]=m[c.next]||[]).push(c)});return Object.keys(m).sort().slice(0,n).map(d=>({d,cs:m[d]}))}
 function renderTop(){
   const d=TOP,cps=cpsOf(d.name),cos=byInd[d.name]||[];
-  const r20=mean(cos.map(c=>c.r20)),dd=mean(cos.map(c=>c.dd52)),rev=median(cos.map(c=>c.revg));const C=2*Math.PI*48;
+  const r20=mean(cos.map(c=>c.r20)),dd=mean(cos.map(c=>c.dd52)),rev=median(cos.filter(c=>c.financialRevenueComparable).map(c=>c.revg));const C=2*Math.PI*48;
   const cpCol=(cp,i)=>{const T=TIGHT[cp.tight]||{k:'t2'};return`<div class="cp-col ${T.k}" style="--tc:${TC[T.k]}"><div class="cp-col-h"><span class="cp-idx">卡点 0${i+1}</span>${tbBadge(cp.tight)}</div><div class="cp-name">${esc(cp.name)}</div><div class="cp-seg" title="${esc(cp.seg)}">${esc(cp.seg)}</div>${(byCp[cp.name]||[]).map(leadRow).join('')}</div>`};
   $('#topCard').innerHTML=`<div class="card-h"><div class="card-t">${ICON.target}主线拆解 · ${esc(d.name)}</div>${lvBadge(d.total)}</div>
   <div class="top-strip">
@@ -180,7 +180,7 @@ function findCo(token){token=token.trim();return CO.find(c=>c.short===token||c.n
 function renderIndDetail(){
   const d=IND.find(x=>x.name===S.sel),cos=byInd[d.name]||[],cps=cpsOf(d.name),i=IND.indexOf(d),lv=levelOf(d.total);
   const reps=d.reps.split(/[、,，]/).map(s=>s.trim()).filter(Boolean);
-  const rs=cos.length?[['龙头近20日 · 均值',mean(cos.map(c=>c.r20))],['距52周高点 · 均值',mean(cos.map(c=>c.dd52))],['单季营收同比 · 中位数',median(cos.map(c=>c.revg))]]:null;
+  const rs=cos.length?[['龙头近20日 · 均值',mean(cos.map(c=>c.r20))],['距52周高点 · 均值',mean(cos.map(c=>c.dd52))],['单季营收同比 · 中位数',median(cos.filter(c=>c.financialRevenueComparable).map(c=>c.revg))]]:null;
   const el=$('#indDetail');
   el.innerHTML=`<div class="fade-swap"><div class="dt-h"><div><div class="eyebrow">#${String(i+1).padStart(2,'0')} · ${lv.l}</div><h3>${esc(d.name)}</h3></div><div class="dt-score"><b class="num">${d.total}</b><span> / 20</span></div></div>
   <div class="dt-body"><div>${radarSVG()}</div><div class="rstats">${rs?rs.map(r=>`<div class="rstat"><div class="l">${r[0]}</div><div class="v num ${ud(r[1])}">${pct(r[1])}</div></div>`).join('')+`<div class="hint">基于 ${cos.length} 家细分龙头</div>`:`<div class="rstat"><div class="l">龙头数据</div><div class="v" style="font-size:13px;font-weight:500;color:var(--text-2)">该行业暂未拆解卡点与龙头，低频跟踪即可</div></div>`}</div></div>
@@ -238,13 +238,13 @@ function renderMap(){const box=$('#treemap');if(!box||!box.offsetWidth)return;co
   Object.keys(tiles).forEach(id=>{if(!seen[id])tiles[id].classList.add('gone')});
   $('#mapLabels').innerHTML=labels;
   const P=pal(),ramp=M.neg?`linear-gradient(90deg,${P.down},${P.neu})`:`linear-gradient(90deg,${P.down},${P.neu},${P.up})`;
-  $('#mapLegend').innerHTML=`<span>${M.l}</span>${M.neg?`<span class="num">${pct(-M.dom,0)}</span><span class="ramp" style="background:${ramp}"></span><span class="num">0%</span>`:`<span class="num">${pct(-M.dom,0)}</span><span class="ramp" style="background:${ramp}"></span><span class="num">${pct(M.dom,0)}</span>`}<span>· 灰色 = 暂无数据</span><span class="sp"></span><span>${list.length} 家 · 面积 ≈ 市值(美元)^0.4，小市值设最小面积</span>`}
+  $('#mapLegend').innerHTML=`<span>${M.l}</span>${M.neg?`<span class="num">${pct(-M.dom,0)}</span><span class="ramp" style="background:${ramp}"></span><span class="num">0%</span>`:`<span class="num">${pct(-M.dom,0)}</span><span class="ramp" style="background:${ramp}"></span><span class="num">${pct(M.dom,0)}</span>`}<span>· 灰色 = 暂无数据</span><span class="sp"></span><span>${list.length} 家 · 面积 ≈ 市值(美元)^0.4，小市值设最小面积；市值缺失用占位面积</span>`}
 function tileTip(c){const M=METRICS.find(m=>m.k===S.metric);return`<div class="tt">${esc(c.name)}</div><div class="muted" style="font-size:11px">${esc(c.code)} · ${esc(c.mkt)} · ${esc(c.cp)}</div>
   <div style="margin:6px 0 4px">${sgBadges(c)}</div>
   <div class="tr"><span>${M.l}</span><b class="num ${ud(c[M.k])}">${pct(c[M.k])}</b></div>
   ${M.k!=='r20'?`<div class="tr"><span>近20日</span><b class="num ${ud(c.r20)}">${pct(c.r20)}</b></div>`:''}
   <div class="tr"><span>营收 / 净利同比</span><b class="num"><span class="${ud(c.revg)}">${pct(c.revg)}</span> / <span class="${ud(c.earng)}">${pct(c.earng)}</span></b></div>
-  <div class="tr"><span>市值</span><b>${mcapStr(c.mcapUSD)}</b></div>${spark(c,120,240,36)}<div class="muted" style="font-size:10.5px">近120个交易日 · 点击查看详情</div>`}
+  <div class="tr"><span>市值</span><b>${mcapStr(c.mcapUSD)}</b></div>${spark(c,120,240,36)}<div class="muted" style="font-size:10.5px">${c.sc.length>=120?'近120个交易日':`短历史 · 实际 ${c.sc.length} 个交易日`} · 点击查看详情</div>`}
 
 /* ---------- table ---------- */
 const PL={r5:'近5日',r20:'近20日',r60:'近60日',ytd:'年初至今',dd52:'距高点',revg:'营收同比',earng:'净利同比'};
@@ -263,7 +263,7 @@ function renderTable(){const col=COLS.find(x=>x.k===S.sort.k)||COLS[6],dir=S.sor
   const rows=filtered().slice().sort((a,b)=>{const x=col.v(a),y=col.v(b);if(x==null&&y==null)return 0;if(x==null)return 1;if(y==null)return -1;return(col.s?String(x).localeCompare(String(y),'zh'):x-y)*dir});
   $('#tbl').innerHTML=`<thead><tr>${COLS.map(c=>`<th class="${c.c||''} ${c.k===S.sort.k?'sorted':''}" data-sort="${c.ns?'':c.k}">${c.l}${c.k===S.sort.k?`<span class="ar">${dir<0?'↓':'↑'}</span>`:''}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr data-co="${r.id}">${COLS.map(c=>`<td class="${c.c||''}">${c.f(r)}</td>`).join('')}</tr>`).join('')}</tbody>`}
 function renderLeaders(){if(S.view==='map'){$('#mapCard').hidden=false;$('#tableCard').hidden=true;renderMap()}else{$('#mapCard').hidden=true;$('#tableCard').hidden=false;renderTable()}
-  $('#leadSub').textContent=S.view==='map'?'按行业 → 卡点分组 · 面积≈市值（压缩显示）· 颜色=所选指标 · 点击查看走势与财务':'点击表头排序 · 点击行查看走势与财务 · 颜色：'+(S.conv==='cn'?'红涨绿跌':'绿涨红跌')}
+  $('#leadSub').textContent=S.view==='map'?'按行业 → 卡点分组 · 已知市值决定面积；缺失用占位面积 · 颜色=所选指标 · 点击查看走势与财务':'点击表头排序 · 点击行查看走势与财务 · 颜色：'+(S.conv==='cn'?'红涨绿跌':'绿涨红跌')}
 
 /* ---------- calendar ---------- */
 function renderCal(){const list=CO.filter(c=>c.next&&c.next>=TODAY).sort((a,b)=>a.next.localeCompare(b.next)||(b.mcapUSD||0)-(a.mcapUSD||0)),dates=Array.from(new Set(list.map(c=>c.next)));
@@ -275,6 +275,11 @@ function renderCal(){const list=CO.filter(c=>c.next&&c.next>=TODAY).sort((a,b)=>
   $('#cal').innerHTML=h;$('#calLegend').innerHTML=KEY_IND.map(n=>`<span><i style="background:${IC(n)}"></i>${esc(n)}</span>`).join('')}
 
 /* ---------- drawer ---------- */
+const FIN_BASIS={single_quarter:'单季',half_year:'半年累计',cumulative:'累计',annual:'全年'};
+function finLabel(c){const f=c.provenance?.financial||{};if(f.status!=='verified')return'财务待核实';return[c.period,FIN_BASIS[f.basis]||'口径待核',f.currency,f.report_status==='preliminary'?'初步结果':f.report_status==='revenue_only'?'仅收入':f.profit_comparison==='turnaround'?'扭亏·利润同比不适用':f.profit_comparison==='one_off'?'利润含一次性项目':''].filter(Boolean).join(' · ')}
+function finDetail(c){const f=c.provenance?.financial||{};return[finLabel(c),f.accounting_basis,f.profit_metric,f.revenue_scope,f.profit_scope,f.margin_scope,f.source_name,`披露 ${f.published_at||'未知'} · 核验 ${f.verified_at||'未知'}`,...(f.source_urls||[]),...(f.conditions||[])].filter(Boolean).join('；')}
+function peLabel(c){const s=c.provenance?.valuation?.peStatus;return s==='nonpositive'?'PE(TTM) 非正':s==='invalid'?'PE(TTM) 无效':s==='missing'?'PE(TTM) 缺失':'PE(TTM)'}
+function rangeComplete(c,r){if(c.t.length<2)return false;const last=c.t[c.t.length-1],cut=r==='ytd'?Date.UTC(new Date(last).getUTCFullYear(),0,1):last-({'1m':31,'3m':92,'6m':183,'1y':366,'2y':731}[r]||0)*864e5;return c.t[0]<=cut}
 const ORDER=CO.map(c=>c.id);
 function openDrawer(id){const c=byId[id];if(!c)return;S.drawer=id;const cp=CP.find(x=>x.name===c.cp),k=ORDER.indexOf(id);hideTip();
   const dr=$('#drawer');
@@ -283,14 +288,14 @@ function openDrawer(id){const c=byId[id];if(!c)return;S.drawer=id;const cp=CP.fi
   <div class="dw-price"><span class="big num">${fmtPrice(c)}</span><span class="chg num ${ud(c.r1d)}">${pct(c.r1d,2)}</span><span class="meta">${c.ld?`最近交易日 ${c.ld}${c.stale?' · 行情暂未更新':''}`:'暂无行情'} · 市值约 ${mcapStr(c.mcapUSD)} · 第 ${k+1}/${ORDER.length} 家</span></div>
   <div class="dw-range"><div class="seg" id="rangeSeg"></div></div>
   <div class="dw-chart" id="dwChart"></div>
-  <div class="mgrid">${[['近5日',c.r5],['近20日',c.r20],['近60日',c.r60],['年初至今',c.ytd],['距52周高点',c.dd52]].map(m=>`<div class="mt"><div class="l">${m[0]}</div><div class="v num ${ud(m[1])}">${pct(m[1])}</div></div>`).join('')}</div>
-  <div class="dw-sec">近期财务<span>${esc(c.period||'')}${c.mkt==='A股'?' · 单季同比（累计数倒算）':''}</span></div>
-  <div class="mgrid four">${[['营收同比',pct(c.revg),ud(c.revg)],['净利同比',pct(c.earng),ud(c.earng)],['毛利率',fin(c.gm)?(c.gm*100).toFixed(1)+'%':'—',''],['PE(TTM)',fin(c.pe)?c.pe.toFixed(1):'—','']].map(m=>`<div class="mt"><div class="l">${m[0]}</div><div class="v num ${m[2]}">${m[1]}</div></div>`).join('')}</div>
-  ${c.flash?`<div class="flash-box">${ICON.bolt}<div><div class="t">业绩快讯</div><p>${hlDates(esc(c.flash))}</p></div></div>`:''}
+  <div class="mgrid">${[['近5日',c.r5],['近20日',c.r20],['近60日',c.r60],['年初至今',c.ytd],[c.history?.high52Available?'距52周高点':'52周数据不足',c.dd52]].map(m=>`<div class="mt"><div class="l">${m[0]}</div><div class="v num ${ud(m[1])}">${pct(m[1])}</div></div>`).join('')}</div>
+  <div class="dw-sec" data-tip="${esc(finDetail(c))}">近期财务<span>${esc(finLabel(c))}</span></div>
+  <div class="mgrid four">${[['营收同比',pct(c.revg),ud(c.revg)],['净利同比',pct(c.earng),ud(c.earng)],['毛利率',fin(c.gm)?(c.gm*100).toFixed(1)+'%':'—',''],[peLabel(c),fin(c.pe)?c.pe.toFixed(1):'—','']].map(m=>`<div class="mt"><div class="l">${m[0]}</div><div class="v num ${m[2]}">${m[1]}</div></div>`).join('')}</div>
+  ${c.flash?`<div class="flash-box">${ICON.bolt}<div><div class="t">业绩快讯 · 待核实</div><p>${hlDates(esc(c.flash))}</p></div></div>`:''}
   ${c.view?`<div class="view-box"><div class="t">一句话看点</div><p>${esc(c.view)}</p></div>`:''}
   <div class="dw-next">${ICON.cal}${c.next?`下次财报 <b>${md(c.next)} ${wd(c.next)}</b><span class="cd">${daysTo(c.next)} 天后</span>`:'下次财报日期待定'}</div>
   <div class="dw-actions">${c.url?`<a class="btn primary" href="${esc(c.url)}" target="_blank" rel="noopener">${ICON.book}知识库笔记 ${ICON.ext}</a>`:''}<button class="btn${c.url?'':' primary'}" data-gocp="${esc(c.ind)}" data-cpname="${esc(c.cp)}">查看所在卡点 ${ICON.arrow}</button></div></div>`;
-  seg($('#rangeSeg'),[{v:'1m',l:'1月'},{v:'3m',l:'3月'},{v:'6m',l:'6月'},{v:'ytd',l:'年初至今'},{v:'1y',l:'1年'},{v:'2y',l:'2年'}],S.range,v=>{S.range=v;drawChart(c)});
+  seg($('#rangeSeg'),[{v:'1m',l:'1月'},{v:'3m',l:'3月'},{v:'6m',l:'6月'},{v:'ytd',l:'年初至今'},{v:'1y',l:'1年'},{v:'2y',l:'2年'}].map(o=>({...o,l:rangeComplete(c,o.v)?o.l:o.l+'·不足'})),S.range,v=>{S.range=v;drawChart(c)});
   dr.classList.add('on');dr.setAttribute('aria-hidden','false');$('#mask').classList.add('on');document.body.style.overflow='hidden';
   requestAnimationFrame(()=>{drawChart(c);moveThumb($('#rangeSeg'))})}
 function closeDrawer(){const dr=$('#drawer');dr.classList.remove('on');dr.setAttribute('aria-hidden','true');$('#mask').classList.remove('on');document.body.style.overflow='';S.drawer=null}
@@ -305,7 +310,7 @@ function drawChart(c){const box=$('#dwChart');if(!box)return;const W=Math.max(28
   let g='';for(let j=0;j<4;j++){const v=mn+(mx-mn)*(j+.5)/4,y=Y(v);g+=`<line class="gl" x1="${pl}" x2="${W-pr}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}"/><text class="ax" x="${W-pr+8}" y="${(y+3.5).toFixed(1)}">${fmtAx(v)}</text>`}
   const xi=[0,Math.round((V.length-1)/2),V.length-1],xl=xi.map((i,j)=>`<text class="ax" x="${X(i).toFixed(1)}" y="${H-7}" text-anchor="${j===0?'start':j===2?'end':'middle'}">${fmtDay(T[i],long)}</text>`).join('');
   const hi=showHi?`<line class="hi" x1="${pl}" x2="${W-pr}" y1="${Y(c.hi52).toFixed(1)}" y2="${Y(c.hi52).toFixed(1)}"/><text class="ax hi-t" x="${pl+4}" y="${(Y(c.hi52)-5).toFixed(1)}">52周高点 ${fmtAx(c.hi52)}</text>`:'';
-  box.innerHTML=`<div class="ch-h"><span class="muted">区间涨跌</span><b class="num ${ud(chg)}">${pct(chg)}</b><span class="muted">· ${fmtDay(T[0])} – ${fmtDay(T[T.length-1])}</span></div><svg class="chart ${k}" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${g}${hi}<path d="${d}L${X(V.length-1).toFixed(1)},${H-pb}L${X(0)},${H-pb}Z" fill="url(#g-${k})"/><path class="line" d="${d}"/>${xl}<circle class="lastdot" cx="${X(V.length-1).toFixed(1)}" cy="${Y(V[V.length-1]).toFixed(1)}" r="3" style="fill:var(--${k})"/><g class="cross" style="opacity:0"><line class="cx" y1="${pt}" y2="${H-pb}"/><circle class="cd" r="4.5"/></g><rect class="hit" x="${pl}" y="0" width="${W-pl-pr}" height="${H}" fill="transparent"/></svg><div class="ch-tip"></div>`;
+  box.innerHTML=`<div class="ch-h"><span class="muted">${rangeComplete(c,range)?'区间涨跌':`短历史 · 实际${V.length}日`}</span><b class="num ${ud(chg)}">${pct(chg)}</b><span class="muted">· ${new Date(T[0]).toISOString().slice(0,10)} – ${new Date(T[T.length-1]).toISOString().slice(0,10)}</span></div><svg class="chart ${k}" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${g}${hi}<path d="${d}L${X(V.length-1).toFixed(1)},${H-pb}L${X(0)},${H-pb}Z" fill="url(#g-${k})"/><path class="line" d="${d}"/>${xl}<circle class="lastdot" cx="${X(V.length-1).toFixed(1)}" cy="${Y(V[V.length-1]).toFixed(1)}" r="3" style="fill:var(--${k})"/><g class="cross" style="opacity:0"><line class="cx" y1="${pt}" y2="${H-pb}"/><circle class="cd" r="4.5"/></g><rect class="hit" x="${pl}" y="0" width="${W-pl-pr}" height="${H}" fill="transparent"/></svg><div class="ch-tip"></div>`;
   const line=$('.line',box);try{const L=line.getTotalLength();line.style.strokeDasharray=L;line.style.strokeDashoffset=L;line.getBoundingClientRect();line.style.transition='stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1)';line.style.strokeDashoffset='0'}catch(e){}
   const svg=$('svg',box),cr=$('.cross',svg),cx=$('.cx',svg),cd=$('.cd',svg),tp=$('.ch-tip',box),hit=$('.hit',svg);
   const mv=e=>{const r=svg.getBoundingClientRect(),x=(e.clientX-r.left)*(W/r.width);let i=Math.round((x-pl)/(W-pl-pr)*(V.length-1));i=Math.max(0,Math.min(V.length-1,i));const px=X(i),py=Y(V[i]);cx.setAttribute('x1',px);cx.setAttribute('x2',px);cd.setAttribute('cx',px);cd.setAttribute('cy',py);cr.style.opacity=1;const ch=V[i]/V[0]-1;tp.innerHTML=`<b>${new Date(T[i]).toISOString().slice(0,10)}</b>&nbsp; ${fmtAx(V[i])} &nbsp;<span class="${ud(ch)}">${pct(ch)}</span>`;tp.style.left=Math.max(70,Math.min(W-90,px*(r.width/W)))+'px';tp.classList.add('on')};
@@ -373,9 +378,9 @@ $('#icSearch').innerHTML=ICON.search;$('#icSearch2').innerHTML=ICON.search;
 
 /* ---------- footer ---------- */
 function renderFoot(){$('#foot').innerHTML=`<div class="foot-grid">
-  <div><div class="bl">${ICON.grid}数据口径</div><p>行情：Yahoo Finance（备用：腾讯财经），截至 ${ASOFL}${STALE.length?`，${STALE.length} 只暂用上次数据`:''}；比值：腾讯财经指数月线。财务：最新一期单季同比，A股由累计数倒算单季；「业绩快讯」来自三季报预告、快报或财报要点。市值按当日汇率折算美元，仅用于热力图面积。</p></div>
-  <div><div class="bl">${ICON.target}信号规则</div><p>业绩（看净利同比，缺失时看营收）：高增 ≥ 50% · 增长 ≥ 10% · 平稳 &gt; −10% · 其余为下滑。<br>股价：走强 = 近20日 ≥ +5%；深度回调 = 距52周高点 ≤ −40%；回调 = 近20日 ≤ −10%；其余为震荡。</p></div>
-  <div><div class="bl">${ICON.alert}说明</div><p>评分与观点由仓库 radar/data 维护，合并 PR 后自动更新；行情每个交易日刷新 3 次。本页仅用于研究跟踪，不构成投资建议。</p>${REPO?`<a class="btn" href="${esc(REPO)}" target="_blank" rel="noopener">打开 GitHub 仓库 ${ICON.ext}</a>`:''}</div></div>
+  <div><div class="bl">${ICON.grid}数据口径</div><p>行情：Yahoo Finance（备用：腾讯财经），截至 ${ASOFL}${STALE.length?`，${STALE.length} 只暂用上次数据`:''}；比值：腾讯财经指数月线。财务：按公司所列期别、币种及会计口径；单季中位数只含已核实正式单季。缺失、半年累计、初步结果与扭亏不作为普通季度增长信号；详情悬停查看来源与核验日期。业绩快讯待核实。市值仅用报价同日历史汇率折算美元；缺失用占位面积。</p></div>
+  <div><div class="bl">${ICON.target}信号规则</div><p>业绩（已核实正式单季、三项齐备且利润可比）：高增 ≥ 50% · 增长 ≥ 10% · 平稳 &gt; −10% · 其余为下滑。<br>股价：走强 = 近20日 ≥ +5%；深度回调 = 距52周高点 ≤ −40%；回调 = 近20日 ≤ −10%；其余为震荡。</p></div>
+  <div><div class="bl">${ICON.alert}说明</div><p>评分与观点由仓库 radar/data 维护，当前为验收版本，自动刷新与发布未启用。本页仅用于研究跟踪，不构成投资建议。</p>${REPO?`<a class="btn" href="${esc(REPO)}" target="_blank" rel="noopener">打开 GitHub 仓库 ${ICON.ext}</a>`:''}</div></div>
   <div class="foot-b">投研雷达 · ALPHA RADAR · 更新于 ${D.meta.generatedAt?md(D.meta.generatedAt.slice(0,10))+' '+D.meta.generatedAt.slice(11,16):TODAY} · 快捷键：${isMac?'⌘K':'Ctrl K'} 搜索 · ←/→ 切换公司 · Esc 关闭</div>`;
   $('#sigLegend').innerHTML=`<span>业绩：<span class="sg p1">高增</span> ≥50% <span class="sg p2">增长</span> ≥10% <span class="sg p3">平稳</span> <span class="sg p4">下滑</span></span><span>股价：<span class="sg x1">走强</span> 近20日≥+5% <span class="sg x3">回调</span> ≤−10% <span class="sg x4">深度回调</span> 距高点≤−40% <span class="sg x2">震荡</span></span>`}
 

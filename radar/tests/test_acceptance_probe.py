@@ -147,7 +147,7 @@ class QualityTests(unittest.TestCase):
     def test_fx_inverse_direction(self):
         h=probe.ProbeHttp(probe.Budget(),'yahoo')
         h.documents=[{'chart':{'result':[{'meta':{'regularMarketPrice':2.}}]}}]
-        value=record(value=.5,asOf=NOW.date().isoformat())
+        value=record(value=.5,asOf=NOW.date().isoformat(),rates=[[NOW.date().isoformat(),.5,2.]])
         self.assertTrue(probe.fx_quality(value,h,'EUR')[0]['directionVerified'])
         self.assertFalse(probe.fx_quality(value,h,'CNY')[0]['directionVerified'])
 

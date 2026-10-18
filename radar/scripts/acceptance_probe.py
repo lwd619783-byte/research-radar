@@ -24,7 +24,7 @@ from zoneinfo import ZoneInfo
 
 import build
 import quotes
-from integrity import ZONES, financial_status, fresh_record, observation_time, valid_bars
+from integrity import ZONES, financial_status, fresh_record, observation_time, valid_bars, pe_status
 
 ROOT = Path(__file__).resolve().parents[2]
 MAX_REQUESTS = 240  # 119 planned GETs, at most one 429 retry each; 2 spare.
@@ -218,13 +218,13 @@ def index_quality(value, h):
 
 
 def fx_quality(value, h, currency):
-    meta = chart_meta(h)
-    price = meta.get('regularMarketPrice')
+    history = value.get('rates') or []
+    price = history[-1][2] if history else None
     fields = {'positiveRate': quotes.positive(value.get('value')), 'sourcePricePresent': quotes.positive(price),
               'directionVerified': quotes.positive(price) and value.get('value') == (1/price if currency == 'EUR' else price),
               'dateValid': date_ok(value.get('asOf')),
               'dateFresh': fresh_record(value, dt.datetime.now(dt.UTC), value.get('asOf')) if value.get('asOf') else False}
-    return fields, {'count': 1 if fields['positiveRate'] else 0, 'asOf': value.get('asOf'),
+    return fields, {'count': len(history), 'asOf': value.get('asOf'), 'dates': [r[0] for r in history],
                     'direction': 'USD-to-local', 'inverted': currency == 'EUR'}, True
 
 
@@ -253,7 +253,8 @@ def inspect(category, code, source, budget, fetch, quality):
         row.update(checks=fields, details=details, quality=all(fields.values()))
         row['publicationGate'] = row['quality'] and bool(gate)
     except Exception as exc:
-        row['failure'] = str(exc) if isinstance(exc, StopProbe) else type(exc).__name__
+        row['failure'] = str(exc) if isinstance(exc, (StopProbe, quotes.SourceDataError)) else type(exc).__name__
+        if isinstance(exc, quotes.SourceDataError): row['details']['count'] = exc.count
         # No server exception text, URLs, local paths, response fields, cookies or crumb.
         row['parse'] = bool(h.documents) and not (isinstance(exc, StopProbe) and str(exc) == 'json_parse_failed')
     row['connection'] = any(e.get('httpStatus') == 200 for e in h.events)
@@ -267,7 +268,7 @@ def inventory(data):
     return companies, [c for c in companies if c['mkt'] in ('A股', '港股') and quotes.tencent_code(c['sym'])], sorted({c['cur'] for c in companies}-{'USD'})
 
 
-def collect(data, budget):
+def collect(data, budget, market_sink=None):
     companies, tencent, currencies = inventory(data)
     rows = []
     mk = {k: {} for k in ('daily', 'quote', 'index', 'fx', 'ratio')}
@@ -299,13 +300,13 @@ def collect(data, budget):
                      'connection':bool(batch.get('connection')), 'parse':bool(batch.get('parse')),
                      'quality':all(fields.values()), 'publicationGate':all(fields.values()),
                      'checks':fields,'details':{'count':int(bool(v)),'asOf':d,'observedAt':observed.isoformat() if observed else None,
-                                              'receivedAt':v.get('receivedAt')},'requests':[]})
+                                              'receivedAt':v.get('receivedAt'), 'peStatus':pe_status(v.get('trailingPE'))},'requests':[]})
     quote_session = {'failure':quote_failure,'requests':h.events,'batches':h.batches,'expectedBatchSizes':[len(companies[i:i+40]) for i in range(0,len(companies),40)],'returned':len(values),
                      'cookieAvailable':bool(list(h.jar)),'crumbAvailable':bool(h._crumb)}
     for x in data['config']['indices']:
         for source in ('yahoo', 'tencent') if x.get('tencent') else ('yahoo',):
             row,value = inspect('index-'+source, x['symbol'],source,budget,
-                                lambda h: quotes.index_quote(h,x['symbol'],x.get('tencent','')),index_quality)
+                                lambda h: quotes.index_quote(h,x['symbol'],x.get('tencent',''),source=source),index_quality)
             rows.append(row)
             if source == 'yahoo' and value: mk['index'][x['symbol']] = value
     for cur in currencies:
@@ -328,11 +329,13 @@ def collect(data, budget):
     for category in sorted({r['category'] for r in rows}):
         group=[r for r in rows if r['category']==category]
         summary[category]={'planned':len(group),**{k:sum(bool(r[k]) for r in group) for k in ('connection','parse','quality','publicationGate')}}
+    if market_sink is not None:
+        market_sink.update(mk)
     return rows,summary,quote_session,gates
 
 
 def verify_frozen():
-    hashes=json.loads((ROOT/'audit/acceptance-frozen.json').read_text('utf-8'))
+    hashes=json.loads((ROOT/'audit/truthfulness-frozen.json').read_text('utf-8'))
     for name,expected in hashes.items():
         if hashlib.sha256((ROOT/name).read_bytes()).hexdigest()!=expected:
             raise StopProbe('frozen_hash_mismatch')

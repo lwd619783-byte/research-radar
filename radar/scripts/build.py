@@ -25,7 +25,7 @@ from zoneinfo import ZoneInfo
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import quotes  # noqa: E402
 from schema import load_and_validate  # noqa: E402
-from integrity import fresh_record, valid_bars, financial_status, release_blockers, number, observation_time
+from integrity import fresh_record, valid_bars, financial_status, release_blockers, number, observation_time, dated_fx, pe_status
 
 RADAR = Path(__file__).resolve().parents[1]
 REPO = RADAR.parent
@@ -76,6 +76,9 @@ def metrics(bars: list[list]) -> dict:
         "dd52": r4(bars[-1][1] / high - 1) if high else None,
         "hi52": high, "ld": ld,
         "s0": d0.isoformat(), "sd": sd, "sc": [sig4(b[1]) for b in bars],
+        "history": {"count": len(bars), "firstDate": bars[0][0], "lastDate": ld,
+                    "days": (dt.date.fromisoformat(ld) - d0).days,
+                    "high52Available": high is not None},
     }
 
 
@@ -193,7 +196,6 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
                 blockers.append('stale_quotes_not_safe_in_all_frozen_views')
             if len(d['bars']) < 120 or (dt.date.fromisoformat(m['ld']) - dt.date.fromisoformat(d['bars'][0][0])).days < 731:
                 issues.append({'symbol': s, 'kind': 'history', 'status': 'short_history'})
-                blockers.append('short_price_history_fixed_chart_labels')
         q = mk["quote"].get(s) or {}
         quote_date = None
         try:
@@ -205,34 +207,52 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
             pass
         if not quote_date or not fresh_record(q, now, quote_date, c['mkt']) or quote_date != m.get('ld'):
             q = {}
-        cur = (q.get("currency") or (d or {}).get("currency") or c["cur"])
+        # Quote/price currency is independent of the financial reporting currency.
+        cur = (d or {}).get('currency') or c['cur']
+        valuation_currency_ok = q.get('currency') == cur
         mcap = q.get("marketCap")
-        fx_same_date = cur == 'USD' or fx_meta.get(cur, {}).get('asOf') == quote_date
-        mcap_usd = round(mcap / fx[cur] / 1e8, 1) if quotes.positive(mcap) and cur in fx and fx_same_date else None
+        selected_fx = ({'value': 1., 'asOf': quote_date, 'src': 'USD-identity', 'direction': 'USD-to-local'}
+                       if cur == 'USD' and quote_date else dated_fx(mk['fx'].get(cur), cur, quote_date, now))
+        mcap_usd = round(mcap / selected_fx['value'] / 1e8, 1) if quotes.positive(mcap) and valuation_currency_ok and selected_fx else None
         pe = q.get("trailingPE")
+        pe_state = pe_status(pe)
         pe = round(pe, 1) if quotes.positive(pe) else None
         hi52 = m.get("hi52")
         row = {k: c[k] for k in ("id", "name", "code", "sym", "mkt", "role", "ind", "cp", "revg", "earng", "gm",
                                  "period", "flash", "view", "next", "url")}
         row.update({"cur": cur, "pe": pe, "mcapUSD": mcap_usd,
                     "price": None, "r1d": None, "r5": None, "r20": None, "r60": None, "ytd": None, "dd52": None,
-                    "s0": None, "sd": [], "sc": [], "ld": None})
+                    "s0": None, "sd": [], "sc": [], "ld": None, "history": {"count": 0}})
         row.update(m)
         row["hi52"] = round(hi52, 3 if hi52 < 10 else 2) if hi52 else None
         status = financial_status(c.get('financial'), now.date())
         row['provenance'] = {'daily': {k: (d or {}).get(k) for k in ('src', 'asOf', 'receivedAt', 'returnBasis', 'phase')},
                              'valuation': {'source': q.get('src'), 'asOf': quote_date if q else None,
                                            'receivedAt': q.get('receivedAt'), 'observedAt': q.get('regularMarketTime'),
-                                           'status': 'available' if q else 'missing'},
+                                           'status': 'available' if q else 'missing', 'peStatus': pe_state,
+                                           'currency': q.get('currency'), 'currencyMatches': valuation_currency_ok,
+                                           'fx': selected_fx,
+                                           'marketCapStatus': 'available' if mcap_usd is not None else 'missing_or_incompatible'},
                              'financial': {**c.get('financial', {}), 'status': status}}
         if status != 'verified':
             for key in ('revg', 'earng', 'gm'):
                 row[key] = None
             issues.append({'symbol': s, 'kind': 'financial', 'status': status})
-            # Existing flash/period/footer text still asserts current financials.
-            blockers.append('financial_evidence_missing_or_incompatible_with_frozen_text')
+            blockers.append('financial_evidence_incomplete')
+        fin = row['provenance']['financial']
+        if fin.get('profit_comparison') in ('turnaround', 'loss_base', 'not_disclosed'):
+            row['earng'] = None
+        row['financialSignalEligible'] = (status == 'verified' and fin.get('basis') == 'single_quarter'
+            and fin.get('report_status') == 'final' and fin.get('profit_comparison') == 'comparable'
+            and all(number(row[k]) for k in ('revg', 'earng', 'gm')))
+        row['financialRevenueComparable'] = (status == 'verified' and fin.get('basis') == 'single_quarter'
+            and fin.get('report_status') == 'final')
+        # Original free-text flash has no independent source/date contract.
+        row['flashStatus'] = 'unverified'
         if mcap_usd is None:
-            blockers.append('missing_market_cap_fixed_area_label')
+            issues.append({'symbol': s, 'kind': 'valuation', 'status': 'market_cap_unavailable'})
+        if pe_state != 'available':
+            issues.append({'symbol': s, 'kind': 'valuation', 'status': 'pe_' + pe_state})
         cos.append(row)
 
     a_dates = [c["ld"] for c in cos if c["mkt"] == "A股" and c["ld"]]
