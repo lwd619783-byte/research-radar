@@ -1,6 +1,7 @@
 """Render real fetched values for LOCAL review, while preserving release blockers."""
 import datetime as dt
 import hashlib
+import gzip
 import json
 from pathlib import Path
 import sys
@@ -9,13 +10,17 @@ sys.path.insert(0,str(ROOT/'radar/scripts'))
 import build
 from integrity import release_blockers
 HERE=Path(__file__).resolve().parent
-now=dt.datetime.now(build.BJ)
+manifest=json.loads((HERE/'fx-finality-capture.json').read_text())
+now=dt.datetime.fromisoformat(manifest['replayAt'])
+snapshot=HERE/'fixtures/market-finality.json.gz'
 data,report=build.load_and_validate(build.RADAR,ROOT,now.date())
 assert not report.errors,report.errors
-mk=json.loads(Path('/tmp/radar-live-market.json').read_text())
+raw=gzip.decompress(snapshot.read_bytes())
+assert hashlib.sha256(raw).hexdigest()==manifest['files'][snapshot.name]['uncompressedSHA256']
+mk=json.loads(raw)
 D,stale,missing=build.assemble(data,mk,mk,now)
 cs=D['companies']
-summary=dict(checkedAt=now.isoformat(),marketSnapshotSHA256=hashlib.sha256(Path('/tmp/radar-live-market.json').read_bytes()).hexdigest(),
+summary=dict(checkedAt=dt.datetime.now(dt.UTC).isoformat(),replayAt=now.isoformat(),marketSnapshotSHA256=hashlib.sha256(raw).hexdigest(),
              asOf=D['meta']['asOf'],companies=len(cs),missingDaily=len(missing),staleDaily=len(stale),
              financialVerified=sum(c['provenance']['financial']['status']=='verified' for c in cs),
              financialComplete=sum(all(c[k] is not None for k in ('revg','earng','gm')) for c in cs),
@@ -33,7 +38,7 @@ assert summary['financialComplete']==37
 assert summary['sameDateFx']==summary['mcapAvailable']==42
 assert sorted(summary['financialMissing'])==['DZSK','KBL']
 assert summary['blockers']==['financial_evidence_incomplete']
-(HERE/'integrated-data-review.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')
+(HERE/'fx-finality-replay.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')
 # Explicit local review rendering is not build.main and does not update any
 # production cache/fingerprint. Even this reviewed HTML stays release-blocked.
 D['meta']['reviewPreview']=True

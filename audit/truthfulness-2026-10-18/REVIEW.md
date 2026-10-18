@@ -1,5 +1,7 @@
 # 2026-10-18 数据真实性修复：待独立审计，未发布
 
+后续同轮审计修复及持久化回放证据见 [FX-FINALITY-AUDIT-FIX.md](FX-FINALITY-AUDIT-FIX.md)。下文保留首阶段历史事实；“仅在/tmp”的限制已由该补丁解决。
+
 ## 身份、执行配置与边界
 
 用户批准 `gpt-6-astra / high / Standard`。本执行端没有提供实际模型、推理级别、服务层的受理回执，因此实际配置仍**无法核实**，没有把授权偏好当成已生效配置。私有仓库身份经 GitHub API 确认：`lwd619783-byte/research-radar`，`private=true`，默认分支 `fix/radar-data-integrity`。2026-10-18 02:06:14 UTC fetch 后确认起点为 `414eb80626d3200dfebe4a010507c5fe74d7ca31`，从此建立 `fix/radar-truthfulness-2026-10-18`，保留原分支。初始工作区干净。未找到 AGENTS.md；已读 HANDOFF.md 与 `audit/INTERFACE-ACCEPTANCE-2026-10-17.md`。

@@ -11,7 +11,7 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
-from test_integrity import NOW, bars, build, dataset, months, quotes, record, financial_evidence
+from test_integrity import NOW, bars, build, dataset, months, quotes, record, financial_evidence, historical_fx
 
 
 def monthly_record(day='2026-10-16', denominator=False):
@@ -31,7 +31,7 @@ def complete_dataset():
         mk['quote'][c['sym']] = record(marketCap=1e10, trailingPE=20., currency=c['cur'], src='yahoo',
             regularMarketTime=dt.datetime(2026, 10, 16, 12, tzinfo=dt.UTC).timestamp())
         if c['cur'] != 'USD':
-            mk['fx'][c['cur']] = record(value=7., asOf='2026-10-16', src='synthetic')
+            mk['fx'][c['cur']] = historical_fx(c['cur'])
     for x in data['config']['indices']:
         mk['index'][x['symbol']] = record(price=3000., chg=.01, date='2026-10-16', phase='closed', src='synthetic')
     mk['ratio'] = {'cyb': monthly_record(), 'hl': monthly_record(denominator=True)}

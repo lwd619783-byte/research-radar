@@ -24,7 +24,7 @@ from zoneinfo import ZoneInfo
 
 import build
 import quotes
-from integrity import ZONES, financial_status, fresh_record, observation_time, valid_bars, pe_status
+from integrity import ZONES, financial_status, fresh_record, observation_time, valid_bars, pe_status, dated_fx
 
 ROOT = Path(__file__).resolve().parents[2]
 MAX_REQUESTS = 240  # 119 planned GETs, at most one 429 retry each; 2 spare.
@@ -223,6 +223,7 @@ def fx_quality(value, h, currency):
     fields = {'positiveRate': quotes.positive(value.get('value')), 'sourcePricePresent': quotes.positive(price),
               'directionVerified': quotes.positive(price) and value.get('value') == (1/price if currency == 'EUR' else price),
               'dateValid': date_ok(value.get('asOf')),
+              'finalDailyHistoryConfirmed': dated_fx(value, currency, value.get('asOf'), dt.datetime.now(dt.UTC)) is not None,
               'dateFresh': fresh_record(value, dt.datetime.now(dt.UTC), value.get('asOf')) if value.get('asOf') else False}
     return fields, {'count': len(history), 'asOf': value.get('asOf'), 'dates': [r[0] for r in history],
                     'direction': 'USD-to-local', 'inverted': currency == 'EUR'}, True

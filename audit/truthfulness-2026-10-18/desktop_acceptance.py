@@ -6,7 +6,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 HERE=Path(__file__).resolve().parent
 OUT=Path('/tmp/radar-desktop-review')
-SHOTS=HERE/'screenshots';SHOTS.mkdir(exist_ok=True)
+SHOTS=HERE/'screenshots-finality';SHOTS.mkdir(exist_ok=True)
 results=[]
 with sync_playwright() as p:
     browser=p.chromium.launch(executable_path='/usr/bin/chromium',headless=True)
@@ -57,5 +57,5 @@ assert results[0]['layout']==results[1]['layout'],results
 receipt=dict(checkedAt=dt.datetime.now(dt.UTC).isoformat(),viewport={'width':1440,'height':1000},
              browser='system Chromium via installed Playwright',results=results,
              screenshots={f.name:{'bytes':f.stat().st_size,'sha256':hashlib.sha256(f.read_bytes()).hexdigest()} for f in SHOTS.glob('*.png')})
-(HERE/'desktop-receipt.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n')
+(HERE/'desktop-finality-receipt.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n')
 print(json.dumps(receipt,ensure_ascii=False,indent=2))

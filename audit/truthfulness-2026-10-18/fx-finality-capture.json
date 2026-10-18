@@ -1,0 +1,374 @@
+{
+  "startedAt": "2026-10-18T02:38:09.727037+00:00",
+  "finishedAt": "2026-10-18T02:38:21.237893+00:00",
+  "replayAt": "2026-10-18T02:38:21.237897+00:00",
+  "legacyProducerSHA": "414eb80626d3200dfebe4a010507c5fe74d7ca31",
+  "originalSnapshotSHA256": "7104fc3546ed56aa9878e98c8c0632da0b776948fd4f12b6ac9af488555006d2",
+  "newRequests": 6,
+  "results": [
+    {
+      "currency": "CNY",
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:38:09.735506+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3641,
+          "receivedAt": "2026-10-18T02:38:11.601583+00:00",
+          "sha256": "76183a60fee2482acaaf983cc1428a2a6d2ff71c0de724e45270391497dc61c2"
+        }
+      ],
+      "checks": {
+        "positiveRate": true,
+        "sourcePricePresent": true,
+        "directionVerified": true,
+        "dateValid": true,
+        "finalDailyHistoryConfirmed": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 23,
+        "asOf": "2026-10-16",
+        "dates": [
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16"
+        ],
+        "direction": "USD-to-local",
+        "inverted": false
+      },
+      "quality": true,
+      "gate": true
+    },
+    {
+      "currency": "EUR",
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:38:11.609323+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3727,
+          "receivedAt": "2026-10-18T02:38:13.957479+00:00",
+          "sha256": "70314ef1bb8d228fc8089c4aa5f99d20b90daef7be346a8a1c96eb8970a07b8c"
+        }
+      ],
+      "checks": {
+        "positiveRate": true,
+        "sourcePricePresent": true,
+        "directionVerified": true,
+        "dateValid": true,
+        "finalDailyHistoryConfirmed": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 23,
+        "asOf": "2026-10-16",
+        "dates": [
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16"
+        ],
+        "direction": "USD-to-local",
+        "inverted": true
+      },
+      "quality": true,
+      "gate": true
+    },
+    {
+      "currency": "HKD",
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:38:13.964990+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3637,
+          "receivedAt": "2026-10-18T02:38:15.816407+00:00",
+          "sha256": "9269a631b7dabbdaff321a8b57599341ad2e56d0e8a62d7880854e662936f4e8"
+        }
+      ],
+      "checks": {
+        "positiveRate": true,
+        "sourcePricePresent": true,
+        "directionVerified": true,
+        "dateValid": true,
+        "finalDailyHistoryConfirmed": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 23,
+        "asOf": "2026-10-16",
+        "dates": [
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16"
+        ],
+        "direction": "USD-to-local",
+        "inverted": false
+      },
+      "quality": true,
+      "gate": true
+    },
+    {
+      "currency": "JPY",
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:38:15.824487+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3725,
+          "receivedAt": "2026-10-18T02:38:17.480539+00:00",
+          "sha256": "6401d0ad67308eb19c71683785ec38a70a3fe7f4cee4fa020e4346bdb59d74dc"
+        }
+      ],
+      "checks": {
+        "positiveRate": true,
+        "sourcePricePresent": true,
+        "directionVerified": true,
+        "dateValid": true,
+        "finalDailyHistoryConfirmed": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 23,
+        "asOf": "2026-10-16",
+        "dates": [
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16"
+        ],
+        "direction": "USD-to-local",
+        "inverted": false
+      },
+      "quality": true,
+      "gate": true
+    },
+    {
+      "currency": "KRW",
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:38:17.488204+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3603,
+          "receivedAt": "2026-10-18T02:38:19.106465+00:00",
+          "sha256": "d7f7bd317c0ae4068414b1cba8bc78e2695697776e0359626246aa305c036d7e"
+        }
+      ],
+      "checks": {
+        "positiveRate": true,
+        "sourcePricePresent": true,
+        "directionVerified": true,
+        "dateValid": true,
+        "finalDailyHistoryConfirmed": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 23,
+        "asOf": "2026-10-16",
+        "dates": [
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16"
+        ],
+        "direction": "USD-to-local",
+        "inverted": false
+      },
+      "quality": true,
+      "gate": true
+    },
+    {
+      "currency": "TWD",
+      "requests": [
+        {
+          "host": "query1.finance.yahoo.com",
+          "pathClass": "chart",
+          "attempt": 1,
+          "startedAt": "2026-10-18T02:38:19.113583+00:00",
+          "httpStatus": 200,
+          "status": "connected",
+          "bytes": 3698,
+          "receivedAt": "2026-10-18T02:38:20.876523+00:00",
+          "sha256": "61836648d1aa4566d5d3e65caab7c82866668f4ddbad877bb087222896e385dd"
+        }
+      ],
+      "checks": {
+        "positiveRate": true,
+        "sourcePricePresent": true,
+        "directionVerified": true,
+        "dateValid": true,
+        "finalDailyHistoryConfirmed": true,
+        "dateFresh": true
+      },
+      "details": {
+        "count": 23,
+        "asOf": "2026-10-16",
+        "dates": [
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01",
+          "2026-10-02",
+          "2026-10-05",
+          "2026-10-06",
+          "2026-10-07",
+          "2026-10-08",
+          "2026-10-09",
+          "2026-10-12",
+          "2026-10-13",
+          "2026-10-14",
+          "2026-10-15",
+          "2026-10-16"
+        ],
+        "direction": "USD-to-local",
+        "inverted": false
+      },
+      "quality": true,
+      "gate": true
+    }
+  ],
+  "legacyFixture": "Unmodified baseline fx() executed against recorded public CNY response; not an original saved production cache. Synthetic closed-equity responses used only inside fallback tests.",
+  "snapshotPublicFieldsReviewed": true,
+  "files": {
+    "market-original.json.gz": {
+      "bytes": 873270,
+      "sha256": "30b75e902cd87a28e641d2ec1cd9a8a3f98faa14ac60c98bdf8bd0e58a66b9ea",
+      "uncompressedSHA256": "7104fc3546ed56aa9878e98c8c0632da0b776948fd4f12b6ac9af488555006d2"
+    },
+    "fx-public-responses.json": {
+      "bytes": 15299,
+      "sha256": "6046c6300cace8f072fab2ca67f0c658f7776be71e01d607ed760582815d7818"
+    },
+    "legacy-fx-cache.json": {
+      "bytes": 191,
+      "sha256": "0194a26dee8dfae5dc8422c4c2e1b7fe7517309d29276fc3118de24dcd8270f9"
+    },
+    "market-finality.json.gz": {
+      "bytes": 863015,
+      "sha256": "3892e5abcdab5ec8e537d6a7b9aa18a39bc70022d672e309f9767fd85efa3b07",
+      "uncompressedSHA256": "8bfc4755070254fff382230457c68293865cd17aecbbe8647ebf9ac9dc429365"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-10-18T02:42:21.400183+00:00",
+  "base": "622b5f98062b635dc2ad9137cd26915b3f256c21",
+  "unchangedFiles": [
+    ".github/workflows/README.md",
+    ".github/workflows/radar-deploy.yml.disabled",
+    ".github/workflows/radar-interface-acceptance.yml",
+    ".github/workflows/radar-preview.yml.disabled",
+    "radar/data/chokepoints.toml",
+    "radar/data/companies.toml",
+    "radar/data/config.toml",
+    "radar/data/industries.toml",
+    "radar/site/app.js",
+    "radar/site/index.html",
+    "radar/site/style.css"
+  ],
+  "withinScope": true,
+  "checkedFiles": 35,
+  "credentialPatternHits": [],
+  "manualPublicFieldsReview": true,
+  "nonFXSnapshotUnchanged": true,
+  "sameDateFXValuesUnchanged": {
+    "CNY": true,
+    "EUR": true,
+    "HKD": true,
+    "JPY": true,
+    "KRW": true,
+    "TWD": true
+  },
+  "notes": "Fixtures contain only normalized public market fields and minimal public Yahoo metadata. No Cookie, crumb, account, header or private research content. Pattern scanning supplements manual review."
+}

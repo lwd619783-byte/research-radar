@@ -13,7 +13,7 @@ import urllib.parse
 import urllib.request
 from zoneinfo import ZoneInfo
 
-from integrity import observation_time
+from integrity import observation_time, fx_bar_final
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
@@ -258,17 +258,24 @@ def fx(h: Http, cur: str) -> dict:
     meta = r.get('meta') or {}
     if not meta.get('exchangeTimezoneName'):
         raise ValueError('fx_timezone_missing')
-    rates = {}
+    if meta.get('dataGranularity') != '1d':
+        raise ValueError('fx_daily_interval_unconfirmed')
+    period = (meta.get('currentTradingPeriod') or {}).get('regular') or {}
+    finality = {'method': 'provider-session-boundary', 'start': period.get('start'), 'end': period.get('end')}
+    received_at = dt.datetime.now(dt.UTC).isoformat()
+    rates, timestamps = {}, {}
     for timestamp, price in zip(r.get('timestamp') or [], r['indicators']['quote'][0].get('close') or []):
         if positive(timestamp) and positive(price):
             day = exchange_date(timestamp, meta)
-            rates[day] = [day, 1 / price if cur == 'EUR' else price, price]
+            if fx_bar_final(day, timestamp, meta['exchangeTimezoneName'], finality, received_at):
+                rates[day] = [day, 1 / price if cur == 'EUR' else price, price]
+                timestamps[day] = timestamp
     if not rates:
-        raise ValueError('fx_daily_history_missing')
+        raise ValueError('fx_final_daily_history_missing')
     history = [rates[day] for day in sorted(rates)]
     return stamp(value=history[-1][1], src='yahoo', asOf=history[-1][0], rates=history,
                  currency=cur, direction='USD-to-local', priceBasis='daily-close',
-                 timezone=meta['exchangeTimezoneName'])
+                 timezone=meta['exchangeTimezoneName'], rateTimestamps=timestamps, finality=finality)
 
 
 # ---------------- 创业板指 ÷ 中证红利 月线 ----------------

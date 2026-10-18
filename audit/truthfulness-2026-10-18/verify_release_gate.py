@@ -2,6 +2,7 @@
 import contextlib
 import datetime as dt
 import hashlib
+import gzip
 import io
 import json
 import os
@@ -13,8 +14,15 @@ ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'radar/scripts'))
 import build
 HERE=Path(__file__).resolve().parent
-snapshot=Path('/tmp/radar-live-market.json')
-market=json.loads(snapshot.read_text())
+snapshot=HERE/'fixtures/market-finality.json.gz'
+raw=gzip.decompress(snapshot.read_bytes())
+manifest=json.loads((HERE/'fx-finality-capture.json').read_text())
+assert hashlib.sha256(raw).hexdigest()==manifest['files'][snapshot.name]['uncompressedSHA256']
+market=json.loads(raw)
+replay_at=dt.datetime.fromisoformat(manifest['replayAt'])
+class Clock(dt.datetime):
+    @classmethod
+    def now(cls,tz=None):return replay_at.astimezone(tz) if tz else replay_at.replace(tzinfo=None)
 results=[]
 for offline,expected in [(False,3),(True,2)]:
     with tempfile.TemporaryDirectory(prefix='radar-gate-') as directory:
@@ -22,7 +30,7 @@ for offline,expected in [(False,3),(True,2)]:
         args=['build.py','--force','--cache',str(base/'cache.json'),'--out',str(out),'--audit-json',str(audit)]
         if offline:args.append('--offline')
         stream=io.StringIO()
-        with patch.object(sys,'argv',args),patch.dict(os.environ,{'GITHUB_OUTPUT':str(output),'GITHUB_STEP_SUMMARY':str(base/'summary.md')}),contextlib.redirect_stdout(stream):
+        with patch.object(build.dt,'datetime',Clock),patch.object(sys,'argv',args),patch.dict(os.environ,{'GITHUB_OUTPUT':str(output),'GITHUB_STEP_SUMMARY':str(base/'summary.md')}),contextlib.redirect_stdout(stream):
             if offline:
                 code=build.main()
             else:
@@ -35,6 +43,6 @@ for offline,expected in [(False,3),(True,2)]:
         if not offline:assert report['blockers']==['financial_evidence_incomplete']
         results.append(dict(mode='empty-offline-force' if offline else 'real-snapshot-replay-force',exit=code,
                             blockers=report['blockers'],rendered=False,githubOutput=output.read_text().strip(),stdout=stream.getvalue()))
-receipt=dict(checkedAt=dt.datetime.now(dt.UTC).isoformat(),snapshotSHA256=hashlib.sha256(snapshot.read_bytes()).hexdigest(),results=results)
-(HERE/'release-gate-receipt.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n')
+receipt=dict(checkedAt=dt.datetime.now(dt.UTC).isoformat(),replayAt=replay_at.isoformat(),snapshotSHA256=hashlib.sha256(raw).hexdigest(),results=results)
+(HERE/'fx-finality-release-gate.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n')
 print(json.dumps({**receipt,'results':[{k:v for k,v in r.items() if k!='stdout'} for r in results]},ensure_ascii=False,indent=2))

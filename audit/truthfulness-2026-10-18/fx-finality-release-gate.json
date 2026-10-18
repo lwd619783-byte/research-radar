@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-18T02:40:00.629116+00:00",
+  "replayAt": "2026-10-18T02:38:21.237897+00:00",
+  "snapshotSHA256": "8bfc4755070254fff382230457c68293865cd17aecbbe8647ebf9ac9dc429365",
+  "results": [
+    {
+      "mode": "real-snapshot-replay-force",
+      "exit": 3,
+      "blockers": [
+        "financial_evidence_incomplete"
+      ],
+      "rendered": false,
+      "githubOutput": "changed=false",
+      "stdout": "[提醒] industries.toml「AI网络与光互连」：kb 路径在仓库中不存在：投研知识库/行业研究/AI网络与光互连｜交换、光模块、CPO与高速连接.md（检查文件名是否被改过）\n[提醒] industries.toml「AI核心半导体」：kb 路径在仓库中不存在：投研知识库/行业研究/AI核心半导体｜GPU ASIC、HBM、先进制程与半导体设备.md（检查文件名是否被改过）\n[提醒] industries.toml「PCB与覆铜板」：kb 路径在仓库中不存在：投研知识库/行业研究/PCB与覆铜板（CCL）｜AI算力、高速材料与供给约束.md（检查文件名是否被改过）\n[提醒] industries.toml「电力与数据中心」：kb 路径在仓库中不存在：投研知识库/行业研究/全球电力与数据中心基础设施｜电网、供配电、液冷与燃机.md（检查文件名是否被改过）\n[提醒] industries.toml「探针卡与半导体测试」：kb 路径在仓库中不存在：投研知识库/行业研究/探针卡｜AI HBM 先进封装驱动晶圆测试升级与国产替代.md（检查文件名是否被改过）\n[提醒] industries.toml「光纤光缆」：kb 路径在仓库中不存在：投研知识库/行业研究/光纤光缆｜AI数据中心、运营商需求与高端光纤升级.md（检查文件名是否被改过）\n[提醒] industries.toml「MLCC与精密时钟」：kb 路径在仓库中不存在：投研知识库/行业研究/MLCC｜多层陶瓷电容器：高端供需、盈利兑现与估值边界.md（检查文件名是否被改过）\n[提醒] industries.toml「AI服务器」：kb 路径在仓库中不存在：投研知识库/行业研究/AI服务器与企业IT基础设施.md（检查文件名是否被改过）\n[提醒] industries.toml「创新药（GLP-1/CXO/AI制药）」：kb 路径在仓库中不存在：投研知识库/行业研究/肥胖与代谢创新药｜GLP-1 GIP、多靶点与口服小分子.md（检查文件名是否被改过）\n[提醒] industries.toml「航空航天与国防」：kb 路径在仓库中不存在：投研知识库/行业研究/航空航天与国防｜研究导航与六篇研报台账.md（检查文件名是否被改过）\n[提醒] industries.toml「电池与储能」：kb 路径在仓库中不存在：投研知识库/行业研究/电池行业｜全固态产业化、先进锂电与储能：政策技术路线研究基线.md（检查文件名是否被改过）\n[提醒] industries.toml「网络安全」：kb 路径在仓库中不存在：投研知识库/行业研究/网络安全｜云安全、身份安全与AI Security.md（检查文件名是否被改过）\n[提醒] industries.toml「玻璃基板」：kb 路径在仓库中不存在：投研知识库/行业研究/玻璃基板行业 V1｜先进封装、TGV与全球产业链.md（检查文件名是否被改过）\n[提醒] industries.toml「消费」：kb 路径在仓库中不存在：投研知识库/行业研究/消费行业｜结构分化、全球比较与投资研究总览.md（检查文件名是否被改过）\n[提醒] industries.toml「房地产」：kb 路径在仓库中不存在：投研知识库/行业研究/房地产｜政策筑底、结构分化与A H龙头投资框架.md（检查文件名是否被改过）\n[提醒] companies.toml「建滔积层板」：财务证据/口径待核（missing_source）；构建不使用未核实财务数值\n[提醒] companies.toml「大族数控」：财务证据/口径待核（missing_source）；构建不使用未核实财务数值\n校验通过：15 个行业 · 16 个卡点 · 42 家公司 · 17 条提醒\n· Replay of real session snapshot; no new network request\n行情：新抓 42/42，用缓存 0，缺失 0；截至 10/16 收盘\nBLOCKED: financial_evidence_incomplete\n"
+    },
+    {
+      "mode": "empty-offline-force",
+      "exit": 2,
+      "blockers": [
+        "financial_evidence_incomplete",
+        "mixed_or_missing_market_dates_need_label_approval",
+        "offline_not_publishable"
+      ],
+      "rendered": false,
+      "githubOutput": "changed=false",
+      "stdout": "[提醒] industries.toml「AI网络与光互连」：kb 路径在仓库中不存在：投研知识库/行业研究/AI网络与光互连｜交换、光模块、CPO与高速连接.md（检查文件名是否被改过）\n[提醒] industries.toml「AI核心半导体」：kb 路径在仓库中不存在：投研知识库/行业研究/AI核心半导体｜GPU ASIC、HBM、先进制程与半导体设备.md（检查文件名是否被改过）\n[提醒] industries.toml「PCB与覆铜板」：kb 路径在仓库中不存在：投研知识库/行业研究/PCB与覆铜板（CCL）｜AI算力、高速材料与供给约束.md（检查文件名是否被改过）\n[提醒] industries.toml「电力与数据中心」：kb 路径在仓库中不存在：投研知识库/行业研究/全球电力与数据中心基础设施｜电网、供配电、液冷与燃机.md（检查文件名是否被改过）\n[提醒] industries.toml「探针卡与半导体测试」：kb 路径在仓库中不存在：投研知识库/行业研究/探针卡｜AI HBM 先进封装驱动晶圆测试升级与国产替代.md（检查文件名是否被改过）\n[提醒] industries.toml「光纤光缆」：kb 路径在仓库中不存在：投研知识库/行业研究/光纤光缆｜AI数据中心、运营商需求与高端光纤升级.md（检查文件名是否被改过）\n[提醒] industries.toml「MLCC与精密时钟」：kb 路径在仓库中不存在：投研知识库/行业研究/MLCC｜多层陶瓷电容器：高端供需、盈利兑现与估值边界.md（检查文件名是否被改过）\n[提醒] industries.toml「AI服务器」：kb 路径在仓库中不存在：投研知识库/行业研究/AI服务器与企业IT基础设施.md（检查文件名是否被改过）\n[提醒] industries.toml「创新药（GLP-1/CXO/AI制药）」：kb 路径在仓库中不存在：投研知识库/行业研究/肥胖与代谢创新药｜GLP-1 GIP、多靶点与口服小分子.md（检查文件名是否被改过）\n[提醒] industries.toml「航空航天与国防」：kb 路径在仓库中不存在：投研知识库/行业研究/航空航天与国防｜研究导航与六篇研报台账.md（检查文件名是否被改过）\n[提醒] industries.toml「电池与储能」：kb 路径在仓库中不存在：投研知识库/行业研究/电池行业｜全固态产业化、先进锂电与储能：政策技术路线研究基线.md（检查文件名是否被改过）\n[提醒] industries.toml「网络安全」：kb 路径在仓库中不存在：投研知识库/行业研究/网络安全｜云安全、身份安全与AI Security.md（检查文件名是否被改过）\n[提醒] industries.toml「玻璃基板」：kb 路径在仓库中不存在：投研知识库/行业研究/玻璃基板行业 V1｜先进封装、TGV与全球产业链.md（检查文件名是否被改过）\n[提醒] industries.toml「消费」：kb 路径在仓库中不存在：投研知识库/行业研究/消费行业｜结构分化、全球比较与投资研究总览.md（检查文件名是否被改过）\n[提醒] industries.toml「房地产」：kb 路径在仓库中不存在：投研知识库/行业研究/房地产｜政策筑底、结构分化与A H龙头投资框架.md（检查文件名是否被改过）\n[提醒] companies.toml「建滔积层板」：财务证据/口径待核（missing_source）；构建不使用未核实财务数值\n[提醒] companies.toml「大族数控」：财务证据/口径待核（missing_source）；构建不使用未核实财务数值\n校验通过：15 个行业 · 16 个卡点 · 42 家公司 · 17 条提醒\n· --offline：全部使用缓存\n行情：新抓 0/42，用缓存 0，缺失 42；截至 None\n  缺失： 源杰科技、Lumentum、Coherent、中际旭创、新易盛、博通 Broadcom、迈威尔 Marvell、Arista、天孚通信、台积电、ASMPT、SK海力士、美光 Micron、长鑫科技、英伟达 NVIDIA、阿斯麦 ASML、北方华创、中微公司、日东纺 Nittobo、宏和科技、东材科技、台光电子、生益科技、建滔积层板、沪电股份、胜宏科技、深南电路、大族数控、鼎泰高科、中钨高新、GE Vernova、西门子能源、东方电气、思源电气、中国西电、金盘科技、伊顿 Eaton、施耐德电气、科华数据、维谛 Vertiv、英维克、Modine\n缺失超过 30%，中止构建，不发布。\n"
+    }
+  ]
+}

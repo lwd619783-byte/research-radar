@@ -1,0 +1,123 @@
+{
+  "checkedAt": "2026-10-18T02:39:59.988879+00:00",
+  "replayAt": "2026-10-18T02:38:21.237897+00:00",
+  "marketSnapshotSHA256": "8bfc4755070254fff382230457c68293865cd17aecbbe8647ebf9ac9dc429365",
+  "asOf": "2026-10-16",
+  "companies": 42,
+  "missingDaily": 0,
+  "staleDaily": 0,
+  "financialVerified": 40,
+  "financialComplete": 37,
+  "financialSignalEligible": 36,
+  "financialMissing": [
+    "KBL",
+    "DZSK"
+  ],
+  "mcapAvailable": 42,
+  "sameDateFx": 42,
+  "fx": {
+    "CNY": {
+      "src": "yahoo",
+      "asOf": "2026-10-16",
+      "receivedAt": "2026-10-18T02:38:11.602133+00:00",
+      "direction": "USD-to-local"
+    },
+    "EUR": {
+      "src": "yahoo",
+      "asOf": "2026-10-16",
+      "receivedAt": "2026-10-18T02:38:13.957821+00:00",
+      "direction": "USD-to-local"
+    },
+    "HKD": {
+      "src": "yahoo",
+      "asOf": "2026-10-16",
+      "receivedAt": "2026-10-18T02:38:15.816933+00:00",
+      "direction": "USD-to-local"
+    },
+    "JPY": {
+      "src": "yahoo",
+      "asOf": "2026-10-16",
+      "receivedAt": "2026-10-18T02:38:17.480807+00:00",
+      "direction": "USD-to-local"
+    },
+    "KRW": {
+      "src": "yahoo",
+      "asOf": "2026-10-16",
+      "receivedAt": "2026-10-18T02:38:19.106729+00:00",
+      "direction": "USD-to-local"
+    },
+    "TWD": {
+      "src": "yahoo",
+      "asOf": "2026-10-16",
+      "receivedAt": "2026-10-18T02:38:20.876850+00:00",
+      "direction": "USD-to-local"
+    }
+  },
+  "blockers": [
+    "financial_evidence_incomplete"
+  ],
+  "shortHistory": [
+    {
+      "id": "CXMT",
+      "count": 54,
+      "firstDate": "2026-07-27",
+      "lastDate": "2026-10-16",
+      "days": 81,
+      "high52Available": false
+    }
+  ],
+  "missingPE": [
+    {
+      "id": "LITE",
+      "status": "missing"
+    },
+    {
+      "id": "SKH",
+      "status": "missing"
+    }
+  ],
+  "indicesAvailable": 5,
+  "issues": [
+    {
+      "symbol": "LITE",
+      "kind": "valuation",
+      "status": "pe_missing"
+    },
+    {
+      "symbol": "000660.KS",
+      "kind": "valuation",
+      "status": "pe_missing"
+    },
+    {
+      "symbol": "688825.SS",
+      "kind": "history",
+      "status": "short_history"
+    },
+    {
+      "symbol": "1888.HK",
+      "kind": "financial",
+      "status": "missing_source"
+    },
+    {
+      "symbol": "301200.SZ",
+      "kind": "financial",
+      "status": "missing_source"
+    },
+    {
+      "symbol": "399006.SZ",
+      "kind": "index",
+      "status": "missing_or_stale"
+    },
+    {
+      "symbol": "000922.SS",
+      "kind": "index",
+      "status": "missing_or_stale"
+    },
+    {
+      "symbol": "HSTECH.HK",
+      "kind": "index",
+      "status": "missing_or_stale"
+    }
+  ],
+  "ratioAvailable": true
+}

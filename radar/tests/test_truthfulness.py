@@ -4,7 +4,7 @@ import datetime as dt
 import json
 import unittest
 from unittest.mock import patch
-from test_integrity import NOW, bars, build, financial_evidence, quotes, record
+from test_integrity import NOW, bars, build, financial_evidence, quotes, record, historical_fx
 from test_review_regressions import complete_dataset
 from integrity import dated_fx, financial_status, pe_status
 import acceptance_probe as probe
@@ -14,18 +14,19 @@ class FxTests(unittest.TestCase):
         class H:
             def yahoo(self, path):
                 return {'chart': {'result': [{'meta': {'exchangeTimezoneName':'UTC', 'regularMarketPrice':99,
-                    'regularMarketTime':1792195200}, 'timestamp':[1792108800,1792195200],
+                    'regularMarketTime':1792195200, 'dataGranularity':'1d',
+                    'currentTradingPeriod':{'regular':{'start':1792108800,'end':1792195200}}}, 'timestamp':[1792108800,1792195200],
                     'indicators': {'quote':[{'close':[7.,8.]}]}}]}}
         fx=quotes.fx(H(),'CNY');fx['receivedAt']=NOW.isoformat()
-        self.assertEqual(fx['asOf'],'2026-10-17')
+        self.assertEqual(fx['asOf'],'2026-10-16')
         self.assertEqual(dated_fx(fx,'CNY','2026-10-16',NOW)['value'],7.)
         self.assertIsNone(dated_fx(fx,'CNY','2026-10-15',NOW))
         self.assertNotEqual(fx['value'],99)
 
     def test_eur_inversion_and_no_nearest_or_future_fill(self):
-        f=record(asOf='2026-10-17',currency='EUR',rates=[['2026-10-16',.5,2.],['2026-10-17',.4,2.5]])
+        f=historical_fx('EUR',rates=[['2026-10-15',.4,2.5],['2026-10-16',.5,2.]])
         self.assertEqual(dated_fx(f,'EUR','2026-10-16',NOW)['value'],.5)
-        self.assertIsNone(dated_fx(f,'EUR','2026-10-15',NOW))
+        self.assertIsNone(dated_fx(f,'EUR','2026-10-17',NOW))
         self.assertIsNone(dated_fx(f,'CNY','2026-10-16',NOW))
         f['rates'][0][1]=2.
         self.assertIsNone(dated_fx(f,'EUR','2026-10-16',NOW))
@@ -33,8 +34,7 @@ class FxTests(unittest.TestCase):
     def test_mcap_uses_historical_fx_and_currency_is_not_financial_currency(self):
         data,mk=complete_dataset();c=data['companies'][0];cur=c['cur']
         c['financial']['currency']='EUR'
-        mk['fx'][cur]=record(asOf='2026-10-17',value=99,currency=cur,
-                            rates=[['2026-10-16',7.,7.],['2026-10-17',99.,99.]])
+        mk['fx'][cur]=historical_fx(cur,asOf='2026-10-17',value=99)
         row=build.assemble(data,mk,mk,NOW)[0]['companies'][0]
         self.assertEqual(row['mcapUSD'],round(1e10/7/1e8,1))
         self.assertEqual(row['cur'],cur)

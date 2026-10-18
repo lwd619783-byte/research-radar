@@ -25,6 +25,18 @@ def record(**kw):
     return dict(schemaVersion=2, receivedAt=NOW.isoformat(), **kw)
 
 
+def historical_fx(currency='CNY', rates=None, **overrides):
+    """Synthetic confirmed daily series, with actual provider-proof field shapes."""
+    rates = rates or [['2026-10-16', 7., 1/7 if currency == 'EUR' else 7.]]
+    start = dt.datetime(2026, 10, 16, tzinfo=dt.UTC).timestamp()
+    value = record(value=rates[-1][1], asOf=rates[-1][0], src='yahoo', currency=currency,
+        direction='USD-to-local', priceBasis='daily-close', timezone='UTC', rates=rates,
+        rateTimestamps={r[0]:dt.datetime.fromisoformat(r[0]).replace(tzinfo=dt.UTC).timestamp() for r in rates},
+        finality={'method':'provider-session-boundary','start':start,'end':start+86400})
+    value.update(overrides)
+    return value
+
+
 def financial_evidence():
     return dict(source_name='Synthetic filing', source_url='https://example.test/report',
         source_urls=['https://example.test/report'], period_end='2026-06-30',

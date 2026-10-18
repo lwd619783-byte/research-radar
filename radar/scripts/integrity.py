@@ -136,11 +136,34 @@ def pe_status(value):
     return 'available' if value > 0 else 'nonpositive'
 
 
+def fx_bar_final(day, timestamp, timezone, session, received_at):
+    """Provider session boundaries, not a matching calendar date, prove finality."""
+    try:
+        if not isinstance(session, dict) or session.get('method') != 'provider-session-boundary':
+            return False
+        start, end = session['start'], session['end']
+        if not all(number(x) and x > 0 for x in (timestamp, start, end)) or not 0 < end-start <= 26*3600:
+            return False
+        received = dt.datetime.fromisoformat(received_at)
+        if received.tzinfo is None or max(timestamp, start) > received.timestamp():
+            return False
+        zone = ZoneInfo(timezone)
+        date = dt.datetime.fromtimestamp(timestamp, zone).date().isoformat()
+        if date != day:
+            return False
+        if timestamp < start:
+            return day < dt.datetime.fromtimestamp(start, zone).date().isoformat()
+        return timestamp < end and received.timestamp() >= end
+    except (KeyError, TypeError, ValueError, OverflowError, OSError):
+        return False
+
+
 def dated_fx(record, currency, day, now):
     """Select the exact observed day; never backfill with a future/nearest rate."""
     if not day or not isinstance(record, dict) or not fresh_record(record, now, day):
         return None
-    if record.get('currency', currency) != currency:
+    if (record.get('currency') != currency or record.get('src') != 'yahoo'
+            or record.get('priceBasis') != 'daily-close' or record.get('direction') != 'USD-to-local'):
         return None
     if 'rates' in record:
         rates = record['rates']
@@ -155,17 +178,23 @@ def dated_fx(record, currency, day, now):
             if not number(row[1]) or row[1] <= 0 or not number(row[2]) or row[2] <= 0: return None
             expected = 1 / row[2] if currency == 'EUR' else row[2]
             if not math.isclose(row[1], expected, rel_tol=1e-12): return None
+            timestamps = record.get('rateTimestamps')
+            if not isinstance(timestamps, dict) or not fx_bar_final(
+                    row[0], timestamps.get(row[0]), record.get('timezone'),
+                    record.get('finality'), record.get('receivedAt')):
+                return None
             if row[0] == day: selected = row
             previous = row[0]
         if selected is None: return None
         value = selected[1]
     else:
-        # Legacy receipts are usable only on their original observed date.
-        if record.get('asOf') != day: return None
-        value = record.get('value')
-        if not number(value) or value <= 0: return None
+        # Old schemaVersion=2 values came from realtime metadata; a same-day
+        # date/receipt does not turn them into a confirmed historical close.
+        return None
     return {'value': value, 'asOf': day, 'src': record.get('src'),
-            'receivedAt': record.get('receivedAt'), 'direction': 'USD-to-local'}
+            'receivedAt': record.get('receivedAt'), 'direction': 'USD-to-local',
+            'finality': {**record['finality'], 'barTimestamp': record['rateTimestamps'][day],
+                         'timezone': record['timezone']}}
 
 
 def release_blockers(D):

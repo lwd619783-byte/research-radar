@@ -1,0 +1,11 @@
+UTC start: 2026-10-18T02:41:53.719884+00:00
+Command: python -B radar/scripts/acceptance_probe.py --preflight
+{"tests": 96, "frozenFiles": 9, "schemaWarnings": 17, "schemaErrors": 0}
+
+Exit: 0
+UTC end: 2026-10-18T02:42:02.614900+00:00
+UTC start: 2026-10-18T02:42:02.614940+00:00
+Command: git diff --check
+
+Exit: 0
+UTC end: 2026-10-18T02:42:02.619801+00:00
