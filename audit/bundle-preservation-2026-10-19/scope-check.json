@@ -1,0 +1,58 @@
+{
+  "checkedAtUTC": "2026-10-19T03:57:32.156099+00:00",
+  "baseSHA": "d73747d1d18b0e8845ac68e8bcf1e4abcd5e3641",
+  "changedFiles": [
+    ".github/workflows/radar-interface-acceptance.yml",
+    "audit/bundle-preservation-2026-10-19/CHART-INVESTIGATION.md",
+    "audit/bundle-preservation-2026-10-19/REVIEW.md",
+    "audit/bundle-preservation-2026-10-19/chart-investigation.json",
+    "audit/bundle-preservation-2026-10-19/frozen-update.json",
+    "audit/bundle-preservation-2026-10-19/initial-targeted-tests.log",
+    "audit/bundle-preservation-2026-10-19/intermediate-139-tests.log",
+    "audit/bundle-preservation-2026-10-19/offline-test-receipt.json",
+    "audit/bundle-preservation-2026-10-19/offline-tests.log",
+    "audit/bundle-preservation-2026-10-19/offline_archive_demo.py",
+    "audit/bundle-preservation-2026-10-19/workflow.diff",
+    "audit/truthfulness-frozen.json",
+    "radar/scripts/acceptance_bundle.py",
+    "radar/scripts/acceptance_probe.py",
+    "radar/tests/test_acceptance_bundle.py",
+    "radar/tests/test_acceptance_probe.py",
+    "audit/bundle-preservation-2026-10-19/offline-demo-receipt.json"
+  ],
+  "scopeAllowed": true,
+  "frozenFilesVerified": 10,
+  "onlyFrozenChange": ".github/workflows/radar-interface-acceptance.yml",
+  "protectedByteIdentical": [
+    "radar/scripts/build.py",
+    "radar/scripts/quotes.py",
+    "radar/scripts/integrity.py",
+    "radar/scripts/snapshot.py",
+    "audit/offline-page-acceptance-2026-10-19/test-data.json"
+  ],
+  "credentialScan": {
+    "patterns": [
+      "github_token",
+      "aws_key",
+      "private_key",
+      "bearer_value",
+      "credential_url"
+    ],
+    "findings": [],
+    "explicitSyntheticTestMatches": [
+      {
+        "file": "radar/tests/test_acceptance_bundle.py",
+        "type": "credential_url",
+        "classification": "explicit offline rejection test, not a real credential"
+      },
+      {
+        "file": "radar/tests/test_acceptance_probe.py",
+        "type": "credential_url",
+        "classification": "explicit offline rejection test, not a real credential"
+      }
+    ],
+    "initialScanNote": "Initial scan stopped on the existing credential-URL rejection fixture. Reviewed exact test literals only; no general exclusion or security setting was added."
+  },
+  "newMarketRequests": 0,
+  "actionDispatches": 0
+}

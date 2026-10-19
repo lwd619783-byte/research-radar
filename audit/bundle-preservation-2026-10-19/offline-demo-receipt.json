@@ -1,0 +1,31 @@
+{
+  "classification": "OFFLINE TEST ONLY — NOT NEW REAL MARKET DATA",
+  "checkedAtUTC": "2026-10-19T03:56:50.771997+00:00",
+  "codeSHA": "e2312f1006b3f79cf5fd7f6cdda34b3aca7cc854",
+  "networkConnections": 0,
+  "newMarketRequests": 0,
+  "sameData": true,
+  "rerenderExact": true,
+  "temporaryArchiveRemovedAfterVerification": true,
+  "archive": {
+    "totalBytes": 1847485,
+    "files": {
+      "DATA.json": {
+        "bytes": 1261534,
+        "sha256": "16a2f5da19e4b679df367889b3eb45c87d5d4b9412dafc28a6b6e91fa1373023"
+      },
+      "index.html": {
+        "bytes": 583659,
+        "sha256": "674c0c771fc1fa84956208559027e510b418da927ef4da88b1fc26497e47c98e"
+      },
+      "receipt.json": {
+        "bytes": 1269,
+        "sha256": "07d3e7bd74d20ef5b9afd4ac0991bc720bb4c3284764950529409f3842c80bed"
+      },
+      "manifest.json": {
+        "bytes": 1023,
+        "sha256": "04ab6a90b195b9cde613fd2424f08f6b659aced5f51e68e2529d9c8455cb78db"
+      }
+    }
+  }
+}

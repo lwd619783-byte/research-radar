@@ -44,6 +44,8 @@ manifest 绑定执行完整 SHA、run ID、attempt、固定时钟、选定日期
 
 离线完整保存示例由 `offline_archive_demo.py` 复用上一阶段标明合成/旧样本的 D，在临时目录实际写入四文件、读取校验并重新渲染，随后删除临时包；仅保留[四文件哈希与大小回执](offline-demo-receipt.json)，避免把新完整 DATA 归档长期写入 Git。真实未来运行的归档由 GitHub artifact 的7天保留期管理，本轮没有上传真实产物。
 
+示例实际在实现提交 `e2312f1006b3f79cf5fd7f6cdda34b3aca7cc854` 上执行，总计 **1,847,485 bytes**：DATA 1,261,534、HTML 583,659、receipt 1,269、manifest 1,023 bytes。DATA 哈希与上一阶段合成样例完全相同；网络连接0，临时包已删除。[提交推送回执](push-receipt.json)、[范围与敏感检查](scope-check.json)。凭据形状扫描只命中原有及新增的两条固定假口令 URL 拒绝测试，逐项核对并限制为这两条测试字面值，无真实凭据发现；没有全局排除或安全设置变更。
+
 ```bash
 python -B -m unittest discover -s radar/tests -v
 python -B audit/bundle-preservation-2026-10-19/offline_archive_demo.py

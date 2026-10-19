@@ -1,0 +1,16 @@
+{
+  "verifiedAtUTC": "2026-10-19T03:57:34.940534+00:00",
+  "repository": "lwd619783-byte/research-radar",
+  "branch": "fix/radar-truthfulness-2026-10-18",
+  "implementationCommit": "e2312f1006b3f79cf5fd7f6cdda34b3aca7cc854",
+  "normalPushExitCode": 0,
+  "observedPush": "d73747d..e2312f1 HEAD -> fix/radar-truthfulness-2026-10-18",
+  "remoteVerification": "ref: refs/heads/fix/radar-data-integrity\tHEAD\n414eb80626d3200dfebe4a010507c5fe74d7ca31\tHEAD\n414eb80626d3200dfebe4a010507c5fe74d7ca31\trefs/heads/fix/radar-data-integrity\ne2312f1006b3f79cf5fd7f6cdda34b3aca7cc854\trefs/heads/fix/radar-truthfulness-2026-10-18\n",
+  "tests": 140,
+  "offlineArchiveBytes": 1847485,
+  "newMarketRequests": 0,
+  "actionDispatches": 0,
+  "deployed": false,
+  "merged": false,
+  "pending": "Independent audit, separately authorized single real collection and actual DATA desktop acceptance."
+}
