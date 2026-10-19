@@ -1,4 +1,4 @@
-"""Fixed synthetic sessions and immutable public history; never live requests."""
+"""Historical common-day policy regressions (not product default); offline only."""
 import copy
 import datetime as dt
 import gzip
@@ -12,6 +12,10 @@ from test_integrity import build, quotes, historical_fx
 from test_review_regressions import complete_dataset
 from integrity import ZONES, release_blockers
 from snapshot import completed_bars, select_daily, select_quote, select_index
+
+def historical_assemble(*args):
+    return build.assemble(*args, snapshot_policy='common-completed')
+
 
 MONDAY = dt.datetime(2026, 10, 19, 1, 19, tzinfo=dt.UTC)
 FRIDAY = '2026-10-16'
@@ -57,7 +61,7 @@ def monday_dataset():
 class CompletedSnapshotTests(unittest.TestCase):
     def test_monday_mixed_seven_markets_unifies_prices_not_intraday_valuations(self):
         data,mk=monday_dataset();before=copy.deepcopy(mk)
-        D,stale,missing=build.assemble(data,mk,mk,MONDAY)
+        D,stale,missing=historical_assemble(data,mk,mk,MONDAY)
         self.assertFalse(stale);self.assertFalse(missing)
         self.assertEqual(D['meta']['snapshot']['status'],'complete')
         self.assertEqual(D['meta']['asOf'],FRIDAY)
@@ -140,7 +144,7 @@ class CompletedSnapshotTests(unittest.TestCase):
     def test_stale_cached_history_is_never_silently_refreshed_by_selection(self):
         data,mk=monday_dataset();fresh=copy.deepcopy(mk)
         symbol=data['companies'][0]['sym'];fresh['daily'].pop(symbol)
-        D,stale,_=build.assemble(data,mk,fresh,MONDAY)
+        D,stale,_=historical_assemble(data,mk,fresh,MONDAY)
         self.assertIn(data['companies'][0]['name'],stale)
         self.assertIn('stale_quotes_not_safe_in_all_frozen_views',release_blockers(D))
 
@@ -149,7 +153,7 @@ class CompletedSnapshotTests(unittest.TestCase):
         for value in (None,{'schemaVersion':2,'phase':'unknown'}):
             with self.subTest(value=value):
                 broken=copy.deepcopy(mk);broken['daily'][data['companies'][0]['sym']]=value
-                D,_,missing=build.assemble(data,broken,broken,MONDAY)
+                D,_,missing=historical_assemble(data,broken,broken,MONDAY)
                 self.assertTrue(missing);self.assertEqual(D['meta']['snapshot']['status'],'incomplete')
                 self.assertIn('mixed_or_missing_market_dates_need_label_approval',release_blockers(D))
 
@@ -168,7 +172,7 @@ class CompletedSnapshotTests(unittest.TestCase):
     def test_fx_exact_day_required_for_valuation_and_meta(self):
         data,mk=monday_dataset();c=next(c for c in data['companies'] if c['cur']=='CNY')
         mk['fx']['CNY']=historical_fx('CNY',rates=[['2026-10-15',7.,7.]],receivedAt=MONDAY.isoformat())
-        D=build.assemble(data,mk,mk,MONDAY)[0]
+        D=historical_assemble(data,mk,mk,MONDAY)[0]
         row=next(r for r in D['companies'] if r['sym']==c['sym'])
         self.assertIsNone(row['mcapUSD']);self.assertIsNone(row['provenance']['valuation']['fx'])
         self.assertNotIn('CNY',D['meta']['fx']);self.assertIsNotNone(row['pe'])
@@ -190,7 +194,7 @@ class CompletedSnapshotTests(unittest.TestCase):
         for change in ({'phase':'unknown'},{'date':'2026-10-19'}):
             with self.subTest(change=change):
                 broken=copy.deepcopy(mk);broken['index'][key].update(change)
-                D=build.assemble(data,broken,broken,MONDAY)[0]
+                D=historical_assemble(data,broken,broken,MONDAY)[0]
                 self.assertEqual(len(D['indices']),len(data['config']['indices'])-1)
                 self.assertIn('index_date_or_phase_needs_label_approval',release_blockers(D))
 

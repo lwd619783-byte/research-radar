@@ -84,7 +84,11 @@ class FxFinalityTests(unittest.TestCase):
             mk[group][c['sym']]['receivedAt']=observed.isoformat()
         self.assertEqual(mk['daily'][c['sym']]['phase'],'closed')
         mk['fx']['CNY']=r
-        self.assertIsNone(build.assemble(data,mk,mk,observed)[0]['companies'][0]['mcapUSD'])
+        row=build.assemble(data,mk,mk,observed)[0]['companies'][0]
+        self.assertIsNotNone(row['mcapUSD'])
+        self.assertTrue(row['mcapEstimated'])
+        self.assertEqual(row['provenance']['valuation']['fx']['value'],7.)
+        self.assertEqual(row['provenance']['valuation']['fx']['asOf'],'2026-10-15')
 
     def test_waiting_cannot_turn_an_intraday_cached_value_into_a_close(self):
         r=historical_fx(receivedAt='2026-10-16T12:00:00+00:00')
@@ -111,9 +115,10 @@ class FxFinalityTests(unittest.TestCase):
         self.assertFalse(stale);self.assertFalse(missing)
         # Immutable captured payloads predate the quote marketState contract.
         # Their hashes still verify; do not invent a closed state during replay.
-        self.assertEqual(sum(c['mcapUSD'] is not None for c in D['companies']),0)
-        self.assertTrue(all(c['pe'] is None for c in D['companies']))
-        self.assertTrue(all(c['provenance']['valuation']['selectionStatus']=='quote_close_unconfirmed' for c in D['companies']))
+        self.assertEqual(sum(c['mcapUSD'] is not None for c in D['companies']),42)
+        self.assertEqual(sum(c['pe'] is not None for c in D['companies']),40)
+        self.assertTrue(all(c['provenance']['valuation']['phase']=='unknown' for c in D['companies']))
+        self.assertTrue(any(r['status']=='partial' for r in D['meta']['coverage']))
         self.assertEqual(sum(c['provenance']['financial']['status']=='verified' for c in D['companies']),40)
         self.assertEqual(sum(all(c[k] is not None for k in ('revg','earng','gm')) for c in D['companies']),38)  # Includes KBL H1; only 37 are complete within the original 40.
         self.assertEqual(sum(c['financialSignalEligible'] for c in D['companies']),36)

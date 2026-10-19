@@ -90,10 +90,12 @@ class RatioObservationTests(unittest.TestCase):
         mk['ratio'] = {'cyb': monthly_record('2026-10-01'), 'hl': monthly_record('2026-10-01', True)}
         self.assertIsNone(build.assemble(data, mk, mk, NOW)[0]['ratio'])
 
-    def test_both_dates_must_match_page_date(self):
+    def test_ratio_same_date_is_independent_of_equity_date(self):
         data, mk = complete_dataset()
         mk['ratio'] = {'cyb': monthly_record('2026-10-15'), 'hl': monthly_record('2026-10-15', True)}
-        self.assertIsNone(build.assemble(data, mk, mk, NOW)[0]['ratio'])
+        D=build.assemble(data,mk,mk,NOW)[0]
+        self.assertEqual(D['ratio']['asOf'],'2026-10-15')
+        self.assertNotEqual(D['ratio']['asOf'],D['meta']['asOf'])
 
     def test_mixed_cached_and_fetched_dates_are_unavailable(self):
         data, cache = complete_dataset()
@@ -288,8 +290,8 @@ class CompleteMainTests(unittest.TestCase):
                           'unconfirmed_close_or_intraday_needs_label_approval'])
 
     def test_date_gate_alone(self):
-        self.assert_gate(lambda d, m: m['index'][d['config']['indices'][0]['symbol']].update(date='2026-10-15'),
-                         'index_date_or_phase_needs_label_approval')
+        self.assert_gate(lambda d, m: m['index'][d['config']['indices'][0]['symbol']].update(date='2026-01-01'),
+                         'index_observation_missing_or_stale')
 
     def test_history_gate_alone(self):
         data, mk = complete_dataset()

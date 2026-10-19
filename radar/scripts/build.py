@@ -24,8 +24,9 @@ from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import quotes  # noqa: E402
+import latest
 from schema import load_and_validate  # noqa: E402
-from integrity import fresh_record, valid_bars, financial_status, release_blockers, number, observation_time, dated_fx, pe_status
+from integrity import ZONES, fresh_record, valid_bars, financial_status, release_blockers, number, observation_time, dated_fx, pe_status
 from snapshot import select_daily, select_quote, select_index
 
 RADAR = Path(__file__).resolve().parents[1]
@@ -164,14 +165,15 @@ def merge(fresh: dict, cache: dict) -> dict:
 
 
 # ---------------- 组装 DATA ----------------
-def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict, list[str], list[str]]:
+def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_policy='latest') -> tuple[dict, list[str], list[str]]:
     cfg = data["config"]
     fx = {"USD": 1.0}
     fx_meta = {}
 
     stale, missing, cos = [], [], []
     blockers, market_dates, issues = [], {}, []
-    daily_snapshot, snapshot = select_daily(data['companies'], mk['daily'], now)
+    selectors = latest if snapshot_policy == 'latest' else None
+    daily_snapshot, snapshot = (selectors.select_daily if selectors else select_daily)(data['companies'], mk['daily'], now)
     for c in data["companies"]:
         s = c["sym"]
         original_daily = mk['daily'].get(s)
@@ -204,7 +206,7 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
         # Quote/price currency is independent of the financial reporting currency.
         cur = (d or {}).get('currency') or c['cur']
         original_quote = mk['quote'].get(s) or {}
-        q, quote_status, observed_quote_date = select_quote(original_quote, m.get('ld'), c['mkt'], cur, now)
+        q, quote_status, observed_quote_date = (selectors.select_quote if selectors else select_quote)(original_quote, m.get('ld'), c['mkt'], cur, now)
         quote_date = observed_quote_date if q else None
         if quote_status != 'available':
             issues.append({'symbol': s, 'kind': 'valuation', 'status': quote_status,
@@ -212,10 +214,12 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
         valuation_currency_ok = q.get('currency') == cur
         mcap = q.get("marketCap")
         selected_fx = ({'value': 1., 'asOf': quote_date, 'src': 'USD-identity', 'direction': 'USD-to-local'}
-                       if cur == 'USD' and quote_date else dated_fx(mk['fx'].get(cur), cur, quote_date, now))
+                       if cur == 'USD' and quote_date else (selectors.select_fx if selectors else dated_fx)(mk['fx'].get(cur), cur, quote_date, now))
         mcap_usd = round(mcap / selected_fx['value'] / 1e8, 1) if quotes.positive(mcap) and valuation_currency_ok and selected_fx else None
         pe = q.get("trailingPE")
         pe_state = pe_status(pe)
+        eps = q.get('epsTrailingTwelveMonths')
+        if selectors and pe is None and number(eps) and eps <= 0: pe_state = 'not_meaningful'
         pe = round(pe, 1) if quotes.positive(pe) else None
         hi52 = m.get("hi52")
         row = {k: c[k] for k in ("id", "name", "code", "sym", "mkt", "role", "ind", "cp", "revg", "earng", "gm",
@@ -224,9 +228,22 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
                     "price": None, "r1d": None, "r5": None, "r20": None, "r60": None, "ytd": None, "dd52": None,
                     "s0": None, "sd": [], "sc": [], "ld": None, "history": {"count": 0}})
         row.update(m)
+        if selectors:
+            row['mcapLocal'] = mcap if quotes.positive(mcap) and valuation_currency_ok else None
+            row['priceAsOf'] = m.get('ld')
+            row['priceObservedAt'] = None
+            row['pricePhase'] = 'closed' if m else 'unknown'
+            row['priceSource'] = (d or {}).get('src')
+            row['marketTimezone'] = ZONES[c['mkt']]
+            if quotes.positive(q.get('regularMarketPrice')) and (not m.get('ld') or quote_date >= m['ld']):
+                row.update(price=q['regularMarketPrice'], priceAsOf=quote_date,
+                           priceObservedAt=dt.datetime.fromtimestamp(q['regularMarketTime'],dt.UTC).isoformat(),
+                           pricePhase=latest.quote_phase(q), priceSource=q.get('src'))
+            row['metricAsOf'] = m.get('ld')
+            row['mcapEstimated'] = bool(selected_fx and selected_fx.get('estimated'))
         row["hi52"] = round(hi52, 3 if hi52 < 10 else 2) if hi52 else None
         status = financial_status(c.get('financial'), now.date(), c)
-        row['provenance'] = {'daily': {k: (d or {}).get(k) for k in ('src', 'asOf', 'receivedAt', 'returnBasis', 'phase', 'snapshotSelection')},
+        row['provenance'] = {'daily': {k: (d or {}).get(k) for k in ('src', 'asOf', 'receivedAt', 'returnBasis', 'phase', 'timezone', 'snapshotSelection')},
                              'valuation': {'source': q.get('src'), 'asOf': quote_date if q else None,
                                            'receivedAt': q.get('receivedAt'), 'observedAt': q.get('regularMarketTime'),
                                            'status': 'available' if q else 'missing', 'peStatus': pe_state,
@@ -234,6 +251,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
                                            'sourceMarketState': original_quote.get('marketState'),
                                            'sourcePeStatus': pe_status(original_quote.get('trailingPE')),
                                            'currency': q.get('currency'), 'currencyMatches': valuation_currency_ok,
+                                           'phase': latest.quote_phase(q), 'timezone': ZONES[c['mkt']],
+                                           'epsTrailingTwelveMonths': q.get('epsTrailingTwelveMonths'),
                                            'fx': selected_fx,
                                            'marketCapStatus': 'available' if mcap_usd is not None else 'missing_or_incompatible'},
                              'financial': {**c.get('financial', {}), 'status': status}}
@@ -262,43 +281,49 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
     all_dates = [c["ld"] for c in cos if c["ld"]]
     asof = snapshot['selectedDate']
     for cur, record in mk['fx'].items():
-        selected = dated_fx(record, cur, asof, now)
+        selected = dated_fx(record, cur, record.get('asOf') if selectors else asof, now)
         if selected:
             fx[cur] = selected['value']
             fx_meta[cur] = {k: selected.get(k) for k in ('src', 'asOf', 'receivedAt', 'direction')}
-    if len(set(all_dates)) != 1 or len(all_dates) != len(cos):
+    if (not selectors and len(set(all_dates)) != 1) or len(all_dates) != len(cos):
         blockers.append('mixed_or_missing_market_dates_need_label_approval')
 
     idx = []
     for x in cfg["indices"]:
         original_index = mk['index'].get(x['symbol'])
-        v = select_index(original_index, asof, now)
+        v = (selectors.select_index if selectors else select_index)(original_index, asof, now)
         if (isinstance(v, dict) and v.get('date') and fresh_record(v, now, v['date'])
                 and number(v.get('price')) and v['price'] > 0 and number(v.get('chg'))):
-            idx.append({"name": x["name"], "price": round(v["price"], 2),
-                        "chg": round(v["chg"], 5), 'asOf': v['date'], 'receivedAt': v['receivedAt'], 'source': v.get('src')})
-            if v['date'] != asof or v.get('phase') != 'closed':
+            idx.append({"symbol": x["symbol"], "name": x["name"], "price": round(v["price"], 2),
+                        "chg": round(v["chg"], 5), 'asOf': v['date'], 'receivedAt': v['receivedAt'], 'source': v.get('src'), 'phase': v.get('phase','unknown'),
+                        'observedAt': v.get('observedAt'), 'providerLocalTime': v.get('providerLocalTime'),
+                        'timezone': v.get('timezone'), 'metadataEvidence': v.get('metadataEvidence')})
+            if not selectors and (v['date'] != asof or v.get('phase') != 'closed'):
                 blockers.append('index_date_or_phase_needs_label_approval')
         else:
             issues.append({'symbol': x['symbol'], 'kind': 'index', 'status': 'missing_or_unconfirmed_snapshot',
                            'requiredDate': asof, 'sourceDate': (original_index or {}).get('date')})
-            if original_index:
+            if selectors:
+                blockers.append('index_observation_missing_or_stale')
+            elif original_index:
                 blockers.append('index_date_or_phase_needs_label_approval')
     ratio = None
     rc, rh = mk['ratio'].get('cyb'), mk['ratio'].get('hl')
     tc, th = observation_time('ratio', rc), observation_time('ratio', rh)
-    if (tc is not None and th is not None and tc == th and tc.date().isoformat() == asof
-            and fresh_record(rc, now, asof) and fresh_record(rh, now, asof)):
-        ratio = ratio_block(rc.get('bars', []), rh.get('bars', []), now.date())
+    aligned = latest.comparable_ratio(rc,rh,now) if selectors else None
+    ratio_date = aligned[0] if aligned else asof
+    if (aligned is not None if selectors else (tc is not None and th is not None and tc == th and tc.date().isoformat() == asof
+            and fresh_record(rc, now, asof) and fresh_record(rh, now, asof))):
+        ratio = ratio_block(aligned[1] if aligned else rc.get('bars', []), aligned[2] if aligned else rh.get('bars', []), now.date())
         if ratio and (not ratio['uiCompatible'] or rc.get('src') != 'tencent' or rh.get('src') != 'tencent'):
             issues.append({'kind': 'ratio', 'status': 'frozen_text_or_range_incompatible'})
             ratio = None
         if ratio:
-            ratio['asOf'] = asof
+            ratio['asOf'] = ratio_date
+            ratio['simultaneousObservationProven'] = False
             ratio['provenance'] = {key: {k: rec.get(k) for k in ('src', 'asOf', 'receivedAt', 'current')}
                                    for key, rec in (('cyb', rc), ('hl', rh))}
-        if ratio and (ratio['p60'] < .2 or ratio['p60'] > .8):
-            # Frozen sentence says "not in extreme zone" unconditionally.
+        if not selectors and ratio and (ratio['p60'] < .2 or ratio['p60'] > .8):
             blockers.append('ratio_extreme_conflicts_with_frozen_sentence')
     if ratio is None:
         issues.append({'kind': 'ratio', 'status': 'unavailable_or_short_history'})
@@ -316,6 +341,13 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
     }
     out = {"meta": meta, "industries": data["industries"], "chokepoints": data["chokepoints"],
            "companies": cos, "indices": idx, "ratio": ratio}
+    if selectors:
+        price_dates=sorted({c['priceAsOf'] for c in cos if c.get('priceAsOf')})
+        out['meta'].update(asOfLabel='各市场最新可得 · '+('—'.join([price_dates[0],price_dates[-1]]) if price_dates else '日期待核'),
+            priceDateRange=price_dates, configuredIndices=[x['symbol'] for x in cfg['indices']],
+            requiredFX=sorted({c['cur'] for c in data['companies']}-{'USD'}))
+        out['meta']['coverage']=latest.coverage_matrix(out)
+        out['meta']['coverageComplete']=all(r['status'] in ('complete','not_applicable') for r in out['meta']['coverage'])
     return out, stale, missing
 
 

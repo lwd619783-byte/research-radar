@@ -242,7 +242,7 @@ class CacheAndContractTests(unittest.TestCase):
             if c['mkt'] == '美股': b = b[:-1]
             mk['daily'][c['sym']] = record(bars=b, priceBasis='raw', asOf=b[-1][0], phase='closed')
         D, _, _ = build.assemble(data, mk, mk, NOW)
-        self.assertEqual(D['meta']['asOfByMarket']['A股'], ['2026-10-15'])
+        self.assertEqual(D['meta']['asOfByMarket']['A股'], ['2026-10-16'])
         self.assertEqual(D['meta']['asOfByMarket']['美股'], ['2026-10-15'])
         self.assertEqual(D['meta']['snapshot']['sourceAsOfByMarket']['A股'], ['2026-10-16'])
         self.assertIn('mixed_or_missing_market_dates_need_label_approval', release_blockers(D))

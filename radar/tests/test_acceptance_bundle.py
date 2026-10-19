@@ -71,6 +71,19 @@ class BundleTests(unittest.TestCase):
         for name in ('receipt.json', 'manifest.json'):
             self.assertIn('offline_test_explicit_blocker', (self.out / name).read_text())
 
+    def test_manifest_binds_independent_price_and_metric_dates(self):
+        self.D['meta']['snapshot']['policy']='latest-quote-and-market-completed-daily'
+        self.D['meta']['priceDateRange']=['2026-10-16','2026-10-19']
+        self.D['meta']['asOfByMarket']={'A股':['2026-10-19'],'美股':['2026-10-16']}
+        self.receipt['publication']['dataSHA256']=bundle.data_digest(self.D)
+        self.save()
+        manifest=json.loads((self.out/'manifest.json').read_text())
+        self.assertEqual(manifest['priceDateRange'],['2026-10-16','2026-10-19'])
+        self.assertEqual(manifest['metricAsOfByMarket']['美股'],['2026-10-16'])
+        manifest['metricAsOfByMarket']['美股']=['2026-10-19']
+        (self.out/'manifest.json').write_bytes(bundle.encoded(manifest))
+        with self.assertRaises(bundle.BundleError):bundle.verify_bundle(self.out)
+
     def test_sensitive_fields_in_data_or_receipt_fail_before_render_or_output(self):
         for target in (self.D, self.receipt):
             for key in ('cookie', 'headers', 'Authorization', 'access_token', 'rawBody', 'quoteResponse', 'documents'):

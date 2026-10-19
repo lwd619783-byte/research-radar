@@ -1,0 +1,4780 @@
+{
+  "classification": "OFFLINE MIXED-DATE REPLAY: saved 2026-10-18 daily/ratio + 2026-10-19 targeted quotes/FX/indices; not an after-close full run",
+  "rows": [
+    {
+      "kind": "company",
+      "symbol": "688498.SS",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688498.SS",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688498.SS",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688498.SS",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688498.SS",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688498.SS",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688498.SS",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688498.SS",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688498.SS",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688498.SS",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 6.02
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688498.SS",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "2026H1＋Q1官方合并财报；Q2差额；CNY中国准则归母"
+    },
+    {
+      "kind": "company",
+      "symbol": "LITE",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "LITE",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "LITE",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "LITE",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "LITE",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "LITE",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "LITE",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "LITE",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "LITE",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "LITE",
+      "metric": "PE",
+      "status": "not_applicable",
+      "reason": "not_meaningful",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": -92.96
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "LITE",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-27",
+      "source": "Lumentum FY2026Q4官方业绩公告；USD US GAAP"
+    },
+    {
+      "kind": "company",
+      "symbol": "COHR",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "COHR",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "COHR",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "COHR",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "COHR",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "COHR",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "COHR",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "COHR",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "COHR",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "COHR",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 4.12
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "COHR",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "Coherent FY2026Q4官方SEC业绩公告；USD US GAAP"
+    },
+    {
+      "kind": "company",
+      "symbol": "300308.SZ",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300308.SZ",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300308.SZ",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300308.SZ",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300308.SZ",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300308.SZ",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300308.SZ",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300308.SZ",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300308.SZ",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300308.SZ",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 18.3
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300308.SZ",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "2026H1＋Q1官方合并财报；Q2差额；CNY中国准则归母"
+    },
+    {
+      "kind": "company",
+      "symbol": "300502.SZ",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300502.SZ",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300502.SZ",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300502.SZ",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300502.SZ",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300502.SZ",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300502.SZ",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300502.SZ",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300502.SZ",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300502.SZ",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 9.39
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300502.SZ",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "2026H1＋Q1官方合并财报；Q2差额；CNY中国准则归母"
+    },
+    {
+      "kind": "company",
+      "symbol": "AVGO",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "AVGO",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "AVGO",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "AVGO",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "AVGO",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "AVGO",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "AVGO",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "AVGO",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "AVGO",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "AVGO",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 7.83
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "AVGO",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-08-02",
+      "source": "Broadcom FY2026Q3官方业绩公告；USD US GAAP"
+    },
+    {
+      "kind": "company",
+      "symbol": "MRVL",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MRVL",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MRVL",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MRVL",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MRVL",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MRVL",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MRVL",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MRVL",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MRVL",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MRVL",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 3.04
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MRVL",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-08-01",
+      "source": "Marvell FY2027Q2官方SEC业绩公告；USD US GAAP"
+    },
+    {
+      "kind": "company",
+      "symbol": "ANET",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ANET",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ANET",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ANET",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ANET",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ANET",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ANET",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ANET",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ANET",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ANET",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 3.17
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ANET",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "Arista 2026Q2官方SEC业绩公告；USD US GAAP"
+    },
+    {
+      "kind": "company",
+      "symbol": "300394.SZ",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300394.SZ",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300394.SZ",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300394.SZ",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300394.SZ",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300394.SZ",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300394.SZ",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300394.SZ",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300394.SZ",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300394.SZ",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 2.13
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300394.SZ",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "2026H1＋Q1官方合并财报；Q2差额；CNY中国准则归母"
+    },
+    {
+      "kind": "company",
+      "symbol": "TSM",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "TSM",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "TSM",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "TSM",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "TSM",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "TSM",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "TSM",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "TSM",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "TSM",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "TSM",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 15.43
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "TSM",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-09-30",
+      "source": "TSMC 2026Q3官方财务报表；TWD TIFRS归母"
+    },
+    {
+      "kind": "company",
+      "symbol": "0522.HK",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "0522.HK",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "0522.HK",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "0522.HK",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "0522.HK",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "0522.HK",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "0522.HK",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "0522.HK",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "0522.HK",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "0522.HK",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 3.76
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "0522.HK",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "ASMPT 2026Q2官方业绩公告；HKD HKFRS；持续经营收入及毛利、总归母利润"
+    },
+    {
+      "kind": "company",
+      "symbol": "000660.KS",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000660.KS",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000660.KS",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000660.KS",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000660.KS",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000660.KS",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000660.KS",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000660.KS",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000660.KS",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000660.KS",
+      "metric": "PE",
+      "status": "missing",
+      "reason": "missing",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": null
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000660.KS",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "SK hynix 2026H1 SEC 6-K内Q2合并报表；KRW K-IFRS归母"
+    },
+    {
+      "kind": "company",
+      "symbol": "MU",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MU",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MU",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MU",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MU",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MU",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MU",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MU",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MU",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MU",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 74.33
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MU",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-09-03",
+      "source": "Micron FY2026 Q4 earnings release, Exhibit 99.1；USD US_GAAP；归母/股东净利润"
+    },
+    {
+      "kind": "company",
+      "symbol": "688825.SS",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688825.SS",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688825.SS",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688825.SS",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688825.SS",
+      "metric": "r60",
+      "status": "missing",
+      "reason": "missing_or_incompatible",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688825.SS",
+      "metric": "ytd",
+      "status": "missing",
+      "reason": "missing_or_incompatible",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688825.SS",
+      "metric": "high52",
+      "status": "missing",
+      "reason": "missing_or_incompatible",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688825.SS",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688825.SS",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688825.SS",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 1.36
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688825.SS",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "长鑫科技2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls；上年亏损，本期扭亏，利润同比不适用"
+    },
+    {
+      "kind": "company",
+      "symbol": "NVDA",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "NVDA",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "NVDA",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "NVDA",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "NVDA",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "NVDA",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "NVDA",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "NVDA",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "NVDA",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "NVDA",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 7.91
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "NVDA",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-07-26",
+      "source": "NVIDIA FY2027Q2官方业绩公告；USD US GAAP"
+    },
+    {
+      "kind": "company",
+      "symbol": "ASML",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ASML",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ASML",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ASML",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ASML",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ASML",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ASML",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ASML",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ASML",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ASML",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 40.64
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ASML",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-09-27",
+      "source": "ASML Q3 2026 US GAAP financial statements；EUR US_GAAP；归母/股东净利润"
+    },
+    {
+      "kind": "company",
+      "symbol": "002371.SZ",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002371.SZ",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002371.SZ",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002371.SZ",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002371.SZ",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002371.SZ",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002371.SZ",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002371.SZ",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002371.SZ",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002371.SZ",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 7.84
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002371.SZ",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "北方华创2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls"
+    },
+    {
+      "kind": "company",
+      "symbol": "688012.SS",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688012.SS",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688012.SS",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688012.SS",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688012.SS",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688012.SS",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688012.SS",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688012.SS",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688012.SS",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688012.SS",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 5.83
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688012.SS",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "中微公司2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls"
+    },
+    {
+      "kind": "company",
+      "symbol": "3110.T",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "3110.T",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "3110.T",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "3110.T",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "3110.T",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "3110.T",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "3110.T",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "3110.T",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "3110.T",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "3110.T",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 229.47
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "3110.T",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "Nitto Boseki FY ending March 2027 Q1 consolidated financial results；JPY Japanese_GAAP；归母/股东净利润"
+    },
+    {
+      "kind": "company",
+      "symbol": "603256.SS",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "603256.SS",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "603256.SS",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "603256.SS",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "603256.SS",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "603256.SS",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "603256.SS",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "603256.SS",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "603256.SS",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "603256.SS",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 0.55
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "603256.SS",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "宏和科技2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls"
+    },
+    {
+      "kind": "company",
+      "symbol": "601208.SS",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601208.SS",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601208.SS",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601208.SS",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601208.SS",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601208.SS",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601208.SS",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601208.SS",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601208.SS",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601208.SS",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 0.4
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601208.SS",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "东材科技2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls"
+    },
+    {
+      "kind": "company",
+      "symbol": "2383.TW",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "2383.TW",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "2383.TW",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "2383.TW",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "2383.TW",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "2383.TW",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "2383.TW",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "2383.TW",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "2383.TW",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "2383.TW",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 63.93
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "2383.TW",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "Elite Material 2026Q2 consolidated financial report；TWD Taiwan_IFRS；归母/股东净利润"
+    },
+    {
+      "kind": "company",
+      "symbol": "600183.SS",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600183.SS",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600183.SS",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600183.SS",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600183.SS",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600183.SS",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600183.SS",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600183.SS",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600183.SS",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600183.SS",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 2.15
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600183.SS",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "生益科技2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls"
+    },
+    {
+      "kind": "company",
+      "symbol": "1888.HK",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "1888.HK",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "1888.HK",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "1888.HK",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "1888.HK",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "1888.HK",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "1888.HK",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "1888.HK",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "1888.HK",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "1888.HK",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 1.39
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "1888.HK",
+      "metric": "financial",
+      "status": "partial",
+      "reason": "verified_partial",
+      "date": "2026-06-30",
+      "source": "Kingboard Laminates 2026 Interim Results / Interim Report"
+    },
+    {
+      "kind": "company",
+      "symbol": "002463.SZ",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002463.SZ",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002463.SZ",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002463.SZ",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002463.SZ",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002463.SZ",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002463.SZ",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002463.SZ",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002463.SZ",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002463.SZ",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 2.6
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002463.SZ",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "沪电股份2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls"
+    },
+    {
+      "kind": "company",
+      "symbol": "300476.SZ",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300476.SZ",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300476.SZ",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300476.SZ",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300476.SZ",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300476.SZ",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300476.SZ",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300476.SZ",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300476.SZ",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300476.SZ",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 5.64
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "300476.SZ",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "胜宏科技2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls"
+    },
+    {
+      "kind": "company",
+      "symbol": "002916.SZ",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002916.SZ",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002916.SZ",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002916.SZ",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002916.SZ",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002916.SZ",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002916.SZ",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002916.SZ",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002916.SZ",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002916.SZ",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 6.19
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002916.SZ",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "深南电路2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls"
+    },
+    {
+      "kind": "company",
+      "symbol": "301200.SZ",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301200.SZ",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301200.SZ",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301200.SZ",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301200.SZ",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301200.SZ",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301200.SZ",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301200.SZ",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301200.SZ",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301200.SZ",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 3.3
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301200.SZ",
+      "metric": "financial",
+      "status": "partial",
+      "reason": "verified_partial",
+      "date": "2026-09-30",
+      "source": "大族数控2026年前三季度业绩快报、2026半年度报告及2025第三季度报告"
+    },
+    {
+      "kind": "company",
+      "symbol": "301377.SZ",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301377.SZ",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301377.SZ",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301377.SZ",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301377.SZ",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301377.SZ",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301377.SZ",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301377.SZ",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301377.SZ",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301377.SZ",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 2.33
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "301377.SZ",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "鼎泰高科2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls"
+    },
+    {
+      "kind": "company",
+      "symbol": "000657.SZ",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000657.SZ",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000657.SZ",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000657.SZ",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000657.SZ",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000657.SZ",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000657.SZ",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000657.SZ",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000657.SZ",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000657.SZ",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 1.26
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "000657.SZ",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "中钨高新2026 H1 report；CNY PRC_ASBE；归母/股东净利润；单季差额桥接，须保留全部source_urls"
+    },
+    {
+      "kind": "company",
+      "symbol": "GEV",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "GEV",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "GEV",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "GEV",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "GEV",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "GEV",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "GEV",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "GEV",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "GEV",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "GEV",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 34.88
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "GEV",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "GE Vernova 2026 Q2 Form 10-Q；USD US_GAAP；归母/股东净利润"
+    },
+    {
+      "kind": "company",
+      "symbol": "ENR.DE",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ENR.DE",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ENR.DE",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ENR.DE",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ENR.DE",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ENR.DE",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ENR.DE",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ENR.DE",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ENR.DE",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ENR.DE",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 3.1
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ENR.DE",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "Siemens Energy Earnings Release Q3 FY2026；EUR IFRS；归母/股东净利润"
+    },
+    {
+      "kind": "company",
+      "symbol": "600875.SS",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600875.SS",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600875.SS",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600875.SS",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600875.SS",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600875.SS",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600875.SS",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600875.SS",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600875.SS",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600875.SS",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 1.33
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "600875.SS",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "东方电气2026年半年度报告；CNY PRC_ASBE；归母/股东净利润"
+    },
+    {
+      "kind": "company",
+      "symbol": "002028.SZ",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002028.SZ",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002028.SZ",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002028.SZ",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002028.SZ",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002028.SZ",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002028.SZ",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002028.SZ",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002028.SZ",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002028.SZ",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 4.2
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002028.SZ",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "思源电气2026年半年度报告；CNY PRC_ASBE；归母/股东净利润"
+    },
+    {
+      "kind": "company",
+      "symbol": "601179.SS",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601179.SS",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601179.SS",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601179.SS",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601179.SS",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601179.SS",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601179.SS",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601179.SS",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601179.SS",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601179.SS",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 0.26
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "601179.SS",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "中国西电2026年半年度报告；CNY PRC_ASBE；归母/股东净利润"
+    },
+    {
+      "kind": "company",
+      "symbol": "688676.SS",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688676.SS",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688676.SS",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688676.SS",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688676.SS",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688676.SS",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688676.SS",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688676.SS",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688676.SS",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688676.SS",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 1.56
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "688676.SS",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-09-30",
+      "source": "金盘科技2026年第三季度报告；CNY PRC_ASBE；归母/股东净利润"
+    },
+    {
+      "kind": "company",
+      "symbol": "ETN",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ETN",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ETN",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ETN",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ETN",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ETN",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ETN",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ETN",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ETN",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ETN",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 9.83
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "ETN",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "Eaton 2026 Q2 financial statements；USD US_GAAP；归母/股东净利润"
+    },
+    {
+      "kind": "company",
+      "symbol": "SU.PA",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "SU.PA",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "SU.PA",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "SU.PA",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "SU.PA",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "SU.PA",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "SU.PA",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "SU.PA",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "SU.PA",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "SU.PA",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 8.32
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "SU.PA",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-09-30",
+      "source": "Schneider Electric Q3 2026 revenues；EUR IFRS；归母/股东净利润；仅收入，利润与毛利未披露"
+    },
+    {
+      "kind": "company",
+      "symbol": "002335.SZ",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002335.SZ",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002335.SZ",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002335.SZ",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002335.SZ",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002335.SZ",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002335.SZ",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002335.SZ",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002335.SZ",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002335.SZ",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 0.75
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002335.SZ",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "科华数据2026年半年度报告；CNY PRC_ASBE；归母/股东净利润"
+    },
+    {
+      "kind": "company",
+      "symbol": "VRT",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "VRT",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "VRT",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "VRT",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "VRT",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "VRT",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "VRT",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "VRT",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "VRT",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "VRT",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 4.42
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "VRT",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "Vertiv Second Quarter 2026 Earnings Release；USD US_GAAP；归母/股东净利润"
+    },
+    {
+      "kind": "company",
+      "symbol": "002837.SZ",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002837.SZ",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002837.SZ",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002837.SZ",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002837.SZ",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002837.SZ",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002837.SZ",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002837.SZ",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002837.SZ",
+      "metric": "marketCapUSD",
+      "status": "partial",
+      "reason": "dated_fx_estimate",
+      "date": "2026-10-19",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002837.SZ",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-19",
+      "evidence": {
+        "epsTrailingTwelveMonths": 0.39
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "002837.SZ",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "英维克2026年半年度报告；CNY PRC_ASBE；归母/股东净利润"
+    },
+    {
+      "kind": "company",
+      "symbol": "MOD",
+      "metric": "price",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MOD",
+      "metric": "daily",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MOD",
+      "metric": "r5",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MOD",
+      "metric": "r20",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MOD",
+      "metric": "r60",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MOD",
+      "metric": "ytd",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MOD",
+      "metric": "high52",
+      "status": "partial",
+      "reason": "cached_or_stale_daily",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MOD",
+      "metric": "marketCap",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MOD",
+      "metric": "marketCapUSD",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": null,
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MOD",
+      "metric": "PE",
+      "status": "complete",
+      "reason": "available",
+      "date": "2026-10-16",
+      "evidence": {
+        "epsTrailingTwelveMonths": 2.66
+      },
+      "source": "yahoo"
+    },
+    {
+      "kind": "company",
+      "symbol": "MOD",
+      "metric": "financial",
+      "status": "complete",
+      "reason": "verified",
+      "date": "2026-06-30",
+      "source": "Modine First Quarter Fiscal 2027 Results；USD US_GAAP；归母/股东净利润；分拆前集团范围"
+    },
+    {
+      "kind": "index",
+      "symbol": "000001.SS",
+      "status": "partial",
+      "date": "2026-10-19",
+      "source": "tencent",
+      "reason": "phase_unknown"
+    },
+    {
+      "kind": "index",
+      "symbol": "399006.SZ",
+      "status": "partial",
+      "date": "2026-10-19",
+      "source": "tencent",
+      "reason": "phase_unknown"
+    },
+    {
+      "kind": "index",
+      "symbol": "000922.SS",
+      "status": "partial",
+      "date": "2026-10-19",
+      "source": "tencent",
+      "reason": "phase_unknown"
+    },
+    {
+      "kind": "index",
+      "symbol": "^HSI",
+      "status": "complete",
+      "date": "2026-10-16",
+      "source": "yahoo",
+      "reason": "available"
+    },
+    {
+      "kind": "index",
+      "symbol": "HSTECH.HK",
+      "status": "partial",
+      "date": "2026-10-16",
+      "source": "tencent",
+      "reason": "phase_unknown"
+    },
+    {
+      "kind": "index",
+      "symbol": "^IXIC",
+      "status": "complete",
+      "date": "2026-10-16",
+      "source": "yahoo",
+      "reason": "available"
+    },
+    {
+      "kind": "index",
+      "symbol": "^GSPC",
+      "status": "complete",
+      "date": "2026-10-16",
+      "source": "yahoo",
+      "reason": "available"
+    },
+    {
+      "kind": "index",
+      "symbol": "^SOX",
+      "status": "complete",
+      "date": "2026-10-16",
+      "source": "yahoo",
+      "reason": "available"
+    },
+    {
+      "kind": "fx",
+      "symbol": "CNY",
+      "status": "complete",
+      "date": "2026-10-16",
+      "source": "yahoo"
+    },
+    {
+      "kind": "fx",
+      "symbol": "EUR",
+      "status": "complete",
+      "date": "2026-10-16",
+      "source": "yahoo"
+    },
+    {
+      "kind": "fx",
+      "symbol": "HKD",
+      "status": "complete",
+      "date": "2026-10-16",
+      "source": "yahoo"
+    },
+    {
+      "kind": "fx",
+      "symbol": "JPY",
+      "status": "complete",
+      "date": "2026-10-16",
+      "source": "yahoo"
+    },
+    {
+      "kind": "fx",
+      "symbol": "KRW",
+      "status": "complete",
+      "date": "2026-10-16",
+      "source": "yahoo"
+    },
+    {
+      "kind": "fx",
+      "symbol": "TWD",
+      "status": "complete",
+      "date": "2026-10-16",
+      "source": "yahoo"
+    },
+    {
+      "kind": "ratio",
+      "symbol": "growth/dividend",
+      "status": "partial",
+      "reason": "common_daily_date_not_proven_simultaneous",
+      "date": "2026-10-16"
+    }
+  ]
+}

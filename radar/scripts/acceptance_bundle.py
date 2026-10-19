@@ -132,6 +132,9 @@ def write_bundle(out_dir, D, receipt, clock):
         'execution': {k: receipt['execution'][k] for k in
                       ('GITHUB_SHA', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT')},
         'fixedClock': clock.isoformat(), 'selectedDate': D['meta']['asOf'],
+        'snapshotPolicy': D['meta']['snapshot'].get('policy'),
+        'priceDateRange': D['meta'].get('priceDateRange',[]),
+        'metricAsOfByMarket': D['meta'].get('asOfByMarket',{}),
         'blockers': receipt['publication']['blockers'], 'retentionDays': 7,
         'maxTotalBytes': MAX_BUNDLE,
         'files': {name: {'bytes': len(payload[name]), 'sha256': digest(payload[name])}
@@ -182,7 +185,7 @@ def verify_bundle(directory):
     check_sensitive(manifest)
     if (set(manifest) != {'schemaVersion', 'purpose', 'dataClassification', 'publicationAuthorized',
                          'execution', 'fixedClock', 'selectedDate', 'blockers', 'retentionDays',
-                         'maxTotalBytes', 'files', 'totalBytes'} or
+                         'maxTotalBytes', 'files', 'totalBytes', 'snapshotPolicy', 'priceDateRange', 'metricAsOfByMarket'} or
             manifest.get('schemaVersion') != 1 or
             manifest.get('purpose') != 'interface-acceptance-not-publication'):
         raise BundleError('bundle_manifest_schema')
@@ -197,6 +200,9 @@ def verify_bundle(directory):
     if (manifest['execution'] != {k: receipt['execution'][k] for k in manifest['execution']} or
             set(manifest['execution']) != {'GITHUB_SHA', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT'} or
             manifest['selectedDate'] != D['meta']['asOf'] or
+            manifest['snapshotPolicy'] != D['meta']['snapshot'].get('policy') or
+            manifest['priceDateRange'] != D['meta'].get('priceDateRange',[]) or
+            manifest['metricAsOfByMarket'] != D['meta'].get('asOfByMarket',{}) or
             manifest['blockers'] != receipt['publication']['blockers'] or
             manifest['dataClassification'] != classification(D) or
             embedded_data(payload['index.html']) != D or

@@ -11,6 +11,7 @@ import math
 import time
 import urllib.parse
 import urllib.request
+import urllib.error
 from zoneinfo import ZoneInfo
 
 from integrity import observation_time, fx_bar_final
@@ -18,7 +19,7 @@ from snapshot import equity_bar_final
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
-YH = ("https://query1.finance.yahoo.com", "https://query2.finance.yahoo.com")
+YH = ("https://query1.finance.yahoo.com",)
 
 
 def positive(v):
@@ -35,6 +36,10 @@ def exchange_date(timestamp, meta):
     return dt.datetime.fromtimestamp(timestamp, tz).date().isoformat()
 
 
+class AccessRefused(RuntimeError):
+    """Fixed code; never route an explicit refusal to a mirror."""
+
+
 class Http:
     def __init__(self, timeout: int = 20) -> None:
         self.timeout = timeout
@@ -42,8 +47,13 @@ class Http:
         self.op = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self.jar))
         self.op.addheaders = [("User-Agent", UA), ("Accept", "application/json,text/plain,*/*")]
         self._crumb: str | None = None
+        self._denied_paths = set()
 
     def get(self, url: str, tries: int = 3) -> bytes:
+        parsed = urllib.parse.urlsplit(url)
+        path = (parsed.netloc, parsed.path)
+        if path in self._denied_paths:
+            raise AccessRefused("source_access_refused")
         err: Exception | None = None
         for i in range(tries):
             try:
@@ -52,30 +62,28 @@ class Http:
             except Exception as e:  # noqa: BLE001
                 err = e
                 code = getattr(e, "code", None)
-                if code in (400, 401, 403, 404):
+                if code in (401, 403, 451):
+                    self._denied_paths.add(path)
+                    raise AccessRefused("source_access_refused") from None
+                if code in (400, 404):
                     break
                 time.sleep(1.5 * (i + 1) + (3 if code == 429 else 0))
-        raise RuntimeError(f"{url[:90]} → {err}")
+        raise RuntimeError("source_transport_failed")
 
     def json(self, url: str, tries: int = 3):
         return json.loads(self.get(url, tries).decode("utf-8", "replace"))
 
     def yahoo(self, path: str, tries: int = 2):
-        """依次尝试 query1 / query2。"""
-        last: Exception | None = None
-        for host in YH:
-            try:
-                return self.json(host + path, tries)
-            except Exception as e:  # noqa: BLE001
-                last = e
-        raise RuntimeError(str(last))
+        """Primary endpoint only: no mirror retry after an explicit refusal."""
+        return self.json(YH[0] + path, tries)
 
     def crumb(self) -> str:
         if self._crumb is None:
             try:
                 self.op.open("https://fc.yahoo.com", timeout=self.timeout)
-            except Exception:  # noqa: BLE001  该地址常返回 404，但会种下 cookie
-                pass
+            except urllib.error.HTTPError as exc:
+                if exc.code in (401,403,451): raise AccessRefused("source_access_refused") from None
+                if exc.code != 404: raise RuntimeError("cookie_seed_failed") from None
             self._crumb = self.get(YH[0] + "/v1/test/getcrumb", 2).decode().strip()
             if not self._crumb or "<" in self._crumb:
                 raise RuntimeError("拿不到 Yahoo crumb")
@@ -149,6 +157,16 @@ def tencent_code(sym: str) -> str | None:
     return {"^HSI": "hkHSI"}.get(s)
 
 
+def tencent_metadata(node, code):
+    qt=(node.get('qt') or {}).get(code)
+    qt=qt if isinstance(qt,list) else []
+    currency=qt[75] if len(qt)>75 and qt[75] in ('HKD','CNY','USD') else None
+    return {'currency':currency, 'phase':'unknown', 'timezone':None,
+            'providerLocalTime':qt[30] if len(qt)>30 else None,
+            'metadataEvidence':{'currency':'payload.qt[75]' if currency else 'not_proven',
+                                'timezone':'not_proven','phase':'not_proven'}}
+
+
 def tencent_daily(h: Http, sym: str, n: int = 520) -> dict:
     code = tencent_code(sym)
     if not code:
@@ -179,8 +197,8 @@ def tencent_daily(h: Http, sym: str, n: int = 520) -> dict:
     bars.sort(key=lambda x: x[0])
     if not bars:
         raise RuntimeError("腾讯返回空 K 线")
-    return stamp(bars=bars, currency=None, src="tencent", asOf=bars[-1][0],
-                 priceBasis="raw", returnBasis="tencent-qfq" if adjusted else None, phase="unknown")
+    return stamp(bars=bars, src="tencent", asOf=bars[-1][0],
+                 priceBasis="raw", returnBasis="tencent-qfq" if adjusted else None, **tencent_metadata(node,code))
 
 
 def daily(h: Http, sym: str) -> dict:
@@ -204,7 +222,7 @@ def yahoo_quotes(h: Http, syms: list[str]) -> dict[str, dict]:
         crumb = h.crumb()
     except Exception:  # noqa: BLE001
         return out
-    fields = "marketCap,trailingPE,currency,regularMarketTime,marketState"
+    fields = "marketCap,trailingPE,epsTrailingTwelveMonths,regularMarketPrice,currency,regularMarketTime,marketState"
     for i in range(0, len(syms), 40):
         part = ",".join(syms[i:i + 40])
         try:
@@ -213,7 +231,7 @@ def yahoo_quotes(h: Http, syms: list[str]) -> dict[str, dict]:
         except Exception:  # noqa: BLE001
             continue
         for q in (j.get("quoteResponse") or {}).get("result") or []:
-            value = stamp(**{k: q.get(k) for k in ("marketCap", "trailingPE", "currency", "regularMarketTime", "marketState")}, src="yahoo")
+            value = stamp(**{k: q.get(k) for k in ("marketCap", "trailingPE", "epsTrailingTwelveMonths", "regularMarketPrice", "currency", "regularMarketTime", "marketState")}, src="yahoo")
             if q.get('symbol') and observation_time('quote', value) is not None:
                 out[q['symbol']] = value
     return out
@@ -237,7 +255,8 @@ def index_quote(h: Http, sym: str, tencent: str = "", source: str | None = None)
             d = yahoo_daily(h, sym, "1mo")
             history = d
             bars = d['bars']
-            provenance = {k: d.get(k) for k in ('src', 'phase')}
+            provenance = {k: d.get(k) for k in ('src', 'phase','timezone','currency')}
+            provenance['observedAt'] = d.get('barTimestamps',{}).get(d.get('asOf'))
             if len(bars) < 2:
                 raise SourceDataError('yahoo_index_insufficient_daily_bars', len(bars))
         except Exception as exc:
@@ -250,6 +269,7 @@ def index_quote(h: Http, sym: str, tencent: str = "", source: str | None = None)
         history = None
         j = h.json(f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={code},day,,,10,")
         node = (j.get('data') or {}).get(code) or {}
+        provenance.update(tencent_metadata(node,code))
         rows = node.get('day') or node.get('qfqday') or []
         bars = [[x[0], float(x[2]), None, None] for x in rows if len(x) > 2]
     if len(bars) < 2:
@@ -332,6 +352,7 @@ def monthly(h: Http, tencent: str, yahoo: str) -> dict:
             daily.append((date, close))
         date, close = max(daily)
         current = {'date': date, 'close': close, 'src': 'tencent'}
+        result['dailyObservations'] = [[d,v] for d,v in daily]
         # Never backfill a later month with an earlier daily observation.
         if result['bars'][-1][0] <= date[:7]:
             result['bars'] = [b for b in result['bars'] if b[0] < date[:7]] + [[date[:7], close]]

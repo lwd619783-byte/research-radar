@@ -1,0 +1,163 @@
+{
+  "classification": "OFFLINE MIXED-DATE REPLAY: saved 2026-10-18 daily/ratio + 2026-10-19 targeted quotes/FX/indices; not an after-close full run",
+  "fixedClock": "2026-10-19T12:33:31.713980+08:00",
+  "requestsMade": 0,
+  "sourceReceiptsPreserved": true,
+  "staleDaily": 42,
+  "missingDaily": 0,
+  "priceDateRange": [
+    "2026-10-16",
+    "2026-10-19"
+  ],
+  "metricsAsOfByMarket": {
+    "A股": [
+      "2026-10-16"
+    ],
+    "美股": [
+      "2026-10-16"
+    ],
+    "港股": [
+      "2026-10-16"
+    ],
+    "韩股": [
+      "2026-10-16"
+    ],
+    "日股": [
+      "2026-10-16"
+    ],
+    "台股": [
+      "2026-10-16"
+    ],
+    "欧股": [
+      "2026-10-16"
+    ]
+  },
+  "coverageComplete": false,
+  "coverageStatusCounts": {
+    "complete": 191,
+    "partial": 281,
+    "not_applicable": 1,
+    "missing": 4
+  },
+  "counts": {
+    "companies": 42,
+    "price": 42,
+    "marketCapLocal": 42,
+    "marketCapUSD": 42,
+    "marketCapEstimated": 25,
+    "PE": 40,
+    "indices": 8,
+    "FX": 6,
+    "ratio": true
+  },
+  "blockers": [
+    "local_review_not_publishable",
+    "offline_not_publishable",
+    "stale_quotes_not_safe_in_all_frozen_views",
+    "synthetic_fixture_not_publishable"
+  ],
+  "archiveRoundTrip": {
+    "totalBytes": 2520003,
+    "files": {
+      "DATA.json": {
+        "bytes": 1643430,
+        "sha256": "d1f6b085473a663356ca69b9fcc884930cfb73ac5440d3d4abc50f703ac57d6b"
+      },
+      "index.html": {
+        "bytes": 750972,
+        "sha256": "d3953604cc6b61a90b60215395279c9f765870f0a4572add5b876f44d5409f98"
+      },
+      "receipt.json": {
+        "bytes": 124073,
+        "sha256": "3dd4575672a4751508b1fd7d8a9e433b0d0988e6d6148326d48fc7949036c79f"
+      },
+      "manifest.json": {
+        "bytes": 1528,
+        "sha256": "4902571b4a7ed8a57f785ed01d54752a22ce084bc5ea79bc48e97c432e5a86e2"
+      }
+    }
+  },
+  "selectedCompanyEvidence": [
+    {
+      "sym": "688498.SS",
+      "price": 1006.06,
+      "priceAsOf": "2026-10-19",
+      "priceObservedAt": "2026-10-19T03:29:56+00:00",
+      "pricePhase": "intraday",
+      "metricAsOf": "2026-10-16",
+      "mcapLocal": 125254844416,
+      "mcapUSD": 187.2,
+      "mcapEstimated": true,
+      "history": {
+        "count": 923,
+        "firstDate": "2022-12-21",
+        "lastDate": "2026-10-16",
+        "days": 1395,
+        "high52Available": true
+      },
+      "pe": 167.1
+    },
+    {
+      "sym": "LITE",
+      "price": 824.13,
+      "priceAsOf": "2026-10-16",
+      "priceObservedAt": "2026-10-16T20:00:01+00:00",
+      "pricePhase": "closed",
+      "metricAsOf": "2026-10-16",
+      "mcapLocal": 74652049408,
+      "mcapUSD": 746.5,
+      "mcapEstimated": false,
+      "history": {
+        "count": 1255,
+        "firstDate": "2021-10-18",
+        "lastDate": "2026-10-16",
+        "days": 1824,
+        "high52Available": true
+      },
+      "pe": null
+    },
+    {
+      "sym": "000660.KS",
+      "price": 1253000.0,
+      "priceAsOf": "2026-10-19",
+      "priceObservedAt": "2026-10-19T04:13:19+00:00",
+      "pricePhase": "intraday",
+      "metricAsOf": "2026-10-16",
+      "mcapLocal": 913269900443648,
+      "mcapUSD": 6810.6,
+      "mcapEstimated": true,
+      "history": {
+        "count": 1220,
+        "firstDate": "2021-10-18",
+        "lastDate": "2026-10-16",
+        "days": 1824,
+        "high52Available": true
+      },
+      "pe": null
+    },
+    {
+      "sym": "688825.SS",
+      "price": 41.58,
+      "priceAsOf": "2026-10-19",
+      "priceObservedAt": "2026-10-19T03:30:00+00:00",
+      "pricePhase": "intraday",
+      "metricAsOf": "2026-10-16",
+      "mcapLocal": 2822620839936,
+      "mcapUSD": 4218.6,
+      "mcapEstimated": true,
+      "history": {
+        "count": 54,
+        "firstDate": "2026-07-27",
+        "lastDate": "2026-10-16",
+        "days": 81,
+        "high52Available": false
+      },
+      "pe": 30.6
+    }
+  ],
+  "ratioEvidence": {
+    "asOf": "2026-10-16",
+    "completedMonths": 196,
+    "simultaneousObservationProven": false
+  }
+}

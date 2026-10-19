@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-19T04:44:42.795347+00:00",
+  "unexplainedSecretValueMatches": [],
+  "reviewedStaticCodePatterns": [
+    {
+      "path": "radar/scripts/quotes.py",
+      "line": 230,
+      "reason": "unchanged source URL interpolation or explicit synthetic rejection test; no real credential"
+    },
+    {
+      "path": "radar/tests/test_acceptance_bundle.py",
+      "line": 100,
+      "reason": "unchanged source URL interpolation or explicit synthetic rejection test; no real credential"
+    },
+    {
+      "path": "radar/tests/test_acceptance_bundle.py",
+      "line": 101,
+      "reason": "unchanged source URL interpolation or explicit synthetic rejection test; no real credential"
+    }
+  ],
+  "publicEvidenceJSONSensitiveScan": "passed",
+  "frozenFilesMatch": 10,
+  "frozenHashChanges": [
+    "radar/site/app.js"
+  ],
+  "newPathsOutsideAllowedScope": [],
+  "noWorkflowChange": true,
+  "checkedFiles": 32
+}

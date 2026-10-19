@@ -25,7 +25,7 @@ from zoneinfo import ZoneInfo
 import build
 import acceptance_bundle as bundle
 import quotes
-from integrity import ZONES, financial_status, fresh_record, observation_time, valid_bars, pe_status, dated_fx
+from integrity import ZONES, financial_status, fresh_record, observation_time, valid_bars, pe_status, dated_fx, number
 from snapshot import CLOSED_QUOTE_STATES
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -296,15 +296,20 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
         observed = observation_time('quote', v)
         d = observed.astimezone(ZoneInfo(ZONES[c['mkt']])).date().isoformat() if observed else None
         fields = {'marketCap': quotes.positive(v.get('marketCap')), 'trailingPE': quotes.positive(v.get('trailingPE')),
+                  'price': quotes.positive(v.get('regularMarketPrice')),
                   'closedMarketState': v.get('marketState') in CLOSED_QUOTE_STATES,
                   'sourceTime': observed is not None, 'currencyMatches': v.get('currency') == c['cur'],
                   'dateMatchesDaily': bool(d and d == mk['daily'].get(c['sym'],{}).get('asOf')),
                   'dateFresh': bool(d and fresh_record(v,dt.datetime.now(dt.UTC),d,c['mkt']))}
+        selected=build.latest.select_quote(v,None,c['mkt'],c['cur'],dt.datetime.now(build.BJ))[0]
+        eps=v.get('epsTrailingTwelveMonths')
+        not_applicable=v.get('trailingPE') is None and number(eps) and eps<=0
+        quality=bool(selected) and fields['marketCap'] and fields['price'] and (fields['trailingPE'] or not_applicable)
         rows.append({'category':'company-yahoo-quote','code':c['sym'],'source':'yahoo',
                      'connection':bool(batch.get('connection')), 'parse':bool(batch.get('parse')),
-                     'quality':all(fields.values()), 'publicationGate':all(fields.values()),
+                     'quality':quality, 'publicationGate':quality,
                      'checks':fields,'details':{'count':int(bool(v)),'asOf':d,'observedAt':observed.isoformat() if observed else None,
-                                              'receivedAt':v.get('receivedAt'), 'peStatus':pe_status(v.get('trailingPE')),
+                                              'receivedAt':v.get('receivedAt'), 'peStatus':'not_meaningful' if not_applicable else pe_status(v.get('trailingPE')),
                                               'marketState':v.get('marketState') if v.get('marketState') in (*CLOSED_QUOTE_STATES, 'REGULAR') else 'unknown'},'requests':[]})
     quote_session = {'failure':quote_failure,'requests':h.events,'batches':h.batches,'expectedBatchSizes':[len(companies[i:i+40]) for i in range(0,len(companies),40)],'returned':len(values),
                      'cookieAvailable':bool(list(h.jar)),'crumbAvailable':bool(h._crumb)}
@@ -313,7 +318,9 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
             row,value = inspect('index-'+source, x['symbol'],source,budget,
                                 lambda h: quotes.index_quote(h,x['symbol'],x.get('tencent',''),source=source),index_quality)
             rows.append(row)
-            if source == 'yahoo' and value: mk['index'][x['symbol']] = value
+            previous=mk['index'].get(x['symbol'])
+            if value and build.latest.select_index(value,None,dt.datetime.now(build.BJ)) and (not previous or value.get('date','')>previous.get('date','')):
+                mk['index'][x['symbol']] = value
     for cur in currencies:
         row,value=inspect('fx',cur,'yahoo',budget,lambda h:quotes.fx(h,cur),lambda v,h:fx_quality(v,h,cur))
         rows.append(row)
@@ -329,6 +336,13 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
     # future relative to this clock. Transport event times remain actual times.
     fixed_clock = snapshot_clock if snapshot_clock is not None else dt.datetime.now(build.BJ)
     D,stale,missing=build.assemble(data,mk,mk,fixed_clock)
+    # Expose transport denial separately from empty/partial observations.
+    D['meta']['sourceAccess']=[{'category':r['category'],'symbol':r['code'],'source':r['source'],'status':'access_blocked'} for r in rows if r.get('failure')=='access_refused_stop_path' or any(e.get('httpStatus') in DENIALS for e in r.get('requests',[]))]
+    if any(e.get('httpStatus') in DENIALS for e in h.events):
+        D['meta']['sourceAccess'].append({'category':'quote-session','source':'yahoo','status':'access_blocked'})
+    for item in D['meta'].get('coverage',[]):
+        if item['status']=='missing' and item.get('metric')!='financial' and any(a.get('symbol')==item.get('symbol') or (a['category']=='quote-session' and item.get('metric') in ('price','PE','marketCap','marketCapUSD')) for a in D['meta']['sourceAccess']):
+            item.update(status='access_blocked',reason='explicit_source_access_refusal')
     gates={'blockers':build.release_blockers(D),'missingDailyCount':len(missing),'staleDailyCount':len(stale),
            'snapshot':D['meta']['snapshot'],
            'marketCapAvailable':sum(c['mcapUSD'] is not None for c in D['companies']),
@@ -336,7 +350,9 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
            'asOf':D['meta']['asOf'],'asOfByMarket':D['meta']['asOfByMarket'], 'ratioAvailable':D['ratio'] is not None,
            'financialVerified':sum(financial_status(c.get('financial'),fixed_clock.date(),c)=='verified' for c in data['companies']),
            'financialPartial':sum(financial_status(c.get('financial'),fixed_clock.date(),c)=='verified_partial' for c in data['companies']),
-           'financialRequired':len(companies),'primaryOnlyAssembly':True,
+           'financialRequired':len(companies),'primaryOnlyAssembly':False,
+           'indexAssemblySources':{k:v.get('src') for k,v in mk['index'].items()},
+           'coverage':D['meta'].get('coverage',[]),
            'dataSHA256':bundle.data_digest(D)}
     summary={}
     for category in sorted({r['category'] for r in rows}):
