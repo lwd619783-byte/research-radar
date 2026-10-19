@@ -1,0 +1,1088 @@
+{
+  "checkedAt": "2026-10-19T03:37:25.461732+00:00",
+  "dataClassification": "Same synthetic/old-sample fixture as prior audit, plus explicitly synthetic missing/zero edge variants; not real Actions DATA",
+  "browser": "Installed Chromium via Playwright; loopback-only assets and CSP, no external requests",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "checks": [
+    {
+      "check": "index_coverage_5_of_8",
+      "passed": true,
+      "evidence": "10/16 收盘 · 指数有效 5/8"
+    },
+    {
+      "check": "three_index_gaps_explicit",
+      "passed": true,
+      "evidence": "指数缺项：399006.SZ、000922.SS、HSTECH.HK"
+    },
+    {
+      "check": "hero_metric_specific_counts",
+      "passed": true,
+      "evidence": [
+        "龙头近20日 · 均值 · 有效 9/9",
+        "距52周高点 · 均值 · 有效 9/9",
+        "单季营收同比 · 中位数 · 有效 9/9"
+      ]
+    },
+    {
+      "check": "ratio_factual_empty_state",
+      "passed": true,
+      "evidence": "红利定投温度计\n当前快照无可用比值数据"
+    },
+    {
+      "check": "Ashare_r5",
+      "passed": true,
+      "evidence": "有效 22/22"
+    },
+    {
+      "check": "Ashare_r20",
+      "passed": true,
+      "evidence": "有效 22/22"
+    },
+    {
+      "check": "Ashare_r60",
+      "passed": true,
+      "evidence": "有效 21/22"
+    },
+    {
+      "check": "Ashare_ytd",
+      "passed": true,
+      "evidence": "有效 21/22"
+    },
+    {
+      "check": "Ashare_dd52",
+      "passed": true,
+      "evidence": "有效 21/22"
+    },
+    {
+      "check": "Ashare_revg",
+      "passed": true,
+      "evidence": "有效 21/22"
+    },
+    {
+      "check": "Ashare_earng",
+      "passed": true,
+      "evidence": "有效 20/22"
+    },
+    {
+      "check": "Ashare_gm",
+      "passed": true,
+      "evidence": "有效 21/22"
+    },
+    {
+      "check": "Ashare_pe",
+      "passed": true,
+      "evidence": "有效 0/22"
+    },
+    {
+      "check": "Ashare_mcapUSD",
+      "passed": true,
+      "evidence": "有效 0/22"
+    },
+    {
+      "check": "Ashare_summary_zero_of_22",
+      "passed": true,
+      "evidence": "点击表头排序 · 点击行查看走势与财务 · 颜色：红涨绿跌 · 当前 22 家 · 市值有效 0/22 · PE有效 0/22"
+    },
+    {
+      "check": "short_row_actual_54",
+      "passed": true,
+      "evidence": "长鑫科技\nSH688825 · A股\n\t\nHBM与存储\n\t待核/不适用回调\t\n实际 54 个交易日 · 短历史\n\t¥45.02\t−11.7%\t−21.3%\t—\t—\t—\t+977%\t—\t87.6%\t—\t—\t10/31 12天"
+    },
+    {
+      "check": "all_r5",
+      "passed": true,
+      "evidence": "有效 42/42"
+    },
+    {
+      "check": "all_r20",
+      "passed": true,
+      "evidence": "有效 42/42"
+    },
+    {
+      "check": "all_r60",
+      "passed": true,
+      "evidence": "有效 41/42"
+    },
+    {
+      "check": "all_ytd",
+      "passed": true,
+      "evidence": "有效 41/42"
+    },
+    {
+      "check": "all_dd52",
+      "passed": true,
+      "evidence": "有效 41/42"
+    },
+    {
+      "check": "all_revg",
+      "passed": true,
+      "evidence": "有效 40/42"
+    },
+    {
+      "check": "all_earng",
+      "passed": true,
+      "evidence": "有效 37/42"
+    },
+    {
+      "check": "all_gm",
+      "passed": true,
+      "evidence": "有效 39/42"
+    },
+    {
+      "check": "all_pe",
+      "passed": true,
+      "evidence": "有效 16/42"
+    },
+    {
+      "check": "all_mcapUSD",
+      "passed": true,
+      "evidence": "有效 17/42"
+    },
+    {
+      "check": "all_summary_17_and_16",
+      "passed": true,
+      "evidence": "点击表头排序 · 点击行查看走势与财务 · 颜色：红涨绿跌 · 当前 42 家 · 市值有效 17/42 · PE有效 16/42"
+    },
+    {
+      "check": "sort_mcapUSDTrue",
+      "passed": true,
+      "evidence": {
+        "valid": 17,
+        "missing": 25
+      }
+    },
+    {
+      "check": "sort_mcapUSDFalse",
+      "passed": true,
+      "evidence": {
+        "valid": 17,
+        "missing": 25
+      }
+    },
+    {
+      "check": "sort_peTrue",
+      "passed": true,
+      "evidence": {
+        "valid": 16,
+        "missing": 26
+      }
+    },
+    {
+      "check": "sort_peFalse",
+      "passed": true,
+      "evidence": {
+        "valid": 16,
+        "missing": 26
+      }
+    },
+    {
+      "check": "sort_revgTrue",
+      "passed": true,
+      "evidence": {
+        "valid": 40,
+        "missing": 2
+      }
+    },
+    {
+      "check": "sort_revgFalse",
+      "passed": true,
+      "evidence": {
+        "valid": 40,
+        "missing": 2
+      }
+    },
+    {
+      "check": "sort_earngTrue",
+      "passed": true,
+      "evidence": {
+        "valid": 37,
+        "missing": 5
+      }
+    },
+    {
+      "check": "sort_earngFalse",
+      "passed": true,
+      "evidence": {
+        "valid": 37,
+        "missing": 5
+      }
+    },
+    {
+      "check": "sort_gmTrue",
+      "passed": true,
+      "evidence": {
+        "valid": 39,
+        "missing": 3
+      }
+    },
+    {
+      "check": "sort_gmFalse",
+      "passed": true,
+      "evidence": {
+        "valid": 39,
+        "missing": 3
+      }
+    },
+    {
+      "check": "partial_excluded_revg",
+      "passed": true,
+      "evidence": {
+        "partialIDs": [
+          "KBL",
+          "DZSK"
+        ]
+      }
+    },
+    {
+      "check": "partial_excluded_earng",
+      "passed": true,
+      "evidence": {
+        "partialIDs": [
+          "KBL",
+          "DZSK"
+        ]
+      }
+    },
+    {
+      "check": "partial_excluded_gm",
+      "passed": true,
+      "evidence": {
+        "partialIDs": [
+          "KBL",
+          "DZSK"
+        ]
+      }
+    },
+    {
+      "check": "港股_r5",
+      "passed": true,
+      "evidence": "有效 2/2"
+    },
+    {
+      "check": "港股_r20",
+      "passed": true,
+      "evidence": "有效 2/2"
+    },
+    {
+      "check": "港股_r60",
+      "passed": true,
+      "evidence": "有效 2/2"
+    },
+    {
+      "check": "港股_ytd",
+      "passed": true,
+      "evidence": "有效 2/2"
+    },
+    {
+      "check": "港股_dd52",
+      "passed": true,
+      "evidence": "有效 2/2"
+    },
+    {
+      "check": "港股_revg",
+      "passed": true,
+      "evidence": "有效 1/2"
+    },
+    {
+      "check": "港股_earng",
+      "passed": true,
+      "evidence": "有效 1/2"
+    },
+    {
+      "check": "港股_gm",
+      "passed": true,
+      "evidence": "有效 1/2"
+    },
+    {
+      "check": "港股_pe",
+      "passed": true,
+      "evidence": "有效 2/2"
+    },
+    {
+      "check": "港股_mcapUSD",
+      "passed": true,
+      "evidence": "有效 2/2"
+    },
+    {
+      "check": "美股_r5",
+      "passed": true,
+      "evidence": "有效 13/13"
+    },
+    {
+      "check": "美股_r20",
+      "passed": true,
+      "evidence": "有效 13/13"
+    },
+    {
+      "check": "美股_r60",
+      "passed": true,
+      "evidence": "有效 13/13"
+    },
+    {
+      "check": "美股_ytd",
+      "passed": true,
+      "evidence": "有效 13/13"
+    },
+    {
+      "check": "美股_dd52",
+      "passed": true,
+      "evidence": "有效 13/13"
+    },
+    {
+      "check": "美股_revg",
+      "passed": true,
+      "evidence": "有效 13/13"
+    },
+    {
+      "check": "美股_earng",
+      "passed": true,
+      "evidence": "有效 12/13"
+    },
+    {
+      "check": "美股_gm",
+      "passed": true,
+      "evidence": "有效 13/13"
+    },
+    {
+      "check": "美股_pe",
+      "passed": true,
+      "evidence": "有效 12/13"
+    },
+    {
+      "check": "美股_mcapUSD",
+      "passed": true,
+      "evidence": "有效 13/13"
+    },
+    {
+      "check": "其他_r5",
+      "passed": true,
+      "evidence": "有效 5/5"
+    },
+    {
+      "check": "其他_r20",
+      "passed": true,
+      "evidence": "有效 5/5"
+    },
+    {
+      "check": "其他_r60",
+      "passed": true,
+      "evidence": "有效 5/5"
+    },
+    {
+      "check": "其他_ytd",
+      "passed": true,
+      "evidence": "有效 5/5"
+    },
+    {
+      "check": "其他_dd52",
+      "passed": true,
+      "evidence": "有效 5/5"
+    },
+    {
+      "check": "其他_revg",
+      "passed": true,
+      "evidence": "有效 5/5"
+    },
+    {
+      "check": "其他_earng",
+      "passed": true,
+      "evidence": "有效 4/5"
+    },
+    {
+      "check": "其他_gm",
+      "passed": true,
+      "evidence": "有效 4/5"
+    },
+    {
+      "check": "其他_pe",
+      "passed": true,
+      "evidence": "有效 2/5"
+    },
+    {
+      "check": "其他_mcapUSD",
+      "passed": true,
+      "evidence": "有效 2/5"
+    },
+    {
+      "check": "aggregate_counts_semiconductor",
+      "passed": true,
+      "evidence": {
+        "industry": "AI核心半导体",
+        "labels": [
+          "龙头近20日 · 均值 · 有效 9/9",
+          "距52周高点 · 均值 · 有效 8/9",
+          "单季营收同比 · 中位数 · 有效 9/9"
+        ],
+        "values": [
+          "−2.9%",
+          "−5.8%",
+          "+55.2%"
+        ],
+        "valid": [
+          9,
+          8,
+          9
+        ],
+        "total": 9
+      }
+    },
+    {
+      "check": "aggregate_counts_pcb",
+      "passed": true,
+      "evidence": {
+        "industry": "PCB与覆铜板",
+        "labels": [
+          "龙头近20日 · 均值 · 有效 12/12",
+          "距52周高点 · 均值 · 有效 12/12",
+          "单季营收同比 · 中位数 · 有效 10/12"
+        ],
+        "values": [
+          "+0.3%",
+          "−4.2%",
+          "+60.9%"
+        ],
+        "valid": [
+          12,
+          12,
+          10
+        ],
+        "total": 12
+      }
+    },
+    {
+      "check": "aggregate_counts_network",
+      "passed": true,
+      "evidence": {
+        "industry": "AI网络与光互连",
+        "labels": [
+          "龙头近20日 · 均值 · 有效 9/9",
+          "距52周高点 · 均值 · 有效 9/9",
+          "单季营收同比 · 中位数 · 有效 9/9"
+        ],
+        "values": [
+          "+1.1%",
+          "−7.4%",
+          "+85.5%"
+        ],
+        "valid": [
+          9,
+          9,
+          9
+        ],
+        "total": 9
+      }
+    },
+    {
+      "check": "aggregate_counts_power",
+      "passed": true,
+      "evidence": {
+        "industry": "电力与数据中心",
+        "labels": [
+          "龙头近20日 · 均值 · 有效 12/12",
+          "距52周高点 · 均值 · 有效 12/12",
+          "单季营收同比 · 中位数 · 有效 11/12"
+        ],
+        "values": [
+          "+0.3%",
+          "−3.3%",
+          "+18.1%"
+        ],
+        "valid": [
+          12,
+          12,
+          11
+        ],
+        "total": 12
+      }
+    },
+    {
+      "check": "aggregate_values_unchanged",
+      "passed": true,
+      "evidence": [
+        {
+          "industry": "AI核心半导体",
+          "labels": [
+            "龙头近20日 · 均值 · 有效 9/9",
+            "距52周高点 · 均值 · 有效 8/9",
+            "单季营收同比 · 中位数 · 有效 9/9"
+          ],
+          "values": [
+            "−2.9%",
+            "−5.8%",
+            "+55.2%"
+          ],
+          "valid": [
+            9,
+            8,
+            9
+          ],
+          "total": 9
+        },
+        {
+          "industry": "PCB与覆铜板",
+          "labels": [
+            "龙头近20日 · 均值 · 有效 12/12",
+            "距52周高点 · 均值 · 有效 12/12",
+            "单季营收同比 · 中位数 · 有效 10/12"
+          ],
+          "values": [
+            "+0.3%",
+            "−4.2%",
+            "+60.9%"
+          ],
+          "valid": [
+            12,
+            12,
+            10
+          ],
+          "total": 12
+        },
+        {
+          "industry": "AI网络与光互连",
+          "labels": [
+            "龙头近20日 · 均值 · 有效 9/9",
+            "距52周高点 · 均值 · 有效 9/9",
+            "单季营收同比 · 中位数 · 有效 9/9"
+          ],
+          "values": [
+            "+1.1%",
+            "−7.4%",
+            "+85.5%"
+          ],
+          "valid": [
+            9,
+            9,
+            9
+          ],
+          "total": 9
+        },
+        {
+          "industry": "电力与数据中心",
+          "labels": [
+            "龙头近20日 · 均值 · 有效 12/12",
+            "距52周高点 · 均值 · 有效 12/12",
+            "单季营收同比 · 中位数 · 有效 11/12"
+          ],
+          "values": [
+            "+0.3%",
+            "−3.3%",
+            "+18.1%"
+          ],
+          "valid": [
+            12,
+            12,
+            11
+          ],
+          "total": 12
+        }
+      ]
+    },
+    {
+      "check": "structure_and_viewport_unchanged",
+      "passed": true,
+      "evidence": {
+        "sections": [
+          "overview",
+          "radar",
+          "choke",
+          "leaders",
+          "calendar"
+        ],
+        "cards": 4,
+        "overflow": false
+      }
+    },
+    {
+      "check": "empty_filter_rows",
+      "passed": true,
+      "evidence": "点击表头排序 · 点击行查看走势与财务 · 颜色：红涨绿跌 · 当前 0 家 · 市值有效 0/0 · PE有效 0/0"
+    },
+    {
+      "check": "empty_filter_r5",
+      "passed": true,
+      "evidence": "有效 0/0"
+    },
+    {
+      "check": "empty_filter_r20",
+      "passed": true,
+      "evidence": "有效 0/0"
+    },
+    {
+      "check": "empty_filter_r60",
+      "passed": true,
+      "evidence": "有效 0/0"
+    },
+    {
+      "check": "empty_filter_ytd",
+      "passed": true,
+      "evidence": "有效 0/0"
+    },
+    {
+      "check": "empty_filter_dd52",
+      "passed": true,
+      "evidence": "有效 0/0"
+    },
+    {
+      "check": "empty_filter_revg",
+      "passed": true,
+      "evidence": "有效 0/0"
+    },
+    {
+      "check": "empty_filter_earng",
+      "passed": true,
+      "evidence": "有效 0/0"
+    },
+    {
+      "check": "empty_filter_gm",
+      "passed": true,
+      "evidence": "有效 0/0"
+    },
+    {
+      "check": "empty_filter_pe",
+      "passed": true,
+      "evidence": "有效 0/0"
+    },
+    {
+      "check": "empty_filter_mcapUSD",
+      "passed": true,
+      "evidence": "有效 0/0"
+    },
+    {
+      "check": "all-missing_r5",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "all-missing_r20",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "all-missing_r60",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "all-missing_ytd",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "all-missing_dd52",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "all-missing_revg",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "all-missing_earng",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "all-missing_gm",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "all-missing_pe",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "all-missing_mcapUSD",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "all_indices_missing_0_of_8",
+      "passed": true,
+      "evidence": "10/16 收盘 · 指数有效 0/8"
+    },
+    {
+      "check": "all_missing_table_dashes",
+      "passed": true,
+      "evidence": {
+        "rows": 42
+      }
+    },
+    {
+      "check": "all_missing_aggregate_not_zero",
+      "passed": true,
+      "evidence": "龙头近20日 · 均值 · 有效 0/9\n—\n距52周高点 · 均值 · 有效 0/9\n—\n单季营收同比 · 中位数 · 有效 0/9\n—\n分母为本行业 9 家 · 各项仅计有效样本"
+    },
+    {
+      "check": "zero-vs-null_r5",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "zero-vs-null_r20",
+      "passed": true,
+      "evidence": "有效 1/42"
+    },
+    {
+      "check": "zero-vs-null_r60",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "zero-vs-null_ytd",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "zero-vs-null_dd52",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "zero-vs-null_revg",
+      "passed": true,
+      "evidence": "有效 1/42"
+    },
+    {
+      "check": "zero-vs-null_earng",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "zero-vs-null_gm",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "zero-vs-null_pe",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "zero-vs-null_mcapUSD",
+      "passed": true,
+      "evidence": "有效 0/42"
+    },
+    {
+      "check": "true_zero_displayed_as_zero_percent",
+      "passed": true,
+      "evidence": {
+        "id": "YJKJ",
+        "cells": [
+          "源杰科技\nSH688498 · A股",
+          "光芯片与激光器",
+          "平稳震荡",
+          "实际 0 个交易日 · 短历史",
+          "—",
+          "—",
+          "0.0%",
+          "—",
+          "—",
+          "—",
+          "0.0%",
+          "—",
+          "—",
+          "—",
+          "—",
+          "10/31 12天"
+        ]
+      }
+    },
+    {
+      "check": "true_zero_sorts_before_null_0",
+      "passed": true,
+      "evidence": {
+        "first": "YJKJ"
+      }
+    },
+    {
+      "check": "true_zero_sorts_before_null_1",
+      "passed": true,
+      "evidence": {
+        "first": "YJKJ"
+      }
+    },
+    {
+      "check": "no_runtime_or_network_errors",
+      "passed": true,
+      "evidence": {
+        "pageErrors": [],
+        "externalRequests": []
+      }
+    }
+  ],
+  "observed": {
+    "before": {
+      "tickerLabel": "10/16 收盘",
+      "tickerText": "上证指数\n3,000\n+0.50%\n恒生指数\n3,519\n+0.80%\n纳斯达克\n3,865\n+1.00%\n标普500\n4,038\n+1.10%\n费城半导体\n4,211\n+1.20%\n源杰科技\n¥59.36\n−0.20%\nLumentum\n$60.89\n−0.50%\nCoherent\n$62.34\n−0.31%\n中际旭创\n¥65.13\n+0.17%\n新易盛\n¥69.46\n+0.48%\n博通\n$74.10\n+0.36%\n迈威尔\n$77.55\n−0.04%\nArista\n$79.39\n−0.35%\n天孚通信\n¥80.69\n−0.31%\n台积电\n$83.01\n+0.02%\nASMPT\nHK$86.98\n+0.34%\nSK海力士\n₩91.70\n+0.34%\n美光\n$95.60\n+0.07%\n长鑫科技\n¥45.02\n+3.28%\n英伟达\n$99.13\n−0.29%\n阿斯麦\n$101.03\n−0.07%\n北方华创\n¥104.56\n+0.22%\n中微公司\n¥109.23\n+0.31%\n日东纺\nJP¥113.50\n+0.13%\n宏和科技\n¥116.21\n−0.14%\n东材科技\n¥117.62\n−0.26%\n台光电子\nNT$119.20\n−0.13%\n生益科技\n¥122.25\n+0.13%\n建滔积层板\nHK$126.73\n+0.27%\n沪电股份\n¥131.28\n+0.17%\n胜宏科技\n¥134.47\n−0.06%\n深南电路\n¥136.13\n−0.22%\n大族数控\n¥137.49\n−0.16%\n鼎泰高科\n¥140.06\n+0.05%\n中钨高新\n¥144.23\n+0.22%\nGE Vernova\n$148.93\n+0.19%\n西门子能源\n€152.59\n+0.01%\n东方电气\n¥154.61\n−0.17%\n思源电气\n¥155.89\n−0.18%\n中国西电\n¥158.00\n−0.01%\n金盘科技\n¥161.77\n+0.16%\n伊顿\n$166.49\n+0.20%\n施耐德电气\n€170.57\n+0.06%\n科华数据\n¥173.03\n−0.11%\n维谛\n$174.36\n−0.17%\n英维克\n¥176.09\n−0.06%\nModine\n$179.40\n+0.11%\n上证指数\n3,000\n+0.50%\n恒生指数\n3,519\n+0.80%\n纳斯达克\n3,865\n+1.00%\n标普500\n4,038\n+1.10%\n费城半导体\n4,211\n+1.20%\n源杰科技\n¥59.36\n−0.20%\nLumentum\n$60.89\n−0.50%\nCoherent\n$62.34\n−0.31%\n中际旭创\n¥65.13\n+0.17%\n新易盛\n¥69.46\n+0.48%\n博通\n$74.10\n+0.36%\n迈威尔\n$77.55\n−0.04%\nArista\n$79.39\n−0.35%\n天孚通信\n¥80.69\n−0.31%\n台积电\n$83.01\n+0.02%\nASMPT\nHK$86.98\n+0.34%\nSK海力士\n₩91.70\n+0.34%\n美光\n$95.60\n+0.07%\n长鑫科技\n¥45.02\n+3.28%\n英伟达\n$99.13\n−0.29%\n阿斯麦\n$101.03\n−0.07%\n北方华创\n¥104.56\n+0.22%\n中微公司\n¥109.23\n+0.31%\n日东纺\nJP¥113.50\n+0.13%\n宏和科技\n¥116.21\n−0.14%\n东材科技\n¥117.62\n−0.26%\n台光电子\nNT$119.20\n−0.13%\n生益科技\n¥122.25\n+0.13%\n建滔积层板\nHK$126.73\n+0.27%\n沪电股份\n¥131.28\n+0.17%\n胜宏科技\n¥134.47\n−0.06%\n深南电路\n¥136.13\n−0.22%\n大族数控\n¥137.49\n−0.16%\n鼎泰高科\n¥140.06\n+0.05%\n中钨高新\n¥144.23\n+0.22%\nGE Vernova\n$148.93\n+0.19%\n西门子能源\n€152.59\n+0.01%\n东方电气\n¥154.61\n−0.17%\n思源电气\n¥155.89\n−0.18%\n中国西电\n¥158.00\n−0.01%\n金盘科技\n¥161.77\n+0.16%\n伊顿\n$166.49\n+0.20%\n施耐德电气\n€170.57\n+0.06%\n科华数据\n¥173.03\n−0.11%\n维谛\n$174.36\n−0.17%\n英维克\n¥176.09\n−0.06%\nModine\n$179.40\n+0.11%",
+      "topCoverage": [
+        "龙头近20日 · 均值",
+        "距52周高点 · 均值",
+        "单季营收同比 · 中位数"
+      ],
+      "ratio": "红利定投温度计\n比值数据暂不可用，下次刷新会自动恢复",
+      "AshareSub": "点击表头排序 · 点击行查看走势与财务 · 颜色：红涨绿跌",
+      "shortRow": "长鑫科技\nSH688825 · A股\n\t\nHBM与存储\n\t待核/不适用回调\t\n\t¥45.02\t−11.7%\t−21.3%\t—\t—\t—\t+977%\t—\t87.6%\t—\t—\t10/31 12天",
+      "aggregates": [
+        {
+          "industry": "AI核心半导体",
+          "labels": [
+            "龙头近20日 · 均值",
+            "距52周高点 · 均值",
+            "单季营收同比 · 中位数"
+          ],
+          "values": [
+            "−2.9%",
+            "−5.8%",
+            "+55.2%"
+          ],
+          "valid": [
+            9,
+            8,
+            9
+          ],
+          "total": 9
+        },
+        {
+          "industry": "PCB与覆铜板",
+          "labels": [
+            "龙头近20日 · 均值",
+            "距52周高点 · 均值",
+            "单季营收同比 · 中位数"
+          ],
+          "values": [
+            "+0.3%",
+            "−4.2%",
+            "+60.9%"
+          ],
+          "valid": [
+            12,
+            12,
+            10
+          ],
+          "total": 12
+        },
+        {
+          "industry": "AI网络与光互连",
+          "labels": [
+            "龙头近20日 · 均值",
+            "距52周高点 · 均值",
+            "单季营收同比 · 中位数"
+          ],
+          "values": [
+            "+1.1%",
+            "−7.4%",
+            "+85.5%"
+          ],
+          "valid": [
+            9,
+            9,
+            9
+          ],
+          "total": 9
+        },
+        {
+          "industry": "电力与数据中心",
+          "labels": [
+            "龙头近20日 · 均值",
+            "距52周高点 · 均值",
+            "单季营收同比 · 中位数"
+          ],
+          "values": [
+            "+0.3%",
+            "−3.3%",
+            "+18.1%"
+          ],
+          "valid": [
+            12,
+            12,
+            11
+          ],
+          "total": 12
+        }
+      ],
+      "layout": {
+        "sections": [
+          "overview",
+          "radar",
+          "choke",
+          "leaders",
+          "calendar"
+        ],
+        "cards": 4,
+        "overflow": false
+      }
+    },
+    "after": {
+      "tickerLabel": "10/16 收盘 · 指数有效 5/8",
+      "tickerText": "指数缺项：399006.SZ、000922.SS、HSTECH.HK\n上证指数\n3,000\n+0.50%\n恒生指数\n3,519\n+0.80%\n纳斯达克\n3,865\n+1.00%\n标普500\n4,038\n+1.10%\n费城半导体\n4,211\n+1.20%\n源杰科技\n¥59.36\n−0.20%\nLumentum\n$60.89\n−0.50%\nCoherent\n$62.34\n−0.31%\n中际旭创\n¥65.13\n+0.17%\n新易盛\n¥69.46\n+0.48%\n博通\n$74.10\n+0.36%\n迈威尔\n$77.55\n−0.04%\nArista\n$79.39\n−0.35%\n天孚通信\n¥80.69\n−0.31%\n台积电\n$83.01\n+0.02%\nASMPT\nHK$86.98\n+0.34%\nSK海力士\n₩91.70\n+0.34%\n美光\n$95.60\n+0.07%\n长鑫科技\n¥45.02\n+3.28%\n英伟达\n$99.13\n−0.29%\n阿斯麦\n$101.03\n−0.07%\n北方华创\n¥104.56\n+0.22%\n中微公司\n¥109.23\n+0.31%\n日东纺\nJP¥113.50\n+0.13%\n宏和科技\n¥116.21\n−0.14%\n东材科技\n¥117.62\n−0.26%\n台光电子\nNT$119.20\n−0.13%\n生益科技\n¥122.25\n+0.13%\n建滔积层板\nHK$126.73\n+0.27%\n沪电股份\n¥131.28\n+0.17%\n胜宏科技\n¥134.47\n−0.06%\n深南电路\n¥136.13\n−0.22%\n大族数控\n¥137.49\n−0.16%\n鼎泰高科\n¥140.06\n+0.05%\n中钨高新\n¥144.23\n+0.22%\nGE Vernova\n$148.93\n+0.19%\n西门子能源\n€152.59\n+0.01%\n东方电气\n¥154.61\n−0.17%\n思源电气\n¥155.89\n−0.18%\n中国西电\n¥158.00\n−0.01%\n金盘科技\n¥161.77\n+0.16%\n伊顿\n$166.49\n+0.20%\n施耐德电气\n€170.57\n+0.06%\n科华数据\n¥173.03\n−0.11%\n维谛\n$174.36\n−0.17%\n英维克\n¥176.09\n−0.06%\nModine\n$179.40\n+0.11%\n指数缺项：399006.SZ、000922.SS、HSTECH.HK\n上证指数\n3,000\n+0.50%\n恒生指数\n3,519\n+0.80%\n纳斯达克\n3,865\n+1.00%\n标普500\n4,038\n+1.10%\n费城半导体\n4,211\n+1.20%\n源杰科技\n¥59.36\n−0.20%\nLumentum\n$60.89\n−0.50%\nCoherent\n$62.34\n−0.31%\n中际旭创\n¥65.13\n+0.17%\n新易盛\n¥69.46\n+0.48%\n博通\n$74.10\n+0.36%\n迈威尔\n$77.55\n−0.04%\nArista\n$79.39\n−0.35%\n天孚通信\n¥80.69\n−0.31%\n台积电\n$83.01\n+0.02%\nASMPT\nHK$86.98\n+0.34%\nSK海力士\n₩91.70\n+0.34%\n美光\n$95.60\n+0.07%\n长鑫科技\n¥45.02\n+3.28%\n英伟达\n$99.13\n−0.29%\n阿斯麦\n$101.03\n−0.07%\n北方华创\n¥104.56\n+0.22%\n中微公司\n¥109.23\n+0.31%\n日东纺\nJP¥113.50\n+0.13%\n宏和科技\n¥116.21\n−0.14%\n东材科技\n¥117.62\n−0.26%\n台光电子\nNT$119.20\n−0.13%\n生益科技\n¥122.25\n+0.13%\n建滔积层板\nHK$126.73\n+0.27%\n沪电股份\n¥131.28\n+0.17%\n胜宏科技\n¥134.47\n−0.06%\n深南电路\n¥136.13\n−0.22%\n大族数控\n¥137.49\n−0.16%\n鼎泰高科\n¥140.06\n+0.05%\n中钨高新\n¥144.23\n+0.22%\nGE Vernova\n$148.93\n+0.19%\n西门子能源\n€152.59\n+0.01%\n东方电气\n¥154.61\n−0.17%\n思源电气\n¥155.89\n−0.18%\n中国西电\n¥158.00\n−0.01%\n金盘科技\n¥161.77\n+0.16%\n伊顿\n$166.49\n+0.20%\n施耐德电气\n€170.57\n+0.06%\n科华数据\n¥173.03\n−0.11%\n维谛\n$174.36\n−0.17%\n英维克\n¥176.09\n−0.06%\nModine\n$179.40\n+0.11%",
+      "topCoverage": [
+        "龙头近20日 · 均值 · 有效 9/9",
+        "距52周高点 · 均值 · 有效 9/9",
+        "单季营收同比 · 中位数 · 有效 9/9"
+      ],
+      "ratio": "红利定投温度计\n当前快照无可用比值数据",
+      "AshareSub": "点击表头排序 · 点击行查看走势与财务 · 颜色：红涨绿跌 · 当前 22 家 · 市值有效 0/22 · PE有效 0/22",
+      "shortRow": "长鑫科技\nSH688825 · A股\n\t\nHBM与存储\n\t待核/不适用回调\t\n实际 54 个交易日 · 短历史\n\t¥45.02\t−11.7%\t−21.3%\t—\t—\t—\t+977%\t—\t87.6%\t—\t—\t10/31 12天",
+      "aggregates": [
+        {
+          "industry": "AI核心半导体",
+          "labels": [
+            "龙头近20日 · 均值 · 有效 9/9",
+            "距52周高点 · 均值 · 有效 8/9",
+            "单季营收同比 · 中位数 · 有效 9/9"
+          ],
+          "values": [
+            "−2.9%",
+            "−5.8%",
+            "+55.2%"
+          ],
+          "valid": [
+            9,
+            8,
+            9
+          ],
+          "total": 9
+        },
+        {
+          "industry": "PCB与覆铜板",
+          "labels": [
+            "龙头近20日 · 均值 · 有效 12/12",
+            "距52周高点 · 均值 · 有效 12/12",
+            "单季营收同比 · 中位数 · 有效 10/12"
+          ],
+          "values": [
+            "+0.3%",
+            "−4.2%",
+            "+60.9%"
+          ],
+          "valid": [
+            12,
+            12,
+            10
+          ],
+          "total": 12
+        },
+        {
+          "industry": "AI网络与光互连",
+          "labels": [
+            "龙头近20日 · 均值 · 有效 9/9",
+            "距52周高点 · 均值 · 有效 9/9",
+            "单季营收同比 · 中位数 · 有效 9/9"
+          ],
+          "values": [
+            "+1.1%",
+            "−7.4%",
+            "+85.5%"
+          ],
+          "valid": [
+            9,
+            9,
+            9
+          ],
+          "total": 9
+        },
+        {
+          "industry": "电力与数据中心",
+          "labels": [
+            "龙头近20日 · 均值 · 有效 12/12",
+            "距52周高点 · 均值 · 有效 12/12",
+            "单季营收同比 · 中位数 · 有效 11/12"
+          ],
+          "values": [
+            "+0.3%",
+            "−3.3%",
+            "+18.1%"
+          ],
+          "valid": [
+            12,
+            12,
+            11
+          ],
+          "total": 12
+        }
+      ],
+      "layout": {
+        "sections": [
+          "overview",
+          "radar",
+          "choke",
+          "leaders",
+          "calendar"
+        ],
+        "cards": 4,
+        "overflow": false
+      }
+    }
+  },
+  "edgeVariants": {
+    "all-missing": "all displayed numeric metrics null; all eight configured indices unavailable",
+    "zero-vs-null": "same numeric nulls except first company r20/revg are real numeric zero; its history is empty"
+  },
+  "screenshots": {
+    "after-01-overview-indices.png": {
+      "bytes": 366863,
+      "sha256": "adab6b8cdcafbb7cdc0372942718913ea0b5cd26195c18398f57426e9c143e84"
+    },
+    "after-06-zero-vs-null.png": {
+      "bytes": 251406,
+      "sha256": "8a2b207469cc7a3f2295a32c25b1a134afd5ddc834a548006ebed25b080c7483"
+    },
+    "before-02-ratio.png": {
+      "bytes": 353128,
+      "sha256": "ee57cc3986237d3c5beec3d62c851f003fd2cde80364d59e53f82b4c5c4a3520"
+    },
+    "after-02-ratio.png": {
+      "bytes": 353577,
+      "sha256": "27330959936c2994f29a3abf2ced75dc1d51b1b503e3fd60741a020fea814783"
+    },
+    "before-03-filter-short-history.png": {
+      "bytes": 314730,
+      "sha256": "c5a7397507d90a78b02325ce6c65b3587ccb55ddc473c232934f1178ea2817ce"
+    },
+    "after-03b-cxmt-actual-history.png": {
+      "bytes": 319984,
+      "sha256": "32bf5763513bdeaa0125d3791c4d3f45bbf10eb80770be668f63140f34823de7"
+    },
+    "before-04-semiconductor.png": {
+      "bytes": 428048,
+      "sha256": "bfd06b0da47554310bea4b13a44c11f33f2f461898a172ddbc54ba24759cba30"
+    },
+    "before-01-overview-indices.png": {
+      "bytes": 363109,
+      "sha256": "97002eacd3066b5cb70033ad8512314de23dd48397946daa15facf395d160d41"
+    },
+    "after-03-filter-short-history.png": {
+      "bytes": 321906,
+      "sha256": "173d5f4bc7166ca240f6dc6b91cc91ccc310bc145d38e414e689b59a452636a9"
+    },
+    "after-04-semiconductor.png": {
+      "bytes": 432583,
+      "sha256": "64881cf67367c01ef600da6f0e0558f6179cbb02e6191826b31d6999e9a09666"
+    },
+    "after-06-all-missing.png": {
+      "bytes": 246853,
+      "sha256": "e20c8ba1ef9b612711bc23685b12f9c09879a000580f3513d214908949981485"
+    },
+    "after-04-pcb.png": {
+      "bytes": 452667,
+      "sha256": "bedfc407b0af72f30ba04027681b0ea429faf6d7e9ac56acbd88aa7829625056"
+    },
+    "after-05-empty-filter.png": {
+      "bytes": 310702,
+      "sha256": "7881eec51300631c0945fbe5a78b45bc9df4283d151a9ea5c46882383559726c"
+    },
+    "before-03b-cxmt-actual-history.png": {
+      "bytes": 313796,
+      "sha256": "95c8b1dd3b4e541d2414098370373f9a151ea1e5e0af07471261ca3a863486f4"
+    },
+    "before-04-pcb.png": {
+      "bytes": 447617,
+      "sha256": "d819a44324733d9f0ca96cff9d1737c74002071bd0c4ae234306e8abcdcbeff5"
+    }
+  }
+}

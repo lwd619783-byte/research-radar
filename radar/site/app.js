@@ -62,6 +62,14 @@ const fmtPrice=c=>fin(c.price)?(CUR[c.cur]||'')+fmtNum(c.price):'—';
 const mcapStr=v=>!fin(v)?'—':v>=10000?(v/10000).toFixed(2)+' 万亿美元':Math.round(v).toLocaleString('en-US')+' 亿美元';
 const hlDates=s=>s.replace(/(\d{1,2}\/\d{1,2})/g,'<span class="dt">$1</span>');
 
+/* ---------- display coverage ---------- */
+const coverageCount=(items,value)=>items.filter(c=>fin(value(c))).length;
+const coverageText=(items,value)=>`${coverageCount(items,value)}/${items.length}`;
+function sparkHistoryLabel(c){const n=Math.min(60,c.sc.length);return`实际 ${n} 个交易日${n<60?' · 短历史':''}`}
+function indexAvailability(indices,issues){
+  const known=Array.isArray(issues),missing=known?[...new Set(issues.filter(x=>x.kind==='index').map(x=>x.symbol).filter(Boolean))]:[];
+  return{missing,label:known?`指数有效 ${indices.length}/${indices.length+missing.length}`:`指数已提供 ${indices.length} 项 · 覆盖待核`}}
+
 /* ---------- data ---------- */
 const CO=D.companies,byId={},byInd={},byCp={};
 function perfSig(c){if(c.financialPartial)return{k:'na',l:'不评分',r:0};if(!c.financialSignalEligible)return{k:'na',l:'待核/不适用',r:0};const g=fin(c.earng)?c.earng:c.revg;if(!fin(g))return{k:'na',l:'—',r:0};if(g>=.5)return{k:'p1',l:'高增',r:4};if(g>=.1)return{k:'p2',l:'增长',r:3};if(g>-.1)return{k:'p3',l:'平稳',r:2};return{k:'p4',l:'下滑',r:1}}
@@ -95,9 +103,9 @@ function countUp(el){const to=parseFloat(el.dataset.count),dp=+(el.dataset.dp||0
   const f=now=>{const p=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3);el.textContent=pre+(to*e).toFixed(dp)+suf;if(p<1)requestAnimationFrame(f)};requestAnimationFrame(f)}
 
 /* ---------- ticker ---------- */
-function renderTicker(){const idx=D.indices.map(x=>`<div class="tk idx"><b>${esc(x.name)}</b><span class="px num">${fmtNum(x.price)}</span><span class="num ${ud(x.chg)}">${pct(x.chg,2)}</span></div>`).join('');
+function renderTicker(){const status=indexAvailability(D.indices,D.meta.issues),notice=status.missing.length?`<div class="tk idx-gap">指数缺项：${esc(status.missing.join('、'))}</div>`:'';const idx=D.indices.map(x=>`<div class="tk idx"><b>${esc(x.name)}</b><span class="px num">${fmtNum(x.price)}</span><span class="num ${ud(x.chg)}">${pct(x.chg,2)}</span></div>`).join('');
   const cos=CO.map(c=>`<div class="tk" data-co="${c.id}"><b>${esc(c.short)}</b><span class="px num">${fmtPrice(c)}</span><span class="num ${ud(c.r1d)}">${pct(c.r1d,2)}</span></div>`).join('');
-  const one=idx+'<span class="tk-sep"></span>'+cos+'<span class="tk-sep"></span>';$('#tickerTrack').innerHTML=one+one;$('#tickerLabel').textContent=ASOFL}
+  const one=notice+idx+'<span class="tk-sep"></span>'+cos+'<span class="tk-sep"></span>';$('#tickerTrack').innerHTML=one+one;$('#tickerLabel').textContent=ASOFL+' · '+status.label;$('#tickerLabel').dataset.tip=status.missing.length?'指数缺项：'+status.missing.join('、'):status.label}
 
 /* ---------- hero ---------- */
 function renderHero(){
@@ -123,7 +131,7 @@ function renderTop(){
   <div class="top-strip">
     <div class="ring"><svg width="112" height="112" viewBox="0 0 112 112"><circle class="trk" cx="56" cy="56" r="48" stroke-width="9" fill="none"/><circle class="bar" cx="56" cy="56" r="48" stroke-width="9" fill="none" stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${C.toFixed(2)}" data-to="${(C*(1-d.total/20)).toFixed(2)}"/></svg><div class="ctr"><div><div class="big num" data-count="${d.total}">0</div><div class="of">/ 20 综合分</div></div></div></div>
     <div class="dims">${DIMS.map(x=>`<div class="dim"><span>${x.n}</span><span class="pips" style="--c:${x.c}">${[1,2,3,4,5].map(i=>`<i class="pip ${i<=d.s[x.k]?'on':''}" style="transition-delay:${250+i*90}ms"></i>`).join('')}</span><b class="num">${d.s[x.k]}</b></div>`).join('')}</div>
-    <div class="tstats"><div class="tstat"><span class="l">龙头近20日 · 均值</span><span class="v num ${ud(r20)}">${pct(r20)}</span></div><div class="tstat"><span class="l">距52周高点 · 均值</span><span class="v num ${ud(dd)}">${pct(dd)}</span></div><div class="tstat"><span class="l">单季营收同比 · 中位数</span><span class="v num ${ud(rev)}">${pct(rev)}</span></div></div>
+    <div class="tstats"><div class="tstat"><span class="l">龙头近20日 · 均值 · 有效 ${coverageText(cos,c=>c.r20)}</span><span class="v num ${ud(r20)}">${pct(r20)}</span></div><div class="tstat"><span class="l">距52周高点 · 均值 · 有效 ${coverageText(cos,c=>c.dd52)}</span><span class="v num ${ud(dd)}">${pct(dd)}</span></div><div class="tstat"><span class="l">单季营收同比 · 中位数 · 有效 ${coverageText(cos,c=>c.financialRevenueComparable?c.revg:null)}</span><span class="v num ${ud(rev)}">${pct(rev)}</span></div></div>
   </div>
   <div class="mini-h"><span>关键卡点 → 细分龙头</span><span class="hint">按紧缺度排序 · 点击公司看走势与财务</span></div>
   <div class="cp-cols">${cps.slice(0,3).map(cpCol).join('')}</div>
@@ -135,7 +143,7 @@ function renderRank(){
   <div class="legend-dims">${DIMS.map(x=>`<span><i style="background:${x.c}"></i>${x.n}</span>`).join('')}</div>`}
 
 function renderThermo(){
-  if(!D.ratio){$('#thermoCard').innerHTML=`<div class="card-h"><div class="card-t">${ICON.thermo}红利定投温度计</div></div><div class="muted" style="padding:28px 0">比值数据暂不可用，下次刷新会自动恢复</div>`;return}
+  if(!D.ratio){$('#thermoCard').innerHTML=`<div class="card-h"><div class="card-t">${ICON.thermo}红利定投温度计</div></div><div class="muted" style="padding:28px 0">当前快照无可用比值数据</div>`;return}
   const R=D.ratio,lo=.3,hi=.7,f=Math.max(0,Math.min(1,(R.cur-lo)/(hi-lo))),cx=130,cy=128,r=100;
   const pt=(v,rr)=>{const a=Math.PI*(1-(v-lo)/(hi-lo));return[cx+rr*Math.cos(a),cy-rr*Math.sin(a)]};
   let ticks='';[.3,.4,.5,.6,.7].forEach(v=>{const a=pt(v,r-14),b=pt(v,r-6),t=pt(v,r+13);const end=v===lo||v===hi,tx=end?(v===lo?cx-r-11:cx+r+11):t[0],ty=end?cy+3.5:t[1]+3;ticks+=`<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}" stroke="currentColor" opacity=".35"/><text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" text-anchor="${end?(v===lo?'end':'start'):'middle'}">${v.toFixed(1)}</text>`});
@@ -181,10 +189,10 @@ function findCo(token){token=token.trim();return CO.find(c=>c.short===token||c.n
 function renderIndDetail(){
   const d=IND.find(x=>x.name===S.sel),cos=byInd[d.name]||[],cps=cpsOf(d.name),i=IND.indexOf(d),lv=levelOf(d.total);
   const reps=d.reps.split(/[、,，]/).map(s=>s.trim()).filter(Boolean);
-  const rs=cos.length?[['龙头近20日 · 均值',mean(cos.map(c=>c.r20))],['距52周高点 · 均值',mean(cos.map(c=>c.dd52))],['单季营收同比 · 中位数',median(cos.filter(c=>c.financialRevenueComparable).map(c=>c.revg))]]:null;
+  const rs=cos.length?[['龙头近20日 · 均值',mean(cos.map(c=>c.r20)),coverageText(cos,c=>c.r20)],['距52周高点 · 均值',mean(cos.map(c=>c.dd52)),coverageText(cos,c=>c.dd52)],['单季营收同比 · 中位数',median(cos.filter(c=>c.financialRevenueComparable).map(c=>c.revg)),coverageText(cos,c=>c.financialRevenueComparable?c.revg:null)]]:null;
   const el=$('#indDetail');
   el.innerHTML=`<div class="fade-swap"><div class="dt-h"><div><div class="eyebrow">#${String(i+1).padStart(2,'0')} · ${lv.l}</div><h3>${esc(d.name)}</h3></div><div class="dt-score"><b class="num">${d.total}</b><span> / 20</span></div></div>
-  <div class="dt-body"><div>${radarSVG()}</div><div class="rstats">${rs?rs.map(r=>`<div class="rstat"><div class="l">${r[0]}</div><div class="v num ${ud(r[1])}">${pct(r[1])}</div></div>`).join('')+`<div class="hint">基于 ${cos.length} 家细分龙头</div>`:`<div class="rstat"><div class="l">龙头数据</div><div class="v" style="font-size:13px;font-weight:500;color:var(--text-2)">该行业暂未拆解卡点与龙头，低频跟踪即可</div></div>`}</div></div>
+  <div class="dt-body"><div>${radarSVG()}</div><div class="rstats">${rs?rs.map(r=>`<div class="rstat"><div class="l">${r[0]} · 有效 ${r[2]}</div><div class="v num ${ud(r[1])}">${pct(r[1])}</div></div>`).join('')+`<div class="hint">分母为本行业 ${cos.length} 家 · 各项仅计有效样本</div>`:`<div class="rstat"><div class="l">龙头数据</div><div class="v" style="font-size:13px;font-weight:500;color:var(--text-2)">该行业暂未拆解卡点与龙头，低频跟踪即可</div></div>`}</div></div>
   <div class="blk"><div class="bl">${ICON.target}一句话逻辑</div><p>${esc(d.logic)}</p></div>
   <div class="blk"><div class="bl">${ICON.bolt}最新信号</div><p>${esc(d.signal)}</p></div>
   <div class="blk risk"><div class="bl">${ICON.alert}主要风险</div><p>${esc(d.risk)}</p></div>
@@ -253,18 +261,19 @@ const COLS=[
   {k:'name',l:'公司',c:'l',v:c=>c.short,s:1,f:c=>`<div class="tc-n"><i style="background:${IC(c.ind)}"></i><div><b>${esc(c.short)}</b><span>${esc(c.code)} · ${esc(c.mkt)}</span></div></div>`},
   {k:'cp',l:'卡点',c:'l',v:c=>c.cp,s:1,f:c=>`<div class="cpc" title="${esc(c.cp)}">${esc(c.cp)}</div>`},
   {k:'sig',l:'信号',c:'l',v:c=>c.perf.r*10+c.px.r,f:sgBadges},
-  {k:'spark',l:'60日走势',c:'l',ns:1,f:c=>spark(c,60,92,26)},
-  {k:'price',l:'最新价',ns:1,f:c=>`<span class="num">${fmtPrice(c)}</span>`}]
-  .concat(Object.keys(PL).map(k=>({k,l:PL[k],v:c=>rankValue(c,k),f:c=>`<span class="num ${ud(rankValue(c,k))}">${pct(rankValue(c,k))}</span>`})))
-  .concat([{k:'gm',l:'毛利率',v:c=>rankValue(c,'gm'),f:c=>`<span class="num">${fin(rankValue(c,'gm'))?(c.gm*100).toFixed(1)+'%':'—'}</span>`},
-  {k:'pe',l:'PE(TTM)',v:c=>c.pe,f:c=>`<span class="num">${fin(c.pe)?c.pe.toFixed(1):'—'}</span>`},
-  {k:'mcapUSD',l:'市值(亿$)',v:c=>c.mcapUSD,f:c=>`<span class="num">${fin(c.mcapUSD)?Math.round(c.mcapUSD).toLocaleString('en-US'):'—'}</span>`},
+  {k:'spark',l:'走势（最多60日）',c:'l',ns:1,f:c=>spark(c,60,92,26)+`<div class="muted" style="font-size:10px">${sparkHistoryLabel(c)}</div>`},
+  {k:'price',l:'最新价',ns:1,coverage:1,v:c=>c.price,f:c=>`<span class="num">${fmtPrice(c)}</span>`}]
+  .concat(Object.keys(PL).map(k=>({k,l:PL[k],coverage:1,v:c=>rankValue(c,k),f:c=>`<span class="num ${ud(rankValue(c,k))}">${pct(rankValue(c,k))}</span>`})))
+  .concat([{k:'gm',l:'毛利率',coverage:1,v:c=>rankValue(c,'gm'),f:c=>`<span class="num">${fin(rankValue(c,'gm'))?(c.gm*100).toFixed(1)+'%':'—'}</span>`},
+  {k:'pe',l:'PE(TTM)',coverage:1,v:c=>c.pe,f:c=>`<span class="num">${fin(c.pe)?c.pe.toFixed(1):'—'}</span>`},
+  {k:'mcapUSD',l:'市值(亿$)',coverage:1,v:c=>c.mcapUSD,f:c=>`<span class="num">${fin(c.mcapUSD)?Math.round(c.mcapUSD).toLocaleString('en-US'):'—'}</span>`},
   {k:'next',l:'下次财报',v:c=>c.next,s:1,f:c=>c.next?`<span class="num">${md(c.next)}</span> <span class="muted">${daysTo(c.next)}天</span>`:'<span class="muted">待定</span>'}]);
 function renderTable(){const col=COLS.find(x=>x.k===S.sort.k)||COLS[6],dir=S.sort.d;
   const rows=filtered().slice().sort((a,b)=>{const x=col.v(a),y=col.v(b);if(x==null&&y==null)return 0;if(x==null)return 1;if(y==null)return -1;return(col.s?String(x).localeCompare(String(y),'zh'):x-y)*dir});
-  $('#tbl').innerHTML=`<thead><tr>${COLS.map(c=>`<th class="${c.c||''} ${c.k===S.sort.k?'sorted':''}" data-sort="${c.ns?'':c.k}">${c.l}${c.k===S.sort.k?`<span class="ar">${dir<0?'↓':'↑'}</span>`:''}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr data-co="${r.id}">${COLS.map(c=>`<td class="${c.c||''}">${c.f(r)}</td>`).join('')}</tr>`).join('')}</tbody>`}
+  $('#tbl').innerHTML=`<thead><tr>${COLS.map(c=>`<th class="${c.c||''} ${c.k===S.sort.k?'sorted':''}" data-sort="${c.ns?'':c.k}">${c.l}${c.k===S.sort.k?`<span class="ar">${dir<0?'↓':'↑'}</span>`:''}${c.coverage?`<div class="muted" style="font-size:10px">有效 ${coverageText(rows,c.v)}</div>`:''}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr data-co="${r.id}">${COLS.map(c=>`<td class="${c.c||''}">${c.f(r)}</td>`).join('')}</tr>`).join('')}</tbody>`}
 function renderLeaders(){if(S.view==='map'){$('#mapCard').hidden=false;$('#tableCard').hidden=true;renderMap()}else{$('#mapCard').hidden=true;$('#tableCard').hidden=false;renderTable()}
-  $('#leadSub').textContent=S.view==='map'?'按行业 → 卡点分组 · 已知市值决定面积；缺失用占位面积 · 颜色=所选指标 · 点击查看走势与财务':'点击表头排序 · 点击行查看走势与财务 · 颜色：'+(S.conv==='cn'?'红涨绿跌':'绿涨红跌')}
+  const list=filtered(),coverage=` · 当前 ${list.length} 家 · 市值有效 ${coverageText(list,c=>c.mcapUSD)} · PE有效 ${coverageText(list,c=>c.pe)}`;
+  $('#leadSub').textContent=(S.view==='map'?'按行业 → 卡点分组 · 已知市值决定面积；缺失用占位面积 · 颜色=所选指标':'点击表头排序 · 点击行查看走势与财务 · 颜色：'+(S.conv==='cn'?'红涨绿跌':'绿涨红跌'))+coverage}
 
 /* ---------- calendar ---------- */
 function renderCal(){const list=CO.filter(c=>c.next&&c.next>=TODAY).sort((a,b)=>a.next.localeCompare(b.next)||(b.mcapUSD||0)-(a.mcapUSD||0)),dates=Array.from(new Set(list.map(c=>c.next)));

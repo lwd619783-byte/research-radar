@@ -1,0 +1,59 @@
+{
+  "checkedAtUTC": "2026-10-19T03:39:42.425433+00:00",
+  "baseSHA": "2de3aca8d5f9088fb8d7e3f57d65e0aa092f729f",
+  "modifiedTracked": [
+    "audit/truthfulness-frozen.json",
+    "radar/site/app.js"
+  ],
+  "newFiles": [
+    "audit/display-fixes-2026-10-19/REVIEW.md",
+    "audit/display-fixes-2026-10-19/after.html",
+    "audit/display-fixes-2026-10-19/app.diff",
+    "audit/display-fixes-2026-10-19/before.html",
+    "audit/display-fixes-2026-10-19/browser-check-output.txt",
+    "audit/display-fixes-2026-10-19/browser-receipt.json",
+    "audit/display-fixes-2026-10-19/check_display.py",
+    "audit/display-fixes-2026-10-19/fixture-reuse.json",
+    "audit/display-fixes-2026-10-19/frozen-update.json",
+    "audit/display-fixes-2026-10-19/make_comparison.py",
+    "audit/display-fixes-2026-10-19/offline-test-receipt.json",
+    "audit/display-fixes-2026-10-19/offline-tests.log",
+    "audit/display-fixes-2026-10-19/screenshots/after-01-overview-indices.png",
+    "audit/display-fixes-2026-10-19/screenshots/after-02-ratio.png",
+    "audit/display-fixes-2026-10-19/screenshots/after-03-filter-short-history.png",
+    "audit/display-fixes-2026-10-19/screenshots/after-03b-cxmt-actual-history.png",
+    "audit/display-fixes-2026-10-19/screenshots/after-04-pcb.png",
+    "audit/display-fixes-2026-10-19/screenshots/after-04-semiconductor.png",
+    "audit/display-fixes-2026-10-19/screenshots/after-05-empty-filter.png",
+    "audit/display-fixes-2026-10-19/screenshots/after-06-all-missing.png",
+    "audit/display-fixes-2026-10-19/screenshots/after-06-zero-vs-null.png",
+    "audit/display-fixes-2026-10-19/screenshots/before-01-overview-indices.png",
+    "audit/display-fixes-2026-10-19/screenshots/before-02-ratio.png",
+    "audit/display-fixes-2026-10-19/screenshots/before-03-filter-short-history.png",
+    "audit/display-fixes-2026-10-19/screenshots/before-03b-cxmt-actual-history.png",
+    "audit/display-fixes-2026-10-19/screenshots/before-04-pcb.png",
+    "audit/display-fixes-2026-10-19/screenshots/before-04-semiconductor.png",
+    "radar/tests/test_display_coverage.py"
+  ],
+  "allowedScopeOnly": true,
+  "frozenVerified": 10,
+  "otherNineFrozenUnchanged": true,
+  "reusedDataByteIdentical": true,
+  "sensitiveScan": {
+    "patterns": [
+      "github_token",
+      "aws_key",
+      "private_key",
+      "bearer_value",
+      "credential_url"
+    ],
+    "filesScanned": 15,
+    "findings": [],
+    "limitation": "Scoped credential-pattern scan plus change/provenance review, not a guarantee of universal secret detection."
+  },
+  "gitNetworkRead": {
+    "startUTC": "2026-10-19T03:39:39.771272+00:00",
+    "exitCode": 0,
+    "output": "ref: refs/heads/fix/radar-data-integrity\tHEAD\n414eb80626d3200dfebe4a010507c5fe74d7ca31\tHEAD\n414eb80626d3200dfebe4a010507c5fe74d7ca31\trefs/heads/fix/radar-data-integrity\n2de3aca8d5f9088fb8d7e3f57d65e0aa092f729f\trefs/heads/fix/radar-truthfulness-2026-10-18\n"
+  }
+}

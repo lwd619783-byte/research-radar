@@ -1,0 +1,9 @@
+{
+  "baseSHA": "2de3aca8d5f9088fb8d7e3f57d65e0aa092f729f",
+  "dataPath": "audit/offline-page-acceptance-2026-10-19/test-data.json",
+  "dataSHA256": "16a2f5da19e4b679df367889b3eb45c87d5d4b9412dafc28a6b6e91fa1373023",
+  "dataChanged": false,
+  "classification": "Same explicitly synthetic/old-sample component fixture; NOT original Actions DATA",
+  "beforeHTMLSHA256": "6502ebcdee13ff473782c13cd2d0fb684f9db536e6ce2a24b5f6e581cb3e26fd",
+  "afterHTMLSHA256": "29094e281cabca7434741dd162c9b1b64a974c6d8cc35a7ec63e06f3e925f2fe"
+}
