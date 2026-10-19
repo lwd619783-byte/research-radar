@@ -1,0 +1,10 @@
+{
+  "checkedAt": "2026-10-19T01:25:26.776598+00:00",
+  "evidenceCommit": "6dffb27af7d57524859742d2cf6e27bdeff24816",
+  "executionCommit": "ee0447a8fc7ede19127917b7f6c28a552ce31a90",
+  "normalPushExit": 0,
+  "pushSummary": "ee0447a..6dffb27 HEAD -> fix/radar-truthfulness-2026-10-18",
+  "remoteVerified": "6dffb27af7d57524859742d2cf6e27bdeff24816\trefs/heads/fix/radar-truthfulness-2026-10-18",
+  "forcePush": false,
+  "note": "This receipt is committed afterward; final archive HEAD is reported separately in handoff."
+}
