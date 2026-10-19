@@ -1,0 +1,749 @@
+{
+  "checkedAt": "2026-10-19T03:17:39.296230+00:00",
+  "browser": "Installed Chromium via Playwright; explicitly allowed loopback HTTP serving only the fixture; all other routes denied and CSP connect-src none",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "dataClassification": "SYNTHETIC COMPONENT TEST, not run 39190870708 rendered data",
+  "checks": [
+    {
+      "check": "snapshot_date_not_generated_date",
+      "status": "pass",
+      "evidence": {
+        "hero": "本地验收 · 未发布 · 本周结论 · 2026年10月19日 周一 · 行情截至 10/16 收盘",
+        "ticker": "10/16 收盘"
+      }
+    },
+    {
+      "check": "missing_ratio_has_no_old_value_chart_or_fixed_judgment",
+      "status": "pass",
+      "evidence": "红利定投温度计\n比值数据暂不可用，下次刷新会自动恢复"
+    },
+    {
+      "check": "only_available_indices_rendered",
+      "status": "pass",
+      "evidence": {
+        "uniqueAvailable": 5,
+        "duplicatedForTicker": 10,
+        "names": [
+          "上证指数",
+          "恒生指数",
+          "纳斯达克",
+          "标普500",
+          "费城半导体"
+        ]
+      }
+    },
+    {
+      "check": "mcapUSD_missing_cells_are_dashes",
+      "status": "pass",
+      "evidence": {
+        "missingCount": 25,
+        "ids": [
+          "YJKJ",
+          "HHKJ",
+          "NTB",
+          "SHKJ",
+          "HDGF",
+          "KHSJ",
+          "DFDQ",
+          "SKH",
+          "SNDL",
+          "DCKJ",
+          "AMEC",
+          "SYDQ",
+          "ZWGX",
+          "DZSK",
+          "TFTX",
+          "JPKJ",
+          "YWK",
+          "XYS",
+          "ZGXD",
+          "EMC",
+          "DTGK",
+          "SYST",
+          "NAURA",
+          "ZJXC",
+          "CXMT"
+        ]
+      }
+    },
+    {
+      "check": "pe_missing_cells_are_dashes",
+      "status": "pass",
+      "evidence": {
+        "missingCount": 26,
+        "ids": [
+          "YJKJ",
+          "HHKJ",
+          "NTB",
+          "SHKJ",
+          "LITE",
+          "HDGF",
+          "KHSJ",
+          "DFDQ",
+          "SKH",
+          "SNDL",
+          "DCKJ",
+          "AMEC",
+          "SYDQ",
+          "ZWGX",
+          "DZSK",
+          "TFTX",
+          "JPKJ",
+          "YWK",
+          "XYS",
+          "ZGXD",
+          "EMC",
+          "DTGK",
+          "SYST",
+          "NAURA",
+          "ZJXC",
+          "CXMT"
+        ]
+      }
+    },
+    {
+      "check": "sort_mcapUSD_descending",
+      "status": "pass",
+      "evidence": {
+        "key": "mcapUSD",
+        "direction": "descending",
+        "numericCount": 17,
+        "missingCount": 25,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      }
+    },
+    {
+      "check": "sort_mcapUSD_ascending",
+      "status": "pass",
+      "evidence": {
+        "key": "mcapUSD",
+        "direction": "ascending",
+        "numericCount": 17,
+        "missingCount": 25,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      }
+    },
+    {
+      "check": "sort_pe_descending",
+      "status": "pass",
+      "evidence": {
+        "key": "pe",
+        "direction": "descending",
+        "numericCount": 16,
+        "missingCount": 26,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      }
+    },
+    {
+      "check": "sort_pe_ascending",
+      "status": "pass",
+      "evidence": {
+        "key": "pe",
+        "direction": "ascending",
+        "numericCount": 16,
+        "missingCount": 26,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      }
+    },
+    {
+      "check": "sort_revg_descending",
+      "status": "pass",
+      "evidence": {
+        "key": "revg",
+        "direction": "descending",
+        "numericCount": 40,
+        "missingCount": 2,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      }
+    },
+    {
+      "check": "sort_revg_ascending",
+      "status": "pass",
+      "evidence": {
+        "key": "revg",
+        "direction": "ascending",
+        "numericCount": 40,
+        "missingCount": 2,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      }
+    },
+    {
+      "check": "sort_earng_descending",
+      "status": "pass",
+      "evidence": {
+        "key": "earng",
+        "direction": "descending",
+        "numericCount": 37,
+        "missingCount": 5,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      }
+    },
+    {
+      "check": "sort_earng_ascending",
+      "status": "pass",
+      "evidence": {
+        "key": "earng",
+        "direction": "ascending",
+        "numericCount": 37,
+        "missingCount": 5,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      }
+    },
+    {
+      "check": "sort_gm_descending",
+      "status": "pass",
+      "evidence": {
+        "key": "gm",
+        "direction": "descending",
+        "numericCount": 39,
+        "missingCount": 3,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      }
+    },
+    {
+      "check": "sort_gm_ascending",
+      "status": "pass",
+      "evidence": {
+        "key": "gm",
+        "direction": "ascending",
+        "numericCount": 39,
+        "missingCount": 3,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      }
+    },
+    {
+      "check": "market_filter_A股",
+      "status": "pass",
+      "evidence": {
+        "market": "A股",
+        "rows": 22,
+        "marketCapAvailable": 0,
+        "peAvailable": 0
+      }
+    },
+    {
+      "check": "A_share_filter_all_missing_valuation_stays_dash",
+      "status": "pass",
+      "evidence": {
+        "rows": 22
+      }
+    },
+    {
+      "check": "market_filter_港股",
+      "status": "pass",
+      "evidence": {
+        "market": "港股",
+        "rows": 2,
+        "marketCapAvailable": 2,
+        "peAvailable": 2
+      }
+    },
+    {
+      "check": "market_filter_美股",
+      "status": "pass",
+      "evidence": {
+        "market": "美股",
+        "rows": 13,
+        "marketCapAvailable": 13,
+        "peAvailable": 12
+      }
+    },
+    {
+      "check": "market_filter_其他",
+      "status": "pass",
+      "evidence": {
+        "market": "其他",
+        "rows": 5,
+        "marketCapAvailable": 2,
+        "peAvailable": 2
+      }
+    },
+    {
+      "check": "market_filter_all",
+      "status": "pass",
+      "evidence": {
+        "market": "all",
+        "rows": 42,
+        "marketCapAvailable": 17,
+        "peAvailable": 16
+      }
+    },
+    {
+      "check": "industry_filter_AI核心半导体",
+      "status": "pass",
+      "evidence": {
+        "rows": 9
+      }
+    },
+    {
+      "check": "industry_filter_AI网络与光互连",
+      "status": "pass",
+      "evidence": {
+        "rows": 9
+      }
+    },
+    {
+      "check": "industry_filter_PCB与覆铜板",
+      "status": "pass",
+      "evidence": {
+        "rows": 12
+      }
+    },
+    {
+      "check": "industry_filter_电力与数据中心",
+      "status": "pass",
+      "evidence": {
+        "rows": 12
+      }
+    },
+    {
+      "check": "missing_valuation_drawer",
+      "status": "pass",
+      "evidence": {
+        "id": "SKH",
+        "text": "AI核心半导体\n›\nHBM与存储\n极紧\nSK海力士\nKR000660\n韩股\n全球龙头\n高增\n震荡\n₩91.70\n+0.34%\n最近交易日 2026-10-16 · 市值约 — · 第 12/42 家\n1月\n3月\n6月\n年初至今\n1年\n2年\n区间涨跌\n+1.9%\n· 2026-04-16 – 2026-10-16\n87.51\n90.17\n92.82\n95.48\n52周高点 96.08\n4/16\n7/17\n10/16\n近5日\n+1.8%\n近20日\n+1.5%\n近60日\n+0.7%\n年初至今\n+3.6%\n距52周高点\n−4.6%\n近期财务\n2026Q2 · 单季 · KRW · K-IFRS\n营收同比\n+257%\n净利同比\n+1241%\n毛利率\n83.2%\nPE(TTM) 缺失\n—\n业绩快讯 · 待核实\n\n⏳ 10/27发财报\n\n一句话看点\n\nHBM市占第一，存储超级周期核心\n\n下次财报\n10/27 周二\n8 天后\n查看所在卡点"
+      }
+    },
+    {
+      "check": "LITE_PE_missing_not_zero",
+      "status": "pass",
+      "evidence": {
+        "id": "LITE",
+        "peCell": "PE(TTM) 缺失\n—"
+      }
+    },
+    {
+      "check": "short_history_drawer",
+      "status": "pass",
+      "evidence": {
+        "id": "CXMT",
+        "text": "AI核心半导体\n›\nHBM与存储\n极紧\n长鑫科技\nSH688825\nA股\n国产替代\n待核/不适用\n回调\n¥45.02\n+3.28%\n最近交易日 2026-10-16 · 市值约 — · 第 14/42 家\n1月\n3月·不足\n6月·不足\n年初至今·不足\n1年·不足\n2年·不足\n短历史 · 实际54日\n−8.1%\n· 2026-07-27 – 2026-10-16\n44.77\n50.05\n55.34\n60.62\n7/27\n9/2\n10/16\n近5日\n−11.7%\n近20日\n−21.3%\n近60日\n—\n年初至今\n—\n52周数据不足\n—\n近期财务\n2026Q2 derived from H1-Q1 · 单季 · CNY · PRC_ASBE · 扭亏·利润同比不适用\n营收同比\n+977%\n净利同比\n—\n毛利率\n87.6%\nPE(TTM) 缺失\n—\n业绩快讯 · 待核实\n\nQ3预告：前三季营收2650–2700亿（+726%~742%）、归母1310–1325亿（扭亏）；⏳ 三季报10/31\n\n一句话看点\n\n国产DRAM龙头，量价齐升扭亏\n\n下次财报\n10/31 周六\n12 天后\n查看所在卡点",
+        "source": "54 is the older local fixture, not a run receipt selected count"
+      }
+    },
+    {
+      "check": "KBL_partial_not_scored",
+      "status": "pass",
+      "evidence": {
+        "id": "KBL",
+        "label": "近期财务\n2026H1累计 · 半年累计 · HKD · HKFRS · 部分披露 · 不评分"
+      }
+    },
+    {
+      "check": "DZSK_partial_not_scored",
+      "status": "pass",
+      "evidence": {
+        "id": "DZSK",
+        "label": "近期财务\n2026Q3初步推算 · 单季 · CNY · PRC_ASBE · 部分披露 · 不评分"
+      }
+    },
+    {
+      "check": "aggregate_excludes_missing_and_partial_AI核心半导体",
+      "status": "pass",
+      "evidence": {
+        "industry": "AI核心半导体",
+        "totalCompanies": 9,
+        "validCounts": [
+          9,
+          8,
+          9
+        ],
+        "expected": [
+          -0.02935555555555556,
+          -0.05775,
+          0.5516232
+        ],
+        "rendered": [
+          "−2.9%",
+          "−5.8%",
+          "+55.2%"
+        ],
+        "caption": "基于 9 家细分龙头"
+      }
+    },
+    {
+      "check": "aggregate_excludes_missing_and_partial_PCB与覆铜板",
+      "status": "pass",
+      "evidence": {
+        "industry": "PCB与覆铜板",
+        "totalCompanies": 12,
+        "validCounts": [
+          12,
+          12,
+          10
+        ],
+        "expected": [
+          0.0034083333333333335,
+          -0.041775,
+          0.6086439399999999
+        ],
+        "rendered": [
+          "+0.3%",
+          "−4.2%",
+          "+60.9%"
+        ],
+        "caption": "基于 12 家细分龙头"
+      }
+    },
+    {
+      "check": "partial_heatmap_neutral",
+      "status": "pass",
+      "evidence": {
+        "KBL": "rgb(42, 46, 57)",
+        "DZSK": "rgb(42, 46, 57)"
+      }
+    },
+    {
+      "check": "map_placeholder_area_disclosed",
+      "status": "pass",
+      "evidence": "营收同比\n−100%\n+100%\n· 灰色 = 暂无数据/不参排\n42 家 · 面积 ≈ 市值(美元)^0.4，小市值设最小面积；市值缺失用占位面积"
+    },
+    {
+      "check": "no_page_errors_or_external_requests",
+      "status": "pass",
+      "evidence": {
+        "pageErrors": [],
+        "blockedOutboundAttempts": []
+      }
+    },
+    {
+      "check": "production_section_structure_preserved",
+      "status": "pass",
+      "evidence": {
+        "sections": [
+          "overview",
+          "radar",
+          "choke",
+          "leaders",
+          "calendar"
+        ],
+        "cards": 4,
+        "overflow": false
+      }
+    }
+  ],
+  "findings": [
+    {
+      "id": "F3",
+      "scope": "ratio 缺失提示作出恢复承诺",
+      "evidence": "红利定投温度计\n比值数据暂不可用，下次刷新会自动恢复",
+      "productionChanged": false
+    },
+    {
+      "id": "F2",
+      "scope": "缺失指数没有显式覆盖或缺项提示",
+      "evidence": {
+        "tickerAvailable": [
+          "上证指数",
+          "恒生指数",
+          "纳斯达克",
+          "标普500",
+          "费城半导体"
+        ],
+        "tickerLabel": "10/16 收盘",
+        "configured": 8,
+        "displayed": 5,
+        "note": "5/8 is the explicit fixture assumption; original receipt had no assembled list."
+      },
+      "productionChanged": false
+    },
+    {
+      "id": "F1",
+      "scope": "排序/筛选和聚合缺少逐指标有效覆盖分母",
+      "evidence": {
+        "fixtureMarketCap": "17/42",
+        "fixturePE": "16/42",
+        "tableUI": {
+          "leadSub": "点击表头排序 · 点击行查看走势与财务 · 颜色：红涨绿跌",
+          "tableFooter": "业绩：高增 ≥50% 增长 ≥10% 平稳 下滑\n股价：走强 近20日≥+5% 回调 ≤−10% 深度回调 距高点≤−40% 震荡",
+          "filterLabels": "全部市场\nA股\n港股\n美股\n其他"
+        },
+        "note": "Filters identify categories; they do not show current non-null/total counts."
+      },
+      "productionChanged": false
+    },
+    {
+      "id": "F4",
+      "scope": "列表固定“60日走势”未对短历史行提示不足",
+      "evidence": {
+        "header": "60日走势",
+        "row": "长鑫科技\nSH688825 · A股\n\t\nHBM与存储\n\t待核/不适用回调\t\n\t¥45.02\t−11.7%\t−21.3%\t—\t—\t—\t+977%\t—\t87.6%\t—\t—\t10/31 12天",
+        "fixtureHistoryCount": 54
+      },
+      "productionChanged": false
+    }
+  ],
+  "details": {
+    "date": {
+      "hero": "本地验收 · 未发布 · 本周结论 · 2026年10月19日 周一 · 行情截至 10/16 收盘",
+      "ticker": "10/16 收盘"
+    },
+    "ratioText": "红利定投温度计\n比值数据暂不可用，下次刷新会自动恢复",
+    "tableHeaders": "公司\t卡点\t信号\t60日走势\t最新价\t近5日\t近20日↓\t近60日\t年初至今\t距高点\t营收同比\t净利同比\t毛利率\tPE(TTM)\t市值(亿$)\t下次财报\n",
+    "sorts": [
+      {
+        "key": "mcapUSD",
+        "direction": "descending",
+        "numericCount": 17,
+        "missingCount": 25,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      },
+      {
+        "key": "mcapUSD",
+        "direction": "ascending",
+        "numericCount": 17,
+        "missingCount": 25,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      },
+      {
+        "key": "pe",
+        "direction": "descending",
+        "numericCount": 16,
+        "missingCount": 26,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      },
+      {
+        "key": "pe",
+        "direction": "ascending",
+        "numericCount": 16,
+        "missingCount": 26,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      },
+      {
+        "key": "revg",
+        "direction": "descending",
+        "numericCount": 40,
+        "missingCount": 2,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      },
+      {
+        "key": "revg",
+        "direction": "ascending",
+        "numericCount": 40,
+        "missingCount": 2,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      },
+      {
+        "key": "earng",
+        "direction": "descending",
+        "numericCount": 37,
+        "missingCount": 5,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      },
+      {
+        "key": "earng",
+        "direction": "ascending",
+        "numericCount": 37,
+        "missingCount": 5,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      },
+      {
+        "key": "gm",
+        "direction": "descending",
+        "numericCount": 39,
+        "missingCount": 3,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      },
+      {
+        "key": "gm",
+        "direction": "ascending",
+        "numericCount": 39,
+        "missingCount": 3,
+        "nullsLast": true,
+        "numericallyOrdered": true,
+        "partialExcluded": true
+      }
+    ],
+    "marketFilters": [
+      {
+        "market": "A股",
+        "rows": 22,
+        "marketCapAvailable": 0,
+        "peAvailable": 0
+      },
+      {
+        "market": "港股",
+        "rows": 2,
+        "marketCapAvailable": 2,
+        "peAvailable": 2
+      },
+      {
+        "market": "美股",
+        "rows": 13,
+        "marketCapAvailable": 13,
+        "peAvailable": 12
+      },
+      {
+        "market": "其他",
+        "rows": 5,
+        "marketCapAvailable": 2,
+        "peAvailable": 2
+      },
+      {
+        "market": "all",
+        "rows": 42,
+        "marketCapAvailable": 17,
+        "peAvailable": 16
+      }
+    ],
+    "coverageText": {
+      "leadSub": "点击表头排序 · 点击行查看走势与财务 · 颜色：红涨绿跌",
+      "tableFooter": "业绩：高增 ≥50% 增长 ≥10% 平稳 下滑\n股价：走强 近20日≥+5% 回调 ≤−10% 深度回调 距高点≤−40% 震荡",
+      "filterLabels": "全部市场\nA股\n港股\n美股\n其他"
+    },
+    "shortTable": {
+      "header": "公司\t卡点\t信号\t60日走势\t最新价\t近5日\t近20日\t近60日\t年初至今\t距高点\t营收同比\t净利同比\t毛利率\tPE(TTM)\t市值(亿$)↓\t下次财报\n",
+      "row": "长鑫科技\nSH688825 · A股\n\t\nHBM与存储\n\t待核/不适用回调\t\n\t¥45.02\t−11.7%\t−21.3%\t—\t—\t—\t+977%\t—\t87.6%\t—\t—\t10/31 12天"
+    },
+    "aggregates": [
+      {
+        "industry": "AI核心半导体",
+        "totalCompanies": 9,
+        "validCounts": [
+          9,
+          8,
+          9
+        ],
+        "expected": [
+          -0.02935555555555556,
+          -0.05775,
+          0.5516232
+        ],
+        "rendered": [
+          "−2.9%",
+          "−5.8%",
+          "+55.2%"
+        ],
+        "caption": "基于 9 家细分龙头"
+      },
+      {
+        "industry": "PCB与覆铜板",
+        "totalCompanies": 12,
+        "validCounts": [
+          12,
+          12,
+          10
+        ],
+        "expected": [
+          0.0034083333333333335,
+          -0.041775,
+          0.6086439399999999
+        ],
+        "rendered": [
+          "+0.3%",
+          "−4.2%",
+          "+60.9%"
+        ],
+        "caption": "基于 12 家细分龙头"
+      }
+    ],
+    "marketCapTotalAndPEMean": "No such aggregate component is present; not asserted as tested. Existing return means/revenue medians were numerically checked.",
+    "layout": {
+      "sections": [
+        "overview",
+        "radar",
+        "choke",
+        "leaders",
+        "calendar"
+      ],
+      "cards": 4,
+      "overflow": false
+    }
+  },
+  "productionFilesChanged": false,
+  "screenshots": {
+    "11-aggregate-pcb.png": {
+      "bytes": 447795,
+      "sha256": "d51e2d0f624d9a5cb18d1ee21d318e1b45c4f4dcab868b0d6237e91886942bda"
+    },
+    "03-table-sort-and-missing-values.png": {
+      "bytes": 309914,
+      "sha256": "94104c9783421aff6aa8c4e0d2139658398f34e179bd2c042f96c3d3dc9dd9b4"
+    },
+    "04-a-share-filter.png": {
+      "bytes": 315945,
+      "sha256": "c59aa15805abf79abcf83acf3946d90d57f1da13118f7cfb8b5ff3afd611134c"
+    },
+    "06-lite-missing-pe.png": {
+      "bytes": 337874,
+      "sha256": "256000e17b21adc8ce4e920fa54bf4953c3ddb4fe14993318fba575f47f05495"
+    },
+    "08-kbl-partial.png": {
+      "bytes": 330524,
+      "sha256": "60ea122fcb62acef5d1decbffdc9bb474d7d6d943b0516839a6a7401ac90cf9f"
+    },
+    "01-overview-test-data.png": {
+      "bytes": 363109,
+      "sha256": "97002eacd3066b5cb70033ad8512314de23dd48397946daa15facf395d160d41"
+    },
+    "07-short-history.png": {
+      "bytes": 340865,
+      "sha256": "b4428b87131fbe2d0010c17ed5ca99c02be3bbfaf2b5be3c448335bbf62089f8"
+    },
+    "10-short-history-table-label.png": {
+      "bytes": 312845,
+      "sha256": "603a60eb3195bcdf7d9af5e7927145111f56dfa0984f13f8c0582dac84513383"
+    },
+    "12-map-placeholders-and-partial.png": {
+      "bytes": 375217,
+      "sha256": "da63d5714d00a0e87ba48c4db076af9555b8bc45b277777913c3f8ca7f38c142"
+    },
+    "09-dzsk-partial.png": {
+      "bytes": 340228,
+      "sha256": "0d7e7656cd21b6f8e7e6015fc338b43576082d993922ccbb0c05673609454605"
+    },
+    "11-aggregate-semiconductor.png": {
+      "bytes": 427988,
+      "sha256": "f166553a6a103e3a455afe2a5f726f5a8089bb20048db93a83653429ce5ba59b"
+    },
+    "05-missing-valuation-drawer.png": {
+      "bytes": 329064,
+      "sha256": "751035195096c059545a05ef878a660f399ff111ee01d2b961c1138121b8bfa3"
+    },
+    "02-ratio-unavailable.png": {
+      "bytes": 353128,
+      "sha256": "ee57cc3986237d3c5beec3d62c851f003fd2cde80364d59e53f82b4c5c4a3520"
+    }
+  }
+}

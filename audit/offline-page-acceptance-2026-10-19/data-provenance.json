@@ -1,0 +1,65 @@
+{
+  "generatedAt": "2026-10-19T03:14:31.587899+00:00",
+  "fixtureClock": "2026-10-19T02:38:00+00:00",
+  "dataType": "Explicit synthetic component fixture, not reconstructed Actions data",
+  "marketRequests": 0,
+  "externalDeployment": false,
+  "patternSource": "Parent independently verified run 39190870708 receipt summary only; used to choose missingness pattern, never to reconstruct actual prices.",
+  "priorCXMTSource": {
+    "path": "audit/truthfulness-2026-10-18/fixtures/market-finality.json.gz",
+    "sha256": "3892e5abcdab5ec8e537d6a7b9aa18a39bc70022d672e309f9767fd85efa3b07",
+    "selectedFixtureCount": 54,
+    "warning": "54 is this older local sample count, not a directly observed selected-bar count in run 39190870708 receipt"
+  },
+  "financeSource": "Unchanged repository public evidence: 40 verified / 2 partial",
+  "syntheticFields": [
+    "all other daily prices/returns",
+    "all market capitalization and PE values",
+    "all index values",
+    "all FX numeric rates",
+    "session and receipt timestamps"
+  ],
+  "fixtureCounts": {
+    "companies": 42,
+    "marketCap": 17,
+    "PE": 16,
+    "missingMarketCap": 25,
+    "missingPE": 26,
+    "indices": 5,
+    "ratioAvailable": false
+  },
+  "realPreviewMissing": [
+    "run 39190870708 complete selected company bar arrays and metrics",
+    "actual selected valuation numeric fields",
+    "assembled index list and values",
+    "assembled FX numeric values/provenance",
+    "full assembled DATA"
+  ],
+  "localInspected": {
+    "radar/.cache": "absent",
+    "radar/dist": "absent",
+    "audit/runtime/build-report.json": "2026-10-18 generated; asOf null; unsuitable",
+    "priorMarketFixture": "2026-10-18, no marketState in quote records; not current run"
+  },
+  "previewOnlyAdditions": [
+    "CSP disables network",
+    "fixed explicit test-data watermark",
+    "test-data title"
+  ],
+  "productionFrontendFilesChanged": false,
+  "releaseBlockers": [
+    "local_review_not_publishable",
+    "offline_not_publishable",
+    "synthetic_fixture_not_publishable"
+  ],
+  "outputs": {
+    "preview.html": {
+      "bytes": 582105,
+      "sha256": "6502ebcdee13ff473782c13cd2d0fb684f9db536e6ce2a24b5f6e581cb3e26fd"
+    },
+    "test-data.json": {
+      "bytes": 1261534,
+      "sha256": "16a2f5da19e4b679df367889b3eb45c87d5d4b9412dafc28a6b6e91fa1373023"
+    }
+  }
+}

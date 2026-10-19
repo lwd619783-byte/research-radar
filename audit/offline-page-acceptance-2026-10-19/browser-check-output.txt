@@ -1,0 +1,57 @@
+{
+  "checks": 36,
+  "passed": 36,
+  "failed": [],
+  "findings": [
+    {
+      "id": "F3",
+      "scope": "ratio 缺失提示作出恢复承诺",
+      "evidence": "红利定投温度计\n比值数据暂不可用，下次刷新会自动恢复",
+      "productionChanged": false
+    },
+    {
+      "id": "F2",
+      "scope": "缺失指数没有显式覆盖或缺项提示",
+      "evidence": {
+        "tickerAvailable": [
+          "上证指数",
+          "恒生指数",
+          "纳斯达克",
+          "标普500",
+          "费城半导体"
+        ],
+        "tickerLabel": "10/16 收盘",
+        "configured": 8,
+        "displayed": 5,
+        "note": "5/8 is the explicit fixture assumption; original receipt had no assembled list."
+      },
+      "productionChanged": false
+    },
+    {
+      "id": "F1",
+      "scope": "排序/筛选和聚合缺少逐指标有效覆盖分母",
+      "evidence": {
+        "fixtureMarketCap": "17/42",
+        "fixturePE": "16/42",
+        "tableUI": {
+          "leadSub": "点击表头排序 · 点击行查看走势与财务 · 颜色：红涨绿跌",
+          "tableFooter": "业绩：高增 ≥50% 增长 ≥10% 平稳 下滑\n股价：走强 近20日≥+5% 回调 ≤−10% 深度回调 距高点≤−40% 震荡",
+          "filterLabels": "全部市场\nA股\n港股\n美股\n其他"
+        },
+        "note": "Filters identify categories; they do not show current non-null/total counts."
+      },
+      "productionChanged": false
+    },
+    {
+      "id": "F4",
+      "scope": "列表固定“60日走势”未对短历史行提示不足",
+      "evidence": {
+        "header": "60日走势",
+        "row": "长鑫科技\nSH688825 · A股\n\t\nHBM与存储\n\t待核/不适用回调\t\n\t¥45.02\t−11.7%\t−21.3%\t—\t—\t—\t+977%\t—\t87.6%\t—\t—\t10/31 12天",
+        "fixtureHistoryCount": 54
+      },
+      "productionChanged": false
+    }
+  ],
+  "screenshots": 13
+}

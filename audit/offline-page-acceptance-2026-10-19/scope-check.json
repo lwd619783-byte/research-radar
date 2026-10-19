@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-19T03:20:42.055247+00:00",
+  "baseSHA": "f4bc66728925b55bf61edda926b3f0db857a099f",
+  "frozenFiles": 10,
+  "productionCodeFrontendDataWorkflowsAndFinancialEvidenceUnchanged": true,
+  "embeddedProductionCSSAndJSExact": true,
+  "browserChecksPassed": 36,
+  "openFindings": 4,
+  "screenshots": 13,
+  "allScreenshotsVisuallyInspected": true,
+  "screenshotHashesVerified": true,
+  "sensitivePatternScan": "passed",
+  "contentReview": "Original radar display text and reviewed public financial evidence only; no private knowledge-base document content, credentials, account/payment material or original Actions raw payloads added.",
+  "marketRequests": 0,
+  "actionsDispatches": 0,
+  "artifactDownloadRetries": 0,
+  "deployed": false
+}

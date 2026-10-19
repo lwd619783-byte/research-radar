@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-10-19T03:21:12.225789+00:00",
+  "baseSHA": "f4bc66728925b55bf61edda926b3f0db857a099f",
+  "remoteRefs": [
+    "ref: refs/heads/fix/radar-data-integrity\tHEAD",
+    "414eb80626d3200dfebe4a010507c5fe74d7ca31\tHEAD",
+    "414eb80626d3200dfebe4a010507c5fe74d7ca31\trefs/heads/fix/radar-data-integrity",
+    "f4bc66728925b55bf61edda926b3f0db857a099f\trefs/heads/fix/radar-truthfulness-2026-10-18"
+  ],
+  "marketRequests": 0,
+  "note": "Normal read-only Git verification, not a market-data request."
+}
