@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-10-19T03:21:46.050918+00:00",
+  "previewEvidenceCommit": "162c0303e64c48dfafc91def1a22aa0958881e94",
+  "baseSHA": "f4bc66728925b55bf61edda926b3f0db857a099f",
+  "normalPushExitCode": 0,
+  "forcePush": false,
+  "remoteVerified": "162c0303e64c48dfafc91def1a22aa0958881e94\trefs/heads/fix/radar-truthfulness-2026-10-18",
+  "workingTreeAfterEvidencePush": "clean",
+  "pushSummary": "f4bc667..162c030 HEAD -> fix/radar-truthfulness-2026-10-18",
+  "note": "This receipt is committed afterward; final archive SHA is reported in handoff."
+}
