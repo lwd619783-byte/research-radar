@@ -1,0 +1,74 @@
+{
+  "classification": "READ-ONLY OFFLINE COMPARISON; synthetic preview vs older saved sample, NOT new real market data",
+  "firstAvailableRepositoryCommit": "22d9601eb4879f02ca8278aa27841ce9e604a845",
+  "firstVersionIdentityUnconfirmed": true,
+  "sparkFunctionByteIdentical": true,
+  "detailCoordinateAndPathCodeByteIdentical": true,
+  "chartType": "raw closing-price polyline, not OHLC candles",
+  "syntheticCompanies": 41,
+  "oldSampleCompanies": 1,
+  "sourcePaths": {
+    "synthetic": "audit/offline-page-acceptance-2026-10-19/make_preview.py:31",
+    "oldSample": "audit/truthfulness-2026-10-18/fixtures/market-finality.json.gz",
+    "oldSampleSHA256": "3892e5abcdab5ec8e537d6a7b9aa18a39bc70022d672e309f9767fd85efa3b07"
+  },
+  "examples": {
+    "688498.SS": {
+      "syntheticPreviewExceptOldCXMT": {
+        "points": 60,
+        "returnStdPct": 0.37224,
+        "rangeOverFirstPct": 8.20383,
+        "directionChanges": 4,
+        "equalAdjacent": 2
+      },
+      "previousPublicSampleRawClose": {
+        "points": 60,
+        "returnStdPct": 6.42922,
+        "rangeOverFirstPct": 49.62319,
+        "directionChanges": 30,
+        "equalAdjacent": 0
+      },
+      "priorFirst": "2022-12-21",
+      "priorLast": "2026-10-16",
+      "priorTotal": 923
+    },
+    "LITE": {
+      "syntheticPreviewExceptOldCXMT": {
+        "points": 60,
+        "returnStdPct": 0.38056,
+        "rangeOverFirstPct": 7.61675,
+        "directionChanges": 3,
+        "equalAdjacent": 0
+      },
+      "previousPublicSampleRawClose": {
+        "points": 60,
+        "returnStdPct": 5.97398,
+        "rangeOverFirstPct": 69.60118,
+        "directionChanges": 30,
+        "equalAdjacent": 0
+      },
+      "priorFirst": "2021-10-18",
+      "priorLast": "2026-10-16",
+      "priorTotal": 1255
+    },
+    "688825.SS": {
+      "syntheticPreviewExceptOldCXMT": {
+        "points": 54,
+        "returnStdPct": 3.8866,
+        "rangeOverFirstPct": 37.16327,
+        "directionChanges": 29,
+        "equalAdjacent": 0
+      },
+      "previousPublicSampleRawClose": {
+        "points": 54,
+        "returnStdPct": 3.8866,
+        "rangeOverFirstPct": 37.16326,
+        "directionChanges": 29,
+        "equalAdjacent": 0
+      },
+      "priorFirst": "2026-07-27",
+      "priorLast": "2026-10-16",
+      "priorTotal": 54
+    }
+  }
+}

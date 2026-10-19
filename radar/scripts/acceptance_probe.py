@@ -1,7 +1,7 @@
-"""One bounded, read-only interface acceptance. Never renders or updates caches.
+"""One bounded diagnostic execution; archives the exact gate-checked DATA.
 
-Only the explicit receipt schema below is written. Raw HTTP bodies, request URLs,
-cookies, crumbs, research fields, headers and exception messages stay out of logs.
+No cache update or publication. Only an allowlisted, checked 10 MB archive is
+written; raw HTTP bodies, cookies, crumbs, headers and credentials stay in memory.
 """
 from __future__ import annotations
 
@@ -23,6 +23,7 @@ import urllib.request
 from zoneinfo import ZoneInfo
 
 import build
+import acceptance_bundle as bundle
 import quotes
 from integrity import ZONES, financial_status, fresh_record, observation_time, valid_bars, pe_status, dated_fx
 from snapshot import CLOSED_QUOTE_STATES
@@ -270,7 +271,7 @@ def inventory(data):
     return companies, [c for c in companies if c['mkt'] in ('A股', '港股') and quotes.tencent_code(c['sym'])], sorted({c['cur'] for c in companies}-{'USD'})
 
 
-def collect(data, budget, market_sink=None):
+def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_clock=None):
     companies, tencent, currencies = inventory(data)
     rows = []
     mk = {k: {} for k in ('daily', 'quote', 'index', 'fx', 'ratio')}
@@ -324,21 +325,27 @@ def collect(data, budget, market_sink=None):
                 lambda h:quotes.monthly(h,cfg[prefix+'_tencent'],cfg[prefix+'_yahoo']),month_quality)
             rows.append(row)
             if source=='tencent' and value: mk['ratio'][key]=value
-    D,stale,missing=build.assemble(data,mk,mk,dt.datetime.now(build.BJ))
+    # Freeze once AFTER the last source result: receivedAt must not be in the
+    # future relative to this clock. Transport event times remain actual times.
+    fixed_clock = snapshot_clock if snapshot_clock is not None else dt.datetime.now(build.BJ)
+    D,stale,missing=build.assemble(data,mk,mk,fixed_clock)
     gates={'blockers':build.release_blockers(D),'missingDailyCount':len(missing),'staleDailyCount':len(stale),
            'snapshot':D['meta']['snapshot'],
            'marketCapAvailable':sum(c['mcapUSD'] is not None for c in D['companies']),
            'peAvailable':sum(c['pe'] is not None for c in D['companies']),
            'asOf':D['meta']['asOf'],'asOfByMarket':D['meta']['asOfByMarket'], 'ratioAvailable':D['ratio'] is not None,
-           'financialVerified':sum(financial_status(c.get('financial'),dt.date.today(),c)=='verified' for c in data['companies']),
-           'financialPartial':sum(financial_status(c.get('financial'),dt.date.today(),c)=='verified_partial' for c in data['companies']),
-           'financialRequired':len(companies),'primaryOnlyAssembly':True}
+           'financialVerified':sum(financial_status(c.get('financial'),fixed_clock.date(),c)=='verified' for c in data['companies']),
+           'financialPartial':sum(financial_status(c.get('financial'),fixed_clock.date(),c)=='verified_partial' for c in data['companies']),
+           'financialRequired':len(companies),'primaryOnlyAssembly':True,
+           'dataSHA256':bundle.data_digest(D)}
     summary={}
     for category in sorted({r['category'] for r in rows}):
         group=[r for r in rows if r['category']==category]
         summary[category]={'planned':len(group),**{k:sum(bool(r[k]) for r in group) for k in ('connection','parse','quality','publicationGate')}}
     if market_sink is not None:
         market_sink.update(mk)
+    if snapshot_sink is not None:
+        snapshot_sink.update(data=D, clock=fixed_clock, gates=gates)
     return rows,summary,quote_session,gates
 
 
@@ -365,12 +372,17 @@ def preflight():
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--preflight',action='store_true')
-    ap.add_argument('--out',type=Path)
+    ap.add_argument('--out',type=Path,help='receipt.json within a new archive directory')
+    ap.add_argument('--verify-bundle',type=Path,help='read-only offline archive verification')
     args=ap.parse_args()
+    if args.verify_bundle:
+        print(json.dumps(bundle.verify_bundle(args.verify_bundle)))
+        return 0
     if args.preflight:
         print(json.dumps(preflight()))
         return 0
     if not args.out: ap.error('--out required')
+    if args.out.name != 'receipt.json': ap.error('--out must name receipt.json')
     if os.environ.get('GITHUB_ACTIONS')!='true' or os.environ.get('GITHUB_RUN_ATTEMPT')!='1':
         raise StopProbe('github_first_attempt_only')
     verify_frozen()
@@ -382,15 +394,15 @@ def main():
              'limits':{'requests':MAX_REQUESTS,'timeoutSeconds':TIMEOUT,'deadlineSeconds':DEADLINE,'attemptsPerGet':2,'retryOnly429':True,'maxRetryAfterSeconds':10},
              'schemaWarnings':len(rep.warnings),'fallbackPolicy':'separate-source-only; query2 not attempted; access denials stop corresponding lane'}
     budget=Budget()
-    rows,summary,session,gates=collect(data,budget)
+    snapshot = {}
+    rows,summary,session,gates=collect(data,budget,snapshot_sink=snapshot)
     receipt.update(results=rows,summary=summary,quoteSession=session,publication=gates,
-                   requestsMade=budget.count,deniedPaths=sorted(budget.denied),finishedAt=utc())
-    blob=(json.dumps(receipt,ensure_ascii=True,allow_nan=False,indent=2)+'\n').encode()
-    if len(blob)>MAX_RECEIPT: raise StopProbe('receipt_size_limit')
-    args.out.parent.mkdir(parents=True,exist_ok=True)
-    args.out.write_bytes(blob)
-    print(json.dumps({'receiptBytes':len(blob),'sha256':hashlib.sha256(blob).hexdigest(),'summary':summary,
-                      'publicationBlocked':bool(gates['blockers']),'requestsMade':budget.count}))
+                   requestsMade=budget.count,deniedPaths=sorted(budget.denied),finishedAt=utc(),
+                   fixedClock=snapshot['clock'].isoformat())
+    saved = bundle.write_bundle(args.out.parent, snapshot['data'], receipt, snapshot['clock'])
+    print(json.dumps({'archive':saved,'summary':summary,
+                      'publicationBlocked':bool(gates['blockers']),'publicationAuthorized':False,
+                      'requestsMade':budget.count}))
     return 0  # Completed diagnostics, NOT a claim that interfaces or release gates passed.
 
 
@@ -398,5 +410,5 @@ if __name__=='__main__':
     try:
         sys.exit(main())
     except Exception as exc:
-        print(json.dumps({'fatal':str(exc) if isinstance(exc,StopProbe) else type(exc).__name__}))
+        print(json.dumps({'fatal':str(exc) if isinstance(exc,(StopProbe,bundle.BundleError)) else type(exc).__name__}))
         sys.exit(2)

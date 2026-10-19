@@ -251,10 +251,15 @@ class WorkflowTests(unittest.TestCase):
         self.assertFalse(next(s for s in steps if s.get('uses','').startswith('actions/checkout@'))['with']['persist-credentials'])
         self.assertEqual(next(s for s in steps if s.get('uses','').startswith('actions/setup-python@'))['with']['python-version'],'3.12')
 
-    def test_only_explicit_receipt_uploaded_for_seven_days(self):
+    def test_only_explicit_verified_bundle_uploaded_for_seven_days(self):
         steps=self.workflow()['jobs']['acceptance']['steps']
         artifact=next(s for s in steps if s.get('uses','').startswith('actions/upload-artifact@'))['with']
-        self.assertEqual(artifact['path'],'${{ runner.temp }}/radar-interface-acceptance/receipt.json')
+        self.assertEqual(artifact['path'].splitlines(), ['${{ runner.temp }}/radar-interface-acceptance/'+name for name in probe.bundle.FILES])
+        verify=next(s for s in steps if s.get('id')=='archive_verify')
+        self.assertIn('--verify-bundle',verify['run'])
+        self.assertEqual(probe.bundle.MAX_BUNDLE,10_000_000)
+        upload=next(s for s in steps if s.get('uses','').startswith('actions/upload-artifact@'))
+        self.assertEqual(upload['if'],"success() && steps.probe.outcome == 'success' && steps.archive_verify.outcome == 'success'")
         self.assertEqual(artifact['retention-days'],7)
         self.assertFalse(artifact['include-hidden-files'])
         self.assertLess(next(i for i,s in enumerate(steps) if '--preflight' in s.get('run','')),next(i for i,s in enumerate(steps) if s.get('id')=='probe'))

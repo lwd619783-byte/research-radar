@@ -1,0 +1,13 @@
+{
+  "classification": "OFFLINE TESTS; no new real market data",
+  "startUTC": "2026-10-19T03:54:27.458094+00:00",
+  "endUTC": "2026-10-19T03:54:59.632989+00:00",
+  "command": "python -B -m unittest discover -s radar/tests -v",
+  "exitCode": 0,
+  "summary": [
+    "----------------------------------------------------------------------",
+    "Ran 140 tests in 31.973s",
+    "",
+    "OK"
+  ]
+}

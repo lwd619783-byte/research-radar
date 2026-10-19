@@ -1,0 +1,25 @@
+diff --git a/.github/workflows/radar-interface-acceptance.yml b/.github/workflows/radar-interface-acceptance.yml
+index 57cb9e8..4644635 100644
+--- a/.github/workflows/radar-interface-acceptance.yml
++++ b/.github/workflows/radar-interface-acceptance.yml
+@@ -48,12 +48,17 @@
+           "run": "python -B radar/scripts/acceptance_probe.py --out \"$RUNNER_TEMP/radar-interface-acceptance/receipt.json\""
+         },
+         {
+-          "name": "Upload only the sanitized receipt",
+-          "if": "always() && steps.probe.outcome != 'skipped'",
++          "name": "Verify complete archive allowlist, hashes and 10 MB limit",
++          "id": "archive_verify",
++          "run": "python -B radar/scripts/acceptance_probe.py --verify-bundle \"$RUNNER_TEMP/radar-interface-acceptance\""
++        },
++        {
++          "name": "Upload only the verified diagnostic archive",
++          "if": "success() && steps.probe.outcome == 'success' && steps.archive_verify.outcome == 'success'",
+           "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+           "with": {
+             "name": "radar-interface-acceptance-${{ github.run_id }}",
+-            "path": "${{ runner.temp }}/radar-interface-acceptance/receipt.json",
++            "path": "${{ runner.temp }}/radar-interface-acceptance/DATA.json\n${{ runner.temp }}/radar-interface-acceptance/index.html\n${{ runner.temp }}/radar-interface-acceptance/receipt.json\n${{ runner.temp }}/radar-interface-acceptance/manifest.json",
+             "retention-days": 7,
+             "if-no-files-found": "error",
+             "compression-level": 9,
