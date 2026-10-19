@@ -1,0 +1,24 @@
+{
+  "verifiedAtUTC": "2026-10-19T03:40:21.873301+00:00",
+  "repository": "lwd619783-byte/research-radar",
+  "branch": "fix/radar-truthfulness-2026-10-18",
+  "implementationAndEvidenceCommit": "74941d1235c71eddfcdafc13b9294349c8f794da",
+  "normalPush": {
+    "command": "git push origin HEAD:refs/heads/fix/radar-truthfulness-2026-10-18",
+    "exitCode": 0,
+    "observedOutput": "2de3aca..74941d1 HEAD -> fix/radar-truthfulness-2026-10-18"
+  },
+  "remoteVerification": {
+    "exitCode": 0,
+    "output": "ref: refs/heads/fix/radar-data-integrity\tHEAD\n414eb80626d3200dfebe4a010507c5fe74d7ca31\tHEAD\n414eb80626d3200dfebe4a010507c5fe74d7ca31\trefs/heads/fix/radar-data-integrity\n74941d1235c71eddfcdafc13b9294349c8f794da\trefs/heads/fix/radar-truthfulness-2026-10-18\n"
+  },
+  "workingTreeCleanBeforeReceipt": true,
+  "offlineTests": 127,
+  "browserAssertions": 114,
+  "screenshots": 15,
+  "newMarketRequests": 0,
+  "newActionDispatches": 0,
+  "deployed": false,
+  "merged": false,
+  "pending": "Independent parent audit and actual complete DATA page acceptance remain required."
+}
