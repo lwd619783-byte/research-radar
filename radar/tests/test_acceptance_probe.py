@@ -1,6 +1,9 @@
 """Offline transport, redaction, scope and manual-workflow contracts."""
 import datetime as dt
 import io
+import os
+import subprocess
+import tempfile
 import json
 from pathlib import Path
 import sys
@@ -151,7 +154,7 @@ class QualityTests(unittest.TestCase):
         self.assertTrue(probe.fx_quality(value,h,'EUR')[0]['directionVerified'])
         self.assertFalse(probe.fx_quality(value,h,'CNY')[0]['directionVerified'])
 
-    def test_frozen_manifest(self): self.assertEqual(probe.verify_frozen(),9)
+    def test_frozen_manifest(self): self.assertEqual(probe.verify_frozen(),10)
 
 
 
@@ -194,6 +197,51 @@ class WorkflowTests(unittest.TestCase):
         job=w['jobs']['acceptance'];self.assertEqual(job['runs-on'],'ubuntu-24.04')
         self.assertEqual(job['timeout-minutes'],20);self.assertIn('github.run_attempt == 1',job['if'])
         self.assertNotIn('secrets.',json.dumps(w))
+
+    def test_current_branch_exact_sha_and_zero_cost_gate_before_runner(self):
+        w=self.workflow();job=w['jobs']['acceptance']
+        self.assertEqual(job['if'],
+            "github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/radar-truthfulness-2026-10-18' && github.run_attempt == 1 && inputs.zero_cost_verified == true && inputs.reviewed_sha == github.sha")
+        cost=w['on']['workflow_dispatch']['inputs']['zero_cost_verified']
+        self.assertEqual(cost['type'],'boolean');self.assertTrue(cost['required']);self.assertIs(cost['default'],False)
+        checkout=next(s for s in job['steps'] if s.get('uses','').startswith('actions/checkout@'))
+        self.assertEqual(checkout['with']['ref'],'${{ github.sha }}')
+        self.assertEqual(probe.MAX_REQUESTS,240)
+        self.assertEqual(probe.MAX_RECEIPT,512*1024)
+
+    def test_actual_shell_guard_rejects_wrong_branch_sha_cost_and_reruns(self):
+        guard=self.workflow()['jobs']['acceptance']['steps'][0]
+        self.assertEqual(guard['env'],{'REVIEWED_SHA':'${{ inputs.reviewed_sha }}','ZERO_COST_VERIFIED':'${{ inputs.zero_cost_verified }}'})
+        env={'PATH':os.environ.get('PATH','/usr/bin:/bin'),'GITHUB_EVENT_NAME':'workflow_dispatch',
+             'GITHUB_REF':'refs/heads/fix/radar-truthfulness-2026-10-18','GITHUB_RUN_ATTEMPT':'1',
+             'GITHUB_SHA':'a'*40,'REVIEWED_SHA':'a'*40,'ZERO_COST_VERIFIED':'true'}
+        def run(change):
+            return subprocess.run(['bash','-c',guard['run']],env={**env,**change},capture_output=True).returncode
+        self.assertEqual(run({}),0)
+        for change in ({'GITHUB_REF':'refs/heads/fix/radar-data-integrity'},
+                       {'GITHUB_REF':'refs/heads/main'},{'GITHUB_EVENT_NAME':'push'},
+                       {'GITHUB_RUN_ATTEMPT':'2'},{'ZERO_COST_VERIFIED':'false'},
+                       {'ZERO_COST_VERIFIED':''},{'ZERO_COST_VERIFIED':'unknown'},
+                       {'REVIEWED_SHA':'b'*40},{'REVIEWED_SHA':'a'*7},
+                       {'REVIEWED_SHA':'A'*40},{'REVIEWED_SHA':'','GITHUB_SHA':''}):
+            with self.subTest(change=change):self.assertNotEqual(run(change),0)
+        with tempfile.TemporaryDirectory() as directory:
+            marker=Path(directory)/'not-created'
+            self.assertNotEqual(run({'REVIEWED_SHA':'$(touch '+str(marker)+')'}),0)
+            self.assertFalse(marker.exists())
+
+    def test_checkout_identity_is_verified_before_preflight_and_requests(self):
+        steps=self.workflow()['jobs']['acceptance']['steps']
+        verify=steps[2]
+        self.assertEqual(verify['name'],'Verify checked-out HEAD equals reviewed execution SHA')
+        self.assertIn('actions/checkout@',steps[1]['uses'])
+        self.assertLess(2,next(i for i,s in enumerate(steps) if '--preflight' in s.get('run','')))
+        head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+        for reviewed,actual,success in ((head,head,True),('0'*40,head,False),(head,'0'*40,False)):
+            with self.subTest(reviewed=reviewed,actual=actual):
+                result=subprocess.run(['bash','-c',verify['run']],cwd=ROOT,
+                    env={'PATH':os.environ.get('PATH','/usr/bin:/bin'),'REVIEWED_SHA':reviewed,'GITHUB_SHA':actual},capture_output=True)
+                self.assertEqual(result.returncode==0,success)
 
     def test_fixed_official_actions_no_deployment(self):
         steps=self.workflow()['jobs']['acceptance']['steps']

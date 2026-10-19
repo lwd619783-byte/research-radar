@@ -13,19 +13,24 @@
   "concurrency": {"group": "radar-interface-acceptance", "cancel-in-progress": false},
   "jobs": {
     "acceptance": {
-      "if": "github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/radar-data-integrity' && github.run_attempt == 1",
+      "if": "github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/radar-truthfulness-2026-10-18' && github.run_attempt == 1 && inputs.zero_cost_verified == true && inputs.reviewed_sha == github.sha",
       "runs-on": "ubuntu-24.04",
       "timeout-minutes": 20,
       "steps": [
         {
           "name": "Validate reviewed SHA and cost authorization",
           "env": {"REVIEWED_SHA": "${{ inputs.reviewed_sha }}", "ZERO_COST_VERIFIED": "${{ inputs.zero_cost_verified }}"},
-          "run": "test \"$ZERO_COST_VERIFIED\" = true\ntest \"$REVIEWED_SHA\" = \"$GITHUB_SHA\"\n"
+          "run": "set -euo pipefail\ntest \"$GITHUB_EVENT_NAME\" = workflow_dispatch\ntest \"$GITHUB_REF\" = refs/heads/fix/radar-truthfulness-2026-10-18\ntest \"$GITHUB_RUN_ATTEMPT\" = 1\ntest \"$ZERO_COST_VERIFIED\" = true\n[[ \"$REVIEWED_SHA\" =~ ^[0-9a-f]{40}$ ]]\ntest \"$REVIEWED_SHA\" = \"$GITHUB_SHA\"\n"
         },
         {
           "name": "Checkout exact execution commit",
           "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
           "with": {"persist-credentials": false, "fetch-depth": 0, "ref": "${{ github.sha }}"}
+        },
+        {
+          "name": "Verify checked-out HEAD equals reviewed execution SHA",
+          "env": {"REVIEWED_SHA": "${{ inputs.reviewed_sha }}"},
+          "run": "set -euo pipefail\ntest \"$(git rev-parse HEAD)\" = \"$GITHUB_SHA\"\ntest \"$(git rev-parse HEAD)\" = \"$REVIEWED_SHA\"\n"
         },
         {
           "name": "Python 3.12",

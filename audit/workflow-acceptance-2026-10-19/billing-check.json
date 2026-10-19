@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-19T01:01:32.335995+00:00",
+  "method": "GET",
+  "endpoint": "/users/{owner}/settings/billing/actions",
+  "exit": 1,
+  "httpStatus": 403,
+  "message": "Resource not accessible by integration",
+  "documentation_url": "https://docs.github.com/rest/billing/billing#get-github-actions-billing-for-a-user",
+  "scopeRequirementReported": false,
+  "allowanceVerified": false,
+  "paidOverageBoundaryVerified": false,
+  "zeroCostVerified": false,
+  "rawAccountDataPersisted": false
+}

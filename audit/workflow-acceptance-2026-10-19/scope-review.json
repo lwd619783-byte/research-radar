@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-10-19T01:04:53.962596+00:00",
+  "baselineSHA": "7a1015f789162ed4d2ff51f60323d3aeb2013b84",
+  "byteIdentical": [
+    "radar/data/chokepoints.toml",
+    "radar/data/companies.toml",
+    "radar/data/config.toml",
+    "radar/data/industries.toml",
+    "radar/scripts/acceptance_probe.py",
+    "radar/scripts/build.py",
+    "radar/scripts/integrity.py",
+    "radar/scripts/probe_sources.py",
+    "radar/scripts/quotes.py",
+    "radar/scripts/schema.py",
+    "radar/scripts/visual_fixture.py",
+    "radar/site/app.js",
+    "radar/site/index.html",
+    "radar/site/style.css",
+    ".github/workflows/radar-deploy.yml.disabled",
+    ".github/workflows/radar-preview.yml.disabled",
+    "audit/partial-financial-2026-10-18/public-evidence.json"
+  ],
+  "originalNineFrozenHashesUnchanged": true,
+  "newFrozenCount": 10,
+  "changesWithinAuthorizedScope": true,
+  "credentialPatternHits": [],
+  "syntheticException": "Existing baseline user:secret URL in transport rejection test; not a credential",
+  "noPrivateAccountOrResearchDataCopied": true,
+  "manualReview": "Only sanitized billing denial, repository/run identifiers, workflow/test changes and evidence summaries added."
+}
