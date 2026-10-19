@@ -1,0 +1,14 @@
+{
+  "verifiedAtUTC": "2026-10-19T04:11:01.349732+00:00",
+  "branch": "fix/radar-truthfulness-2026-10-18",
+  "evidenceCommit": "6217ed908f228c13a6d174e26380d365140d7121",
+  "executionSHA": "3e8a63f6f61ba9952353df9b51d790ea9e380510",
+  "run": 39197733096,
+  "attempt": 1,
+  "normalPushExitCode": 0,
+  "remoteVerification": "ref: refs/heads/fix/radar-data-integrity\tHEAD\n414eb80626d3200dfebe4a010507c5fe74d7ca31\tHEAD\n414eb80626d3200dfebe4a010507c5fe74d7ca31\trefs/heads/fix/radar-data-integrity\n6217ed908f228c13a6d174e26380d365140d7121\trefs/heads/fix/radar-truthfulness-2026-10-18\n",
+  "worktreeCleanBeforeReceipt": true,
+  "codeChanged": false,
+  "frozenHashesChanged": 0,
+  "pending": "Parent to obtain original ZIP legally; offline hash/DATA/render and actual desktop acceptance not yet performed."
+}
