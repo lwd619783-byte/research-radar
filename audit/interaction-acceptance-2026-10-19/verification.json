@@ -1,0 +1,40 @@
+[
+  {
+    "name": "tests",
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "radar/tests",
+      "-v"
+    ],
+    "startedAt": "2026-10-19T12:29:14.171085+00:00",
+    "finishedAt": "2026-10-19T12:29:50.333364+00:00",
+    "exitCode": 0
+  },
+  {
+    "name": "javascript",
+    "command": [
+      "node",
+      "--check",
+      "radar/site/app.js"
+    ],
+    "startedAt": "2026-10-19T12:29:50.333514+00:00",
+    "finishedAt": "2026-10-19T12:29:50.362751+00:00",
+    "exitCode": 0
+  },
+  {
+    "name": "diff",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "startedAt": "2026-10-19T12:29:50.362937+00:00",
+    "finishedAt": "2026-10-19T12:29:50.367107+00:00",
+    "exitCode": 0
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-10-19T12:30:07.754508+00:00",
+  "expectedBundleDirectory": "/workspace/scratch/50673417708c/radar-close-audit/verified-bundle",
+  "missingFiles": [
+    "DATA.json",
+    "index.html",
+    "receipt.json",
+    "manifest.json"
+  ],
+  "userAlreadyUploaded": true,
+  "libraryMatch": {
+    "libraryFileId": "libfile_2e1a820938148191938f54e67ba0b4ec",
+    "name": "radar-interface-acceptance-39214475581.zip",
+    "sizeBytes": 442011
+  },
+  "expectedZipSHA256": "9965b4718b29cc4da212e37c4afa259c5f8723bc984b5f64b76f50eb950e2f30",
+  "localZipSHA256": null,
+  "materializationResult": "Current hosted-app helper returned HTTP 401; stopped this path",
+  "artifactDownloadAttempts": 0,
+  "additionalMarketRequests": 0,
+  "actionsDispatched": 0,
+  "browserInteractionStatus": "not_run_original_files_unavailable",
+  "newHTMLStatus": "not_generated_original_files_unavailable",
+  "screenshotsStatus": "not_generated",
+  "nextStep": "Parent coordinates transfer of already-uploaded verified bundle into this execution environment; do not ask user to upload again"
+}

@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-10-19T12:30:07.761983+00:00",
+  "baseSHA": "687db331349c10972d29de5fdeaff359c3f0ff00",
+  "changedTrackedFiles": [
+    "audit/truthfulness-frozen.json",
+    "radar/site/app.js",
+    "radar/tests/test_display_coverage.py"
+  ],
+  "frozenFilesMatch": 10,
+  "frozenHashChanges": [
+    "radar/site/app.js"
+  ],
+  "appSHA256": "f8d73e4e28c78e17e130431b5c1d4f64594b75b9d03fe143b194ddb6f720b6ec",
+  "templateCSSMarketAndWorkflowFilesChanged": false,
+  "actualBrowserAcceptance": false
+}
