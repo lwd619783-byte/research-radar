@@ -48,5 +48,37 @@
     "startedAt": "2026-10-19T04:42:51.301765+00:00",
     "finishedAt": "2026-10-19T04:42:51.308154+00:00",
     "exitCode": 0
+  },
+  {
+    "name": "tests-final-fixed-clock",
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "radar/tests",
+      "-v"
+    ],
+    "startedAt": "2026-10-19T04:45:49.183171+00:00",
+    "finishedAt": "2026-10-19T04:46:23.531531+00:00",
+    "exitCode": 0
+  },
+  {
+    "name": "tests-final-access-attribution",
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "radar/tests",
+      "-v"
+    ],
+    "startedAt": "2026-10-19T04:46:44.389746+00:00",
+    "finishedAt": "2026-10-19T04:47:18.485174+00:00",
+    "exitCode": 0
   }
 ]

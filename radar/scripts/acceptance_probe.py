@@ -271,6 +271,19 @@ def inventory(data):
     return companies, [c for c in companies if c['mkt'] in ('A股', '港股') and quotes.tencent_code(c['sym'])], sorted({c['cur'] for c in companies}-{'USD'})
 
 
+def access_affects(item, access):
+    """A denied daily endpoint cannot explain an unrelated missing PE field."""
+    category=access['category']
+    if item['kind']=='company':
+        metric=item.get('metric')
+        if category=='quote-session':return metric in ('price','PE','marketCap','marketCapUSD')
+        return (access.get('symbol')==item.get('symbol') and category=='company-yahoo-daily'
+                and metric in ('price','daily','r5','r20','r60','ytd','high52'))
+    if item['kind']=='ratio':return category=='ratio-tencent'
+    return (access.get('symbol')==item.get('symbol') and
+            (category.startswith('index-') if item['kind']=='index' else category=='fx'))
+
+
 def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_clock=None):
     companies, tencent, currencies = inventory(data)
     rows = []
@@ -300,8 +313,8 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
                   'closedMarketState': v.get('marketState') in CLOSED_QUOTE_STATES,
                   'sourceTime': observed is not None, 'currencyMatches': v.get('currency') == c['cur'],
                   'dateMatchesDaily': bool(d and d == mk['daily'].get(c['sym'],{}).get('asOf')),
-                  'dateFresh': bool(d and fresh_record(v,dt.datetime.now(dt.UTC),d,c['mkt']))}
-        selected=build.latest.select_quote(v,None,c['mkt'],c['cur'],dt.datetime.now(build.BJ))[0]
+                  'dateFresh': bool(d and fresh_record(v,snapshot_clock if snapshot_clock is not None else dt.datetime.now(dt.UTC),d,c['mkt']))}
+        selected=build.latest.select_quote(v,None,c['mkt'],c['cur'],snapshot_clock if snapshot_clock is not None else dt.datetime.now(build.BJ))[0]
         eps=v.get('epsTrailingTwelveMonths')
         not_applicable=v.get('trailingPE') is None and number(eps) and eps<=0
         quality=bool(selected) and fields['marketCap'] and fields['price'] and (fields['trailingPE'] or not_applicable)
@@ -319,7 +332,7 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
                                 lambda h: quotes.index_quote(h,x['symbol'],x.get('tencent',''),source=source),index_quality)
             rows.append(row)
             previous=mk['index'].get(x['symbol'])
-            if value and build.latest.select_index(value,None,dt.datetime.now(build.BJ)) and (not previous or value.get('date','')>previous.get('date','')):
+            if value and build.latest.select_index(value,None,snapshot_clock if snapshot_clock is not None else dt.datetime.now(build.BJ)) and (not previous or value.get('date','')>previous.get('date','')):
                 mk['index'][x['symbol']] = value
     for cur in currencies:
         row,value=inspect('fx',cur,'yahoo',budget,lambda h:quotes.fx(h,cur),lambda v,h:fx_quality(v,h,cur))
@@ -341,7 +354,7 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
     if any(e.get('httpStatus') in DENIALS for e in h.events):
         D['meta']['sourceAccess'].append({'category':'quote-session','source':'yahoo','status':'access_blocked'})
     for item in D['meta'].get('coverage',[]):
-        if item['status']=='missing' and item.get('metric')!='financial' and any(a.get('symbol')==item.get('symbol') or (a['category']=='quote-session' and item.get('metric') in ('price','PE','marketCap','marketCapUSD')) for a in D['meta']['sourceAccess']):
+        if item['status']=='missing' and any(access_affects(item,a) for a in D['meta']['sourceAccess']):
             item.update(status='access_blocked',reason='explicit_source_access_refusal')
     gates={'blockers':build.release_blockers(D),'missingDailyCount':len(missing),'staleDailyCount':len(stale),
            'snapshot':D['meta']['snapshot'],

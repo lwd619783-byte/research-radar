@@ -172,4 +172,15 @@ class LatestMarketTests(unittest.TestCase):
                 with self.assertRaises(quotes.AccessRefused):h.get(url+'?symbols='+batch)
         self.assertEqual(request.call_count,1)
 
+    def test_access_denial_is_attributed_only_to_dependent_metrics(self):
+        daily={'category':'company-yahoo-daily','symbol':'LITE'}
+        quote={'category':'quote-session'}
+        item={'kind':'company','symbol':'LITE','metric':'PE'}
+        self.assertFalse(probe.access_affects(item,daily))
+        self.assertTrue(probe.access_affects(item,quote))
+        self.assertFalse(probe.access_affects({**item,'metric':'r20'},quote))
+        self.assertTrue(probe.access_affects({**item,'metric':'r20'},daily))
+        self.assertFalse(probe.access_affects({**item,'metric':'financial'},quote))
+        self.assertTrue(probe.access_affects({'kind':'ratio'}, {'category':'ratio-tencent','symbol':'cyb'}))
+
 if __name__=='__main__':unittest.main()
