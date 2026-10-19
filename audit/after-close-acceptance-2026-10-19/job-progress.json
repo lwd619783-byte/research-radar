@@ -1,0 +1,108 @@
+[
+  {
+    "id": 117935032406,
+    "run_id": 39214475581,
+    "head_sha": "b629883c76f578be4dac2740e5bfc5e8bfa4cb35",
+    "name": "acceptance",
+    "status": "in_progress",
+    "conclusion": null,
+    "started_at": "2026-10-19T07:12:18Z",
+    "completed_at": null,
+    "html_url": "https://github.com/lwd619783-byte/research-radar/actions/runs/39214475581/job/117935032406",
+    "runner_name": "GitHub Actions 1000000998",
+    "runner_group_name": "GitHub Actions",
+    "labels": [
+      "ubuntu-24.04"
+    ],
+    "steps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 1,
+        "started_at": "2026-10-19T07:12:19Z",
+        "completed_at": "2026-10-19T07:12:20Z"
+      },
+      {
+        "name": "Validate reviewed SHA and cost authorization",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 2,
+        "started_at": "2026-10-19T07:12:20Z",
+        "completed_at": "2026-10-19T07:12:20Z"
+      },
+      {
+        "name": "Checkout exact execution commit",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 3,
+        "started_at": "2026-10-19T07:12:20Z",
+        "completed_at": "2026-10-19T07:12:22Z"
+      },
+      {
+        "name": "Verify checked-out HEAD equals reviewed execution SHA",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 4,
+        "started_at": "2026-10-19T07:12:22Z",
+        "completed_at": "2026-10-19T07:12:22Z"
+      },
+      {
+        "name": "Python 3.12",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 5,
+        "started_at": "2026-10-19T07:12:22Z",
+        "completed_at": "2026-10-19T07:12:23Z"
+      },
+      {
+        "name": "Offline regression, schema and frozen hashes before requests",
+        "status": "in_progress",
+        "conclusion": null,
+        "number": 6,
+        "started_at": "2026-10-19T07:12:23Z",
+        "completed_at": null
+      },
+      {
+        "name": "Bounded read-only interface acceptance",
+        "status": "pending",
+        "conclusion": null,
+        "number": 7,
+        "started_at": null,
+        "completed_at": null
+      },
+      {
+        "name": "Verify complete archive allowlist, hashes and 10 MB limit",
+        "status": "pending",
+        "conclusion": null,
+        "number": 8,
+        "started_at": null,
+        "completed_at": null
+      },
+      {
+        "name": "Upload only the verified diagnostic archive",
+        "status": "pending",
+        "conclusion": null,
+        "number": 9,
+        "started_at": null,
+        "completed_at": null
+      },
+      {
+        "name": "Post Python 3.12",
+        "status": "pending",
+        "conclusion": null,
+        "number": 17,
+        "started_at": null,
+        "completed_at": null
+      },
+      {
+        "name": "Post Checkout exact execution commit",
+        "status": "pending",
+        "conclusion": null,
+        "number": 18,
+        "started_at": null,
+        "completed_at": null
+      }
+    ]
+  }
+]

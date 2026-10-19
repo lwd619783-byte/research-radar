@@ -1,0 +1,28 @@
+{
+  "startedAtUTC": "2026-10-19T07:12:11.994548+00:00",
+  "executionSHA": "b629883c76f578be4dac2740e5bfc5e8bfa4cb35",
+  "remoteRefVerified": "b629883c76f578be4dac2740e5bfc5e8bfa4cb35\trefs/heads/fix/radar-truthfulness-2026-10-18",
+  "existingRunIds": [
+    39197733096,
+    39190870708,
+    39184829414,
+    39047568864
+  ],
+  "request": {
+    "method": "POST",
+    "endpoint": "repos/lwd619783-byte/research-radar/actions/workflows/radar-interface-acceptance.yml/dispatches",
+    "payload": {
+      "ref": "fix/radar-truthfulness-2026-10-18",
+      "inputs": {
+        "reviewed_sha": "b629883c76f578be4dac2740e5bfc5e8bfa4cb35",
+        "zero_cost_verified": true
+      }
+    }
+  },
+  "attemptsIssued": 1,
+  "state": "request_returned_success",
+  "finishedAtUTC": "2026-10-19T07:12:15.461261+00:00",
+  "exitCode": 0,
+  "stdoutEmpty": true,
+  "stderrEmpty": true
+}

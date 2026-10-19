@@ -1,0 +1,24 @@
+{
+  "checkedAtUTC": "2026-10-19T07:16:50.333926+00:00",
+  "sensitiveScan": "passed",
+  "checkedFiles": [
+    "artifact-metadata.json",
+    "run-timeline.jsonl",
+    "execution-scope.json",
+    "cost-and-authorization.json",
+    "runs-after.json",
+    "run-identity.json",
+    "runs-before.json",
+    "REVIEW.md",
+    "single-dispatch.json",
+    "run-terminal.json",
+    "access-blockers.json",
+    "job-progress.json",
+    "job-terminal.json"
+  ],
+  "reviewedException": "single-dispatch request.payload contains only exact authorized branch, reviewed SHA and zero_cost_verified boolean; no response payload or credentials",
+  "frozenFilesMatch": 10,
+  "productionOrWorkflowChanges": false,
+  "originalArtifactOrLogBytesRetrieved": false,
+  "signedRedirectURLPersisted": false
+}

@@ -1,0 +1,17 @@
+{
+  "recordedAtUTC": "2026-10-19T07:12:11.994264+00:00",
+  "basis": "Explicit user authorization for one after-close run; existing same-day screenshot evidence and unchanged hard-zero-overage boundary reused; no new billing reading claimed",
+  "priorEvidence": "audit/real-bundle-acceptance-2026-10-19/cost-and-authorization.json",
+  "includedMinutes": 2000,
+  "priorObservedUsedMinutes": 2,
+  "subsequentRunsCount": 3,
+  "conservativeMinutesIncludingThisRun": 82,
+  "existingArtifactBytes": 449008,
+  "newUncompressedArchiveMaxBytes": 10000000,
+  "retentionDays": 7,
+  "billingAPIRetried": false,
+  "artifactDownloadRetried": false,
+  "settingsChanged": false,
+  "newCredentials": false,
+  "zeroCostVerified": true
+}

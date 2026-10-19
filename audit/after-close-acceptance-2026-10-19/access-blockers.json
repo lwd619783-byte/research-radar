@@ -1,0 +1,20 @@
+{
+  "recordedAtUTC": "2026-10-19T07:15:22.212653+00:00",
+  "jobLogRead": {
+    "method": "GET",
+    "endpoint": "repos/lwd619783-byte/research-radar/actions/jobs/117935032406/logs",
+    "attempts": 1,
+    "result": "GitHub redirected to actions-results storage; redirected read returned Forbidden",
+    "pathStopped": true,
+    "alternateLogPathAttempted": false,
+    "logBytesRetrieved": 0
+  },
+  "artifactDownload": {
+    "attempts": 0,
+    "reason": "Previously explicit refusal; user instruction prohibits retry"
+  },
+  "billingReadRetried": false,
+  "signedRedirectURLPersisted": false,
+  "originalFilesLocal": false,
+  "requiresUserOriginalArchive": true
+}

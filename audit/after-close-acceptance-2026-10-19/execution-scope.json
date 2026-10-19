@@ -1,0 +1,28 @@
+{
+  "checkedAtUTC": "2026-10-19T07:13:37.131462+00:00",
+  "executionSHA": "b629883c76f578be4dac2740e5bfc5e8bfa4cb35",
+  "workflowSHA256": "168635dd28f16fbbc1c5e4c174aaaf991a3b3aa3c4b21d90f605871f8d11a572",
+  "events": [
+    "workflow_dispatch"
+  ],
+  "permissions": {
+    "contents": "read"
+  },
+  "jobTimeoutMinutes": 20,
+  "requestHardLimit": 240,
+  "deadlineSeconds": 840,
+  "archiveMaxTotalBytes": 10000000,
+  "receiptMaxBytes": 524288,
+  "archiveFileAllowlist": [
+    "DATA.json",
+    "index.html",
+    "receipt.json",
+    "manifest.json"
+  ],
+  "retentionDays": 7,
+  "frozenFilesMatch": 10,
+  "disabledPublicationWorkflows": [
+    ".github/workflows/radar-deploy.yml.disabled",
+    ".github/workflows/radar-preview.yml.disabled"
+  ]
+}

@@ -1,0 +1,72 @@
+[
+  {
+    "id": 39214475581,
+    "head_sha": "b629883c76f578be4dac2740e5bfc5e8bfa4cb35",
+    "head_branch": "fix/radar-truthfulness-2026-10-18",
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "success",
+    "run_attempt": 1,
+    "created_at": "2026-10-19T07:12:14Z",
+    "run_started_at": "2026-10-19T07:12:14Z",
+    "updated_at": "2026-10-19T07:14:25Z",
+    "html_url": "https://github.com/lwd619783-byte/research-radar/actions/runs/39214475581",
+    "workflow_id": 387767552
+  },
+  {
+    "id": 39197733096,
+    "head_sha": "3e8a63f6f61ba9952353df9b51d790ea9e380510",
+    "head_branch": "fix/radar-truthfulness-2026-10-18",
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "success",
+    "run_attempt": 1,
+    "created_at": "2026-10-19T04:05:20Z",
+    "run_started_at": "2026-10-19T04:05:20Z",
+    "updated_at": "2026-10-19T04:07:07Z",
+    "html_url": "https://github.com/lwd619783-byte/research-radar/actions/runs/39197733096",
+    "workflow_id": 387767552
+  },
+  {
+    "id": 39190870708,
+    "head_sha": "dce7a0cd4a457f566e56809cb3644bb75476ecfa",
+    "head_branch": "fix/radar-truthfulness-2026-10-18",
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "success",
+    "run_attempt": 1,
+    "created_at": "2026-10-19T02:37:49Z",
+    "run_started_at": "2026-10-19T02:37:49Z",
+    "updated_at": "2026-10-19T02:39:28Z",
+    "html_url": "https://github.com/lwd619783-byte/research-radar/actions/runs/39190870708",
+    "workflow_id": 387767552
+  },
+  {
+    "id": 39184829414,
+    "head_sha": "ee0447a8fc7ede19127917b7f6c28a552ce31a90",
+    "head_branch": "fix/radar-truthfulness-2026-10-18",
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "success",
+    "run_attempt": 1,
+    "created_at": "2026-10-19T01:19:25Z",
+    "run_started_at": "2026-10-19T01:19:25Z",
+    "updated_at": "2026-10-19T01:21:01Z",
+    "html_url": "https://github.com/lwd619783-byte/research-radar/actions/runs/39184829414",
+    "workflow_id": 387767552
+  },
+  {
+    "id": 39047568864,
+    "head_sha": "c60d9f7f70b01e94b2367e02d4a46ab6ff5420ed",
+    "head_branch": "fix/radar-data-integrity",
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "success",
+    "run_attempt": 1,
+    "created_at": "2026-10-17T16:01:03Z",
+    "run_started_at": "2026-10-17T16:01:03Z",
+    "updated_at": "2026-10-17T16:02:35Z",
+    "html_url": "https://github.com/lwd619783-byte/research-radar/actions/runs/39047568864",
+    "workflow_id": 387767552
+  }
+]
