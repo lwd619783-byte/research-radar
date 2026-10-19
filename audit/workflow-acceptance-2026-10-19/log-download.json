@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-10-19T01:22:37.262822+00:00",
+  "endpoint": "/repos/{owner}/{repo}/actions/runs/{run_id}/logs",
+  "exit": 0,
+  "rawSignedURLsPersisted": false,
+  "archiveSHA256": "7d9a2d81d8a5a0c914b9931b2e7717450b0b9902922e6edb059ecad533d5da79",
+  "bytes": 15988,
+  "selectedFiles": {
+    "1_Set up job.txt": {
+      "sourceMember": "acceptance/1_Set up job.txt",
+      "bytes": 2272,
+      "sha256": "10dd30c5f1d6e43ec92d026b626a8b610e54185922699c1871b9497edf98209c"
+    },
+    "6_Offline regression, schema and frozen hashes before requests.txt": {
+      "sourceMember": "acceptance/6_Offline regression, schema and frozen hashes before requests.txt",
+      "bytes": 981,
+      "sha256": "383fc09015c9f6888d32910f47d1463a6052d0cc7b8babc50f012462027619de"
+    },
+    "7_Bounded read-only interface acceptance.txt": {
+      "sourceMember": "acceptance/7_Bounded read-only interface acceptance.txt",
+      "bytes": 1972,
+      "sha256": "0d3b54d0ad8a2d835e27456cedc2a2062f5c1f23591b9fe46893b77d0255be0d"
+    },
+    "8_Upload only the sanitized receipt.txt": {
+      "sourceMember": "acceptance/8_Upload only the sanitized receipt.txt",
+      "bytes": 2760,
+      "sha256": "2ebe50b011af0d9878eab88d98934c286eb7a075d8c2362eaae448f5b26e91ea"
+    }
+  }
+}

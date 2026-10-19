@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-10-19T01:22:33.816392+00:00",
+  "artifact": {
+    "id": 12157214514,
+    "name": "radar-interface-acceptance-39184829414",
+    "size_in_bytes": 12666,
+    "created_at": "2026-10-19T01:20:58Z",
+    "updated_at": "2026-10-19T01:20:58Z",
+    "expires_at": "2026-10-26T01:20:56Z",
+    "expired": false,
+    "digest": "sha256:1019f6ebee13d4dfd3582e6aff9e50e16a2068d094d6f0f21790507aa69b2bd9"
+  },
+  "artifactMetadataReadSucceeded": true,
+  "downloadAttempts": 1,
+  "downloadDenied": true,
+  "downloadFailure": "Forbidden at normal GitHub artifact redirect storage host",
+  "storageHost": "productionresultssa18.blob.core.windows.net",
+  "httpStatusNotExposed": null,
+  "downloadSHA256": null,
+  "digestMatchesGitHub": null,
+  "receiptBytes": null,
+  "receiptSHA256": null,
+  "receiptPreservedByteForByte": false,
+  "signedDownloadURLPersisted": false,
+  "downloadPathStopped": true
+}

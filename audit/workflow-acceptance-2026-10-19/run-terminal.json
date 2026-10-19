@@ -1,0 +1,120 @@
+{
+  "id": 39184829414,
+  "head_sha": "ee0447a8fc7ede19127917b7f6c28a552ce31a90",
+  "head_branch": "fix/radar-truthfulness-2026-10-18",
+  "event": "workflow_dispatch",
+  "status": "completed",
+  "conclusion": "success",
+  "run_attempt": 1,
+  "created_at": "2026-10-19T01:19:25Z",
+  "updated_at": "2026-10-19T01:21:01Z",
+  "run_started_at": "2026-10-19T01:19:25Z",
+  "html_url": "https://github.com/lwd619783-byte/research-radar/actions/runs/39184829414",
+  "checkedAt": "2026-10-19T01:21:13.053004+00:00",
+  "jobs": [
+    {
+      "id": 117844937293,
+      "name": "acceptance",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-19T01:19:29Z",
+      "completed_at": "2026-10-19T01:21:01Z",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_name": "GitHub Actions 1000000995",
+      "runner_group_name": "GitHub Actions",
+      "html_url": "https://github.com/lwd619783-byte/research-radar/actions/runs/39184829414/job/117844937293",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-19T01:19:30Z",
+          "completed_at": "2026-10-19T01:19:31Z"
+        },
+        {
+          "name": "Validate reviewed SHA and cost authorization",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-19T01:19:31Z",
+          "completed_at": "2026-10-19T01:19:31Z"
+        },
+        {
+          "name": "Checkout exact execution commit",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-19T01:19:31Z",
+          "completed_at": "2026-10-19T01:19:34Z"
+        },
+        {
+          "name": "Verify checked-out HEAD equals reviewed execution SHA",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-19T01:19:34Z",
+          "completed_at": "2026-10-19T01:19:34Z"
+        },
+        {
+          "name": "Python 3.12",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-19T01:19:34Z",
+          "completed_at": "2026-10-19T01:19:34Z"
+        },
+        {
+          "name": "Offline regression, schema and frozen hashes before requests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-19T01:19:34Z",
+          "completed_at": "2026-10-19T01:19:58Z"
+        },
+        {
+          "name": "Bounded read-only interface acceptance",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-19T01:19:58Z",
+          "completed_at": "2026-10-19T01:20:56Z"
+        },
+        {
+          "name": "Upload only the sanitized receipt",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-19T01:20:56Z",
+          "completed_at": "2026-10-19T01:20:58Z"
+        },
+        {
+          "name": "Post Python 3.12",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-19T01:20:58Z",
+          "completed_at": "2026-10-19T01:20:58Z"
+        },
+        {
+          "name": "Post Checkout exact execution commit",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-19T01:20:58Z",
+          "completed_at": "2026-10-19T01:20:58Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-19T01:20:58Z",
+          "completed_at": "2026-10-19T01:20:58Z"
+        }
+      ]
+    }
+  ]
+}

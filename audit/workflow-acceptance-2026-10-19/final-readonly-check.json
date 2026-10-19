@@ -1,0 +1,43 @@
+{
+  "checkedAt": "2026-10-19T01:25:04.188582+00:00",
+  "executionSHA": "ee0447a8fc7ede19127917b7f6c28a552ce31a90",
+  "repository": {
+    "full_name": "lwd619783-byte/research-radar",
+    "private": true,
+    "default_branch": "fix/radar-data-integrity"
+  },
+  "remoteRefs": [
+    "414eb80626d3200dfebe4a010507c5fe74d7ca31\trefs/heads/fix/radar-data-integrity",
+    "ee0447a8fc7ede19127917b7f6c28a552ce31a90\trefs/heads/fix/radar-truthfulness-2026-10-18"
+  ],
+  "workflowTotalRuns": 2,
+  "runs": [
+    {
+      "id": 39184829414,
+      "head_sha": "ee0447a8fc7ede19127917b7f6c28a552ce31a90",
+      "head_branch": "fix/radar-truthfulness-2026-10-18",
+      "run_attempt": 1,
+      "event": "workflow_dispatch",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/lwd619783-byte/research-radar/actions/runs/39184829414"
+    },
+    {
+      "id": 39047568864,
+      "head_sha": "c60d9f7f70b01e94b2367e02d4a46ab6ff5420ed",
+      "head_branch": "fix/radar-data-integrity",
+      "run_attempt": 1,
+      "event": "workflow_dispatch",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/lwd619783-byte/research-radar/actions/runs/39047568864"
+    }
+  ],
+  "frozenFilesVerified": 10,
+  "productionFrontDataPartialEvidenceAndWorkflowBytesUnchanged": true,
+  "selectedOriginalLogHashesVerified": true,
+  "costEvidenceHashMatchesDispatchRecord": true,
+  "newEvidenceCredentialPatternScan": "passed",
+  "newEvidenceFileCount": 16,
+  "review": "Only necessary public repo identity, authorized minimal fee summary, diagnostic logs and access-refusal metadata; no personal research, raw account screenshots, credentials, signed URLs or unrelated browser content."
+}

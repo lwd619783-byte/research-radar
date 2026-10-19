@@ -28,10 +28,18 @@ condition requires the cost boolean and matching reviewed/execution SHA before
 allocating the runner; shell checks require a full lowercase SHA and verify the
 checked-out HEAD before preflight. The default branch remains unchanged.
 
-Current billing access returned HTTP 403 (`Resource not accessible by
-integration`); plan, remaining allowance and paid-overage blocking are unverified.
-No new dispatch has been issued, and `zero_cost_verified` must remain false.
-The 2026-10-17 billing observations and old successful run are historical evidence,
-not current cost or data acceptance. See
-`audit/workflow-acceptance-2026-10-19/REVIEW.md` for the repair, tests and the
-minimum evidence required to proceed. Both publication workflows remain disabled.
+The initial billing API returned HTTP 403 and that path remains stopped. The
+user subsequently supplied current cost screenshots, visually verified by the
+parent and independent auditor, and explicitly authorized the one follow-up.
+Run 39184829414 executed reviewed SHA
+`ee0447a8fc7ede19127917b7f6c28a552ce31a90` on 2026-10-19, attempt 1, and
+completed the diagnostic workflow successfully. Runner preflight passed 107
+tests and ten frozen hashes. The probe made 119 requests and explicitly reported
+`publicationBlocked=true`; workflow success is not data acceptance.
+
+The artifact upload succeeded, but this executor's normal artifact download
+received Forbidden and that path was stopped. Original receipt byte verification
+and exact blocker review remain pending. Readable original runner logs and the
+minimal screenshot evidence summary are archived; no further dispatch or rerun
+is authorized. See `audit/workflow-acceptance-2026-10-19/RUN-39184829414.md`.
+Both publication workflows remain disabled.

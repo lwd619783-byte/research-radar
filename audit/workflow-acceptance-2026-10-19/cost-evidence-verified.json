@@ -1,0 +1,49 @@
+{
+  "recordedAt": "2026-10-19T01:19:23.449162+00:00",
+  "evidenceType": "User-supplied current screenshots, visually checked by parent and independent auditor; summary relayed to this executor",
+  "screenshotTimesBeijing": [
+    "2026-10-19 09:12",
+    "2026-10-19 09:15"
+  ],
+  "screenshotTimesUTC": [
+    "2026-10-19 01:12",
+    "2026-10-19 01:15"
+  ],
+  "libraryIds": [
+    "libfile_4b45b1d6c7988191977c556d3d180335",
+    "libfile_f64ab6fd39488191a17ac9196a760029",
+    "libfile_d5506fd063248191b3a98f465301cd5f"
+  ],
+  "account": "lwd619783-byte",
+  "plan": "GitHub Free",
+  "actionsMinutesUsed": 2,
+  "actionsMinutesIncluded": 2000,
+  "storageUsedGB": 0,
+  "storageIncludedGB": 0.5,
+  "billableUSD": 0,
+  "grossUsageUSD": 0.19,
+  "includedDiscountUSD": 0.19,
+  "accountActionsBudget": {
+    "spentUSD": 0,
+    "limitUSD": 0,
+    "usageBlocked": true
+  },
+  "accountPackagesBudget": {
+    "spentUSD": 0,
+    "limitUSD": 0,
+    "usageBlocked": true
+  },
+  "zeroCostVerified": true,
+  "billingAPIRetried": false,
+  "budgetsOrPermissionsChanged": false,
+  "screenshotsCommitted": false,
+  "independentAudit": {
+    "reviewedSHA": "ee0447a8fc7ede19127917b7f6c28a552ce31a90",
+    "passedTests": 106,
+    "environmentErrors": 1,
+    "errorReason": "Missing historical Git object in independent snapshot; disabled workflows separately compared byte-for-byte",
+    "claimed107AllGreen": false
+  },
+  "executorPreviousPreflight": "107 passed with full repository history; see preflight.txt, not rerun by this dispatch script",
+  "scope": "One standard ubuntu-24.04 job, timeout 20 min, max 240 read-only data requests, one receipt <=512 KiB retained 7 days; no deployment"
+}
