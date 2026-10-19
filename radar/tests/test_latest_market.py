@@ -16,6 +16,72 @@ from integrity import ZONES
 ROOT=Path(__file__).resolve().parents[2]
 
 class LatestMarketTests(unittest.TestCase):
+    def same_day_close_dataset(self, hour, minute=0):
+        data,mk=complete_dataset();c=data['companies'][0];symbol=c['sym'];zone=ZONES[c['mkt']]
+        bars=copy.deepcopy(mk['daily'][symbol]['bars'])
+        daily=session_record([b[0] for b in bars],c['mkt'],NOW,FRIDAY,c['cur'])
+        daily['bars']=bars;daily['finality']['end']=epoch(FRIDAY,zone,15)
+        mk['daily'][symbol]=daily
+        mk['quote'][symbol].update(regularMarketTime=epoch(FRIDAY,zone,hour)+minute*60,
+                                  regularMarketPrice=999.,marketState='REGULAR')
+        return data,mk,symbol
+
+    def test_same_day_intraday_quote_cannot_replace_later_completed_close(self):
+        data,mk,symbol=self.same_day_close_dataset(14,30);before=copy.deepcopy(mk)
+        row=build.assemble(data,mk,mk,NOW)[0]['companies'][0]
+        self.assertEqual(row['price'],mk['daily'][symbol]['bars'][-1][1])
+        self.assertEqual(row['pricePhase'],'closed');self.assertIsNone(row['priceObservedAt'])
+        self.assertEqual(row['priceSelection']['boundaryKind'],'provider_session_end')
+        self.assertFalse(row['priceSelection']['useQuote'])
+        self.assertEqual(row['provenance']['valuation']['observedAt'],mk['quote'][symbol]['regularMarketTime'])
+        self.assertEqual(row['mcapLocal'],mk['quote'][symbol]['marketCap'])
+        self.assertEqual(row['pe'],round(mk['quote'][symbol]['trailingPE'],1))
+        self.assertEqual(mk,before)
+
+    def test_quote_exactly_at_close_does_not_override_completed_close(self):
+        data,mk,symbol=self.same_day_close_dataset(15)
+        row=build.assemble(data,mk,mk,NOW)[0]['companies'][0]
+        self.assertEqual(row['price'],mk['daily'][symbol]['bars'][-1][1])
+        self.assertFalse(row['priceSelection']['useQuote'])
+
+    def test_proven_later_same_day_quote_replaces_price_without_splicing_history(self):
+        data,mk,symbol=self.same_day_close_dataset(15,1)
+        for state,phase in (('POST','closed'),(None,'unknown')):
+            with self.subTest(state=state):
+                mk['quote'][symbol]['marketState']=state
+                row=build.assemble(data,mk,mk,NOW)[0]['companies'][0]
+                self.assertEqual(row['price'],999.);self.assertNotIn(999.,row['sc'])
+                self.assertEqual(row['priceSelection']['reason'],'quote_proven_later')
+                self.assertEqual(row['pricePhase'],phase)
+                self.assertEqual(row['metricAsOf'],FRIDAY)
+
+    def test_unknown_session_metadata_cannot_prove_quote_after_close(self):
+        data,mk,symbol=self.same_day_close_dataset(16)
+        del mk['daily'][symbol]['finality'];del mk['daily'][symbol]['timezone']
+        for state in ('CLOSED',None):
+            mk['quote'][symbol]['marketState']=state
+            row=build.assemble(data,mk,mk,NOW)[0]['companies'][0]
+            self.assertEqual(row['price'],mk['daily'][symbol]['bars'][-1][1])
+            self.assertEqual(row['priceSelection']['reason'],'completed_close_order_unproven')
+            self.assertIsNotNone(row['mcapLocal']);self.assertIsNotNone(row['pe'])
+
+    def test_invalid_boundary_metadata_and_unknown_quote_time_do_not_prove_order(self):
+        _,mk,symbol=self.same_day_close_dataset(16);daily=mk['daily'][symbol];q=mk['quote'][symbol]
+        for change in ({'timezone':None},{'timezone':'Unknown/Zone'},{'barTimestamps':{}},
+                       {'finality':{'method':'guessed','start':1,'end':2}},
+                       {'receivedAt':dt.datetime.fromtimestamp(epoch(FRIDAY,ZONES['A股'],14),dt.UTC).isoformat()}):
+            with self.subTest(change=change):
+                self.assertFalse(latest.quote_after_completed_daily(q,{**daily,**change})['useQuote'])
+        self.assertFalse(latest.quote_after_completed_daily({**q,'regularMarketTime':None},daily)['useQuote'])
+
+    def test_later_session_start_is_only_upper_bound_not_invented_close(self):
+        data,mk=monday_dataset();c=next(c for c in data['companies'] if c['sym']=='000660.KS')
+        daily=latest.select_daily([c],mk['daily'],MONDAY)[0][c['sym']]
+        q={**mk['quote'][c['sym']],'regularMarketPrice':321.}
+        chosen=latest.quote_after_completed_daily(q,daily)
+        self.assertTrue(chosen['useQuote']);self.assertEqual(chosen['boundaryKind'],'later_session_start_upper_bound')
+        self.assertFalse(latest.quote_after_completed_daily({**q,'regularMarketTime':daily['finality']['start']-1},daily)['useQuote'])
+
     def test_current_quote_and_completed_metrics_are_independent_without_splice(self):
         data,mk=monday_dataset();before=copy.deepcopy(mk)
         for c in data['companies']:

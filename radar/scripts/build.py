@@ -235,7 +235,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
             row['pricePhase'] = 'closed' if m else 'unknown'
             row['priceSource'] = (d or {}).get('src')
             row['marketTimezone'] = ZONES[c['mkt']]
-            if quotes.positive(q.get('regularMarketPrice')) and (not m.get('ld') or quote_date >= m['ld']):
+            row['priceSelection'] = latest.quote_after_completed_daily(q,d)
+            if quotes.positive(q.get('regularMarketPrice')) and row['priceSelection']['useQuote']:
                 row.update(price=q['regularMarketPrice'], priceAsOf=quote_date,
                            priceObservedAt=dt.datetime.fromtimestamp(q['regularMarketTime'],dt.UTC).isoformat(),
                            pricePhase=latest.quote_phase(q), priceSource=q.get('src'))

@@ -1,0 +1,29 @@
+[
+  {
+    "name": "tests",
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "radar/tests",
+      "-v"
+    ],
+    "startedAt": "2026-10-19T05:14:18.263393+00:00",
+    "finishedAt": "2026-10-19T05:14:53.994204+00:00",
+    "exitCode": 0
+  },
+  {
+    "name": "diff",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "startedAt": "2026-10-19T05:14:53.994541+00:00",
+    "finishedAt": "2026-10-19T05:14:53.998303+00:00",
+    "exitCode": 0
+  }
+]

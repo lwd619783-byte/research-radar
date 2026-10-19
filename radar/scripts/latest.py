@@ -2,7 +2,7 @@
 import datetime as dt
 from zoneinfo import ZoneInfo
 from integrity import ZONES, fresh_record, number, observation_time, dated_fx
-from snapshot import completed_bars, CLOSED_QUOTE_STATES
+from snapshot import completed_bars, equity_bar_final, CLOSED_QUOTE_STATES
 
 
 def select_daily(companies, records, now):
@@ -42,6 +42,43 @@ def select_quote(record, day, market, currency, now):
     if observed>dt.datetime.fromisoformat(record['receivedAt']):return {},'quote_observation_after_receipt',local
     if record.get('currency')!=currency:return {},'quote_currency_mismatch',local
     return record,'available',local
+
+
+def quote_after_completed_daily(quote, daily):
+    """Strict timestamp ordering; a daily bar timestamp is not its close time.
+
+    A matching provider session supplies the close. For an older completed bar,
+    the next provider session's start is only a conservative upper bound: no
+    historical closing hour is inferred from a calendar date or market state.
+    """
+    observed=observation_time('quote',quote)
+    result={'useQuote':False,'reason':'quote_time_missing','completedBoundaryUTC':None,
+            'boundaryKind':None}
+    if observed is None:return result
+    if not number(quote.get('regularMarketPrice')) or quote['regularMarketPrice']<=0:
+        return {**result,'reason':'quote_price_missing_or_invalid'}
+    if not daily:return {**result,'useQuote':True,'reason':'no_completed_daily_price'}
+    result['reason']='completed_close_order_unproven'
+    try:
+        day=daily['asOf'];session=daily['finality'];zone=ZoneInfo(daily['timezone'])
+        timestamp=daily['barTimestamps'][day]
+        if not equity_bar_final(day,timestamp,daily['timezone'],session,daily['receivedAt']):return result
+        start,end=session['start'],session['end']
+        if not 0<end-start<=12*3600:return result
+        start_day=dt.datetime.fromtimestamp(start,zone).date().isoformat()
+        end_day=dt.datetime.fromtimestamp(end,zone).date().isoformat()
+        if start_day!=end_day:return result
+        if day==start_day and start<=timestamp<end:
+            boundary,kind=end,'provider_session_end'
+        elif day<start_day:
+            boundary,kind=start,'later_session_start_upper_bound'
+        else:return result
+        later=observed.timestamp()>boundary
+        return {'useQuote':later,'reason':'quote_proven_later' if later else 'quote_not_proven_later',
+                'completedBoundaryUTC':dt.datetime.fromtimestamp(boundary,dt.UTC).isoformat(),
+                'boundaryKind':kind}
+    except (KeyError,TypeError,ValueError,OverflowError,OSError):
+        return result
 
 
 def select_fx(record, currency, quote_day, now):

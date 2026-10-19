@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-19T05:14:45.925756+00:00",
+  "baseSHA": "f32d8e95cb9503ff5a87b44025798ed1d8cc20d6",
+  "fetchedBranchSHA": "f32d8e95cb9503ff5a87b44025798ed1d8cc20d6",
+  "branch": "fix/radar-truthfulness-2026-10-18",
+  "frozenFilesMatch": 10,
+  "schemaErrors": 0,
+  "schemaWarnings": 17,
+  "changedSourcePaths": [
+    "radar/scripts/build.py",
+    "radar/scripts/latest.py",
+    "radar/tests/test_latest_market.py"
+  ],
+  "credentialPatternMatches": [],
+  "additionalMarketRequests": 0,
+  "actionsDispatched": 0,
+  "deployed": false
+}
