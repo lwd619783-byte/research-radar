@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-10-19T02:40:41.907396+00:00",
+  "metadataReadSucceeded": true,
+  "metadataReadAttempts": 2,
+  "firstMetadataReadFailure": "HTTP 503",
+  "artifactDownloadAttemptsThisRun": 0,
+  "downloadPathStoppedFromPriorExplicitForbidden": true,
+  "originalZIPObtained": false,
+  "originalReceiptObtained": false,
+  "byteHashesIndependentlyVerified": false,
+  "note": "Metadata only; no artifact archive request or alternate download path was attempted.",
+  "artifacts": [
+    {
+      "id": 12159459634,
+      "name": "radar-interface-acceptance-39190870708",
+      "size_in_bytes": 12910,
+      "created_at": "2026-10-19T02:39:24Z",
+      "updated_at": "2026-10-19T02:39:24Z",
+      "expires_at": "2026-10-26T02:39:24Z",
+      "expired": false,
+      "digest": "sha256:6a640acb65dc94d0d1ebfb4b7ffbd10640f857f584a02d172282bf717d7254f7"
+    }
+  ]
+}

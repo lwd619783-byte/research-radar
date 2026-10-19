@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-10-19T02:37:46.718432+00:00",
+  "runs": [
+    {
+      "id": 39184829414,
+      "head_sha": "ee0447a8fc7ede19127917b7f6c28a552ce31a90",
+      "head_branch": "fix/radar-truthfulness-2026-10-18",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1
+    },
+    {
+      "id": 39047568864,
+      "head_sha": "c60d9f7f70b01e94b2367e02d4a46ab6ff5420ed",
+      "head_branch": "fix/radar-data-integrity",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": 39190870708,
+  "head_sha": "dce7a0cd4a457f566e56809cb3644bb75476ecfa",
+  "head_branch": "fix/radar-truthfulness-2026-10-18",
+  "event": "workflow_dispatch",
+  "status": "in_progress",
+  "conclusion": null,
+  "run_attempt": 1,
+  "created_at": "2026-10-19T02:37:49Z",
+  "html_url": "https://github.com/lwd619783-byte/research-radar/actions/runs/39190870708",
+  "checkedAt": "2026-10-19T02:37:57.777728+00:00"
+}

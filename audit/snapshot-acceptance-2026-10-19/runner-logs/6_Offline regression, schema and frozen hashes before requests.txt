@@ -1,0 +1,12 @@
+﻿2026-10-19T02:37:55.9728604Z ##[group]Run python -B radar/scripts/acceptance_probe.py --preflight
+2026-10-19T02:37:55.9729964Z [36;1mpython -B radar/scripts/acceptance_probe.py --preflight[0m
+2026-10-19T02:37:55.9832934Z shell: /usr/bin/bash -e {0}
+2026-10-19T02:37:55.9834015Z env:
+2026-10-19T02:37:55.9834905Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-19T02:37:55.9836467Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-19T02:37:55.9838097Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-19T02:37:55.9839503Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-19T02:37:55.9840861Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-19T02:37:55.9842228Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-19T02:37:55.9843408Z ##[endgroup]
+2026-10-19T02:38:16.5636174Z {"tests": 122, "frozenFiles": 10, "schemaWarnings": 17, "schemaErrors": 0}

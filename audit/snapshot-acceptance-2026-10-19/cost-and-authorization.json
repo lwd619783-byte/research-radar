@@ -1,0 +1,52 @@
+{
+  "recordedAt": "2026-10-19T02:37:46.717993+00:00",
+  "source": "User current screenshots visually verified by parent and independent auditor; approved summary supplied to executor",
+  "screenshotTimesBeijing": [
+    "2026-10-19 09:12",
+    "2026-10-19 09:15"
+  ],
+  "evidenceReferences": [
+    "libfile_4b45b1d6c7988191977c556d3d180335",
+    "libfile_f64ab6fd39488191a17ac9196a760029",
+    "libfile_d5506fd063248191b3a98f465301cd5f"
+  ],
+  "account": "lwd619783-byte",
+  "plan": "GitHub Free",
+  "observedIncludedMinutes": 2000,
+  "observedUsedMinutes": 2,
+  "observedStorageGB": 0,
+  "includedStorageGB": 0.5,
+  "storagePrecisionCaveat": "Displayed 0/0.5 GB is not exact byte usage",
+  "observedBillableUSD": 0,
+  "actionsBudget": {
+    "scope": "Account",
+    "limitUSD": 0,
+    "usageBlocked": true,
+    "displayedUsagePercent": 100
+  },
+  "knownSubsequentRun": {
+    "id": 39184829414,
+    "jobElapsedSeconds": 92,
+    "maximumJobMinutes": 20
+  },
+  "conservativeRemainingMinutesAfterKnownRun": 1978,
+  "requestedJobMaxMinutes": 20,
+  "requestedReceiptMaxBytes": 524288,
+  "artifactRetentionDays": 7,
+  "zeroCostVerified": true,
+  "basis": "Same-day verified included allowances and hard zero-overage boundary; even charging prior known job its full 20-minute bound leaves sufficient minutes. No post-run metered bill is asserted.",
+  "billingAPIRetried": false,
+  "paymentScreenshotsCommitted": false,
+  "settingsChanged": false,
+  "authorization": "Sentinel_7b0cfe66e4bc8191b58c6d463a5b6544 replying to Sentinel_627f48bf7dd08191a8197e2a1293699f, 2026-10-19 10:35 Asia/Shanghai",
+  "independentAudit": {
+    "passedTests": 121,
+    "environmentErrors": 1,
+    "error": "Missing historical 22d9601 object; workflow history independently compared byte-for-byte",
+    "frozenFiles": 10,
+    "schemaErrors": 0,
+    "schemaWarnings": 17
+  },
+  "priorLocalSuite": 122,
+  "modelPreference": "gpt-6-astra / high / Standard; backend acceptance not independently verifiable"
+}

@@ -1,0 +1,48 @@
+{
+  "checkedAt": "2026-10-19T02:42:35.145706+00:00",
+  "executionSHA": "dce7a0cd4a457f566e56809cb3644bb75476ecfa",
+  "repository": "lwd619783-byte/research-radar",
+  "private": true,
+  "defaultBranch": "fix/radar-data-integrity",
+  "remoteRefs": [
+    "414eb80626d3200dfebe4a010507c5fe74d7ca31\trefs/heads/fix/radar-data-integrity",
+    "dce7a0cd4a457f566e56809cb3644bb75476ecfa\trefs/heads/fix/radar-truthfulness-2026-10-18"
+  ],
+  "workflowTotalRuns": 3,
+  "runs": [
+    {
+      "id": 39190870708,
+      "head_sha": "dce7a0cd4a457f566e56809cb3644bb75476ecfa",
+      "head_branch": "fix/radar-truthfulness-2026-10-18",
+      "run_attempt": 1,
+      "event": "workflow_dispatch",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39184829414,
+      "head_sha": "ee0447a8fc7ede19127917b7f6c28a552ce31a90",
+      "head_branch": "fix/radar-truthfulness-2026-10-18",
+      "run_attempt": 1,
+      "event": "workflow_dispatch",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39047568864,
+      "head_sha": "c60d9f7f70b01e94b2367e02d4a46ab6ff5420ed",
+      "head_branch": "fix/radar-data-integrity",
+      "run_attempt": 1,
+      "event": "workflow_dispatch",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "frozenFilesVerified": 10,
+  "executionCodeDiagnosticsWorkflowsFrontendAndDataUnchanged": true,
+  "selectedLogHashesVerified": true,
+  "costEvidenceHashMatchesDispatchRecord": true,
+  "scopeAndCredentialPatternScan": "passed",
+  "evidenceFilesReviewed": 14,
+  "privateResearchCredentialsPaymentScreenshotsOrSignedURLsCommitted": false
+}

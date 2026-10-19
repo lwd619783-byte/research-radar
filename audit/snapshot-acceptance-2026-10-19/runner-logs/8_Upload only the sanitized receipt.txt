@@ -1,0 +1,31 @@
+﻿2026-10-19T02:39:24.0825203Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-10-19T02:39:24.0825471Z with:
+2026-10-19T02:39:24.0825634Z   name: radar-interface-acceptance-39190870708
+2026-10-19T02:39:24.0825860Z   path: /home/runner/work/_temp/radar-interface-acceptance/receipt.json
+2026-10-19T02:39:24.0826218Z   retention-days: 7
+2026-10-19T02:39:24.0826350Z   if-no-files-found: error
+2026-10-19T02:39:24.0826481Z   compression-level: 9
+2026-10-19T02:39:24.0826616Z   include-hidden-files: false
+2026-10-19T02:39:24.0826750Z   overwrite: false
+2026-10-19T02:39:24.0826861Z env:
+2026-10-19T02:39:24.0827005Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-19T02:39:24.0827240Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-19T02:39:24.0827469Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-19T02:39:24.0827678Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-19T02:39:24.0827895Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-19T02:39:24.0828133Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-19T02:39:24.0828320Z ##[endgroup]
+2026-10-19T02:39:24.1996503Z (node:2180) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-19T02:39:24.1997513Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-19T02:39:24.2037143Z With the provided path, there will be 1 file uploaded
+2026-10-19T02:39:24.2045199Z Artifact name is valid!
+2026-10-19T02:39:24.2063289Z Root directory input is valid!
+2026-10-19T02:39:24.4937932Z Beginning upload of artifact content to blob storage
+2026-10-19T02:39:24.5108092Z (node:2180) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-19T02:39:24.6782672Z Uploaded bytes 12910
+2026-10-19T02:39:24.7167976Z Finished uploading artifact content to blob storage!
+2026-10-19T02:39:24.7169004Z SHA256 digest of uploaded artifact zip is 6a640acb65dc94d0d1ebfb4b7ffbd10640f857f584a02d172282bf717d7254f7
+2026-10-19T02:39:24.7170545Z Finalizing artifact upload
+2026-10-19T02:39:24.9614416Z Artifact radar-interface-acceptance-39190870708.zip successfully finalized. Artifact ID 12159459634
+2026-10-19T02:39:24.9631891Z Artifact radar-interface-acceptance-39190870708 has been successfully uploaded! Final size is 12910 bytes. Artifact ID is 12159459634
+2026-10-19T02:39:24.9644556Z Artifact download URL: https://github.com/lwd619783-byte/research-radar/actions/runs/39190870708/artifacts/12159459634
