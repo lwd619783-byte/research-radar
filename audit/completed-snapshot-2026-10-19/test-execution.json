@@ -1,0 +1,18 @@
+{
+  "startedAt": "2026-10-19T02:18:14.010134+00:00",
+  "finishedAt": "2026-10-19T02:18:40.205796+00:00",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "radar/tests",
+    "-v"
+  ],
+  "exitCode": 0,
+  "logSHA256": "066f5c36210d598138885ee24757f86498ddced6f58a91384e473ab97cbe389a",
+  "networkDataRequests": 0,
+  "scope": "Offline regression suite; source responses mocked or immutable local fixtures. Not an Actions run."
+}

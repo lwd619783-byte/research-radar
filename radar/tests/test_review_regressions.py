@@ -29,7 +29,7 @@ def complete_dataset():
             c['financial'] = financial_evidence()
         mk['daily'][c['sym']] = record(bars=bars(), priceBasis='raw', returnBasis='synthetic-adjusted',
                                       asOf='2026-10-16', phase='closed', src='synthetic')
-        mk['quote'][c['sym']] = record(marketCap=1e10, trailingPE=20., currency=c['cur'], src='yahoo',
+        mk['quote'][c['sym']] = record(marketCap=1e10, trailingPE=20., currency=c['cur'], src='yahoo', marketState='CLOSED',
             regularMarketTime=dt.datetime(2026, 10, 16, 12, tzinfo=dt.UTC).timestamp())
         if c['cur'] != 'USD':
             mk['fx'][c['cur']] = historical_fx(c['cur'])
@@ -266,7 +266,7 @@ class CompleteMainTests(unittest.TestCase):
                 mutate(data, mk)
                 root = Path(td)
                 code, report, output = self.run_main(data, mk, root, force)
-                self.assertEqual(report['blockers'], [blocker])
+                self.assertEqual(report['blockers'], sorted(blocker if isinstance(blocker, list) else [blocker]))
                 self.assertEqual(code, 3)
                 self.assertEqual(output['changed'], 'false')
                 self.assertFalse((root/'out').exists())
@@ -284,7 +284,8 @@ class CompleteMainTests(unittest.TestCase):
 
     def test_close_gate_alone(self):
         self.assert_gate(lambda d, m: m['daily'][d['companies'][0]['sym']].update(phase='unknown'),
-                         'unconfirmed_close_or_intraday_needs_label_approval')
+                         ['mixed_or_missing_market_dates_need_label_approval',
+                          'unconfirmed_close_or_intraday_needs_label_approval'])
 
     def test_date_gate_alone(self):
         self.assert_gate(lambda d, m: m['index'][d['config']['indices'][0]['symbol']].update(date='2026-10-15'),

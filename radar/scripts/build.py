@@ -26,6 +26,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import quotes  # noqa: E402
 from schema import load_and_validate  # noqa: E402
 from integrity import fresh_record, valid_bars, financial_status, release_blockers, number, observation_time, dated_fx, pe_status
+from snapshot import select_daily, select_quote, select_index
 
 RADAR = Path(__file__).resolve().parents[1]
 REPO = RADAR.parent
@@ -170,16 +171,24 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
 
     stale, missing, cos = [], [], []
     blockers, market_dates, issues = [], {}, []
+    daily_snapshot, snapshot = select_daily(data['companies'], mk['daily'], now)
     for c in data["companies"]:
         s = c["sym"]
-        d = mk["daily"].get(s)
+        original_daily = mk['daily'].get(s)
+        d = daily_snapshot.get(s)
         usable = (isinstance(d, dict) and d.get('schemaVersion') == 2 and d.get('priceBasis') == 'raw'
                   and valid_bars(d.get('bars')) and d.get('asOf') == d['bars'][-1][0])
         m = metrics(d['bars']) if usable else {}
         if not usable:
             missing.append(c["name"])
-            issues.append({'symbol': s, 'kind': 'daily', 'status': 'missing_or_legacy'})
-        elif d is not fresh['daily'].get(s) or not fresh_record(d, now, m['ld'], c['mkt']):
+            issues.append({'symbol': s, 'kind': 'daily', 'status': 'no_common_completed_observation'})
+            if (isinstance(original_daily, dict) and observation_time('daily', original_daily) is not None
+                    and not fresh_record(original_daily, now, original_daily['asOf'], c['mkt'])):
+                stale.append(c['name'])
+                blockers.append('stale_quotes_not_safe_in_all_frozen_views')
+            if isinstance(original_daily, dict) and original_daily.get('phase') != 'closed':
+                blockers.append('unconfirmed_close_or_intraday_needs_label_approval')
+        elif original_daily is not fresh['daily'].get(s) or not fresh_record(d, now, m['ld'], c['mkt']):
             stale.append(c["name"])
             m["stale"] = True
             issues.append({'symbol': s, 'kind': 'daily', 'status': 'stale'})
@@ -192,19 +201,14 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
                 blockers.append('stale_quotes_not_safe_in_all_frozen_views')
             if len(d['bars']) < 120 or (dt.date.fromisoformat(m['ld']) - dt.date.fromisoformat(d['bars'][0][0])).days < 731:
                 issues.append({'symbol': s, 'kind': 'history', 'status': 'short_history'})
-        q = mk["quote"].get(s) or {}
-        quote_date = None
-        try:
-            from integrity import ZONES
-            observed = observation_time('quote', q)
-            if observed is not None:
-                quote_date = observed.astimezone(ZoneInfo(ZONES[c['mkt']])).date().isoformat()
-        except (KeyError, TypeError, ValueError, OSError):
-            pass
-        if not quote_date or not fresh_record(q, now, quote_date, c['mkt']) or quote_date != m.get('ld'):
-            q = {}
         # Quote/price currency is independent of the financial reporting currency.
         cur = (d or {}).get('currency') or c['cur']
+        original_quote = mk['quote'].get(s) or {}
+        q, quote_status, observed_quote_date = select_quote(original_quote, m.get('ld'), c['mkt'], cur, now)
+        quote_date = observed_quote_date if q else None
+        if quote_status != 'available':
+            issues.append({'symbol': s, 'kind': 'valuation', 'status': quote_status,
+                           'observedDate': observed_quote_date, 'requiredDate': m.get('ld')})
         valuation_currency_ok = q.get('currency') == cur
         mcap = q.get("marketCap")
         selected_fx = ({'value': 1., 'asOf': quote_date, 'src': 'USD-identity', 'direction': 'USD-to-local'}
@@ -222,10 +226,13 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
         row.update(m)
         row["hi52"] = round(hi52, 3 if hi52 < 10 else 2) if hi52 else None
         status = financial_status(c.get('financial'), now.date(), c)
-        row['provenance'] = {'daily': {k: (d or {}).get(k) for k in ('src', 'asOf', 'receivedAt', 'returnBasis', 'phase')},
+        row['provenance'] = {'daily': {k: (d or {}).get(k) for k in ('src', 'asOf', 'receivedAt', 'returnBasis', 'phase', 'snapshotSelection')},
                              'valuation': {'source': q.get('src'), 'asOf': quote_date if q else None,
                                            'receivedAt': q.get('receivedAt'), 'observedAt': q.get('regularMarketTime'),
                                            'status': 'available' if q else 'missing', 'peStatus': pe_state,
+                                           'selectionStatus': quote_status, 'sourceAsOf': observed_quote_date,
+                                           'sourceMarketState': original_quote.get('marketState'),
+                                           'sourcePeStatus': pe_status(original_quote.get('trailingPE')),
                                            'currency': q.get('currency'), 'currencyMatches': valuation_currency_ok,
                                            'fx': selected_fx,
                                            'marketCapStatus': 'available' if mcap_usd is not None else 'missing_or_incompatible'},
@@ -252,20 +259,20 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
             issues.append({'symbol': s, 'kind': 'valuation', 'status': 'pe_' + pe_state})
         cos.append(row)
 
-    a_dates = [c["ld"] for c in cos if c["mkt"] == "A股" and c["ld"]]
     all_dates = [c["ld"] for c in cos if c["ld"]]
-    asof = min(all_dates) if all_dates else None
+    asof = snapshot['selectedDate']
     for cur, record in mk['fx'].items():
         selected = dated_fx(record, cur, asof, now)
         if selected:
             fx[cur] = selected['value']
             fx_meta[cur] = {k: selected.get(k) for k in ('src', 'asOf', 'receivedAt', 'direction')}
-    if len(set(all_dates)) != 1:
+    if len(set(all_dates)) != 1 or len(all_dates) != len(cos):
         blockers.append('mixed_or_missing_market_dates_need_label_approval')
 
     idx = []
     for x in cfg["indices"]:
-        v = mk["index"].get(x["symbol"])
+        original_index = mk['index'].get(x['symbol'])
+        v = select_index(original_index, asof, now)
         if (isinstance(v, dict) and v.get('date') and fresh_record(v, now, v['date'])
                 and number(v.get('price')) and v['price'] > 0 and number(v.get('chg'))):
             idx.append({"name": x["name"], "price": round(v["price"], 2),
@@ -273,7 +280,10 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
             if v['date'] != asof or v.get('phase') != 'closed':
                 blockers.append('index_date_or_phase_needs_label_approval')
         else:
-            issues.append({'symbol': x['symbol'], 'kind': 'index', 'status': 'missing_or_stale'})
+            issues.append({'symbol': x['symbol'], 'kind': 'index', 'status': 'missing_or_unconfirmed_snapshot',
+                           'requiredDate': asof, 'sourceDate': (original_index or {}).get('date')})
+            if original_index:
+                blockers.append('index_date_or_phase_needs_label_approval')
     ratio = None
     rc, rh = mk['ratio'].get('cyb'), mk['ratio'].get('hl')
     tc, th = observation_time('ratio', rc), observation_time('ratio', rh)
@@ -301,6 +311,7 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime) -> tuple[dict,
                    "calHint": wk.get("calendar_hint", ""), "thermoAction": wk.get("thermo_action", "")},
         "stale": stale, "fx": {k: round(v, 4) for k, v in fx.items()},
         'asOfByMarket': {k: sorted(v) for k, v in market_dates.items()}, 'fxProvenance': fx_meta,
+        'snapshot': snapshot,
         'blockers': sorted(set(blockers)), 'issues': issues, 'offline': bool(fresh.get('offline')),
     }
     out = {"meta": meta, "industries": data["industries"], "chokepoints": data["chokepoints"],

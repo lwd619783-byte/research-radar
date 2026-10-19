@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-19T02:18:55.770355+00:00",
+  "baseSHA": "19ad59e2df2b648b5463f248c93e81abeef2ed12",
+  "frozenFiles": 10,
+  "schemaWarnings": 17,
+  "schemaErrors": 0,
+  "protectedPathsByteUnchanged": [
+    "radar/site",
+    "radar/data",
+    ".github/workflows",
+    "audit/truthfulness-frozen.json",
+    "radar/scripts/integrity.py",
+    "audit/partial-financial-2026-10-18/public-evidence.json",
+    "audit/truthfulness-2026-10-18/fixtures"
+  ],
+  "financialVerified": 40,
+  "financialPartial": 2
+}

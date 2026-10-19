@@ -200,7 +200,7 @@ class CacheAndContractTests(unittest.TestCase):
         c = data['companies'][1]  # USD company
         c['financial'] = financial_evidence()
         mk['daily'][c['sym']] = record(bars=bars(), priceBasis='raw', asOf='2026-10-16', phase='closed')
-        mk['quote'][c['sym']] = record(marketCap=1e10, trailingPE=-3, currency='USD', src='yahoo',
+        mk['quote'][c['sym']] = record(marketCap=1e10, trailingPE=-3, currency='USD', src='yahoo', marketState='CLOSED',
             regularMarketTime=dt.datetime(2026,10,16,20,tzinfo=dt.UTC).timestamp())
         D, _, _ = build.assemble(data, mk, mk, NOW)
         self.assertEqual(D['companies'][1]['revg'], c['revg'])
@@ -242,8 +242,9 @@ class CacheAndContractTests(unittest.TestCase):
             if c['mkt'] == '美股': b = b[:-1]
             mk['daily'][c['sym']] = record(bars=b, priceBasis='raw', asOf=b[-1][0], phase='closed')
         D, _, _ = build.assemble(data, mk, mk, NOW)
-        self.assertEqual(D['meta']['asOfByMarket']['A股'], ['2026-10-16'])
+        self.assertEqual(D['meta']['asOfByMarket']['A股'], ['2026-10-15'])
         self.assertEqual(D['meta']['asOfByMarket']['美股'], ['2026-10-15'])
+        self.assertEqual(D['meta']['snapshot']['sourceAsOfByMarket']['A股'], ['2026-10-16'])
         self.assertIn('mixed_or_missing_market_dates_need_label_approval', release_blockers(D))
         self.assertTrue(D['meta']['generatedAt'].startswith('2026-10-18'))
 

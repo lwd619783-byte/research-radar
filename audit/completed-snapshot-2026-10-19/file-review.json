@@ -1,0 +1,23 @@
+{
+  "checkedAt": "2026-10-19T02:20:43.591836+00:00",
+  "allowlistedScope": true,
+  "credentialPatternScan": "passed",
+  "review": "Only code, fixed synthetic tests, minimal run identity and public-source observations. No private research, account screenshots, credentials or signed URLs.",
+  "sha256": {
+    "radar/scripts/acceptance_probe.py": "31197cd0efdbb0b2c2742a4b83e4114a10716b98e21de1239e6bea53648fc733",
+    "radar/scripts/build.py": "444a1cb452c3cfd3ceabdd2e64da2f905f5635f8eb8f2d575a8c1bef0cd4b05e",
+    "radar/scripts/quotes.py": "bedd28528869916241a81f2d6ffabdc3951a2425811c79acc13af0e247e9c35e",
+    "radar/tests/test_fx_finality.py": "7f0de12cfe649c586d735f9210a166eef1e7a003db054520b4eb74e80c064cc2",
+    "radar/tests/test_integrity.py": "c1a1802b216a51daccdbc04debefbe987661dbc32f376e6feabe690a484cb73e",
+    "radar/tests/test_review_regressions.py": "363b083aaf4f756ab6c3f76f9b0eb9faa60980ea55464c6c688c4f1fc9bfe512",
+    "audit/completed-snapshot-2026-10-19/REVIEW.md": "a218554530dca50320e19d7f9b47d8d631f1872238da73e8140c3a5b3fe6e329",
+    "audit/completed-snapshot-2026-10-19/frozen-schema-scope.json": "05e195f3797935d538d4e7d50ab77c5fb6681d427fde5c8b03db3b96121b57c9",
+    "audit/completed-snapshot-2026-10-19/pre-push-readonly-state.json": "a812cabbd743d88382a74a0471e15369dc21ac62c4fdb81ba44008471ea677b2",
+    "audit/completed-snapshot-2026-10-19/replay-results.json": "ffaf53184f85a3770f8e6cd92c612c56533b652dbcfc02c64c2c0b7a73548a33",
+    "audit/completed-snapshot-2026-10-19/replay.py": "38db56dd4e434d82a4b36c5013bd5593571cd7eab9b51f521b90b9ca249aab91",
+    "audit/completed-snapshot-2026-10-19/test-execution.json": "0b7a219df5e03808441ffa794d81022aa758aaf9fdca2e39325d07b486ed9cb3",
+    "audit/completed-snapshot-2026-10-19/tests.txt": "066f5c36210d598138885ee24757f86498ddced6f58a91384e473ab97cbe389a",
+    "radar/scripts/snapshot.py": "4544853a91b390b7f45208f29054f6410925bef1b4edae4606fbacc6dff799c6",
+    "radar/tests/test_completed_snapshot.py": "22021a3823bf7ccbf9c6f986220337f7df2d0628ad4a8be70fb19e02d068d971"
+  }
+}

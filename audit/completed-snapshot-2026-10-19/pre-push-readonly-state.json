@@ -1,0 +1,34 @@
+{
+  "checkedAt": "2026-10-19T02:20:20.993457+00:00",
+  "repository": "lwd619783-byte/research-radar",
+  "private": true,
+  "defaultBranch": "fix/radar-data-integrity",
+  "remoteRefs": [
+    "414eb80626d3200dfebe4a010507c5fe74d7ca31\trefs/heads/fix/radar-data-integrity",
+    "19ad59e2df2b648b5463f248c93e81abeef2ed12\trefs/heads/fix/radar-truthfulness-2026-10-18"
+  ],
+  "workflowRuns": [
+    {
+      "id": 39184829414,
+      "head_sha": "ee0447a8fc7ede19127917b7f6c28a552ce31a90",
+      "head_branch": "fix/radar-truthfulness-2026-10-18",
+      "run_attempt": 1,
+      "event": "workflow_dispatch",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39047568864,
+      "head_sha": "c60d9f7f70b01e94b2367e02d4a46ab6ff5420ed",
+      "head_branch": "fix/radar-data-integrity",
+      "run_attempt": 1,
+      "event": "workflow_dispatch",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "newDispatches": 0,
+  "reruns": 0,
+  "marketDataRequests": 0,
+  "artifactDownloadRetries": 0
+}

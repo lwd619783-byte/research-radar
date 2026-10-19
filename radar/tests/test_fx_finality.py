@@ -109,8 +109,11 @@ class FxFinalityTests(unittest.TestCase):
         data,report=build.load_and_validate(build.RADAR,build.REPO,now.date());self.assertFalse(report.errors)
         D,stale,missing=build.assemble(data,mk,mk,now)
         self.assertFalse(stale);self.assertFalse(missing)
-        self.assertEqual(sum(c['mcapUSD'] is not None for c in D['companies']),42)
-        self.assertTrue(all(c['provenance']['valuation']['fx']['asOf']==c['ld'] for c in D['companies']))
+        # Immutable captured payloads predate the quote marketState contract.
+        # Their hashes still verify; do not invent a closed state during replay.
+        self.assertEqual(sum(c['mcapUSD'] is not None for c in D['companies']),0)
+        self.assertTrue(all(c['pe'] is None for c in D['companies']))
+        self.assertTrue(all(c['provenance']['valuation']['selectionStatus']=='quote_close_unconfirmed' for c in D['companies']))
         self.assertEqual(sum(c['provenance']['financial']['status']=='verified' for c in D['companies']),40)
         self.assertEqual(sum(all(c[k] is not None for k in ('revg','earng','gm')) for c in D['companies']),38)  # Includes KBL H1; only 37 are complete within the original 40.
         self.assertEqual(sum(c['financialSignalEligible'] for c in D['companies']),36)

@@ -1,0 +1,1952 @@
+{
+  "kind": "synthetic offline scenarios, NOT an Actions receipt or live replay",
+  "fixedClock": "2026-10-19T01:19:00+00:00",
+  "networkRequests": 0,
+  "scenarios": {
+    "monday_mixed_markets": {
+      "snapshot": {
+        "policy": "latest-common-completed-daily",
+        "selectedDate": "2026-10-16",
+        "status": "complete",
+        "selectedCompanies": 42,
+        "requiredCompanies": 42,
+        "sourceAsOfByMarket": {
+          "A股": [
+            "2026-10-16"
+          ],
+          "美股": [
+            "2026-10-16"
+          ],
+          "港股": [
+            "2026-10-16"
+          ],
+          "韩股": [
+            "2026-10-19"
+          ],
+          "日股": [
+            "2026-10-19"
+          ],
+          "台股": [
+            "2026-10-16"
+          ],
+          "欧股": [
+            "2026-10-16"
+          ]
+        }
+      },
+      "asOfByMarket": {
+        "A股": [
+          "2026-10-16"
+        ],
+        "美股": [
+          "2026-10-16"
+        ],
+        "港股": [
+          "2026-10-16"
+        ],
+        "韩股": [
+          "2026-10-16"
+        ],
+        "日股": [
+          "2026-10-16"
+        ],
+        "台股": [
+          "2026-10-16"
+        ],
+        "欧股": [
+          "2026-10-16"
+        ]
+      },
+      "blockers": [],
+      "missingDailyCount": 0,
+      "staleDailyCount": 0,
+      "marketCapAvailable": 39,
+      "peAvailable": 38,
+      "financialVerified": 40,
+      "financialPartial": 2,
+      "partialScored": 0,
+      "indicesAvailable": 8,
+      "fxDates": {
+        "CNY": "2026-10-16",
+        "HKD": "2026-10-16",
+        "KRW": "2026-10-16",
+        "JPY": "2026-10-16",
+        "TWD": "2026-10-16",
+        "EUR": "2026-10-16"
+      },
+      "selectedRows": {
+        "000660.KS": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": null,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": null,
+            "asOf": null,
+            "receivedAt": null,
+            "observedAt": null,
+            "status": "missing",
+            "peStatus": "missing",
+            "selectionStatus": "quote_date_mismatch_or_missing",
+            "sourceAsOf": "2026-10-19",
+            "sourceMarketState": "REGULAR",
+            "sourcePeStatus": "missing",
+            "currency": null,
+            "currencyMatches": false,
+            "fx": null,
+            "marketCapStatus": "missing_or_incompatible"
+          }
+        },
+        "3110.T": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": null,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": null,
+            "asOf": null,
+            "receivedAt": null,
+            "observedAt": null,
+            "status": "missing",
+            "peStatus": "missing",
+            "selectionStatus": "quote_date_mismatch_or_missing",
+            "sourceAsOf": "2026-10-19",
+            "sourceMarketState": "REGULAR",
+            "sourcePeStatus": "available",
+            "currency": null,
+            "currencyMatches": false,
+            "fx": null,
+            "marketCapStatus": "missing_or_incompatible"
+          }
+        },
+        "2383.TW": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": null,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": null,
+            "asOf": null,
+            "receivedAt": null,
+            "observedAt": null,
+            "status": "missing",
+            "peStatus": "missing",
+            "selectionStatus": "quote_date_mismatch_or_missing",
+            "sourceAsOf": "2026-10-19",
+            "sourceMarketState": "REGULAR",
+            "sourcePeStatus": "available",
+            "currency": null,
+            "currencyMatches": false,
+            "fx": null,
+            "marketCapStatus": "missing_or_incompatible"
+          }
+        },
+        "LITE": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": 100.0,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": "yahoo",
+            "asOf": "2026-10-16",
+            "receivedAt": "2026-10-19T01:19:00+00:00",
+            "observedAt": 1792180800.0,
+            "status": "available",
+            "peStatus": "missing",
+            "selectionStatus": "available",
+            "sourceAsOf": "2026-10-16",
+            "sourceMarketState": "CLOSED",
+            "sourcePeStatus": "missing",
+            "currency": "USD",
+            "currencyMatches": true,
+            "fx": {
+              "value": 1.0,
+              "asOf": "2026-10-16",
+              "src": "USD-identity",
+              "direction": "USD-to-local"
+            },
+            "marketCapStatus": "available"
+          }
+        },
+        "688825.SS": {
+          "date": "2026-10-16",
+          "price": 45.02,
+          "pe": 20.0,
+          "marketCapUSD": 14.3,
+          "history": {
+            "count": 54,
+            "firstDate": "2026-07-27",
+            "lastDate": "2026-10-16",
+            "days": 81,
+            "high52Available": false
+          },
+          "valuation": {
+            "source": "yahoo",
+            "asOf": "2026-10-16",
+            "receivedAt": "2026-10-19T01:19:00+00:00",
+            "observedAt": 1792137600.0,
+            "status": "available",
+            "peStatus": "available",
+            "selectionStatus": "available",
+            "sourceAsOf": "2026-10-16",
+            "sourceMarketState": "CLOSED",
+            "sourcePeStatus": "available",
+            "currency": "CNY",
+            "currencyMatches": true,
+            "fx": {
+              "value": 7.0,
+              "asOf": "2026-10-16",
+              "src": "yahoo",
+              "receivedAt": "2026-10-19T01:19:00+00:00",
+              "direction": "USD-to-local",
+              "finality": {
+                "method": "provider-session-boundary",
+                "start": 1792108800.0,
+                "end": 1792195200.0,
+                "barTimestamp": 1792108800.0,
+                "timezone": "UTC"
+              }
+            },
+            "marketCapStatus": "available"
+          }
+        }
+      },
+      "issues": [
+        {
+          "symbol": "LITE",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "000660.KS",
+          "kind": "valuation",
+          "status": "quote_date_mismatch_or_missing",
+          "observedDate": "2026-10-19",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "000660.KS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "000660.KS",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "688825.SS",
+          "kind": "history",
+          "status": "short_history"
+        },
+        {
+          "symbol": "3110.T",
+          "kind": "valuation",
+          "status": "quote_date_mismatch_or_missing",
+          "observedDate": "2026-10-19",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "3110.T",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "3110.T",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "2383.TW",
+          "kind": "valuation",
+          "status": "quote_date_mismatch_or_missing",
+          "observedDate": "2026-10-19",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "2383.TW",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "2383.TW",
+          "kind": "valuation",
+          "status": "pe_missing"
+        }
+      ]
+    },
+    "no_exact_day_cny_fx": {
+      "snapshot": {
+        "policy": "latest-common-completed-daily",
+        "selectedDate": "2026-10-16",
+        "status": "complete",
+        "selectedCompanies": 42,
+        "requiredCompanies": 42,
+        "sourceAsOfByMarket": {
+          "A股": [
+            "2026-10-16"
+          ],
+          "美股": [
+            "2026-10-16"
+          ],
+          "港股": [
+            "2026-10-16"
+          ],
+          "韩股": [
+            "2026-10-19"
+          ],
+          "日股": [
+            "2026-10-19"
+          ],
+          "台股": [
+            "2026-10-16"
+          ],
+          "欧股": [
+            "2026-10-16"
+          ]
+        }
+      },
+      "asOfByMarket": {
+        "A股": [
+          "2026-10-16"
+        ],
+        "美股": [
+          "2026-10-16"
+        ],
+        "港股": [
+          "2026-10-16"
+        ],
+        "韩股": [
+          "2026-10-16"
+        ],
+        "日股": [
+          "2026-10-16"
+        ],
+        "台股": [
+          "2026-10-16"
+        ],
+        "欧股": [
+          "2026-10-16"
+        ]
+      },
+      "blockers": [],
+      "missingDailyCount": 0,
+      "staleDailyCount": 0,
+      "marketCapAvailable": 17,
+      "peAvailable": 38,
+      "financialVerified": 40,
+      "financialPartial": 2,
+      "partialScored": 0,
+      "indicesAvailable": 8,
+      "fxDates": {
+        "HKD": "2026-10-16",
+        "KRW": "2026-10-16",
+        "JPY": "2026-10-16",
+        "TWD": "2026-10-16",
+        "EUR": "2026-10-16"
+      },
+      "selectedRows": {
+        "000660.KS": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": null,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": null,
+            "asOf": null,
+            "receivedAt": null,
+            "observedAt": null,
+            "status": "missing",
+            "peStatus": "missing",
+            "selectionStatus": "quote_date_mismatch_or_missing",
+            "sourceAsOf": "2026-10-19",
+            "sourceMarketState": "REGULAR",
+            "sourcePeStatus": "missing",
+            "currency": null,
+            "currencyMatches": false,
+            "fx": null,
+            "marketCapStatus": "missing_or_incompatible"
+          }
+        },
+        "3110.T": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": null,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": null,
+            "asOf": null,
+            "receivedAt": null,
+            "observedAt": null,
+            "status": "missing",
+            "peStatus": "missing",
+            "selectionStatus": "quote_date_mismatch_or_missing",
+            "sourceAsOf": "2026-10-19",
+            "sourceMarketState": "REGULAR",
+            "sourcePeStatus": "available",
+            "currency": null,
+            "currencyMatches": false,
+            "fx": null,
+            "marketCapStatus": "missing_or_incompatible"
+          }
+        },
+        "2383.TW": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": null,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": null,
+            "asOf": null,
+            "receivedAt": null,
+            "observedAt": null,
+            "status": "missing",
+            "peStatus": "missing",
+            "selectionStatus": "quote_date_mismatch_or_missing",
+            "sourceAsOf": "2026-10-19",
+            "sourceMarketState": "REGULAR",
+            "sourcePeStatus": "available",
+            "currency": null,
+            "currencyMatches": false,
+            "fx": null,
+            "marketCapStatus": "missing_or_incompatible"
+          }
+        },
+        "LITE": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": 100.0,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": "yahoo",
+            "asOf": "2026-10-16",
+            "receivedAt": "2026-10-19T01:19:00+00:00",
+            "observedAt": 1792180800.0,
+            "status": "available",
+            "peStatus": "missing",
+            "selectionStatus": "available",
+            "sourceAsOf": "2026-10-16",
+            "sourceMarketState": "CLOSED",
+            "sourcePeStatus": "missing",
+            "currency": "USD",
+            "currencyMatches": true,
+            "fx": {
+              "value": 1.0,
+              "asOf": "2026-10-16",
+              "src": "USD-identity",
+              "direction": "USD-to-local"
+            },
+            "marketCapStatus": "available"
+          }
+        },
+        "688825.SS": {
+          "date": "2026-10-16",
+          "price": 45.02,
+          "pe": 20.0,
+          "marketCapUSD": null,
+          "history": {
+            "count": 54,
+            "firstDate": "2026-07-27",
+            "lastDate": "2026-10-16",
+            "days": 81,
+            "high52Available": false
+          },
+          "valuation": {
+            "source": "yahoo",
+            "asOf": "2026-10-16",
+            "receivedAt": "2026-10-19T01:19:00+00:00",
+            "observedAt": 1792137600.0,
+            "status": "available",
+            "peStatus": "available",
+            "selectionStatus": "available",
+            "sourceAsOf": "2026-10-16",
+            "sourceMarketState": "CLOSED",
+            "sourcePeStatus": "available",
+            "currency": "CNY",
+            "currencyMatches": true,
+            "fx": null,
+            "marketCapStatus": "missing_or_incompatible"
+          }
+        }
+      },
+      "issues": [
+        {
+          "symbol": "688498.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "LITE",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "300308.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "300502.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "300394.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "000660.KS",
+          "kind": "valuation",
+          "status": "quote_date_mismatch_or_missing",
+          "observedDate": "2026-10-19",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "000660.KS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "000660.KS",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "688825.SS",
+          "kind": "history",
+          "status": "short_history"
+        },
+        {
+          "symbol": "688825.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "002371.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "688012.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "3110.T",
+          "kind": "valuation",
+          "status": "quote_date_mismatch_or_missing",
+          "observedDate": "2026-10-19",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "3110.T",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "3110.T",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "603256.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "601208.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "2383.TW",
+          "kind": "valuation",
+          "status": "quote_date_mismatch_or_missing",
+          "observedDate": "2026-10-19",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "2383.TW",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "2383.TW",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "600183.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "002463.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "300476.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "002916.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "301200.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "301377.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "000657.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "600875.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "002028.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "601179.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "688676.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "002335.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "002837.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        }
+      ]
+    },
+    "unknown_index_still_blocks": {
+      "snapshot": {
+        "policy": "latest-common-completed-daily",
+        "selectedDate": "2026-10-16",
+        "status": "complete",
+        "selectedCompanies": 42,
+        "requiredCompanies": 42,
+        "sourceAsOfByMarket": {
+          "A股": [
+            "2026-10-16"
+          ],
+          "美股": [
+            "2026-10-16"
+          ],
+          "港股": [
+            "2026-10-16"
+          ],
+          "韩股": [
+            "2026-10-19"
+          ],
+          "日股": [
+            "2026-10-19"
+          ],
+          "台股": [
+            "2026-10-16"
+          ],
+          "欧股": [
+            "2026-10-16"
+          ]
+        }
+      },
+      "asOfByMarket": {
+        "A股": [
+          "2026-10-16"
+        ],
+        "美股": [
+          "2026-10-16"
+        ],
+        "港股": [
+          "2026-10-16"
+        ],
+        "韩股": [
+          "2026-10-16"
+        ],
+        "日股": [
+          "2026-10-16"
+        ],
+        "台股": [
+          "2026-10-16"
+        ],
+        "欧股": [
+          "2026-10-16"
+        ]
+      },
+      "blockers": [
+        "index_date_or_phase_needs_label_approval"
+      ],
+      "missingDailyCount": 0,
+      "staleDailyCount": 0,
+      "marketCapAvailable": 39,
+      "peAvailable": 38,
+      "financialVerified": 40,
+      "financialPartial": 2,
+      "partialScored": 0,
+      "indicesAvailable": 7,
+      "fxDates": {
+        "CNY": "2026-10-16",
+        "HKD": "2026-10-16",
+        "KRW": "2026-10-16",
+        "JPY": "2026-10-16",
+        "TWD": "2026-10-16",
+        "EUR": "2026-10-16"
+      },
+      "selectedRows": {
+        "000660.KS": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": null,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": null,
+            "asOf": null,
+            "receivedAt": null,
+            "observedAt": null,
+            "status": "missing",
+            "peStatus": "missing",
+            "selectionStatus": "quote_date_mismatch_or_missing",
+            "sourceAsOf": "2026-10-19",
+            "sourceMarketState": "REGULAR",
+            "sourcePeStatus": "missing",
+            "currency": null,
+            "currencyMatches": false,
+            "fx": null,
+            "marketCapStatus": "missing_or_incompatible"
+          }
+        },
+        "3110.T": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": null,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": null,
+            "asOf": null,
+            "receivedAt": null,
+            "observedAt": null,
+            "status": "missing",
+            "peStatus": "missing",
+            "selectionStatus": "quote_date_mismatch_or_missing",
+            "sourceAsOf": "2026-10-19",
+            "sourceMarketState": "REGULAR",
+            "sourcePeStatus": "available",
+            "currency": null,
+            "currencyMatches": false,
+            "fx": null,
+            "marketCapStatus": "missing_or_incompatible"
+          }
+        },
+        "2383.TW": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": null,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": null,
+            "asOf": null,
+            "receivedAt": null,
+            "observedAt": null,
+            "status": "missing",
+            "peStatus": "missing",
+            "selectionStatus": "quote_date_mismatch_or_missing",
+            "sourceAsOf": "2026-10-19",
+            "sourceMarketState": "REGULAR",
+            "sourcePeStatus": "available",
+            "currency": null,
+            "currencyMatches": false,
+            "fx": null,
+            "marketCapStatus": "missing_or_incompatible"
+          }
+        },
+        "LITE": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": 100.0,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": "yahoo",
+            "asOf": "2026-10-16",
+            "receivedAt": "2026-10-19T01:19:00+00:00",
+            "observedAt": 1792180800.0,
+            "status": "available",
+            "peStatus": "missing",
+            "selectionStatus": "available",
+            "sourceAsOf": "2026-10-16",
+            "sourceMarketState": "CLOSED",
+            "sourcePeStatus": "missing",
+            "currency": "USD",
+            "currencyMatches": true,
+            "fx": {
+              "value": 1.0,
+              "asOf": "2026-10-16",
+              "src": "USD-identity",
+              "direction": "USD-to-local"
+            },
+            "marketCapStatus": "available"
+          }
+        },
+        "688825.SS": {
+          "date": "2026-10-16",
+          "price": 45.02,
+          "pe": 20.0,
+          "marketCapUSD": 14.3,
+          "history": {
+            "count": 54,
+            "firstDate": "2026-07-27",
+            "lastDate": "2026-10-16",
+            "days": 81,
+            "high52Available": false
+          },
+          "valuation": {
+            "source": "yahoo",
+            "asOf": "2026-10-16",
+            "receivedAt": "2026-10-19T01:19:00+00:00",
+            "observedAt": 1792137600.0,
+            "status": "available",
+            "peStatus": "available",
+            "selectionStatus": "available",
+            "sourceAsOf": "2026-10-16",
+            "sourceMarketState": "CLOSED",
+            "sourcePeStatus": "available",
+            "currency": "CNY",
+            "currencyMatches": true,
+            "fx": {
+              "value": 7.0,
+              "asOf": "2026-10-16",
+              "src": "yahoo",
+              "receivedAt": "2026-10-19T01:19:00+00:00",
+              "direction": "USD-to-local",
+              "finality": {
+                "method": "provider-session-boundary",
+                "start": 1792108800.0,
+                "end": 1792195200.0,
+                "barTimestamp": 1792108800.0,
+                "timezone": "UTC"
+              }
+            },
+            "marketCapStatus": "available"
+          }
+        }
+      },
+      "issues": [
+        {
+          "symbol": "LITE",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "000660.KS",
+          "kind": "valuation",
+          "status": "quote_date_mismatch_or_missing",
+          "observedDate": "2026-10-19",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "000660.KS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "000660.KS",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "688825.SS",
+          "kind": "history",
+          "status": "short_history"
+        },
+        {
+          "symbol": "3110.T",
+          "kind": "valuation",
+          "status": "quote_date_mismatch_or_missing",
+          "observedDate": "2026-10-19",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "3110.T",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "3110.T",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "2383.TW",
+          "kind": "valuation",
+          "status": "quote_date_mismatch_or_missing",
+          "observedDate": "2026-10-19",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "2383.TW",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "2383.TW",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "000001.SS",
+          "kind": "index",
+          "status": "missing_or_unconfirmed_snapshot",
+          "requiredDate": "2026-10-16",
+          "sourceDate": "2026-10-16"
+        }
+      ]
+    },
+    "legacy_quotes_not_promoted": {
+      "snapshot": {
+        "policy": "latest-common-completed-daily",
+        "selectedDate": "2026-10-16",
+        "status": "complete",
+        "selectedCompanies": 42,
+        "requiredCompanies": 42,
+        "sourceAsOfByMarket": {
+          "A股": [
+            "2026-10-16"
+          ],
+          "美股": [
+            "2026-10-16"
+          ],
+          "港股": [
+            "2026-10-16"
+          ],
+          "韩股": [
+            "2026-10-19"
+          ],
+          "日股": [
+            "2026-10-19"
+          ],
+          "台股": [
+            "2026-10-16"
+          ],
+          "欧股": [
+            "2026-10-16"
+          ]
+        }
+      },
+      "asOfByMarket": {
+        "A股": [
+          "2026-10-16"
+        ],
+        "美股": [
+          "2026-10-16"
+        ],
+        "港股": [
+          "2026-10-16"
+        ],
+        "韩股": [
+          "2026-10-16"
+        ],
+        "日股": [
+          "2026-10-16"
+        ],
+        "台股": [
+          "2026-10-16"
+        ],
+        "欧股": [
+          "2026-10-16"
+        ]
+      },
+      "blockers": [],
+      "missingDailyCount": 0,
+      "staleDailyCount": 0,
+      "marketCapAvailable": 0,
+      "peAvailable": 0,
+      "financialVerified": 40,
+      "financialPartial": 2,
+      "partialScored": 0,
+      "indicesAvailable": 8,
+      "fxDates": {
+        "CNY": "2026-10-16",
+        "HKD": "2026-10-16",
+        "KRW": "2026-10-16",
+        "JPY": "2026-10-16",
+        "TWD": "2026-10-16",
+        "EUR": "2026-10-16"
+      },
+      "selectedRows": {
+        "000660.KS": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": null,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": null,
+            "asOf": null,
+            "receivedAt": null,
+            "observedAt": null,
+            "status": "missing",
+            "peStatus": "missing",
+            "selectionStatus": "quote_date_mismatch_or_missing",
+            "sourceAsOf": "2026-10-19",
+            "sourceMarketState": null,
+            "sourcePeStatus": "missing",
+            "currency": null,
+            "currencyMatches": false,
+            "fx": null,
+            "marketCapStatus": "missing_or_incompatible"
+          }
+        },
+        "3110.T": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": null,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": null,
+            "asOf": null,
+            "receivedAt": null,
+            "observedAt": null,
+            "status": "missing",
+            "peStatus": "missing",
+            "selectionStatus": "quote_date_mismatch_or_missing",
+            "sourceAsOf": "2026-10-19",
+            "sourceMarketState": null,
+            "sourcePeStatus": "available",
+            "currency": null,
+            "currencyMatches": false,
+            "fx": null,
+            "marketCapStatus": "missing_or_incompatible"
+          }
+        },
+        "2383.TW": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": null,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": null,
+            "asOf": null,
+            "receivedAt": null,
+            "observedAt": null,
+            "status": "missing",
+            "peStatus": "missing",
+            "selectionStatus": "quote_date_mismatch_or_missing",
+            "sourceAsOf": "2026-10-19",
+            "sourceMarketState": null,
+            "sourcePeStatus": "available",
+            "currency": null,
+            "currencyMatches": false,
+            "fx": null,
+            "marketCapStatus": "missing_or_incompatible"
+          }
+        },
+        "LITE": {
+          "date": "2026-10-16",
+          "price": 100.0,
+          "pe": null,
+          "marketCapUSD": null,
+          "history": {
+            "count": 800,
+            "firstDate": "2024-08-08",
+            "lastDate": "2026-10-16",
+            "days": 799,
+            "high52Available": true
+          },
+          "valuation": {
+            "source": null,
+            "asOf": null,
+            "receivedAt": null,
+            "observedAt": null,
+            "status": "missing",
+            "peStatus": "missing",
+            "selectionStatus": "quote_close_unconfirmed",
+            "sourceAsOf": "2026-10-16",
+            "sourceMarketState": null,
+            "sourcePeStatus": "missing",
+            "currency": null,
+            "currencyMatches": false,
+            "fx": null,
+            "marketCapStatus": "missing_or_incompatible"
+          }
+        },
+        "688825.SS": {
+          "date": "2026-10-16",
+          "price": 45.02,
+          "pe": null,
+          "marketCapUSD": null,
+          "history": {
+            "count": 54,
+            "firstDate": "2026-07-27",
+            "lastDate": "2026-10-16",
+            "days": 81,
+            "high52Available": false
+          },
+          "valuation": {
+            "source": null,
+            "asOf": null,
+            "receivedAt": null,
+            "observedAt": null,
+            "status": "missing",
+            "peStatus": "missing",
+            "selectionStatus": "quote_close_unconfirmed",
+            "sourceAsOf": "2026-10-16",
+            "sourceMarketState": null,
+            "sourcePeStatus": "available",
+            "currency": null,
+            "currencyMatches": false,
+            "fx": null,
+            "marketCapStatus": "missing_or_incompatible"
+          }
+        }
+      },
+      "issues": [
+        {
+          "symbol": "688498.SS",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "688498.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "688498.SS",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "LITE",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "LITE",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "LITE",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "COHR",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "COHR",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "COHR",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "300308.SZ",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "300308.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "300308.SZ",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "300502.SZ",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "300502.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "300502.SZ",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "AVGO",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "AVGO",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "AVGO",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "MRVL",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "MRVL",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "MRVL",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "ANET",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "ANET",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "ANET",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "300394.SZ",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "300394.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "300394.SZ",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "TSM",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "TSM",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "TSM",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "0522.HK",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "0522.HK",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "0522.HK",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "000660.KS",
+          "kind": "valuation",
+          "status": "quote_date_mismatch_or_missing",
+          "observedDate": "2026-10-19",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "000660.KS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "000660.KS",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "MU",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "MU",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "MU",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "688825.SS",
+          "kind": "history",
+          "status": "short_history"
+        },
+        {
+          "symbol": "688825.SS",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "688825.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "688825.SS",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "NVDA",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "NVDA",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "NVDA",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "ASML",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "ASML",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "ASML",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "002371.SZ",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "002371.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "002371.SZ",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "688012.SS",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "688012.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "688012.SS",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "3110.T",
+          "kind": "valuation",
+          "status": "quote_date_mismatch_or_missing",
+          "observedDate": "2026-10-19",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "3110.T",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "3110.T",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "603256.SS",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "603256.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "603256.SS",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "601208.SS",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "601208.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "601208.SS",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "2383.TW",
+          "kind": "valuation",
+          "status": "quote_date_mismatch_or_missing",
+          "observedDate": "2026-10-19",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "2383.TW",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "2383.TW",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "600183.SS",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "600183.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "600183.SS",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "1888.HK",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "1888.HK",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "1888.HK",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "002463.SZ",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "002463.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "002463.SZ",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "300476.SZ",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "300476.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "300476.SZ",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "002916.SZ",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "002916.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "002916.SZ",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "301200.SZ",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "301200.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "301200.SZ",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "301377.SZ",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "301377.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "301377.SZ",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "000657.SZ",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "000657.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "000657.SZ",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "GEV",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "GEV",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "GEV",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "ENR.DE",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "ENR.DE",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "ENR.DE",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "600875.SS",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "600875.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "600875.SS",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "002028.SZ",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "002028.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "002028.SZ",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "601179.SS",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "601179.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "601179.SS",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "688676.SS",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "688676.SS",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "688676.SS",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "ETN",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "ETN",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "ETN",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "SU.PA",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "SU.PA",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "SU.PA",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "002335.SZ",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "002335.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "002335.SZ",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "VRT",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "VRT",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "VRT",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "002837.SZ",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "002837.SZ",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "002837.SZ",
+          "kind": "valuation",
+          "status": "pe_missing"
+        },
+        {
+          "symbol": "MOD",
+          "kind": "valuation",
+          "status": "quote_close_unconfirmed",
+          "observedDate": "2026-10-16",
+          "requiredDate": "2026-10-16"
+        },
+        {
+          "symbol": "MOD",
+          "kind": "valuation",
+          "status": "market_cap_unavailable"
+        },
+        {
+          "symbol": "MOD",
+          "kind": "valuation",
+          "status": "pe_missing"
+        }
+      ]
+    }
+  }
+}

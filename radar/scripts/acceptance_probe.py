@@ -25,6 +25,7 @@ from zoneinfo import ZoneInfo
 import build
 import quotes
 from integrity import ZONES, financial_status, fresh_record, observation_time, valid_bars, pe_status, dated_fx
+from snapshot import CLOSED_QUOTE_STATES
 
 ROOT = Path(__file__).resolve().parents[2]
 MAX_REQUESTS = 240  # 119 planned GETs, at most one 429 retry each; 2 spare.
@@ -294,6 +295,7 @@ def collect(data, budget, market_sink=None):
         observed = observation_time('quote', v)
         d = observed.astimezone(ZoneInfo(ZONES[c['mkt']])).date().isoformat() if observed else None
         fields = {'marketCap': quotes.positive(v.get('marketCap')), 'trailingPE': quotes.positive(v.get('trailingPE')),
+                  'closedMarketState': v.get('marketState') in CLOSED_QUOTE_STATES,
                   'sourceTime': observed is not None, 'currencyMatches': v.get('currency') == c['cur'],
                   'dateMatchesDaily': bool(d and d == mk['daily'].get(c['sym'],{}).get('asOf')),
                   'dateFresh': bool(d and fresh_record(v,dt.datetime.now(dt.UTC),d,c['mkt']))}
@@ -301,7 +303,8 @@ def collect(data, budget, market_sink=None):
                      'connection':bool(batch.get('connection')), 'parse':bool(batch.get('parse')),
                      'quality':all(fields.values()), 'publicationGate':all(fields.values()),
                      'checks':fields,'details':{'count':int(bool(v)),'asOf':d,'observedAt':observed.isoformat() if observed else None,
-                                              'receivedAt':v.get('receivedAt'), 'peStatus':pe_status(v.get('trailingPE'))},'requests':[]})
+                                              'receivedAt':v.get('receivedAt'), 'peStatus':pe_status(v.get('trailingPE')),
+                                              'marketState':v.get('marketState') if v.get('marketState') in (*CLOSED_QUOTE_STATES, 'REGULAR') else 'unknown'},'requests':[]})
     quote_session = {'failure':quote_failure,'requests':h.events,'batches':h.batches,'expectedBatchSizes':[len(companies[i:i+40]) for i in range(0,len(companies),40)],'returned':len(values),
                      'cookieAvailable':bool(list(h.jar)),'crumbAvailable':bool(h._crumb)}
     for x in data['config']['indices']:
@@ -323,6 +326,9 @@ def collect(data, budget, market_sink=None):
             if source=='tencent' and value: mk['ratio'][key]=value
     D,stale,missing=build.assemble(data,mk,mk,dt.datetime.now(build.BJ))
     gates={'blockers':build.release_blockers(D),'missingDailyCount':len(missing),'staleDailyCount':len(stale),
+           'snapshot':D['meta']['snapshot'],
+           'marketCapAvailable':sum(c['mcapUSD'] is not None for c in D['companies']),
+           'peAvailable':sum(c['pe'] is not None for c in D['companies']),
            'asOf':D['meta']['asOf'],'asOfByMarket':D['meta']['asOfByMarket'], 'ratioAvailable':D['ratio'] is not None,
            'financialVerified':sum(financial_status(c.get('financial'),dt.date.today(),c)=='verified' for c in data['companies']),
            'financialPartial':sum(financial_status(c.get('financial'),dt.date.today(),c)=='verified_partial' for c in data['companies']),

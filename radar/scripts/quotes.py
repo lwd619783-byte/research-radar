@@ -14,6 +14,7 @@ import urllib.request
 from zoneinfo import ZoneInfo
 
 from integrity import observation_time, fx_bar_final
+from snapshot import equity_bar_final
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
@@ -96,6 +97,7 @@ def yahoo_daily(h: Http, sym: str, rng: str = "5y") -> dict:
     adj = ((r.get("indicators", {}).get("adjclose") or [{}])[0].get("adjclose")) or []
     highs = q.get("high") or []
     bars: dict[str, list] = {}
+    timestamps = {}
     for i, (t, c) in enumerate(zip(r.get("timestamp") or [], cl)):
         if not positive(c):
             continue
@@ -104,18 +106,32 @@ def yahoo_daily(h: Http, sym: str, rng: str = "5y") -> dict:
         d = exchange_date(t, m)
         bars[d] = [d, float(c), float(a) if positive(a) else None,
                    float(high) if positive(high) and high >= c else None]
+        timestamps[d] = t
     if not bars:
         raise SourceDataError('yahoo_chart_empty_daily_bars')
     out = [bars[k] for k in sorted(bars)]
     # Do not splice realtime raw prices into an adjusted daily series.
     regular = (m.get("currentTradingPeriod") or {}).get("regular") or {}
-    end = regular.get("end")
-    phase = "unknown"
-    if end:
-        end_date = exchange_date(end, m)
-        phase = "closed" if out[-1][0] < end_date or (out[-1][0] == end_date and time.time() >= end) else "intraday"
-    return stamp(bars=out, currency=m.get("currency"), src="yahoo", asOf=out[-1][0],
-                 priceBasis="raw", returnBasis="yahoo-adjclose", phase=phase)
+    value = stamp(bars=out, currency=m.get("currency"), src="yahoo", asOf=out[-1][0],
+                  priceBasis="raw", returnBasis="yahoo-adjclose", phase="unknown",
+                  timezone=m.get('exchangeTimezoneName'), barTimestamps=timestamps,
+                  finality={'method': 'provider-session-boundary',
+                            'start': regular.get('start'), 'end': regular.get('end')})
+    if equity_bar_final(out[-1][0], timestamps[out[-1][0]], value['timezone'], value['finality'], value['receivedAt']):
+        value['phase'] = 'closed'
+    else:
+        # Intraday classification requires valid provider boundaries too; missing
+        # metadata stays unknown and cannot authorize historical trimming.
+        try:
+            start, end = regular['start'], regular['end']
+            received = dt.datetime.fromisoformat(value['receivedAt']).timestamp()
+            if (positive(start) and positive(end) and 0 < end-start <= 26*3600
+                    and value['timezone'] and start <= timestamps[out[-1][0]] <= received < end):
+                ZoneInfo(value['timezone'])
+                value['phase'] = 'intraday'
+        except (KeyError, TypeError, ValueError):
+            pass
+    return value
 
 
 def tencent_code(sym: str) -> str | None:
@@ -188,7 +204,7 @@ def yahoo_quotes(h: Http, syms: list[str]) -> dict[str, dict]:
         crumb = h.crumb()
     except Exception:  # noqa: BLE001
         return out
-    fields = "marketCap,trailingPE,currency,regularMarketTime"
+    fields = "marketCap,trailingPE,currency,regularMarketTime,marketState"
     for i in range(0, len(syms), 40):
         part = ",".join(syms[i:i + 40])
         try:
@@ -197,7 +213,7 @@ def yahoo_quotes(h: Http, syms: list[str]) -> dict[str, dict]:
         except Exception:  # noqa: BLE001
             continue
         for q in (j.get("quoteResponse") or {}).get("result") or []:
-            value = stamp(**{k: q.get(k) for k in ("marketCap", "trailingPE", "currency", "regularMarketTime")}, src="yahoo")
+            value = stamp(**{k: q.get(k) for k in ("marketCap", "trailingPE", "currency", "regularMarketTime", "marketState")}, src="yahoo")
             if q.get('symbol') and observation_time('quote', value) is not None:
                 out[q['symbol']] = value
     return out
@@ -214,10 +230,12 @@ class SourceDataError(RuntimeError):
 def index_quote(h: Http, sym: str, tencent: str = "", source: str | None = None) -> dict:
     """Independent source mode preserves Yahoo semantic failures before fallback."""
     bars, diagnostics = [], []
+    history = None
     provenance = {'src': 'yahoo', 'phase': 'unknown'}
     if source != 'tencent':
         try:
             d = yahoo_daily(h, sym, "1mo")
+            history = d
             bars = d['bars']
             provenance = {k: d.get(k) for k in ('src', 'phase')}
             if len(bars) < 2:
@@ -229,6 +247,7 @@ def index_quote(h: Http, sym: str, tencent: str = "", source: str | None = None)
     if source == 'tencent' or len(bars) < 2:
         if not code: raise SourceDataError('index_no_backup')
         provenance = {'src': 'tencent', 'phase': 'unknown'}
+        history = None
         j = h.json(f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={code},day,,,10,")
         node = (j.get('data') or {}).get(code) or {}
         rows = node.get('day') or node.get('qfqday') or []
@@ -238,7 +257,7 @@ def index_quote(h: Http, sym: str, tencent: str = "", source: str | None = None)
     if not valid_index_bars(bars):
         raise SourceDataError('index_invalid_prices_or_dates', len(bars))
     return stamp(price=bars[-1][1], chg=bars[-1][1] / bars[-2][1] - 1, date=bars[-1][0],
-                 sourceDiagnostics=diagnostics, **provenance)
+                 sourceDiagnostics=diagnostics, dailyHistory=history, **provenance)
 
 
 def valid_index_bars(bars):
