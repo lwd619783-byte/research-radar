@@ -1,0 +1,6 @@
+UTC 2026-10-19T01:05:42.333370+00:00
+Normal repair push confirmed (no force):
+414eb80626d3200dfebe4a010507c5fe74d7ca31	refs/heads/fix/radar-data-integrity
+1b26b645267880bba3335daf77c37d0a33a7109e	refs/heads/fix/radar-truthfulness-2026-10-18
+
+No dispatch: current billing access denied (HTTP 403); zero_cost_verified remains false.

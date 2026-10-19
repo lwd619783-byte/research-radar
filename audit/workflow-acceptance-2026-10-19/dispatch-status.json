@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-19T01:05:42.333370+00:00",
+  "pushedRepairSHA": "1b26b645267880bba3335daf77c37d0a33a7109e",
+  "normalPush": true,
+  "remoteRefs": [
+    "414eb80626d3200dfebe4a010507c5fe74d7ca31\trefs/heads/fix/radar-data-integrity",
+    "1b26b645267880bba3335daf77c37d0a33a7109e\trefs/heads/fix/radar-truthfulness-2026-10-18"
+  ],
+  "runsUnchanged": true,
+  "historicalRunCount": 1,
+  "dispatchesIssuedThisPhase": 0,
+  "zeroCostVerified": false,
+  "newRunId": null,
+  "newRunUrl": null,
+  "sourceRequestsThisPhase": 0,
+  "status": "not_dispatched_cost_unverified",
+  "noMergeOrDeployment": true
+}
