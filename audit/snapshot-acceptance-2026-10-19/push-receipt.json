@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-10-19T02:43:02.488475+00:00",
+  "evidenceCommit": "7129b948de8c0dfab192638abd869221ee9d83ca",
+  "executionCommit": "dce7a0cd4a457f566e56809cb3644bb75476ecfa",
+  "normalPushExitCode": 0,
+  "forcePush": false,
+  "remoteVerified": "7129b948de8c0dfab192638abd869221ee9d83ca\trefs/heads/fix/radar-truthfulness-2026-10-18",
+  "workingTreeAfterEvidencePush": "clean",
+  "pushSummary": "dce7a0c..7129b94 HEAD -> fix/radar-truthfulness-2026-10-18",
+  "note": "This receipt is committed separately; final archive HEAD is reported in handoff."
+}
