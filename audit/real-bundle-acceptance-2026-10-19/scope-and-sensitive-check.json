@@ -1,0 +1,27 @@
+{
+  "checkedAtUTC": "2026-10-19T04:10:39.963934+00:00",
+  "executionSHA": "3e8a63f6f61ba9952353df9b51d790ea9e380510",
+  "addedFiles": [
+    "audit/real-bundle-acceptance-2026-10-19/REVIEW.md",
+    "audit/real-bundle-acceptance-2026-10-19/cost-and-authorization.json",
+    "audit/real-bundle-acceptance-2026-10-19/execution-scope.json",
+    "audit/real-bundle-acceptance-2026-10-19/existing-artifact-metadata.json",
+    "audit/real-bundle-acceptance-2026-10-19/known-jobs.json",
+    "audit/real-bundle-acceptance-2026-10-19/run-identity.json",
+    "audit/real-bundle-acceptance-2026-10-19/run-terminal.json",
+    "audit/real-bundle-acceptance-2026-10-19/run-timeline.jsonl",
+    "audit/real-bundle-acceptance-2026-10-19/runner-log-excerpts.txt",
+    "audit/real-bundle-acceptance-2026-10-19/runner-summary.json",
+    "audit/real-bundle-acceptance-2026-10-19/runs-after.json",
+    "audit/real-bundle-acceptance-2026-10-19/runs-before.json",
+    "audit/real-bundle-acceptance-2026-10-19/single-dispatch.json"
+  ],
+  "auditOnly": true,
+  "frozenHashesVerified": 10,
+  "frozenHashesChanged": 0,
+  "credentialPatternFindings": [],
+  "rawHTTPPayloadsIncluded": false,
+  "accountScreenshotsIncluded": false,
+  "originalZIPIncluded": false,
+  "actualDATAIncluded": false
+}

@@ -1,0 +1,49 @@
+{
+  "recordedAtUTC": "2026-10-19T04:05:17.463259+00:00",
+  "source": "Same-day user screenshots independently verified by parent; reuse expressly authorized for this run",
+  "screenshotTimesBeijing": [
+    "2026-10-19 09:12",
+    "2026-10-19 09:15"
+  ],
+  "evidenceReferences": [
+    "libfile_4b45b1d6c7988191977c556d3d180335",
+    "libfile_f64ab6fd39488191a17ac9196a760029",
+    "libfile_d5506fd063248191b3a98f465301cd5f"
+  ],
+  "plan": "GitHub Free",
+  "observedIncludedMinutes": 2000,
+  "observedUsedMinutes": 2,
+  "hardBudgetUSD": 0,
+  "usageBlocked": true,
+  "observedStorageGB": 0,
+  "includedStorageGB": 0.5,
+  "meterCaveat": "Displayed storage is delayed and rounded; no new account-wide billing reading or exact final cost is claimed. Repository run list has no unaccounted additional runs.",
+  "knownSubsequentJobs": [
+    {
+      "run": 39184829414,
+      "seconds": 92
+    },
+    {
+      "run": 39190870708,
+      "seconds": 95
+    }
+  ],
+  "conservativeMinutesIncludingThisRun": 62,
+  "conservativeRemainingMinutes": 1938,
+  "existingArtifactBytes": 38106,
+  "newUncompressedArchiveMaxBytes": 10000000,
+  "retentionDays": 7,
+  "zeroCostVerified": true,
+  "basis": "Authorized same-day included quota plus all subsequent repository runs checked; even two prior jobs and this job each charged at 20-minute maximum remain within 2000 minutes. Existing hard-zero-overage boundary unchanged.",
+  "billingAPIRetried": false,
+  "settingsChanged": false,
+  "newCredentials": false,
+  "authorization": "Sentinel_25a69b1c6e40819193c8442ccd2fe3f1 replying to Sentinel_9339aae9e7688191a6ed0540fec1bd58, 2026-10-19 12:02 Asia/Shanghai",
+  "modelPreference": "gpt-6-astra / high; backend actual configuration not independently verifiable",
+  "independentAudit": {
+    "newBundleTests": 13,
+    "fullCloudSuite": 140,
+    "frozenHashes": 10
+  },
+  "executionSHA": "3e8a63f6f61ba9952353df9b51d790ea9e380510"
+}

@@ -1,0 +1,45 @@
+{
+  "checkedAtUTC": "2026-10-19T04:04:33.945662+00:00",
+  "total_count": 3,
+  "runs": [
+    {
+      "id": 39190870708,
+      "head_sha": "dce7a0cd4a457f566e56809cb3644bb75476ecfa",
+      "head_branch": "fix/radar-truthfulness-2026-10-18",
+      "event": "workflow_dispatch",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "created_at": "2026-10-19T02:37:49Z",
+      "run_started_at": "2026-10-19T02:37:49Z",
+      "updated_at": "2026-10-19T02:39:28Z",
+      "workflow_id": 387767552
+    },
+    {
+      "id": 39184829414,
+      "head_sha": "ee0447a8fc7ede19127917b7f6c28a552ce31a90",
+      "head_branch": "fix/radar-truthfulness-2026-10-18",
+      "event": "workflow_dispatch",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "created_at": "2026-10-19T01:19:25Z",
+      "run_started_at": "2026-10-19T01:19:25Z",
+      "updated_at": "2026-10-19T01:21:01Z",
+      "workflow_id": 387767552
+    },
+    {
+      "id": 39047568864,
+      "head_sha": "c60d9f7f70b01e94b2367e02d4a46ab6ff5420ed",
+      "head_branch": "fix/radar-data-integrity",
+      "event": "workflow_dispatch",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "created_at": "2026-10-17T16:01:03Z",
+      "run_started_at": "2026-10-17T16:01:03Z",
+      "updated_at": "2026-10-17T16:02:35Z",
+      "workflow_id": 387767552
+    }
+  ]
+}
