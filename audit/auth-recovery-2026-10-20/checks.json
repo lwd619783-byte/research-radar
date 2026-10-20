@@ -1,0 +1,44 @@
+[
+  {
+    "command": [
+      "git",
+      "ls-remote",
+      "--symref",
+      "origin",
+      "HEAD",
+      "refs/heads/fix/radar-truthfulness-2026-10-18"
+    ],
+    "startedAt": "2026-10-20T04:44:23.787340+00:00",
+    "finishedAt": "2026-10-20T04:44:26.586820+00:00",
+    "exitCode": 0,
+    "log": "check-1.log"
+  },
+  {
+    "command": [
+      "gh",
+      "api",
+      "repos/lwd619783-byte/research-radar",
+      "--jq",
+      "{full_name,private,default_branch}"
+    ],
+    "startedAt": "2026-10-20T04:44:26.586900+00:00",
+    "finishedAt": "2026-10-20T04:44:28.843493+00:00",
+    "exitCode": 0,
+    "log": "check-2.log"
+  },
+  {
+    "command": [
+      "python",
+      "-B",
+      "audit/interaction-acceptance-2026-10-19/verify_interactions.py",
+      "--bundle",
+      "/workspace/scratch/50673417708c/radar-close-audit/verified-bundle",
+      "--out",
+      "/workspace/radar-interaction-review"
+    ],
+    "startedAt": "2026-10-20T04:44:28.843582+00:00",
+    "finishedAt": "2026-10-20T04:44:28.943547+00:00",
+    "exitCode": 1,
+    "log": "check-3.log"
+  }
+]
