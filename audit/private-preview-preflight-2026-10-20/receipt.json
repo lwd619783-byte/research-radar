@@ -1,0 +1,77 @@
+{
+  "recordedAt": "2026-10-20T12:24:35.762Z",
+  "target": {
+    "teamName": "LKDMKL",
+    "projectName": "research-radar",
+    "environment": "preview"
+  },
+  "acceptedSourceSHA": "bbdb0b56609ece598fce8160b09f5ce39cec67ca",
+  "freshReads": {
+    "team": {
+      "success": true,
+      "returnedFields": [
+        "name",
+        "slug",
+        "id",
+        "saml"
+      ],
+      "planReturned": false,
+      "budgetReturned": false
+    },
+    "members": {
+      "success": true,
+      "confirmedOwners": 1,
+      "otherReturnedMembers": 0,
+      "paginationHasContinuation": false,
+      "currentActorMatchesOwner": "unverified"
+    },
+    "projectSearch": {
+      "success": true,
+      "query": "research-radar",
+      "count": 0
+    },
+    "currentActor": {
+      "success": false,
+      "operation": "GET /v2/user",
+      "httpStatus": 404,
+      "code": "not_found",
+      "message": "User not found",
+      "wrapperCode": "INVALID_ARGUMENT",
+      "attempts": 1
+    },
+    "billing": {
+      "success": false,
+      "operation": "GET /v1/billing/charges",
+      "httpStatus": 404,
+      "code": "costs_not_found",
+      "message": "Costs not found",
+      "wrapperCode": "INVALID_ARGUMENT",
+      "from": "2026-10-01T00:00:00Z",
+      "toExclusive": "2026-10-20T00:00:00Z",
+      "attempts": 1
+    }
+  },
+  "gates": {
+    "ownerOnlyVerified": false,
+    "noIncrementalCostVerified": false,
+    "protectionBeforeUploadVerified": false
+  },
+  "actions": {
+    "projectsCreated": 0,
+    "deploymentsCreated": 0,
+    "privateContentUploaded": 0,
+    "gitConnectionsCreated": 0,
+    "newCredentials": 0,
+    "permissionChanges": 0,
+    "actionsDispatched": 0,
+    "marketRequests": 0,
+    "productionDeployments": 0
+  },
+  "status": "stopped_before_create_and_upload",
+  "browserAcceptance": "Prior completed 60-check report and HTML hash verified; not rerun this phase",
+  "previewURL": null,
+  "documentation": [
+    "https://vercel.com/docs/deployment-protection/methods-to-protect-deployments/vercel-authentication",
+    "https://vercel.com/docs/plans/hobby"
+  ]
+}
