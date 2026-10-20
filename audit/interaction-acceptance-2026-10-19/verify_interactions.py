@@ -60,7 +60,7 @@ def main():
    page.route('**/*',route);page.goto(url,wait_until='networkidle')
    def shot(name):
     f=args.out/(name+'.png');page.screenshot(path=str(f));report['screenshots'][f.name]={'bytes':f.stat().st_size,'sha256':sha(f.read_bytes())}
-   def click(group,value):page.locator('#'+group+' button[data-v='+json.dumps(value)+']').click()
+   def click(group,value):page.locator('#'+group+' button[data-v='+json.dumps(value,ensure_ascii=False)+']').click()
    def rows():return page.locator('#tbl tbody tr[data-co]').evaluate_all('(xs)=>xs.map(x=>x.dataset.co)')
    def expected(ind,mkt):return sorted(c['id'] for c in D['companies'] if (ind=='all' or c['ind']==ind) and (mkt=='all' or (c['mkt'] not in ('A股','港股','美股') if mkt=='其他' else c['mkt']==mkt)))
    assert '441/477' in page.locator('#dataStatus').inner_text();shot('desktop-overview')

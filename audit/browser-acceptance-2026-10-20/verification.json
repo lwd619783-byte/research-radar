@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-10-20T04:49:50.108169+00:00",
+  "frozenFiles": {
+    "radar/site/app.js": true,
+    "radar/site/index.html": true,
+    "radar/site/style.css": true,
+    "radar/data/chokepoints.toml": true,
+    "radar/data/companies.toml": true,
+    "radar/data/config.toml": true,
+    "radar/data/industries.toml": true,
+    ".github/workflows/radar-deploy.yml.disabled": true,
+    ".github/workflows/radar-preview.yml.disabled": true,
+    ".github/workflows/radar-interface-acceptance.yml": true
+  },
+  "harnessAST": "passed",
+  "productionCodeChanged": false,
+  "originalZipBytes": 442011,
+  "originalZipSHA256": "9965b4718b29cc4da212e37c4afa259c5f8723bc984b5f64b76f50eb950e2f30",
+  "nativePrepareMaterializeCalls": 1,
+  "nativeMaterializeResult": "authorized_signed_transfer",
+  "officialTransferHelperExitCode": 0,
+  "originalFourFilesValidated": true,
+  "originalFourFilesUnchanged": true,
+  "newMarketRequests": 0,
+  "actionsDispatches": 0,
+  "deploymentsCreated": 0,
+  "fullUnitSuiteRerun": false
+}

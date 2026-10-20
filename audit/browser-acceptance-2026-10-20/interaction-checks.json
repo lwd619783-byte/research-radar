@@ -1,0 +1,492 @@
+{
+  "startedAt": "2026-10-20T04:47:40.531145+00:00",
+  "inputRun": 39214475581,
+  "inputFiles": {
+    "receipt.json": {
+      "bytes": 285275,
+      "sha256": "20df613f7050f1861c946a8be10b93f17f9f20c238d64675dfb6bd071e20aed0"
+    },
+    "DATA.json": {
+      "bytes": 1643322,
+      "sha256": "97576f789fcaf6e2841bd21759dfd633143f9ab44f367182414fb36fe0d4bfff"
+    },
+    "manifest.json": {
+      "bytes": 1387,
+      "sha256": "98363c8a1fe79d57c32dab44012e34131c048f0e8638543956e4cf9071930166"
+    },
+    "index.html": {
+      "bytes": 751055,
+      "sha256": "1ee2dc4ed38bb707f7ee3f2bea9cc9aeade6d7fd6069d9de6fbab5f47fc7ebdf"
+    }
+  },
+  "outputHTML": {
+    "bytes": 755727,
+    "sha256": "c9876ec927b8cbe3b5dd306a82ea9150f6f9be3cde1542d650d03f16c0ddcbf1"
+  },
+  "actualDataAsOf": {
+    "A股": [
+      "2026-10-19"
+    ],
+    "美股": [
+      "2026-10-16"
+    ],
+    "港股": [
+      "2026-10-16"
+    ],
+    "韩股": [
+      "2026-10-19"
+    ],
+    "日股": [
+      "2026-10-19"
+    ],
+    "台股": [
+      "2026-10-19"
+    ],
+    "欧股": [
+      "2026-10-16"
+    ]
+  },
+  "priceDateRange": [
+    "2026-10-16",
+    "2026-10-19"
+  ],
+  "sourceFixedClock": "2026-10-19T15:14:19.724189+08:00",
+  "coverage": {
+    "complete": 441,
+    "partial": 31,
+    "not_applicable": 1,
+    "missing": 4
+  },
+  "dataUnchanged": true,
+  "checks": [
+    {
+      "filter": [
+        "all",
+        "all"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 42
+    },
+    {
+      "filter": [
+        "all",
+        "A股"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 22
+    },
+    {
+      "filter": [
+        "all",
+        "港股"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 2
+    },
+    {
+      "filter": [
+        "all",
+        "美股"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 13
+    },
+    {
+      "filter": [
+        "all",
+        "其他"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 5
+    },
+    {
+      "filter": [
+        "AI网络与光互连",
+        "all"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 9
+    },
+    {
+      "filter": [
+        "AI网络与光互连",
+        "A股"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 4
+    },
+    {
+      "filter": [
+        "AI网络与光互连",
+        "港股"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 0
+    },
+    {
+      "filter": [
+        "AI网络与光互连",
+        "美股"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 5
+    },
+    {
+      "filter": [
+        "AI网络与光互连",
+        "其他"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 0
+    },
+    {
+      "filter": [
+        "AI核心半导体",
+        "all"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 9
+    },
+    {
+      "filter": [
+        "AI核心半导体",
+        "A股"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 3
+    },
+    {
+      "filter": [
+        "AI核心半导体",
+        "港股"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 1
+    },
+    {
+      "filter": [
+        "AI核心半导体",
+        "美股"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 4
+    },
+    {
+      "filter": [
+        "AI核心半导体",
+        "其他"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 1
+    },
+    {
+      "filter": [
+        "PCB与覆铜板",
+        "all"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 12
+    },
+    {
+      "filter": [
+        "PCB与覆铜板",
+        "A股"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 9
+    },
+    {
+      "filter": [
+        "PCB与覆铜板",
+        "港股"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 1
+    },
+    {
+      "filter": [
+        "PCB与覆铜板",
+        "美股"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 0
+    },
+    {
+      "filter": [
+        "PCB与覆铜板",
+        "其他"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 2
+    },
+    {
+      "filter": [
+        "电力与数据中心",
+        "all"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 12
+    },
+    {
+      "filter": [
+        "电力与数据中心",
+        "A股"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 6
+    },
+    {
+      "filter": [
+        "电力与数据中心",
+        "港股"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 0
+    },
+    {
+      "filter": [
+        "电力与数据中心",
+        "美股"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 4
+    },
+    {
+      "filter": [
+        "电力与数据中心",
+        "其他"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 2
+    },
+    {
+      "sort": "r5",
+      "direction": -1,
+      "missingLast": true,
+      "valid": 42
+    },
+    {
+      "sort": "r5",
+      "direction": 1,
+      "missingLast": true,
+      "valid": 42
+    },
+    {
+      "sort": "r20",
+      "direction": -1,
+      "missingLast": true,
+      "valid": 42
+    },
+    {
+      "sort": "r20",
+      "direction": 1,
+      "missingLast": true,
+      "valid": 42
+    },
+    {
+      "sort": "r60",
+      "direction": -1,
+      "missingLast": true,
+      "valid": 41
+    },
+    {
+      "sort": "r60",
+      "direction": 1,
+      "missingLast": true,
+      "valid": 41
+    },
+    {
+      "sort": "ytd",
+      "direction": -1,
+      "missingLast": true,
+      "valid": 41
+    },
+    {
+      "sort": "ytd",
+      "direction": 1,
+      "missingLast": true,
+      "valid": 41
+    },
+    {
+      "sort": "dd52",
+      "direction": -1,
+      "missingLast": true,
+      "valid": 41
+    },
+    {
+      "sort": "dd52",
+      "direction": 1,
+      "missingLast": true,
+      "valid": 41
+    },
+    {
+      "sort": "revg",
+      "direction": -1,
+      "missingLast": true,
+      "valid": 40
+    },
+    {
+      "sort": "revg",
+      "direction": 1,
+      "missingLast": true,
+      "valid": 40
+    },
+    {
+      "sort": "earng",
+      "direction": -1,
+      "missingLast": true,
+      "valid": 37
+    },
+    {
+      "sort": "earng",
+      "direction": 1,
+      "missingLast": true,
+      "valid": 37
+    },
+    {
+      "sort": "gm",
+      "direction": -1,
+      "missingLast": true,
+      "valid": 39
+    },
+    {
+      "sort": "gm",
+      "direction": 1,
+      "missingLast": true,
+      "valid": 39
+    },
+    {
+      "sort": "pe",
+      "direction": -1,
+      "missingLast": true,
+      "valid": 40
+    },
+    {
+      "sort": "pe",
+      "direction": 1,
+      "missingLast": true,
+      "valid": 40
+    },
+    {
+      "sort": "mcapUSD",
+      "direction": -1,
+      "missingLast": true,
+      "valid": 42
+    },
+    {
+      "sort": "mcapUSD",
+      "direction": 1,
+      "missingLast": true,
+      "valid": 42
+    },
+    {
+      "sort": "next",
+      "direction": 1,
+      "missingLast": true,
+      "valid": 38
+    },
+    {
+      "sort": "next",
+      "direction": -1,
+      "missingLast": true,
+      "valid": 38
+    },
+    {
+      "metric": "r5",
+      "tableMapValuesEqual": true,
+      "visibleTilesCompared": 40
+    },
+    {
+      "metric": "r20",
+      "tableMapValuesEqual": true,
+      "visibleTilesCompared": 40
+    },
+    {
+      "metric": "r60",
+      "tableMapValuesEqual": true,
+      "visibleTilesCompared": 40
+    },
+    {
+      "metric": "ytd",
+      "tableMapValuesEqual": true,
+      "visibleTilesCompared": 40
+    },
+    {
+      "metric": "dd52",
+      "tableMapValuesEqual": true,
+      "visibleTilesCompared": 40
+    },
+    {
+      "metric": "revg",
+      "tableMapValuesEqual": true,
+      "visibleTilesCompared": 40
+    },
+    {
+      "metric": "earng",
+      "tableMapValuesEqual": true,
+      "visibleTilesCompared": 40
+    },
+    {
+      "drawer": "LITE",
+      "requiredReasonVisible": "亏损 · 不适用"
+    },
+    {
+      "drawer": "000660.KS",
+      "requiredReasonVisible": "暂未取得"
+    },
+    {
+      "drawer": "688825.SS",
+      "requiredReasonVisible": "上市时间不足 · 可用 55 个交易日"
+    },
+    {
+      "searchEmptyResult": true
+    },
+    {
+      "themeAndColorReloadPersistence": true
+    },
+    {
+      "narrowWidth": 390,
+      "noPageOverflow": true,
+      "detailsAndMissingReasonsVisible": true
+    }
+  ],
+  "screenshots": {
+    "desktop-overview.png": {
+      "bytes": 373252,
+      "sha256": "d956ac1c0a36a8d67cdd09dbd99d6ecf794901c7543b44503cf78e4956777823"
+    },
+    "desktop-table.png": {
+      "bytes": 320674,
+      "sha256": "28c4f80585b1b7e3441791f13f44da96d4bce471b7a9766969491393aa4efe49"
+    },
+    "desktop-lite.png": {
+      "bytes": 327216,
+      "sha256": "0969f0a4c527471d8893ff5c168a25841d8b280afb2d6172ee8b724a21f771c0"
+    },
+    "desktop-sk-hynix.png": {
+      "bytes": 325405,
+      "sha256": "4985d96648b4706ca0d05f2bd5c8fa5ee7d9ece017c705da2c5ad47d763369c3"
+    },
+    "desktop-cxmt.png": {
+      "bytes": 341419,
+      "sha256": "89ea1d7c0b638ecea7db0ce839bb4f8f6666fda379cbd58f53a2f952f765dd6a"
+    },
+    "desktop-persisted-theme.png": {
+      "bytes": 319716,
+      "sha256": "cc82b0fd4ce9a6e158f9f0234de06ef4c794174b859527519bbe42cd7a4a9628"
+    },
+    "mobile-cxmt.png": {
+      "bytes": 77131,
+      "sha256": "77a784fc235b04d8b0645f2a5735fc161f04287d7571779c044c07817b27dfcd"
+    },
+    "mobile-data-details.png": {
+      "bytes": 158842,
+      "sha256": "684f7f62a722671908c811641800caf1f57af2c49e03a7418e6ebd735c8901aa"
+    }
+  },
+  "browserErrors": [],
+  "blockedRequests": [],
+  "status": "passed",
+  "emptyFilterCombinationsTested": 4,
+  "finishedAt": "2026-10-20T04:47:54.254463+00:00"
+}

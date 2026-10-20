@@ -1,0 +1,82 @@
+{
+  "startedAt": "2026-10-20T04:46:47.681065+00:00",
+  "inputRun": 39214475581,
+  "inputFiles": {
+    "manifest.json": {
+      "bytes": 1387,
+      "sha256": "98363c8a1fe79d57c32dab44012e34131c048f0e8638543956e4cf9071930166"
+    },
+    "index.html": {
+      "bytes": 751055,
+      "sha256": "1ee2dc4ed38bb707f7ee3f2bea9cc9aeade6d7fd6069d9de6fbab5f47fc7ebdf"
+    },
+    "receipt.json": {
+      "bytes": 285275,
+      "sha256": "20df613f7050f1861c946a8be10b93f17f9f20c238d64675dfb6bd071e20aed0"
+    },
+    "DATA.json": {
+      "bytes": 1643322,
+      "sha256": "97576f789fcaf6e2841bd21759dfd633143f9ab44f367182414fb36fe0d4bfff"
+    }
+  },
+  "outputHTML": {
+    "bytes": 755727,
+    "sha256": "c9876ec927b8cbe3b5dd306a82ea9150f6f9be3cde1542d650d03f16c0ddcbf1"
+  },
+  "actualDataAsOf": {
+    "A股": [
+      "2026-10-19"
+    ],
+    "美股": [
+      "2026-10-16"
+    ],
+    "港股": [
+      "2026-10-16"
+    ],
+    "韩股": [
+      "2026-10-19"
+    ],
+    "日股": [
+      "2026-10-19"
+    ],
+    "台股": [
+      "2026-10-19"
+    ],
+    "欧股": [
+      "2026-10-16"
+    ]
+  },
+  "priceDateRange": [
+    "2026-10-16",
+    "2026-10-19"
+  ],
+  "sourceFixedClock": "2026-10-19T15:14:19.724189+08:00",
+  "coverage": {
+    "complete": 441,
+    "partial": 31,
+    "not_applicable": 1,
+    "missing": 4
+  },
+  "dataUnchanged": true,
+  "checks": [
+    {
+      "filter": [
+        "all",
+        "all"
+      ],
+      "tableAndMapIdsEqual": true,
+      "count": 42
+    }
+  ],
+  "screenshots": {
+    "desktop-overview.png": {
+      "bytes": 373252,
+      "sha256": "d956ac1c0a36a8d67cdd09dbd99d6ecf794901c7543b44503cf78e4956777823"
+    }
+  },
+  "browserErrors": [],
+  "blockedRequests": [],
+  "status": "failed_or_blocked",
+  "failureType": "TimeoutError",
+  "finishedAt": "2026-10-20T04:47:20.540145+00:00"
+}

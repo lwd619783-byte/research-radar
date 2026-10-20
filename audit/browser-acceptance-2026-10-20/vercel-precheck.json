@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-10-20T04:49:50.108405+00:00",
+  "queries": [
+    {
+      "scope": "current_default",
+      "search": "investment-radar",
+      "count": 0
+    },
+    {
+      "operation": "list_teams",
+      "accessibleCount": 1
+    },
+    {
+      "scope": "returned_team",
+      "search": "radar",
+      "count": 0
+    },
+    {
+      "scope": "returned_team",
+      "repoUrl": "https://github.com/lwd619783-byte/research-radar",
+      "count": 0
+    }
+  ],
+  "localProjectLinksFound": false,
+  "targetProjectResolved": false,
+  "ownerOnlyAccessVerified": false,
+  "noAdditionalCostVerified": false,
+  "deploymentCreated": false,
+  "anonymousAccessTest": "not_run_no_deployment",
+  "requiredInput": "Exact existing Vercel project name/settings URL and team; no credentials requested"
+}
