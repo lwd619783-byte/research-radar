@@ -1,0 +1,117 @@
+{
+  "recordedAt": "2026-10-20T12:32:31.434Z",
+  "baselineSHA": "811d769bbb949693d4e3d742883443d99f0f935f",
+  "acceptedSourceSHA": "bbdb0b56609ece598fce8160b09f5ce39cec67ca",
+  "parentEvidence": {
+    "source": "Parent independently verified its logged-in Vercel cloud browser; not this environment",
+    "plan": "Hobby",
+    "ownerIdentityMatched": true,
+    "usage": {
+      "cdnRequests": "6K / 1M",
+      "transfer": "51.93 MB / 100 GB",
+      "origin": "5.76 MB / 10 GB",
+      "cpu": "39 seconds / 4 hours"
+    },
+    "scope": "Static personal research preview only; no upgrade or paid add-on"
+  },
+  "freshPreCreate": {
+    "sameNameProjects": 0,
+    "confirmedOwners": 1,
+    "ownerMatchesParentVerifiedUID": true
+  },
+  "createProject": {
+    "attempts": 1,
+    "request": {
+      "name": "research-radar",
+      "framework": null,
+      "buildCommand": "",
+      "installCommand": "",
+      "publicSource": false,
+      "skipGitConnectDuringLink": true,
+      "enablePreviewFeedback": false,
+      "enableProductionFeedback": false,
+      "ssoProtection": {
+        "deploymentType": "preview"
+      },
+      "gitRepositoryOmitted": true
+    },
+    "result": {
+      "id": "prj_wL3PQdS6tpCAYxQ5u6lltdVqGVFU",
+      "name": "research-radar",
+      "framework": null,
+      "accountId": "team_9Yr7DlwRIfTtq6lvfc30z6Ni",
+      "createdAt": 1792499450005,
+      "updatedAt": 1792499450005,
+      "nodeVersion": "24.x",
+      "live": false,
+      "latestDeployment": null,
+      "domains": [],
+      "passwordProtection": {
+        "enabled": false,
+        "deploymentType": null
+      },
+      "ssoProtection": {
+        "enabled": true,
+        "deploymentType": "preview"
+      },
+      "trustedIps": {
+        "enabled": false,
+        "deploymentType": null,
+        "addresses": [],
+        "protectionMode": null
+      }
+    }
+  },
+  "projectReadBack": {
+    "id": "prj_wL3PQdS6tpCAYxQ5u6lltdVqGVFU",
+    "name": "research-radar",
+    "framework": null,
+    "accountId": "team_9Yr7DlwRIfTtq6lvfc30z6Ni",
+    "createdAt": 1792499450005,
+    "updatedAt": 1792499450106,
+    "nodeVersion": "24.x",
+    "live": false,
+    "latestDeployment": null,
+    "domains": [],
+    "passwordProtection": {
+      "enabled": false,
+      "deploymentType": null
+    },
+    "ssoProtection": {
+      "enabled": true,
+      "deploymentType": "preview"
+    },
+    "trustedIps": {
+      "enabled": false,
+      "deploymentType": null,
+      "addresses": [],
+      "protectionMode": null
+    }
+  },
+  "accessGroupCheck": {
+    "httpStatus": 403,
+    "code": "forbidden",
+    "message": "You don't have permission to list the access group.",
+    "operation": "GET /v1/access-groups",
+    "projectId": "prj_wL3PQdS6tpCAYxQ5u6lltdVqGVFU",
+    "attempts": 1,
+    "retries": 0,
+    "cliFallbackUsed": false
+  },
+  "deploymentCount": 0,
+  "remainingUnknowns": [
+    "External/project/group access not fully verified",
+    "Shareable-link and automation-bypass state not returned",
+    "Git connection state not returned"
+  ],
+  "actions": {
+    "privateContentUploaded": 0,
+    "deploymentsCreated": 0,
+    "newCredentialsRequested": 0,
+    "gitConnectionsRequested": 0,
+    "existingProjectsModified": 0,
+    "marketRequests": 0,
+    "actionsDispatched": 0
+  },
+  "status": "empty_protected_project_created_upload_blocked_pending_protection_evidence"
+}
