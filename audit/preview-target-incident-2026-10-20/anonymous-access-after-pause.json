@@ -1,0 +1,41 @@
+[
+  {
+    "checkedAt": "2026-10-20T15:48:16.038376+00:00",
+    "host": "research-radar-lah8ee4sm-lkdmkl.vercel.app",
+    "path": "/",
+    "authenticated": false,
+    "status": 503,
+    "bytes": 99,
+    "sha256": "1583eb65218f8c57d8dc54ed1df8da695da385cf6e2cd50499927cdebfa187f4",
+    "vercelError": "DEPLOYMENT_PAUSED",
+    "contentType": "text/plain; charset=utf-8",
+    "privatePageMarkers": false,
+    "pausedMarker": true
+  },
+  {
+    "checkedAt": "2026-10-20T15:48:15.975258+00:00",
+    "host": "research-radar-lkdmkl.vercel.app",
+    "path": "/",
+    "authenticated": false,
+    "status": 503,
+    "bytes": 99,
+    "sha256": "4117bfd65e8001db022c0759a1903c11fab348d6f2e044e4357b33c0169e63cc",
+    "vercelError": "DEPLOYMENT_PAUSED",
+    "contentType": "text/plain; charset=utf-8",
+    "privatePageMarkers": false,
+    "pausedMarker": true
+  },
+  {
+    "checkedAt": "2026-10-20T15:48:16.187971+00:00",
+    "host": "research-radar-rouge.vercel.app",
+    "path": "/",
+    "authenticated": false,
+    "status": 503,
+    "bytes": 99,
+    "sha256": "7fe815ad8ffb66ca0c264c59e467993cef61b3adb6dab5927337f2ea59fb493c",
+    "vercelError": "DEPLOYMENT_PAUSED",
+    "contentType": "text/plain; charset=utf-8",
+    "privatePageMarkers": false,
+    "pausedMarker": true
+  }
+]

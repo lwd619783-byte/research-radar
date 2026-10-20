@@ -1,0 +1,223 @@
+{
+  "recordedAt": "2026-10-20T15:49:24.224Z",
+  "status": "unexpected_production_target_project_paused_no_preview_delivered",
+  "sourceCommit": "bbdb0b56609ece598fce8160b09f5ce39cec67ca",
+  "auditBaseline": "a5e83cb41e04b285ab00b19d587f81507d78558e",
+  "parentScreenshotEvidence": {
+    "source": "User screenshots independently read by parent; not observed in this environment",
+    "requireLogIn": true,
+    "scope": "(Legacy) Pre-Production Deployments",
+    "confirmedOwnerCount": 1,
+    "pendingInvitations": false,
+    "automationBypassEmpty": true,
+    "exceptionsEmpty": true,
+    "optionsAllowlist": false,
+    "protectedSourcemaps": true,
+    "shareableLinksDirectlyVerified": false
+  },
+  "freshChecks": {
+    "deploymentCountBefore": 0,
+    "previewProtectionEnabled": true,
+    "hobbyPlanViaGitContext": true,
+    "projectInLinkedGitProjects": false,
+    "worktreeClean": true,
+    "productDiffFromAcceptedCommit": false
+  },
+  "uploadManifest": [
+    {
+      "file": "index.html",
+      "size": 755727,
+      "sha": "3752106ab7acc35151da7552e28e6664c5888f8c",
+      "sha256": "c9876ec927b8cbe3b5dd306a82ea9150f6f9be3cde1542d650d03f16c0ddcbf1",
+      "base64Length": 1007636
+    },
+    {
+      "file": "robots.txt",
+      "size": 26,
+      "sha": "63657cbb7d7086c56b0cd4e5c6999bb683664868",
+      "sha256": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
+      "base64Length": 36
+    },
+    {
+      "file": "vercel.json",
+      "size": 293,
+      "sha": "f31066c6b7e78461a8a7c17dd99350b6440ba5ab",
+      "sha256": "bc9283efd2dd80693ddb32d04ae62c59dd8e36be7f702e6074314bf7b1d09dec",
+      "base64Length": 392
+    }
+  ],
+  "uploads": [
+    {
+      "file": "index.html",
+      "startedAt": "2026-10-20T13:59:21.549Z",
+      "finishedAt": "2026-10-20T15:46:09.748Z",
+      "isError": false,
+      "returnedURL": true,
+      "note": "Response contained a transfer URL; withheld from audit and not fetched"
+    },
+    {
+      "file": "robots.txt",
+      "startedAt": "2026-10-20T15:46:09.748Z",
+      "finishedAt": "2026-10-20T15:46:10.949Z",
+      "isError": false,
+      "returnedURL": false,
+      "note": "Empty result object"
+    },
+    {
+      "file": "vercel.json",
+      "startedAt": "2026-10-20T15:46:10.949Z",
+      "finishedAt": "2026-10-20T15:46:11.901Z",
+      "isError": false,
+      "returnedURL": false,
+      "note": "Empty result object"
+    }
+  ],
+  "createDeployment": {
+    "attempts": 1,
+    "request": {
+      "teamId": "team_9Yr7DlwRIfTtq6lvfc30z6Ni",
+      "requestBody": {
+        "name": "research-radar",
+        "project": "prj_wL3PQdS6tpCAYxQ5u6lltdVqGVFU",
+        "files": [
+          {
+            "file": "index.html",
+            "sha": "3752106ab7acc35151da7552e28e6664c5888f8c",
+            "size": 755727
+          },
+          {
+            "file": "robots.txt",
+            "sha": "63657cbb7d7086c56b0cd4e5c6999bb683664868",
+            "size": 26
+          },
+          {
+            "file": "vercel.json",
+            "sha": "f31066c6b7e78461a8a7c17dd99350b6440ba5ab",
+            "size": 293
+          }
+        ],
+        "projectSettings": {
+          "framework": null,
+          "buildCommand": "",
+          "installCommand": "",
+          "outputDirectory": null,
+          "skipGitConnectDuringLink": true
+        },
+        "meta": {
+          "sourceCommit": "bbdb0b56609ece598fce8160b09f5ce39cec67ca",
+          "sourceRun": "39214475581",
+          "htmlSHA256": "c9876ec927b8cbe3b5dd306a82ea9150f6f9be3cde1542d650d03f16c0ddcbf1",
+          "purpose": "private-preview-acceptance"
+        }
+      }
+    },
+    "result": {
+      "id": "dpl_5LSVENBkwjww8QWm48fadcA1jQ7w",
+      "name": "research-radar",
+      "url": "research-radar-lah8ee4sm-lkdmkl.vercel.app",
+      "type": "LAMBDAS",
+      "state": "INITIALIZING",
+      "createdAt": 1792511222515,
+      "project": {
+        "id": "prj_wL3PQdS6tpCAYxQ5u6lltdVqGVFU",
+        "name": "research-radar",
+        "framework": null
+      },
+      "meta": {},
+      "alias": [
+        "research-radar-lkdmkl.vercel.app"
+      ],
+      "target": "production",
+      "regions": [
+        "iad1"
+      ],
+      "buildingAt": 1792511222515,
+      "readyState": "INITIALIZING"
+    },
+    "targetPolicy": "Official tool documentation said omit target for preview. Target was omitted; response unexpectedly returned production."
+  },
+  "cancel": {
+    "attempts": 1,
+    "httpStatus": 400,
+    "code": "deployment_not_canceled",
+    "message": "Could not cancel the deployment",
+    "retry": false
+  },
+  "pause": {
+    "attempts": 1,
+    "isError": false,
+    "responseResult": null
+  },
+  "postPauseDeployment": {
+    "id": "dpl_5LSVENBkwjww8QWm48fadcA1jQ7w",
+    "name": "research-radar",
+    "url": "research-radar-lah8ee4sm-lkdmkl.vercel.app",
+    "type": "LAMBDAS",
+    "state": "READY",
+    "createdAt": 1792511222515,
+    "project": {
+      "id": "prj_wL3PQdS6tpCAYxQ5u6lltdVqGVFU",
+      "name": "research-radar",
+      "framework": null
+    },
+    "meta": {},
+    "alias": [
+      "research-radar-rouge.vercel.app",
+      "research-radar-lkdmkl.vercel.app"
+    ],
+    "target": "production",
+    "regions": [
+      "iad1"
+    ],
+    "buildingAt": 1792511223539,
+    "ready": 1792511225673,
+    "readyState": "READY",
+    "aliasError": null
+  },
+  "postPauseProject": {
+    "id": "prj_wL3PQdS6tpCAYxQ5u6lltdVqGVFU",
+    "name": "research-radar",
+    "framework": null,
+    "accountId": "team_9Yr7DlwRIfTtq6lvfc30z6Ni",
+    "createdAt": 1792499450005,
+    "updatedAt": 1792511254082,
+    "nodeVersion": "24.x",
+    "live": false,
+    "latestDeployment": {
+      "id": "dpl_5LSVENBkwjww8QWm48fadcA1jQ7w",
+      "url": "research-radar-lah8ee4sm-lkdmkl.vercel.app",
+      "createdAt": 1792511222515,
+      "readyState": "READY",
+      "target": "production"
+    },
+    "domains": [
+      "research-radar-rouge.vercel.app",
+      "research-radar-lkdmkl.vercel.app"
+    ],
+    "passwordProtection": {
+      "enabled": false,
+      "deploymentType": null
+    },
+    "ssoProtection": {
+      "enabled": true,
+      "deploymentType": "preview"
+    },
+    "trustedIps": {
+      "enabled": false,
+      "deploymentType": null,
+      "addresses": [],
+      "protectionMode": null
+    }
+  },
+  "potentialExposure": {
+    "readyAt": "2026-10-20T15:47:05.673Z",
+    "pauseProjectUpdatedAt": "2026-10-20T15:47:34.082Z",
+    "secondsBetweenReadyAndPauseMetadata": 28.409,
+    "observedBeforePause": false,
+    "accessDuringInterval": "unknown"
+  },
+  "remoteContentHashVerified": false,
+  "authenticatedOwnerPageVerified": false,
+  "privatePreviewSuccess": false,
+  "newDeploymentAttemptsAfterMismatch": 0
+}
