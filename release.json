@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "sourceSHA": "e960ae0dd265e6672bc2e2d62592d75cc00cd80c",
+  "runId": "39586478654",
+  "fixedClock": "2026-10-21T18:44:01.203246+08:00",
+  "priceDateRange": [
+    "2026-10-20",
+    "2026-10-21"
+  ],
+  "dataSHA256": "56d4b70de4472e511fa7218d403015a5b4fdd66380da806917f74e8b96f19ca1",
+  "blockers": [],
+  "files": {
+    "index.html": "6ab083378976e4abc665489e44429c80eb4d8d20e6edf9f194e0df61db01a899",
+    "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        }
+      ]
+    }
+  ],
+  "buildCommand": "node verify-release.cjs",
+  "outputDirectory": "public",
+  "installCommand": "echo No dependencies",
+  "framework": null
+}
