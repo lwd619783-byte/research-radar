@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "sourceSHA": "e960ae0dd265e6672bc2e2d62592d75cc00cd80c",
-  "runId": "39586964878",
-  "fixedClock": "2026-10-21T18:47:38.256824+08:00",
+  "sourceSHA": "fd3ffa42560209ff9481b57698f5577de0730a8a",
+  "runId": "39592042092",
+  "fixedClock": "2026-10-21T19:29:05.643940+08:00",
   "priceDateRange": [
     "2026-10-20",
     "2026-10-21"
   ],
-  "dataSHA256": "bacb2abc1a391741445ecde0b0f3bb48177a4eca04314afcd464ee878ab112b7",
+  "dataSHA256": "9cc26988e1f9f033adac5751088887327f5e1f4228beb174f68f0d2cce50355c",
   "blockers": [],
   "files": {
-    "index.html": "f7ed9672e79145ee8e58b25dba1c22a4ecf689cc5a3ee98dbf949dffb5656a01",
+    "index.html": "18139dfc65b62a47d79f366533247e10a31d46d42141513347e251846f23bb54",
     "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1"
   }
 }
