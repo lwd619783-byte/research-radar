@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "state": "current",
+  "sourceSHA": "603181e76c4a08f406397836edb5b7c2d13faa13",
+  "runId": "39595872206",
+  "dataSHA256": "839e292bf6b02bed78f825e747243b70137a7e7ab04c3549f399a7267e8e28fa",
+  "generatedAt": "2026-10-21T19:59+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/39595872206",
+  "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
+  "changes": {
+    "mode": "previous_update",
+    "generatedAt": "2026-10-21T19:59+08:00",
+    "baselineAt": "2026-10-21T19:29+08:00",
+    "reports": [],
+    "calendar": [],
+    "restored": [],
+    "lost": [],
+    "prices": [],
+    "excludedPrices": 0,
+    "sameDatePrices": 42,
+    "pendingResearch": 32,
+    "baselineProof": {
+      "state": "success",
+      "productionSHA": "7fcfced10f5bd58c47f3f4c16313daf8678ea095",
+      "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/FVvGK6Mr5g6dVe96UBg9vKezsTVj",
+      "reportedAt": "2026-10-21T11:29:18Z",
+      "sourceSHA": "fd3ffa42560209ff9481b57698f5577de0730a8a",
+      "dataSHA256": "9cc26988e1f9f033adac5751088887327f5e1f4228beb174f68f0d2cce50355c"
+    }
+  }
+}
