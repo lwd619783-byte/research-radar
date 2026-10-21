@@ -1,4 +1,13 @@
-# Manual acceptance only; publication workflows remain disabled
+# Workflow execution scope
+
+**Current authorization (2026-10-21):** the owner requested automatic market
+refresh and Git publication while keeping All Deployments login protection.
+`radar-production.yml` implements the new scoped production path described in
+`radar/docs/PRODUCTION.md`. The prior manual acceptance workflow and both disabled
+legacy publication workflows remain unchanged. The notes below are historical
+execution records, not the current automation status.
+
+## Historical manual acceptance scope
 
 The original `radar-deploy.yml.disabled` and `radar-preview.yml.disabled`
 remain byte-for-byte unchanged and are not recognized as active workflows.

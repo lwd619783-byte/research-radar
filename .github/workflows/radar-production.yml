@@ -1,0 +1,28 @@
+{
+  "name": "Radar refresh and publish",
+  "on": {
+    "schedule": [{"cron": "15 23 * * 1-5"}, {"cron": "15 4 * * 1-5"}, {"cron": "35 8 * * 1-5"}],
+    "push": {"branches": ["fix/radar-truthfulness-2026-10-18"], "paths": ["radar/**", ".github/workflows/radar-production.yml", "audit/truthfulness-frozen.json"]},
+    "workflow_dispatch": {}
+  },
+  "permissions": {"contents": "read"},
+  "concurrency": {"group": "radar-production", "cancel-in-progress": false},
+  "jobs": {
+    "refresh": {
+      "if": "github.repository == 'lwd619783-byte/research-radar' && github.ref == 'refs/heads/fix/radar-truthfulness-2026-10-18' && github.run_attempt == 1",
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 20,
+      "permissions": {"contents": "write"},
+      "steps": [
+        {"uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262", "with": {"ref": "${{ github.sha }}", "fetch-depth": 0, "persist-credentials": false}},
+        {"name": "Verify source identity", "run": "test \"$(git rev-parse HEAD)\" = \"$GITHUB_SHA\""},
+        {"uses": "actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065", "with": {"python-version": "3.12"}},
+        {"name": "Full offline tests and frozen provenance checks", "run": "python -B radar/scripts/acceptance_probe.py --preflight"},
+        {"name": "Collect current data with bounded requests", "timeout-minutes": 16, "run": "python -B radar/scripts/acceptance_probe.py --out \"$RUNNER_TEMP/radar-current/receipt.json\""},
+        {"name": "Require fresh same-run data and all publication gates", "run": "python -B radar/scripts/production_release.py --bundle \"$RUNNER_TEMP/radar-current\" --out \"$RUNNER_TEMP/radar-release\"\ncd \"$RUNNER_TEMP/radar-release\"\nnode verify-release.cjs"},
+        {"name": "Retain checked snapshot for seven days", "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02", "with": {"name": "radar-production-${{ github.run_id }}", "path": "${{ runner.temp }}/radar-current/DATA.json\n${{ runner.temp }}/radar-current/index.html\n${{ runner.temp }}/radar-current/receipt.json\n${{ runner.temp }}/radar-current/manifest.json\n${{ runner.temp }}/radar-release/release.json", "retention-days": 7, "if-no-files-found": "error", "include-hidden-files": false}},
+        {"name": "Publish checked static files to production Git branch", "run": "bash radar/scripts/publish_release.sh", "env": {"GH_TOKEN": "${{ github.token }}"}}
+      ]
+    }
+  }
+}

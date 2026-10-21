@@ -278,9 +278,10 @@ class CacheAndContractTests(unittest.TestCase):
         self.assertEqual(friday_utc.astimezone(build.BJ).weekday(), 5)
         self.assertNotIn(5, range(0,5))  # cron weekday Friday = 5, currently absent
 
-    def test_only_authorized_manual_acceptance_workflow_is_active(self):
+    def test_only_authorized_workflows_are_active(self):
         workflows = ROOT/'.github/workflows'
-        self.assertEqual([p.name for p in workflows.glob('*.yml')], ['radar-interface-acceptance.yml'])
+        self.assertEqual(sorted(p.name for p in workflows.glob('*.yml')),
+                         ['radar-interface-acceptance.yml', 'radar-production.yml'])
         self.assertEqual(list(workflows.glob('*.yaml')), [])
         for name in ('radar-deploy', 'radar-preview'):
             original = subprocess.check_output([
