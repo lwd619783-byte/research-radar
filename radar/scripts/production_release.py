@@ -13,6 +13,8 @@ import shutil
 
 import acceptance_bundle as bundle
 import build
+import daily_changes
+import release_operations as operations
 
 SOURCE_BRANCH = 'fix/radar-truthfulness-2026-10-18'
 REPOSITORY = 'lwd619783-byte/research-radar'
@@ -40,7 +42,7 @@ def validate_release(D, receipt, now, env):
     bundle.validate_binding(D, receipt, clock)
 
 
-def prepare(source, destination, now=None, env=None):
+def prepare(source, destination, now=None, env=None, baseline=None):
     source, destination = Path(source), Path(destination)
     bundle.verify_bundle(source)
     D = json.loads((source/'DATA.json').read_text('utf-8'))
@@ -48,8 +50,24 @@ def prepare(source, destination, now=None, env=None):
     validate_release(D, receipt, now or dt.datetime.now(dt.UTC), env or os.environ)
     if destination.exists():
         raise ValueError('release_destination_exists')
+    history = []
+    if baseline is not None:
+        previous_manifest, previous_data = operations.verify_files(baseline)
+        proof = json.loads((Path(baseline)/'proof.json').read_text('utf-8'))
+        if (proof.get('state') != 'success' or proof.get('dataSHA256') != previous_manifest['dataSHA256']
+                or proof.get('sourceSHA') != previous_manifest['sourceSHA']):
+            raise ValueError('baseline_proof_mismatch')
+        operations.sha(proof.get('productionSHA'))
+        old_history = json.loads((Path(baseline)/'history.json').read_text('utf-8'))['days'] if previous_manifest['schemaVersion'] == 2 else []
+        history = daily_changes.history_with(daily_changes.project(previous_data, proof), old_history)
+    run_id = receipt['execution']['GITHUB_RUN_ID']
+    info = {'schemaVersion': 1, 'state': 'current', 'sourceSHA': receipt['execution']['GITHUB_SHA'],
+            'runId': run_id, 'dataSHA256': bundle.data_digest(D), 'generatedAt': D['meta']['generatedAt'],
+            'runUrl': f'https://github.com/{REPOSITORY}/actions/runs/{run_id}',
+            'workflowUrl': operations.WORKFLOW, 'changes': daily_changes.summarize(D, history)}
+    bundle.check_sensitive(info)
     public = destination/'public'
-    build.render(D, public)
+    build.render(D, public, info)
     page = public/'index.html'
     html = page.read_text('utf-8')
     old = '当前为验收版本，自动刷新与发布未启用。'
@@ -57,6 +75,8 @@ def prepare(source, destination, now=None, env=None):
         raise ValueError('production_notice_slot_mismatch')
     html = html.replace(old, '行情由定时任务更新，数据检查通过后自动发布；各字段以标注日期为准。')
     page.write_text(html, encoding='utf-8', newline='\n')
+    (public/'version.json').write_bytes(bundle.encoded(info))
+    (destination/'history.json').write_bytes(bundle.encoded({'schemaVersion': 1, 'days': history}))
     if bundle.embedded_data(page.read_bytes()) != D:
         raise ValueError('published_data_changed')
     config = json.loads((public/'vercel.json').read_text('utf-8'))
@@ -65,10 +85,11 @@ def prepare(source, destination, now=None, env=None):
                   installCommand='echo No dependencies', framework=None)
     (destination/'vercel.json').write_bytes(bundle.encoded(config))
     shutil.copyfile(Path(__file__).with_name('verify-release.cjs'), destination/'verify-release.cjs')
-    manifest = {'schemaVersion': 1, 'sourceSHA': receipt['execution']['GITHUB_SHA'],
+    manifest = {'schemaVersion': 2, 'sourceSHA': receipt['execution']['GITHUB_SHA'],
                 'runId': receipt['execution']['GITHUB_RUN_ID'], 'fixedClock': receipt['fixedClock'],
                 'priceDateRange': D['meta'].get('priceDateRange', []),
                 'dataSHA256': bundle.data_digest(D), 'blockers': [],
+                'historySHA256': bundle.digest((destination/'history.json').read_bytes()),
                 'files': {p.name: bundle.digest(p.read_bytes()) for p in public.iterdir()}}
     bundle.check_sensitive(manifest)
     (destination/'release.json').write_bytes(bundle.encoded(manifest))
@@ -79,5 +100,6 @@ if __name__ == '__main__':
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--bundle', required=True, type=Path)
     ap.add_argument('--out', required=True, type=Path)
+    ap.add_argument('--baseline', type=Path)
     args = ap.parse_args()
-    print(json.dumps(prepare(args.bundle, args.out), ensure_ascii=False))
+    print(json.dumps(prepare(args.bundle, args.out, baseline=args.baseline), ensure_ascii=False))

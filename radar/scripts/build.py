@@ -353,15 +353,16 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
     return out, stale, missing
 
 
-def render(D: dict, out_dir: Path) -> Path:
+def render(D: dict, out_dir: Path, operations=None) -> Path:
     site = RADAR / "site"
     h = (site / "index.html").read_text("utf-8")
     css = (site / "style.css").read_text("utf-8")
     js = (site / "app.js").read_text("utf-8")
     data = json.dumps(D, ensure_ascii=False, allow_nan=False, separators=(",", ":")).replace("</", "<\\/")
+    operations_json = json.dumps(operations, ensure_ascii=False, allow_nan=False, separators=(",", ":")).replace("</", "<\\/")
     title = D["meta"].get("title") or "投研雷达"
     h = h.replace("<title>投研雷达 · Alpha Radar</title>", f"<title>{title} · Alpha Radar</title>")
-    h = h.replace("/*__CSS__*/", css).replace("/*__DATA__*/", data).replace("/*__JS__*/", js)
+    h = h.replace("/*__CSS__*/", css).replace("/*__DATA__*/", data).replace("/*__OPERATIONS__*/", operations_json).replace("/*__JS__*/", js)
     out_dir.mkdir(parents=True, exist_ok=True)
     p = out_dir / "index.html"
     p.write_text(h, "utf-8")

@@ -1,5 +1,6 @@
 (()=>{'use strict';
 const D=DATA,html=document.documentElement;
+const OP=typeof OPERATIONS==='undefined'?null:OPERATIONS;
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>Array.from(r.querySelectorAll(s));
 const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:v}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const S={theme:store.get('ar-theme','dark'),conv:store.get('ar-conv','cn'),metric:'r20',view:'map',indF:'all',mktF:'all',level:'all',sel:null,cpInd:null,sort:{k:'r20',d:-1},range:'6m',drawer:null};
@@ -114,6 +115,24 @@ function researchNotice(review,week=''){return`<p class="review-note">${esc(rese
 const researchBadge=review=>`<small class="review-state">${researchText(review).includes('已核实')?'已核实':'待核'}</small>`;
 const eventPill=c=>`<span class="pill" data-co="${c.id}" style="--ic:${IC(c.ind)}"><i></i><span>${esc(c.short)}</span><em>${eventLabel(c)}</em></span>`;
 
+/* ---------- release and evidence helpers ---------- */
+function safeSourceUrl(value){try{const u=new URL(value);return u.protocol==='https:'&&!u.username&&!u.password?u.href:''}catch(e){return''}}
+function sourceAnchor(url,label){const href=safeSourceUrl(url);return href?`<a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(label)} ↗</a>`:'<span class="muted">来源链接缺失 · 待核</span>'}
+function providerUrl(symbol,source,history=false){
+  if(source==='yahoo'&&symbol)return`https://finance.yahoo.com/quote/${encodeURIComponent(symbol)}/${history?'history/':''}`;
+  if(source==='tencent'&&symbol){const s=symbol.toUpperCase();let code=s.endsWith('.SS')?'sh'+s.slice(0,-3):s.endsWith('.SZ')?'sz'+s.slice(0,-3):s.endsWith('.HK')?'hk'+(s.slice(0,-3).match(/^\d+$/)?s.slice(0,-3).padStart(5,'0'):s.slice(0,-3)):s==='^HSI'?'hkHSI':null;return code?`https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=${encodeURIComponent(code)},day,,,10,`:''}return'';
+}
+function scheduledDue(generated,now=Date.now()){
+  const start=Date.parse(generated);if(!Number.isFinite(start))return true;
+  // Beijing schedule, with a one-hour execution/delay allowance; weekends are
+  // explicitly respected. This is a job deadline, not an exchange holiday claim.
+  const bj=new Date(start+8*3600e3),day=Date.UTC(bj.getUTCFullYear(),bj.getUTCMonth(),bj.getUTCDate());
+  for(let n=0;n<9;n++){const base=day+n*864e5,dow=new Date(base).getUTCDay();const slots=[];
+    if(dow>=2&&dow<=6)slots.push(435);if(dow>=1&&dow<=5)slots.push(735,995);
+    for(const minute of slots){const at=base+minute*60e3-8*3600e3;if(at>start)return now>at+3600e3}
+  }return false;
+}
+function validVersion(v){return v&&v.schemaVersion===1&&['current','failed'].includes(v.state)&&/^[a-f0-9]{64}$/.test(v.dataSHA256||'')&&/^[a-f0-9]{40}$/.test(v.sourceSHA||'')&&/^\d+$/.test(v.runId||'')}
 /* ---------- data ---------- */
 const CO=D.companies,byId={},byInd={},byCp={};
 function perfSig(c){if(c.financialPartial)return{k:'na',l:'不评分',r:0};if(!c.financialSignalEligible)return{k:'na',l:'待核/不适用',r:0};const g=fin(c.earng)?c.earng:c.revg;if(!fin(g))return{k:'na',l:'—',r:0};if(g>=.5)return{k:'p1',l:'高增',r:4};if(g>=.1)return{k:'p2',l:'增长',r:3};if(g>-.1)return{k:'p3',l:'平稳',r:2};return{k:'p4',l:'下滑',r:1}}
@@ -246,12 +265,12 @@ function renderIndDetail(){
   const el=$('#indDetail');
   el.innerHTML=`<div class="fade-swap"><div class="dt-h"><div><div class="eyebrow">#${String(i+1).padStart(2,'0')} · ${lv.l}</div><h3>${esc(d.name)}</h3></div><div class="dt-score"><b class="num">${d.total}</b><span> / 20</span></div></div>
   <div class="hint">人工观点与评分</div>${researchNotice(d.review)}
-  <div class="dt-body"><div>${radarSVG()}</div><div class="rstats">${rs?rs.map(r=>`<div class="rstat"><div class="l">${r[0]} · 有效 ${r[2]}</div><div class="v num ${ud(r[1])}">${pct(r[1])}</div></div>`).join('')+`<div class="hint">分母为本行业 ${cos.length} 家 · 各项仅计有效样本</div>`:`<div class="rstat"><div class="l">龙头数据</div><div class="v" style="font-size:13px;font-weight:500;color:var(--text-2)">该行业暂未拆解卡点与龙头，低频跟踪即可</div></div>`}</div></div>
+  <div class="dt-body"><div>${radarSVG()}</div><div class="rstats">${rs?rs.map(r=>`<div class="rstat"><div class="l">${r[0]} · 有效 ${r[2]}</div><div class="v num ${ud(r[1])}">${pct(r[1])}</div></div>`).join('')+`<div class="hint">分母为本行业 ${cos.length} 家 · 各项仅计有效样本</div>`:`<div class="rstat"><div class="l">龙头数据</div><div class="v" style="font-size:13px;font-weight:500;color:var(--text-2)">仅研究观察，尚未接公司数据</div></div>`}</div></div>
   <div class="blk"><div class="bl">${ICON.target}一句话逻辑</div><p>${esc(d.logic)}</p></div>
   <div class="blk"><div class="bl">${ICON.bolt}原研究信号 · 核验状态见上方</div><p>${esc(d.signal)}</p></div>
   <div class="blk risk"><div class="bl">${ICON.alert}主要风险</div><p>${esc(d.risk)}</p></div>
   <div class="blk"><div class="bl">${ICON.grid}代表公司</div><div class="chips">${reps.map(r=>{const c=findCo(r);return c?`<button class="chip link" data-co="${c.id}">${esc(r)}</button>`:`<span class="chip">${esc(r)}</span>`}).join('')}</div></div>
-  <div class="dt-actions">${cps.length?`<button class="btn primary" data-gocp="${esc(d.name)}">查看卡点地图 ${ICON.arrow}</button>`:''}${d.url?`<a class="btn" href="${esc(d.url)}" target="_blank" rel="noopener">${ICON.book}知识库笔记 ${ICON.ext}</a>`:''}</div></div>`;
+  <div class="dt-actions">${cps.length?`<button class="btn primary" data-gocp="${esc(d.name)}">查看卡点地图 ${ICON.arrow}</button>`:''}${d.url?`<a class="btn" href="${esc(d.url)}" target="_blank" rel="noopener">${ICON.book}知识库笔记 ${ICON.ext}</a>`:'<span class="hint">研究笔记来源未接通 · 待核</span>'}</div></div>`;
   animateRadar(d.s)}
 function selectInd(name,scroll){S.sel=name;$$('#indList .ir').forEach(r=>r.classList.toggle('sel',r.dataset.pick===name));renderIndDetail();
   if(KEY_IND.indexOf(name)>=0&&S.cpInd!==name){S.cpInd=name;setSeg($('#cpSeg'),name);renderFlow()}
@@ -343,6 +362,13 @@ const FIN_BASIS={single_quarter:'单季',half_year:'半年累计',cumulative:'�
 function finLabel(c){const f=c.provenance?.financial||{};if(f.status==='verified_partial')return[c.period,FIN_BASIS[f.basis],f.currency,f.accounting_basis,'部分披露 · 不评分'].join(' · ');if(f.status!=='verified')return['财务待核实',f.basis==='half_year'?'半年累计':'',f.report_status==='preliminary'?'初步结果':''].filter(Boolean).join(' · ');return[c.period,FIN_BASIS[f.basis]||'口径待核',f.currency,(f.accounting_basis||'').split(';')[0],f.report_status==='preliminary'?'初步结果':f.report_status==='revenue_only'?'仅收入':f.profit_comparison==='turnaround'?'扭亏·利润同比不适用':f.profit_comparison==='one_off'?'利润含一次性项目':''].filter(Boolean).join(' · ')}
 function finDetail(c){const f=c.provenance?.financial||{};return[finLabel(c),f.accounting_basis,f.profit_metric,f.revenue_scope,f.profit_scope,f.margin_scope,f.source_name,`披露 ${f.published_at||'未知'} · 核验 ${f.verified_at||'未知'}`,...(f.source_urls||[]),...(f.conditions||[])].filter(Boolean).join('；')}
 function peLabel(c){return 'PE(TTM)'+(peStatusText(c)?' · '+peStatusText(c):'')}
+function financialEvidence(c){const f=c.provenance?.financial||{},urls=[...new Set([...(f.source_urls||[]),f.source_url].filter(Boolean))].filter(safeSourceUrl);
+  const fields=[['所属期与状态',finLabel(c)],['披露日 / 核验日',`${f.published_at||'缺失'} / ${f.verified_at||'缺失'}`],['原始来源',f.source_name],['会计口径',f.accounting_basis],['收入 / 利润口径',[f.revenue_scope,f.profit_scope,f.profit_metric].filter(Boolean).join('；')],['毛利率口径',f.margin_scope],['计算说明',f.calculation_note],['核验备注',f.review_note]];
+  return`<details class="evidence-card financial-evidence"><summary>财务证据 · ${f.status==='verified'?'已核实':f.status==='verified_partial'?'部分披露 · 不评分':'待核'} · ${urls.length} 份原文</summary><dl>${fields.filter(x=>x[1]).map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl><div class="evidence-links">${urls.length?urls.map((u,i)=>sourceAnchor(u,`官方原文 ${i+1}`)).join(''):'原文链接缺失 · 待核'}</div>${f.conditions?.length?`<ul>${f.conditions.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}<p>链接指向原始披露；保留所列核验日期，不代表本次行情刷新重新核验财报。</p></details>`;
+}
+function marketEvidence(c){const p=c.provenance||{},d=p.daily||{},v=p.valuation||{},f=v.fx||{};const fxSymbol=c.cur==='EUR'?'EURUSD=X':c.cur+'=X';
+  return`<details class="evidence-card market-evidence"><summary>行情与估值来源 · ${esc(c.priceAsOf||'日期缺失')}</summary><dl><dt>展示报价</dt><dd>${esc(timeDetail(c))} · ${sourceAnchor(providerUrl(c.sym,c.priceSource),'报价来源')}</dd><dt>完成日线 / 收益口径</dt><dd>${esc(d.asOf||'日期缺失')} · ${esc(d.returnBasis||'口径待核')} · ${sourceAnchor(providerUrl(c.sym,d.src,true),'日线来源')}</dd><dt>估值</dt><dd>${esc(v.asOf||'日期缺失')} · ${esc(peLabel(c))} · ${sourceAnchor(providerUrl(c.sym,v.source),'估值来源')}</dd><dt>美元折算</dt><dd>${c.cur==='USD'?'原币为 USD，无需折算':`${esc(f.asOf||'日期缺失')} · ${!f.asOf?'汇率缺失':c.mcapEstimated?'跨日汇率估算':'同日汇率'} · ${sourceAnchor(providerUrl(fxSymbol,f.src,true),'汇率来源')}`}</dd></dl><p>行情链接打开供应商当前页面或接口，并非冻结历史快照。计算仍以本页标注日期为准；链接可打开不等于缺项已补齐。</p></details>`;
+}
 function rangeComplete(c,r){if(c.t.length<2)return false;const last=c.t[c.t.length-1],cut=r==='ytd'?Date.UTC(new Date(last).getUTCFullYear(),0,1):last-({'1m':31,'3m':92,'6m':183,'1y':366,'2y':731}[r]||0)*864e5;return c.t[0]<=cut}
 const ORDER=CO.map(c=>c.id);
 function openDrawer(id){const c=byId[id];if(!c)return;S.drawer=id;const cp=CP.find(x=>x.name===c.cp),k=ORDER.indexOf(id);hideTip();
@@ -355,11 +381,12 @@ function openDrawer(id){const c=byId[id];if(!c)return;S.drawer=id;const cp=CP.fi
   <div class="mgrid">${[['近5日','r5'],['近20日','r20'],['近60日','r60'],['年初至今','ytd'],['距52周高点','dd52']].map(([label,key])=>`<div class="mt"><div class="l">${label}</div><div class="v num ${ud(c[key])}">${pct(c[key])}</div>${metricGap(c,key)?`<div class="muted" style="font-size:10px">${esc(metricGap(c,key))}</div>`:''}</div>`).join('')}</div>
   <div class="dw-sec" data-tip="${esc(finDetail(c))}">近期财务<span>${esc(finLabel(c))}</span></div>
   <div class="mgrid four">${[['营收同比',pct(c.revg),ud(c.revg)],['净利同比',pct(c.earng),ud(c.earng)],['毛利率',fin(c.gm)?(c.gm*100).toFixed(1)+'%':'—',''],[peLabel(c),fin(c.pe)?c.pe.toFixed(1):'—','']].map(m=>`<div class="mt"><div class="l">${m[0]}</div><div class="v num ${m[2]}">${m[1]}</div></div>`).join('')}</div>
+  ${financialEvidence(c)}${marketEvidence(c)}
   ${c.flash?`<div class="flash-box">${ICON.bolt}<div><div class="t">业绩快讯 · 待核实</div><p>${hlDates(esc(earningsText(c.flash)))}</p></div></div>`:''}
   ${c.view?`<div class="view-box"><div class="t">一句话看点 · 待核</div><p>${esc(c.view)}</p></div>`:''}
   <div class="dw-next">${ICON.cal}${c.next?`财报日期 <b>${esc(c.next)} ${wd(c.next)}</b><span class="cd">${eventCountdown(c.next)}</span>`:'财报日期待定'}</div>
   <div class="review-note earnings-evidence"><b>${eventLabel(c)}</b> · ${esc(c.earnings?.timezone||'时区待核')}<br>披露 ${esc(c.earnings?.published_at||'待核')} · 核验 ${esc(c.earnings?.verified_at||'日期缺失')}${c.earnings?.time_note?'<br>'+esc(c.earnings.time_note):''}${c.earnings?.source_url?`<br><a href="${esc(c.earnings.source_url)}" target="_blank" rel="noopener">官方日期来源 ↗</a>`:''}</div>
-  <div class="dw-actions">${c.url?`<a class="btn primary" href="${esc(c.url)}" target="_blank" rel="noopener">${ICON.book}知识库笔记 ${ICON.ext}</a>`:''}<button class="btn${c.url?'':' primary'}" data-gocp="${esc(c.ind)}" data-cpname="${esc(c.cp)}">查看所在卡点 ${ICON.arrow}</button></div></div>`;
+  <div class="dw-actions">${c.url?sourceAnchor(c.url,'知识库笔记'):'<span class="hint">研究笔记来源未接通 · 待核</span>'}<button class="btn${c.url?'':' primary'}" data-gocp="${esc(c.ind)}" data-cpname="${esc(c.cp)}">查看所在卡点 ${ICON.arrow}</button></div></div>`;
   seg($('#rangeSeg'),[{v:'1m',l:'1月'},{v:'3m',l:'3月'},{v:'6m',l:'6月'},{v:'ytd',l:'年初至今'},{v:'1y',l:'1年'},{v:'2y',l:'2年'}].map(o=>({...o,l:rangeComplete(c,o.v)?o.l:o.l+'·不足'})),S.range,v=>{S.range=v;drawChart(c)});
   dr.classList.add('on');dr.setAttribute('aria-hidden','false');$('#mask').classList.add('on');document.body.style.overflow='hidden';
   requestAnimationFrame(()=>{drawChart(c);moveThumb($('#rangeSeg'))})}
@@ -442,6 +469,27 @@ $('#convBtn').addEventListener('click',()=>{S.conv=S.conv==='cn'?'intl':'cn';sto
 $('#icSearch').innerHTML=ICON.search;$('#icSearch2').innerHTML=ICON.search;
 
 /* ---------- footer ---------- */
+/* ---------- publication status and factual changes ---------- */
+let remoteVersion=null,versionError=false,versionBusy=false;
+function renderReleaseStatus(){const box=$('#releaseStatus');if(!box)return;if(!OP){box.innerHTML='<span>本地验收快照 · 线上发布结果未核对</span>';return}
+  const changed=remoteVersion&&(remoteVersion.dataSHA256!==OP.dataSHA256||remoteVersion.sourceSHA!==OP.sourceSHA);
+  const state=remoteVersion||OP,failed=state.state==='failed',overdue=scheduledDue(OP.generatedAt);
+  const stages={preflight:'测试或数据契约',baseline:'历史上线版本核对',collect:'行情采集',prepare:'数据发布检查',publish:'Git 发布',deployment:'Vercel 上线核对'};
+  const checked=remoteVersion&&!changed&&/^[a-f0-9]{40}$/.test(remoteVersion.productionSHA||'');
+  box.classList.toggle('attention',failed||overdue||versionError);box.classList.toggle('has-new',!!changed);
+  box.innerHTML=`<div><b>${failed?'本次更新失败 · '+(stages[state.failedStage]||'结果待核'):changed?'发现新的线上快照':'当前上线快照'}</b><p>当前页面数据：${esc(OP.generatedAt.replace('T',' '))}${failed?` · 保留已核实数据，失败尝试 ${esc(state.attemptedAt||'时间待核')}`:''}</p><p>${checked?'线上版本已核对 · '+esc(remoteVersion.productionSHA.slice(0,8)):versionError?'暂无法核对新版本，请检查网络或登录会话':remoteVersion?'构建提交号待核':'正在核对线上版本'}${overdue?' · 已超过下一次计划更新及 1 小时宽限，请查看发布记录':''}</p></div><div class="release-actions">${sourceAnchor(state.runUrl,'本次发布记录')}${sourceAnchor(OP.workflowUrl,'所有更新与失败')}<button class="btn" id="refreshSnapshot" ${changed?'':'hidden'}>刷新查看新版</button></div>`;
+  $('#refreshSnapshot').addEventListener('click',()=>location.reload());
+}
+async function checkVersion(){if(!OP||versionBusy||document.hidden||!/^https?:$/.test(location.protocol))return;versionBusy=true;const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);
+  try{const response=await fetch('/version.json',{cache:'no-store',credentials:'same-origin',redirect:'error',signal:controller.signal});if(!response.ok||!(response.headers.get('content-type')||'').includes('json'))throw Error('version unavailable');const v=await response.json();if(!validVersion(v))throw Error('version invalid');remoteVersion=v;versionError=false}catch(e){versionError=true}finally{clearTimeout(timer);versionBusy=false;renderReleaseStatus()}
+}
+function renderChanges(){const box=$('#dailyChanges'),s=OP?.changes;if(!box)return;
+  if(!s||s.mode==='unavailable'){box.innerHTML='<div class="bl">每日变化摘要</div><p class="hint">没有可核实的历史快照，暂不计算变化。保留缺失标记，等待成功上线记录。</p>';return}
+  const price=s.prices||[],report=s.reports||[],calendar=s.calendar||[],restored=s.restored||[],lost=s.lost||[];
+  const rows=[...report.map(x=>`${x.name}：${x.label}，${x.before||'原期别缺失'} → ${x.after||'期别缺失'}${x.status==='verified_partial'?'（部分披露）':''}`),...calendar.map(x=>`${x.name}：财报日期 ${x.before||'未定'} → ${x.after||'未定'}（${({confirmed:'官方确认',estimated:'预计',unverified:'待核'})[x.status]||'待核'}）`),...restored.map(x=>`${x.symbol} · ${x.metric}：缺项或部分覆盖恢复为完整`),...lost.map(x=>`${x.symbol} · ${x.metric}：完整变为${x.status==='partial'?'部分覆盖':'缺失或待核'}`)];
+  box.innerHTML=`<div class="changes-head"><div><div class="bl">每日变化摘要</div><p class="hint">${s.mode==='previous_day'?'较前次记录日的最后成功快照':'首日基准 · 较上次成功更新'} ${esc(s.baselineAt.replace('T',' '))}</p></div><span class="tag">仅事实变化</span></div><div class="change-counts">${[['财报更新',report.length],['日历变更',calendar.length],['缺项恢复',restored.length],['覆盖下降',lost.length]].map(([label,n])=>`<span><b class="num">${n}</b>${label}</span>`).join('')}</div><p class="hint">${price.length} 家有新完成日线；${s.sameDatePrices} 家仍为同一交易日；${s.excludedPrices} 家因来源、口径或缺值未比较。${s.pendingResearch} 项周观点、行业或卡点评分继续待核，不随行情刷新。</p>${price.length?`<div class="change-prices"><span class="hint">新完成交易日的最近一日涨跌（复权，按绝对幅度列前 5 家）</span>${price.slice(0,5).map(x=>`<button class="change-company" data-co="${esc(x.id)}"><span>${esc(x.name)}<small>${esc(x.beforeDate)} → ${esc(x.afterDate)}</small></span><b class="num ${ud(x.change)}">${pct(x.change,2)}</b></button>`).join('')}</div>`:'<p class="hint">暂无可比的新完成日线；盘中报价变化不计入日线摘要。</p>'}<details class="change-details"><summary>查看变化明细与比较口径</summary>${rows.length?`<ul>${rows.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'<p>财报、日历和覆盖状态均未记录新变化；这不表示缺项或待核观点已经核实。</p>'}<p>基准保存最近 8 个有成功上线记录的日期。收益直接使用各公司已完成日线的最近一日复权涨跌，不以两个盘中价或未复权价格相除；若中间跨多个交易日，不表示整段累计收益。财报跨期只记录期别与证据更新。</p></details>`;
+}
+function sharedSources(){const fx=D.meta.fxProvenance||{};return`<details class="evidence-card" id="marketSources"><summary>指数、汇率与比值来源</summary><ul>${D.indices.map(x=>`<li>${esc(x.name)} · ${esc(x.asOf||'日期缺失')} · ${phaseText(x.phase)} · ${sourceAnchor(providerUrl(x.symbol,x.source,true),x.source||'来源待核')}</li>`).join('')}${Object.entries(fx).map(([cur,x])=>`<li>${esc(cur)} 汇率 · ${esc(x.asOf||'日期缺失')} · ${sourceAnchor(providerUrl(cur==='EUR'?'EURUSD=X':cur+'=X',x.src,true),x.src||'来源待核')}</li>`).join('')}<li>创业板 / 红利比值 · ${sourceAnchor(providerUrl('399006.SZ',D.ratio?.provenance?.cyb?.src,true),'创业板来源')} · ${sourceAnchor(providerUrl('000922.SS',D.ratio?.provenance?.hl?.src,true),'红利来源')} · 同步时刻仍待核</li></ul><p>供应商页面与接口返回当前数据；本页日期和阶段标记决定使用口径，来源入口不构成历史快照证明。</p></details>`}
 function renderFoot(){
   const gaps=CO.flatMap(c=>['pe','r60','ytd','dd52'].filter(k=>metricGap(c,k)).map(k=>`${c.name} ${k==='pe'?'PE':PL[k]}：${metricGap(c,k)}`));
   const partial=CO.filter(c=>c.financialPartial).map(c=>c.name+' '+c.period+'：部分披露，不参排');
@@ -449,10 +497,10 @@ function renderFoot(){
   const estimated=CO.filter(c=>c.mcapEstimated&&fin(c.mcapUSD)),fxDates=[...new Set(estimated.map(c=>c.provenance?.valuation?.fx?.asOf||'日期未知'))];
   const detail=[...gaps,...partial,...unknown,estimated.length?`${estimated.length} 家美元市值使用跨日 FX 估算（FX 日期 ${fxDates.join('、')}），≈ 数值的原币市值见列表与详情`:'',D.ratio&&!D.ratio.simultaneousObservationProven?`比值保留 ${D.ratio.asOf||'原日期未知'}，同步时刻未核`:''].filter(Boolean).map(x=>`<li>${esc(x)}</li>`).join('');
   $('#foot').innerHTML=`<div class="foot-grid">
-  <div><div class="bl">${ICON.grid}数据口径</div><p>行情：Yahoo Finance（备用：腾讯财经），截至 ${ASOFL}${STALE.length?`，${STALE.length} 只日线沿用缓存`:''}；比值：腾讯财经指数月线。财务：按公司所列期别、币种及会计口径；单季中位数只含已核实正式单季。缺失、半年累计、初步结果与扭亏不作为普通季度增长信号；详情悬停查看来源与核验日期。业绩快讯待核实。价格与估值按各自最新可得报价；5/20/60日、YTD、距52周高按各市场最新完成日线，详见每行时点。市值保留本币值；美元折算优先同日报价，缺少同日汇率时仅允许已证明完成、早于估值且相差不超过4个日历日的汇率，并标为估算（汇率收讫不超过36小时）。详情列来源和日期；缺失用占位面积。</p></div>
+  <div><div class="bl">${ICON.grid}数据口径</div><p>行情：Yahoo Finance（备用：腾讯财经），截至 ${ASOFL}${STALE.length?`，${STALE.length} 只日线沿用缓存`:''}；比值：腾讯财经指数月线。财务：按公司所列期别、币种及会计口径；单季中位数只含已核实正式单季。缺失、半年累计、初步结果与扭亏不作为普通季度增长信号；展开公司详情中的财务证据，查看原文链接与核验日期。业绩快讯待核实。价格与估值按各自最新可得报价；5/20/60日、YTD、距52周高按各市场最新完成日线，详见每行时点。市值保留本币值；美元折算优先同日报价，缺少同日汇率时仅允许已证明完成、早于估值且相差不超过4个日历日的汇率，并标为估算（汇率收讫不超过36小时）。详情列来源和日期；缺失用占位面积。</p></div>
   <div><div class="bl">${ICON.target}信号规则</div><p>业绩（已核实正式单季、三项齐备且利润可比）：高增 ≥ 50% · 增长 ≥ 10% · 平稳 &gt; −10% · 其余为下滑。<br>股价：走强 = 近20日 ≥ +5%；深度回调 = 距52周高点 ≤ −40%，可与走强并存；回调 = 近20日 ≤ −10%；其余为震荡。深度回调家数直接按距高点条件统计。</p><p>有效样本按当前筛选和指标计算；缺值、不参排项不填 0、不参与均值/中位数，升降序均置底。走势图为收盘折线。</p></div>
   <div><div class="bl">${ICON.alert}说明</div><p>评分与观点由仓库 radar/data 维护，当前为验收版本，自动刷新与发布未启用。本页仅用于研究跟踪，不构成投资建议。</p>${REPO?`<a class="btn" href="${esc(REPO)}" target="_blank" rel="noopener">打开 GitHub 仓库 ${ICON.ext}</a>`:''}</div></div>
-  <details id="dataDetails"><summary>数据状态与缺项说明 · ${esc(dataStateLabel(D.meta.coverage))}</summary><p>暂未取得表示当前快照没有有效值，不据此推断接口失败。访问受阻仅按已记录的拒绝标记；已知不适用不计为失败。各项保留原观察时间和来源。</p><ul>${detail}</ul></details>
+  ${sharedSources()}<details id="dataDetails"><summary>数据状态与缺项说明 · ${esc(dataStateLabel(D.meta.coverage))}</summary><p>暂未取得表示当前快照没有有效值，不据此推断接口失败。访问受阻仅按已记录的拒绝标记；已知不适用不计为失败。各项保留原观察时间和来源。</p><ul>${detail}</ul></details>
   <div class="foot-b">投研雷达 · ALPHA RADAR · 更新于 ${D.meta.generatedAt?md(D.meta.generatedAt.slice(0,10))+' '+D.meta.generatedAt.slice(11,16):TODAY} · 快捷键：${isMac?'⌘K':'Ctrl K'} 搜索 · ←/→ 切换公司 · Esc 关闭</div>`;
   $('#sigLegend').innerHTML=`<span>业绩：<span class="sg p1">高增</span> ≥50% <span class="sg p2">增长</span> ≥10% <span class="sg p3">平稳</span> <span class="sg p4">下滑</span></span><span>股价：<span class="sg x1">走强</span> 近20日≥+5% <span class="sg x3">回调</span> ≤−10% <span class="sg x4">深度回调</span> 距高点≤−40% <span class="sg x2">震荡</span></span>`}
 
@@ -475,7 +523,8 @@ seg($('#viewSeg'),[{v:'map',l:'热力图'},{v:'table',l:'列表'}],'map',v=>{S.v
 seg($('#metricSeg'),METRICS.map(m=>({v:m.k,l:m.k==='dd52'?'距高点':m.l})),S.metric,v=>{S.metric=v;if(COLS.some(c=>c.k===v))S.sort={k:v,d:v==='dd52'?1:-1};renderLeaders()});
 seg($('#indSeg'),[{v:'all',l:'全部行业'}].concat(KEY_IND.map(n=>({v:n,l:n}))),'all',v=>{S.indF=v;renderLeaders()});
 seg($('#mktSeg'),['all','A股','港股','美股','其他'].map(v=>({v,l:v==='all'?'全部市场':v})),'all',v=>{S.mktF=v;renderLeaders()});
-renderLeaders();renderCal();renderFoot();initObservers();setNav('overview');
+renderLeaders();renderCal();renderFoot();renderReleaseStatus();renderChanges();checkVersion();initObservers();setNav('overview');
+setInterval(()=>{renderReleaseStatus();checkVersion()},120000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkVersion()});
 let rt=0;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{$$('.seg').forEach(moveThumb);if(S.view==='map')renderMap();if(S.drawer)drawChart(byId[S.drawer]);const a=$('#nav a.active');if(a)setNav(a.dataset.sec)},120)});
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{$$('.seg').forEach(moveThumb);const a=$('#nav a.active');if(a)setNav(a.dataset.sec)});
 })();

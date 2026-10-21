@@ -65,9 +65,14 @@ class ProductionTests(unittest.TestCase):
                          ['15 23 * * 1-5', '15 4 * * 1-5', '35 8 * * 1-5'])
         steps = w['jobs']['refresh']['steps']
         self.assertFalse(steps[0]['with']['persist-credentials'])
-        self.assertTrue(all('GH_TOKEN' not in s.get('env', {}) for s in steps[:-1]))
-        self.assertEqual(steps[-1]['env'], {'GH_TOKEN': '${{ github.token }}'})
-        self.assertIn('production_release.py', steps[5]['run'])
+        by_id = {s['id']: s for s in steps if 'id' in s}
+        self.assertEqual({s['id'] for s in steps if 'GH_TOKEN' in s.get('env', {})}, {'baseline', 'publish', 'result'})
+        self.assertTrue(all('GH_TOKEN' not in by_id[k].get('env', {}) for k in ('preflight','collect','prepare')))
+        self.assertIn('production_release.py', by_id['prepare']['run'])
+        self.assertIn('--check-only', by_id['prepare']['run'])
+        self.assertEqual(by_id['result']['if'], 'always()')
+        self.assertEqual(steps[-1]['if'], 'always()')
+        self.assertEqual(w['jobs']['refresh']['permissions']['statuses'], 'read')
         self.assertNotIn('secrets.VERCEL', json.dumps(w))
         for s in steps:
             if 'uses' in s: self.assertRegex(s['uses'], r'^actions/[a-z-]+@[0-9a-f]{40}$')

@@ -1,0 +1,29 @@
+{
+  "authorizedRequest": "完善并上线：自动发布结果核对和失败提示、可点击的数据来源、每日变化摘要；保留登录保护和缺失、待核标记。",
+  "baselineSourceSHA": "fd3ffa42560209ff9481b57698f5577de0730a8a",
+  "baselineProductionSHA": "7fcfced10f5bd58c47f3f4c16313daf8678ea095",
+  "changedFrozenFiles": {
+    "radar/site/app.js": {
+      "before": "b245d8699a515aafb215785e7c8f7b8244c5a2f525d794c1543152a2adde2e3f",
+      "after": "39ebb5e546396d98325935eb2fe20395453d9e6e0b4bc60e4d81800a42da1734"
+    },
+    "radar/site/index.html": {
+      "before": "8cf42a0a00ae434dbdc96e9567e1e6338c28b95dee534f73664ef4473b2ed51d",
+      "after": "b4f1ec0c97cf17e9fceef4fb9e0797c2b98add6818f34c05212307015469494e"
+    },
+    "radar/site/style.css": {
+      "before": "6d3fa12beecaaa160c286a8ddd3ba8adb8466e5bade8d9276cd3578280c421f6",
+      "after": "d812c88e12f1658143180acb1f8b10069dc59d2959bd2990d7e24e4d230597f2"
+    }
+  },
+  "unchangedDataFiles": [
+    "radar/data/chokepoints.toml",
+    "radar/data/companies.toml",
+    "radar/data/config.toml",
+    "radar/data/industries.toml"
+  ],
+  "docs": [
+    "https://docs.github.com/en/rest/commits/statuses",
+    "https://vercel.com/docs/git/vercel-for-github"
+  ]
+}
