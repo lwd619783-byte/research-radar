@@ -8,6 +8,29 @@ frontend/data hashes are preserved. No data gate is relaxed.
 
 ## Flow
 
+### Authorized content maintenance (2026-10-21)
+
+The owner subsequently authorized the first three reviewed improvements and their
+production release: sourced earnings-calendar dates/status, independent research
+review dates and expiry, and the deep-drawdown count. The reviewed frontend/data
+files may change for this scope; update their frozen hashes with old/new hashes
+and scope evidence in `audit/content-fixes-2026-10-21/`. Other frozen files and all
+publication, financial, market-data and authentication gates remain intact.
+
+`next_earnings` is the sole date for a company. `{{earnings:ID}}` references in
+flash/chokepoint text resolve that date and its status. Optional `earnings` metadata
+uses `confirmed`, `estimated`, or `unverified`, with HTTPS source, publication
+date, verification date, and timezone required for the first two. Missing evidence
+stays unverified; future evidence is unavailable in historical snapshots. Past
+dates stay visible for review rather than being treated as a future event.
+
+Weekly/industry/chokepoint `review` metadata defaults to `unverified` with no
+verification date. `verified` requires a source, rationale, verification date, and
+valid-until date. Weekly periods and expired reviews are labeled at display time.
+Market refresh must never advance these dates or change research scores. Existing
+opinions and scores are retained as unverified; no new research conclusion is
+admitted by this maintenance change.
+
 Source/default branch: `fix/radar-truthfulness-2026-10-18`.
 Release branch: `production` (generated static output only; do not edit manually).
 Target: Vercel team `lkdmkl`, project `research-radar`, production environment.

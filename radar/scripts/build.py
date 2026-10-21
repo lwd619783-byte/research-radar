@@ -224,7 +224,7 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
         hi52 = m.get("hi52")
         row = {k: c[k] for k in ("id", "name", "code", "sym", "mkt", "role", "ind", "cp", "revg", "earng", "gm",
                                  "period", "flash", "view", "next", "url")}
-        row.update({"cur": cur, "pe": pe, "mcapUSD": mcap_usd,
+        row.update({"earnings": c.get('earnings', {}), "cur": cur, "pe": pe, "mcapUSD": mcap_usd,
                     "price": None, "r1d": None, "r5": None, "r20": None, "r60": None, "ytd": None, "dd52": None,
                     "s0": None, "sd": [], "sc": [], "ld": None, "history": {"count": 0}})
         row.update(m)
@@ -334,7 +334,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
         "asOf": asof, "asOfLabel": asof_label(asof, now) if asof else None, "today": now.date().isoformat(),
         "generatedAt": now.isoformat(timespec="minutes"), "repoUrl": cfg["repo_url"], "title": cfg["title"],
         "weekly": {"week": wk.get("week", ""), "focus": wk.get("focus", ""), "lead": wk.get("lead", ""),
-                   "calHint": wk.get("calendar_hint", ""), "thermoAction": wk.get("thermo_action", "")},
+                   "calHint": wk.get("calendar_hint", ""), "thermoAction": wk.get("thermo_action", ""),
+                   "review": wk.get("review", {})},
         "stale": stale, "fx": {k: round(v, 4) for k, v in fx.items()},
         'asOfByMarket': {k: sorted(v) for k, v in market_dates.items()}, 'fxProvenance': fx_meta,
         'snapshot': snapshot,

@@ -488,6 +488,14 @@ kbd{font-family:var(--font-mono);font-size:10.5px;padding:2px 6px;border-radius:
 .tip .tr b{color:var(--text);font-weight:650}
 .tip .spark{margin-top:6px}
 
+/* Review dates stay visible beside the claims they qualify. */
+.review-note{margin:8px 0 14px;padding:9px 12px;border-left:2px solid var(--gold);background:var(--surface-2);border-radius:0 8px 8px 0;color:var(--text-2);font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.review-note a{color:var(--accent-2);text-decoration:underline;text-underline-offset:3px}
+.review-state{margin-left:6px;color:var(--gold);font-size:10px;font-weight:400;white-space:nowrap}
+.cal-col .pill{max-width:100%;white-space:normal;flex-wrap:wrap}
+.cal-col .pill em{font-size:10px}
+.earnings-evidence{margin-top:0}
+
 /* ---------- responsive ---------- */
 @media (max-width:1180px){
   .c-top,.c-rank,.c-thermo,.c-soon{grid-column:span 12}

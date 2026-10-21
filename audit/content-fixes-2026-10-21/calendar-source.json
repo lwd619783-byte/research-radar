@@ -1,0 +1,13 @@
+{
+  "source_url": "https://news.skhynix.com/en/q3-2026-earnings-conference-call-invitation/",
+  "http_status": 200,
+  "received_at": "2026-10-21T11:15:58.396674+00:00",
+  "source_sha256": "81096672050822c54188dc727200cfdc72f585133deef3b9037d6070a04036fc",
+  "source_bytes": 139139,
+  "published_at": "2026-10-21",
+  "verified_at": "2026-10-21",
+  "company_id": "SKH",
+  "earnings_date": "2026-10-28",
+  "timezone": "Asia/Seoul",
+  "review": "Official issuer invitation: results before 09:00 KST; earnings call at 09:00 KST. Other company calendar dates have not been verified in this change."
+}

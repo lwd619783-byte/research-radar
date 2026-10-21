@@ -266,10 +266,12 @@ class CacheAndContractTests(unittest.TestCase):
         self.assertEqual(D['companies'][0]['hi52'], 110)
 
     def test_frontend_hashes_are_exact(self):
-        baseline = json.loads((ROOT/'audit/frontend-baseline.json').read_text())
-        for name, sha in baseline.items():
-            if name == 'app.js': continue  # User authorized text/status-only changes; CSS/template stay frozen.
-            self.assertEqual(hashlib.sha256((ROOT/'radar/site'/name).read_bytes()).hexdigest(), sha)
+        # Current reviewed hashes include the authorized 2026-10-21 status UI.
+        # Keep the historical baseline immutable; check all three current files.
+        baseline = json.loads((ROOT/'audit/truthfulness-frozen.json').read_text())
+        for name in ('app.js', 'index.html', 'style.css'):
+            self.assertEqual(hashlib.sha256((ROOT/'radar/site'/name).read_bytes()).hexdigest(),
+                             baseline['radar/site/'+name])
 
     def test_schedule_gap_recorded_without_changing_schedule(self):
         workflow = (ROOT/'.github/workflows/radar-deploy.yml.disabled').read_text(encoding='utf-8')

@@ -73,6 +73,55 @@ def _date(rep: Report, where: str, v: str, key: str):
         return None
 
 
+def _https_url(value: str) -> bool:
+    return bool(re.fullmatch(r'https://[^/\s<>\"\x27]+(?:/[^\s<>\"\x27]*)?', value))
+
+
+def _review(rep: Report, where: str, obj: dict, today: dt.date) -> dict:
+    """Explicit human research review; absence never acquires today's date."""
+    raw = obj.get('review', {})
+    if not isinstance(raw, dict):
+        rep.err(where, 'review 必须是表格'); raw = {}
+    out = {k: _str(rep, where, raw, k, False) for k in
+           ('status', 'verified_at', 'valid_until', 'source_url', 'note')}
+    out['status'] = out['status'] or 'unverified'
+    if out['status'] not in ('verified', 'unverified'):
+        rep.err(where, 'review.status 只能是 verified / unverified')
+    verified = _date(rep, where, out['verified_at'], 'review.verified_at')
+    until = _date(rep, where, out['valid_until'], 'review.valid_until')
+    if out['source_url'] and not _https_url(out['source_url']):
+        rep.err(where, 'review.source_url 必须是 HTTPS 来源链接')
+    if out['status'] == 'verified' and not (
+            verified and until and until >= verified
+            and out['source_url'] and out['note']):
+        rep.err(where, '已核实观点需要来源、依据、非未来核验日和有效期')
+    if verified and verified > today:
+        out.update(status='unverified', availability='future_evidence')
+    return out
+
+
+def _earnings(rep: Report, where: str, obj: dict, day: str, today: dt.date) -> dict:
+    raw = obj.get('earnings', {})
+    if not isinstance(raw, dict):
+        rep.err(where, 'earnings 必须是表格'); raw = {}
+    out = {k: _str(rep, where, raw, k, False) for k in
+           ('status', 'source_url', 'published_at', 'verified_at', 'timezone', 'time_note')}
+    out['status'] = out['status'] or 'unverified'
+    if out['status'] not in ('confirmed', 'estimated', 'unverified'):
+        rep.err(where, 'earnings.status 只能是 confirmed / estimated / unverified')
+    published = _date(rep, where, out['published_at'], 'earnings.published_at')
+    verified = _date(rep, where, out['verified_at'], 'earnings.verified_at')
+    if out['source_url'] and not _https_url(out['source_url']):
+        rep.err(where, 'earnings.source_url 必须是 HTTPS 来源链接')
+    if out['status'] in ('confirmed', 'estimated') and not (
+            day and out['source_url'] and published and verified
+            and published <= verified and out['timezone']):
+        rep.err(where, '已确认或预计日期需要来源、披露日、非未来核验日和时区')
+    if verified and verified > today:
+        out.update(status='unverified', availability='future_evidence')
+    return out
+
+
 def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = None):
     """返回 (data, report)。data = {config, industries, chokepoints, companies}，均已规范化。"""
     rep = Report()
@@ -88,6 +137,15 @@ def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = 
     # ---- config ----
     site = cfg.get("site", {})
     weekly = cfg.get("weekly", {})
+    weekly = {**weekly, 'review': _review(rep, 'config.toml [weekly]', weekly, today)}
+    week = weekly.get('week', '')
+    try:
+        if not isinstance(week, str) or not re.fullmatch(r'\d{4}-W\d{2}', week):
+            raise ValueError('invalid_week')
+        year, number = week.split('-W')
+        dt.date.fromisocalendar(int(year), int(number), 1)
+    except (AttributeError, TypeError, ValueError):
+        rep.err('config.toml [weekly]', 'week 必须是有效的 YYYY-Www 周次')
     repo_url = str(site.get("repo_url", "")).strip().rstrip("/")
     if repo_url and not re.match(r"^https://github\.com/[^/]+/[^/]+$", repo_url):
         rep.err("config.toml [site]", f"repo_url 应形如 https://github.com/用户名/仓库名，现在是 {repo_url!r}")
@@ -138,6 +196,7 @@ def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = 
             "logic": _str(rep, w, x, "logic"), "signal": _str(rep, w, x, "signal", False),
             "risk": _str(rep, w, x, "risk", False), "reps": _str(rep, w, x, "reps", False),
             "kb": kb, "url": kb_url(kb, w),
+            "review": _review(rep, w, x, today),
         })
     industries.sort(key=lambda r: -r["total"])  # 稳定排序：同分保持文件顺序
 
@@ -161,7 +220,8 @@ def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = 
         cp_ind[n] = ind
         chokepoints.append({"name": n, "ind": ind, "seg": _str(rep, w, x, "segment", False),
                             "tight": TIGHTNESS.get(t, t), "why": _str(rep, w, x, "why", False),
-                            "track": _str(rep, w, x, "track", False)})
+                            "track": _str(rep, w, x, "track", False),
+                            "review": _review(rep, w, x, today)})
 
     # ---- companies ----
     companies, ids, syms, used_cp = [], set(), set(), set()
@@ -225,6 +285,7 @@ def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = 
             "role": _str(rep, w, x, "role", False), "ind": ind, "cp": cp,
             "view": _str(rep, w, x, "view", False), "flash": _str(rep, w, x, "flash", False),
             "next": nxt or None, "period": str(fin.get("period", "")),
+            "earnings": _earnings(rep, w, x, nxt, today),
             "revg": pct("revenue_yoy"), "earng": pct("profit_yoy"), "gm": gm,
             "financial": evidence,
             "fallback_pe": _num(rep, w, x.get("fallback_pe"), "fallback_pe"),
@@ -239,6 +300,11 @@ def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = 
     for c in chokepoints:
         if c["name"] not in used_cp:
             rep.warn(f"chokepoints.toml「{c['name']}」", "没有任何公司挂在这个卡点下")
+    for obj in [*companies, *chokepoints]:
+        for key in ('flash', 'track'):
+            for ref in re.findall(r'\{\{earnings:([^}]+)\}\}', obj.get(key, '')):
+                if ref not in ids:
+                    rep.err(obj['name'], f'财报日期引用不存在的公司 {ref}')
 
     data = {"config": {"title": site.get("title", "投研雷达"), "repo_url": repo_url, "kb_branch": kb_branch,
                        "weekly": weekly, "indices": indices, "fx_fallback": fxf, "ratio": cfg.get("ratio", {})},

@@ -11,6 +11,8 @@ kb_branch = "main"
 # lead 只在 focus 行业作为首屏时显示；留空则自动用该行业的 logic + 最紧卡点。
 [weekly]
 week = "2026-W42"
+# 原观点未重新核实，保留周次；行情更新不得刷新观点核验日期。
+review = { status = "unverified", verified_at = "", valid_until = "", source_url = "", note = "原有观点待重新核验" }
 focus = "AI网络与光互连"
 lead = "AI集群800G→1.6T/CPO升级，光芯片与光模块产能是最紧卡点，量价齐升。最紧的卡点是「光芯片与激光器」；龙头近期大幅回调，但业绩仍在高增，三季报是验证窗口。"
 calendar_hint = "三季报季：先看预告与快报，再看正式报告"

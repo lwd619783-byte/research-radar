@@ -1,0 +1,43 @@
+{
+  "authorization": "User explicitly requested fixes to the first three review findings and production release, preserving login protection and unverified states.",
+  "baseSHA": "e960ae0dd265e6672bc2e2d62592d75cc00cd80c",
+  "changedFrozenFiles": {
+    "radar/site/app.js": {
+      "before": "f8d73e4e28c78e17e130431b5c1d4f64594b75b9d03fe143b194ddb6f720b6ec",
+      "after": "b245d8699a515aafb215785e7c8f7b8244c5a2f525d794c1543152a2adde2e3f"
+    },
+    "radar/site/style.css": {
+      "before": "8987b1f2aae01066e7665ebe6d0b5bb1708089a0fc7586c5d1deb67d7c041d36",
+      "after": "6d3fa12beecaaa160c286a8ddd3ba8adb8466e5bade8d9276cd3578280c421f6"
+    },
+    "radar/data/chokepoints.toml": {
+      "before": "89cdf6861602bff2527a562c26dee6ec612553850cafc83582d0da960616463e",
+      "after": "0520cdc16b35b14418ffdcb4a7b5c1267159a590c265fd1351203f376882f421"
+    },
+    "radar/data/companies.toml": {
+      "before": "a20538f2e71b0a13b72207cb46ece0d2cc63fde81d6c2ed563ee6ea93ed2bc70",
+      "after": "966e2c9eac0df7e025a8d7bfd9a223e272a3f6f63ae6b3ace049b249fff078ef"
+    },
+    "radar/data/config.toml": {
+      "before": "546b8d6920bc54b3fc70853ecc53acedd013cf04fc958ed5728969fbe47aaffd",
+      "after": "595963a1273aab88a38bde15a1dafe41be0cdff15b185854593a56487c625a7f"
+    }
+  },
+  "unchangedFrozenFiles": {
+    "radar/site/index.html": "8cf42a0a00ae434dbdc96e9567e1e6338c28b95dee534f73664ef4473b2ed51d",
+    "radar/data/industries.toml": "b68578b61566053f5bc03f69f06f2e12cb01102deb3cf3af90aa4b7c1259bdb4",
+    ".github/workflows/radar-deploy.yml.disabled": "4eae830c8fa2eba2025cf819fe9e4635f5f360f6113e71b3c03437fa3b60ce18",
+    ".github/workflows/radar-preview.yml.disabled": "62356402c586d9b4f1b8a1061be6ebd8bf1c6027d3672d24c3d5a0ab483be482",
+    ".github/workflows/radar-interface-acceptance.yml": "168635dd28f16fbbc1c5e4c174aaaf991a3b3aa3c4b21d90f605871f8d11a572"
+  },
+  "financialValuesAndEvidenceUnchanged": true,
+  "industryScoresAndOpinionsUnchanged": true,
+  "chokepointOpinionsUnchanged": true,
+  "onlyConfirmedDateCorrection": {
+    "company": "SKH",
+    "from": "2026-10-27",
+    "to": "2026-10-28"
+  },
+  "noAuthOrWorkflowChanges": true,
+  "currentFrontendTestChecksAllThreeFiles": true
+}

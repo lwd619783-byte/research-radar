@@ -1,7 +1,7 @@
 # 关键卡点：每个 [[chokepoint]] 属于一个行业（industry 必须与 industries.toml 里的 name 完全一致）。
 # 有卡点的行业才会出现在「卡点地图」和「龙头热力图」里；同一行业内按紧缺度（极紧 > 偏紧 > 缓解中）再按本文件顺序排列。
 # tightness 只能是：极紧 / 偏紧 / 缓解中
-# track 里写的日期（如 10/31）会在页面上高亮成日期标签。
+# track 的财报日期用 {{earnings:公司id}} 引用 companies.toml；日期和核验状态只有一个事实源。
 
 [[chokepoint]]
 name = "光芯片与激光器"
@@ -9,7 +9,7 @@ industry = "AI网络与光互连"
 tightness = "极紧"
 segment = "EML/CW激光器、InP衬底、硅光芯片"
 why = "1.6T与CPO需要更多高速激光器，InP扩产慢、认证周期长；Lumentum部分器件订单排至2029（转述）"
-track = "Lumentum/Coherent订单与扩产、源杰三季报（10/31）、EML价格"
+track = "Lumentum/Coherent订单与扩产、源杰三季报（{{earnings:YJKJ}}）、EML价格"
 
 [[chokepoint]]
 name = "高速光模块产能与良率"
@@ -17,7 +17,7 @@ industry = "AI网络与光互连"
 tightness = "偏紧"
 segment = "800G/1.6T光模块"
 why = "1.6T爬坡期良率与上游物料决定出货，头部两家份额高"
-track = "1.6T出货占比、毛利率、北美云厂资本开支；中际/新易盛三季报（10/30）"
+track = "1.6T出货占比、毛利率、北美云厂资本开支；中际三季报（{{earnings:ZJXC}}）、新易盛三季报（{{earnings:XYS}}）"
 
 [[chokepoint]]
 name = "网络芯片与交换系统"
@@ -25,7 +25,7 @@ industry = "AI网络与光互连"
 tightness = "偏紧"
 segment = "交换芯片、光DSP、AI以太网交换机、CPO交换"
 why = "集群规模扩大使网络带宽需求快速上升，51.2T/102.4T交换与DSP集中在少数厂商"
-track = "博通AI收入指引（12/09）、Arista AI后端订单（11/03）、Marvell定制ASIC"
+track = "博通AI收入指引（{{earnings:AVGO}}）、Arista AI后端订单（{{earnings:ANET}}）、Marvell定制ASIC"
 
 [[chokepoint]]
 name = "光引擎与精密光器件"
@@ -33,7 +33,7 @@ industry = "AI网络与光互连"
 tightness = "缓解中"
 segment = "光引擎、FAU/耦合、CPO封装"
 why = "CPO与1.6T提升耦合与封装精度要求；天孚称有源器件材料供应自Q2末改善"
-track = "天孚三季报（10/29）、CPO量产节奏"
+track = "天孚三季报（{{earnings:TFTX}}）、CPO量产节奏"
 
 [[chokepoint]]
 name = "先进制程与先进封装"
@@ -41,7 +41,7 @@ industry = "AI核心半导体"
 tightness = "极紧"
 segment = "3nm/2nm、CoWoS、TCB/混合键合"
 why = "CoWoS产能是AI芯片出货的总闸门，扩产周期长"
-track = "台积电资本开支与CoWoS产能、ASMPT TCB订单（10/28）"
+track = "台积电资本开支与CoWoS产能、ASMPT TCB订单（{{earnings:ASMPT}}）"
 
 [[chokepoint]]
 name = "HBM与存储"
@@ -49,7 +49,7 @@ industry = "AI核心半导体"
 tightness = "极紧"
 segment = "HBM3E/HBM4、DRAM、企业级SSD"
 why = "HBM挤占DRAM产能，存储价格大幅上涨"
-track = "DRAM/HBM合约价、海力士Q3（10/27）、长鑫三季报（10/31）"
+track = "DRAM/HBM合约价、海力士Q3（{{earnings:SKH}}）、长鑫三季报（{{earnings:CXMT}}）"
 
 [[chokepoint]]
 name = "算力芯片 GPU/ASIC"
@@ -57,7 +57,7 @@ industry = "AI核心半导体"
 tightness = "偏紧"
 segment = "GPU、定制ASIC"
 why = "需求远超供给，交付受CoWoS与HBM约束"
-track = "英伟达FQ3财报（11/17）：数据中心收入与指引"
+track = "英伟达FQ3财报（{{earnings:NVDA}}）：数据中心收入与指引"
 
 [[chokepoint]]
 name = "前道设备与材料"
@@ -65,7 +65,7 @@ industry = "AI核心半导体"
 tightness = "偏紧"
 segment = "光刻、刻蚀、薄膜沉积"
 why = "先进制程与存储扩产拉动设备，国产化率提升"
-track = "ASML订单、北方华创/中微三季报（10/30–10/31）"
+track = "ASML订单、北方华创三季报（{{earnings:NAURA}}）、中微三季报（{{earnings:AMEC}}）"
 
 [[chokepoint]]
 name = "上游特种玻纤布与树脂"
@@ -73,7 +73,7 @@ industry = "PCB与覆铜板"
 tightness = "极紧"
 segment = "低介电玻纤布（NE/T-glass/石英布）、高速树脂"
 why = "高端玻纤布由少数厂商主导、扩产慢，是CCL上游最紧环节"
-track = "日东纺扩产与财报（11/05）、宏和/东材出货与毛利"
+track = "日东纺扩产与财报（{{earnings:NTB}}）、宏和/东材出货与毛利"
 
 [[chokepoint]]
 name = "高端覆铜板 CCL"
@@ -81,7 +81,7 @@ industry = "PCB与覆铜板"
 tightness = "极紧"
 segment = "M7/M8/M9高速CCL"
 why = "高速材料认证门槛高，涨价沿链传导"
-track = "CCL提价、台光Q3（10/28）、生益三季报（10/30）"
+track = "CCL提价、台光Q3（{{earnings:EMC}}）、生益三季报（{{earnings:SYST}}）"
 
 [[chokepoint]]
 name = "高多层高速PCB产能"
@@ -97,7 +97,7 @@ industry = "PCB与覆铜板"
 tightness = "偏紧"
 segment = "机械/激光钻孔设备、PCB微钻"
 why = "高多层/厚板钻孔难度上升，钻针用量与单价提升"
-track = "大族数控三季报（10/21）、鼎泰/中钨钻针产能"
+track = "大族数控三季报（{{earnings:DZSK}}）、鼎泰/中钨钻针产能"
 
 [[chokepoint]]
 name = "燃气轮机与现场发电"
@@ -105,7 +105,7 @@ industry = "电力与数据中心"
 tightness = "极紧"
 segment = "重型/航改燃机、现场发电"
 why = "数据中心并网等待时间长，燃机是最快供电方案之一，产能有限"
-track = "GEV燃机订单与积压（10/28）、西门子能源（11/11）"
+track = "GEV燃机订单与积压（{{earnings:GEV}}）、西门子能源（{{earnings:ENR}}）"
 
 [[chokepoint]]
 name = "变压器与电网设备"
@@ -113,7 +113,7 @@ industry = "电力与数据中心"
 tightness = "极紧"
 segment = "大型电力变压器、GIS、配网设备"
 why = "大型变压器交期长、电网投资上行"
-track = "电网招标、出海订单；西电/思源三季报（10/22–10/24）"
+track = "电网招标、出海订单；西电三季报（{{earnings:ZGXD}}）、思源三季报（{{earnings:SYDQ}}）"
 
 [[chokepoint]]
 name = "数据中心供配电"
@@ -121,7 +121,7 @@ industry = "电力与数据中心"
 tightness = "偏紧"
 segment = "UPS、HVDC/800V、配电柜"
 why = "机柜功率密度上升推动供电架构升级"
-track = "伊顿Q3（11/03）、施耐德数据中心订单、科华三季报（10/29）"
+track = "伊顿Q3（{{earnings:ETN}}）、施耐德数据中心订单、科华三季报（{{earnings:KHSJ}}）"
 
 [[chokepoint]]
 name = "液冷与热管理"
@@ -129,4 +129,4 @@ industry = "电力与数据中心"
 tightness = "偏紧"
 segment = "冷板/浸没液冷、CDU、热管理"
 why = "高功率机柜使液冷成刚需，但国内利润尚未成熟"
-track = "Vertiv订单（10/28）、英维克毛利率与现金流（10/27）"
+track = "Vertiv订单（{{earnings:VRT}}）、英维克毛利率与现金流（{{earnings:YWK}}）"

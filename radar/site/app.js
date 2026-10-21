@@ -92,6 +92,28 @@ function dataStateCounts(rows){const counts={complete:0,partial:0,not_applicable
 function dataStateLabel(rows){if(!rows?.length)return'数据覆盖待核';const c=dataStateCounts(rows);return`数据：${c.complete}/${rows.length} 项完整 · ${c.partial} 项部分覆盖 · ${c.not_applicable} 项不适用 · ${c.missing} 项暂缺${c.access_blocked?' · '+c.access_blocked+' 项访问受阻':''}`}
 function nativeCapText(c){return fin(c.mcapLocal)?(c.mcapLocal/1e8).toLocaleString('en-US',{maximumFractionDigits:2})+' 亿 '+c.cur:'原币市值暂未取得'}
 
+/* ---------- research and calendar validity ---------- */
+const deepDrawdown=c=>fin(c.dd52)&&c.dd52<=-.4;
+function isoWeek(day){const d=new Date(day+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));const y=d.getUTCFullYear();return y+'-W'+String(Math.ceil((((d-Date.UTC(y,0,1))/864e5)+1)/7)).padStart(2,'0')}
+function researchText(review={},week='',today=TODAY){
+  const dated=review.verified_at&&review.verified_at<=today,stamp=dated?'上次核验 '+review.verified_at:'核验日期缺失';
+  const expired=(week&&week<isoWeek(today))||(review.valid_until&&review.valid_until<today);
+  const verified=review.status==='verified'&&dated&&review.valid_until>=today&&review.source_url&&review.note&&(!week||week===isoWeek(today));
+  return[week?'观点周期 '+week:'',expired?'已过期 · 待复核':verified?'已核实':'待核',stamp,review.valid_until?'有效至 '+review.valid_until:''].filter(Boolean).join(' · ')}
+function eventState(c,today=TODAY){
+  if(!c.next)return'undated';if(c.next<today)return'overdue';const e=c.earnings||{};
+  const evidenced=e.source_url&&e.published_at&&e.verified_at&&e.published_at<=e.verified_at&&e.verified_at<=today&&e.timezone;
+  return evidenced&&['confirmed','estimated'].includes(e.status)?e.status:'unverified'}
+const EVENT_LABEL={confirmed:'官方确认',estimated:'预计',unverified:'日期待核',overdue:'已过期 · 待复核',undated:'日期待定'};
+const eventLabel=(c,today=TODAY)=>EVENT_LABEL[eventState(c,today)];
+function eventCounts(rows,today=TODAY){const counts={confirmed:0,estimated:0,unverified:0,overdue:0,undated:0};rows.forEach(c=>counts[eventState(c,today)]++);return counts}
+function eventSummary(rows,today=TODAY){const n=eventCounts(rows,today);return Object.keys(n).filter(k=>n[k]).map(k=>`${EVENT_LABEL[k]} ${n[k]} 家`).join(' · ')||'暂无日期'}
+function eventCountdown(day,today=TODAY){const n=Math.round((Date.parse(day+'T00:00:00Z')-Date.parse(today+'T00:00:00Z'))/864e5);return n<0?`已过 ${-n} 天 · 待复核`:n===0?'今天':`${n} 天后`}
+function earningsText(text,companies=byId,today=TODAY){return String(text||'').replace(/\{\{earnings:([^}]+)\}\}/g,(_,id)=>{const c=companies[id];return c?`${c.next?md(c.next)+' · ':''}${eventLabel(c,today)}`:'日期待核'})}
+function researchNotice(review,week=''){return`<p class="review-note">${esc(researchText(review,week))}${review?.note?' · '+esc(review.note):''}${review?.source_url?` · <a href="${esc(review.source_url)}" target="_blank" rel="noopener">核验依据 ↗</a>`:''}</p>`}
+const researchBadge=review=>`<small class="review-state">${researchText(review).includes('已核实')?'已核实':'待核'}</small>`;
+const eventPill=c=>`<span class="pill" data-co="${c.id}" style="--ic:${IC(c.ind)}"><i></i><span>${esc(c.short)}</span><em>${eventLabel(c)}</em></span>`;
+
 /* ---------- data ---------- */
 const CO=D.companies,byId={},byInd={},byCp={};
 function perfSig(c){if(c.financialPartial)return{k:'na',l:'不评分',r:0};if(!c.financialSignalEligible)return{k:'na',l:'待核/不适用',r:0};const g=fin(c.earng)?c.earng:c.revg;if(!fin(g))return{k:'na',l:'—',r:0};if(g>=.5)return{k:'p1',l:'高增',r:4};if(g>=.1)return{k:'p2',l:'增长',r:3};if(g>-.1)return{k:'p3',l:'平稳',r:2};return{k:'p4',l:'下滑',r:1}}
@@ -103,7 +125,7 @@ const cpsOf=n=>CP.filter(c=>c.ind===n).map((c,i)=>({c,i})).sort((a,b)=>(TIGHT[a.
 const KEY_IND=IND.filter(i=>CP.some(c=>c.ind===i.name)).map(i=>i.name);
 KEY_IND.forEach(n=>{if(!IND_C[n]){const u=Object.values(IND_C);IND_C[n]=IND_PAL.find(x=>!u.includes(x))||'#8e95a5'}});
 const TOP=IND.find(i=>i.name===WK.focus)||IND[0];S.sel=TOP.name;S.cpInd=TOP.name;
-const sgBadges=c=>`<span class="sg ${c.perf.k}" data-tip="业绩${esc(c.perf.l)}：${fin(c.earng)?'净利':'营收'}同比 ${pct(fin(c.earng)?c.earng:c.revg)}">${c.perf.l}</span><span class="sg ${c.px.k}" data-tip="股价${esc(c.px.l)}：近20日 ${pct(c.r20)} · 距高点 ${pct(c.dd52)}">${c.px.l}</span>`;
+const sgBadges=c=>`<span class="sg ${c.perf.k}" data-tip="业绩${esc(c.perf.l)}：${fin(c.earng)?'净利':'营收'}同比 ${pct(fin(c.earng)?c.earng:c.revg)}">${c.perf.l}</span><span class="sg ${c.px.k}" data-tip="股价${esc(c.px.l)}：近20日 ${pct(c.r20)} · 距高点 ${pct(c.dd52)}">${c.px.l}</span>${deepDrawdown(c)&&c.px.k!=='x4'?`<span class="sg x4" data-tip="距52周高点 ${pct(c.dd52)}；近期走强与深度回撤可同时成立">深度回调</span>`:''}`;
 
 /* ---------- sparkline ---------- */
 function spark(c,n,w,h){const v=c.sc.slice(-n);if(v.length<2)return'';const mn=Math.min.apply(null,v),mx=Math.max.apply(null,v),r=mx-mn||1,st=w/(v.length-1);
@@ -135,19 +157,20 @@ function renderTicker(){const status=indexAvailability(D.indices,D.meta.issues),
 
 /* ---------- hero ---------- */
 function renderHero(){
-  const d0=dObj(TODAY);$('#heroDate').textContent=`${D.meta.reviewPreview?'本地验收 · 未发布 · ':''}本周结论 · ${d0.getUTCFullYear()}年${d0.getUTCMonth()+1}月${d0.getUTCDate()}日 ${wd(TODAY)} · 行情截至 ${ASOFL}`;
-  $('#heroTitle').innerHTML=`本周最值得追踪：<span class="grad">${esc(TOP.name)}</span>`;
+  $('#heroDate').textContent=`${D.meta.reviewPreview?'本地验收 · 未发布 · ':''}研究观点 · 行情截至 ${ASOFL}`;
+  $('#heroTitle').innerHTML=`研究关注：<span class="grad">${esc(TOP.name)}</span>`;
   const cps=cpsOf(TOP.name);
   $('#heroLead').textContent=WK.lead&&TOP.name===WK.focus?WK.lead:`${TOP.logic}。${cps[0]?`最紧的卡点是「${cps[0].name}」。`:''}`;
+  let review=$('#researchStatus');if(!review){review=document.createElement('div');review.id='researchStatus';$('#heroLead').insertAdjacentElement('beforebegin',review)}review.innerHTML=researchNotice(WK.review,WK.week);
   let status=$('#dataStatus');if(!status){status=document.createElement('p');status.id='dataStatus';status.className='hint';$('#heroLead').insertAdjacentElement('afterend',status)}
   status.innerHTML=esc(dataStateLabel(D.meta.coverage))+' · <a href="#foot">数据说明</a>';
   const end=addDays(TODAY,14);
   const kp=[
-    {v:IND.filter(i=>i.total>=17).length,l:'重点追踪行业',s:'总分 ≥ 17',c:'var(--gold)',ic:ICON.hot},
-    {v:CP.filter(c=>TIGHT[c.tight]&&TIGHT[c.tight].k==='t1').length,l:'极紧卡点',s:`共 ${CP.length} 个关键卡点`,c:'var(--tight)',ic:ICON.alert},
+    {v:IND.filter(i=>i.total>=17).length,l:'原评分重点行业',s:'总分 ≥ 17 · 核验状态见行业详情',c:'var(--gold)',ic:ICON.hot},
+    {v:CP.filter(c=>TIGHT[c.tight]&&TIGHT[c.tight].k==='t1').length,l:'原标记极紧卡点',s:`共 ${CP.length} 个 · 核验状态见卡点`,c:'var(--tight)',ic:ICON.alert},
     {v:CO.filter(c=>c.perf.k==='p1').length,l:'业绩高增龙头',s:`同比 ≥ 50% · 共 ${CO.length} 家`,c:'var(--up)',ic:ICON.up},
-    {v:CO.filter(c=>c.px.k==='x4').length,l:'深度回调龙头',s:'距52周高点 ≤ −40%',c:'var(--down)',ic:ICON.down},
-    {v:CO.filter(c=>c.next&&c.next>=TODAY&&c.next<=end).length,l:'两周内发财报',s:`${md(TODAY)} – ${md(end)}`,c:'var(--accent-2)',ic:ICON.cal}];
+    {v:CO.filter(deepDrawdown).length,l:'深度回调龙头',s:'距52周高点 ≤ −40% · 含近期反弹',c:'var(--down)',ic:ICON.down},
+    {v:CO.filter(c=>c.next&&c.next>=TODAY&&c.next<=end).length,l:'两周内财报日期',s:eventSummary(CO.filter(c=>c.next&&c.next>=TODAY&&c.next<=end)),c:'var(--accent-2)',ic:ICON.cal}];
   $('#kpis').innerHTML=kp.map(k=>`<div class="kpi" style="--c:${k.c}"><span class="ic">${k.ic}</span><span class="v num" data-count="${k.v}">0</span><span class="l">${k.l}<small>${k.s}</small></span></div>`).join('')}
 
 function nextEvents(cos,n){const m={};cos.filter(c=>c.next&&c.next>=TODAY).forEach(c=>{(m[c.next]=m[c.next]||[]).push(c)});return Object.keys(m).sort().slice(0,n).map(d=>({d,cs:m[d]}))}
@@ -156,6 +179,7 @@ function renderTop(){
   const r20=mean(cos.map(c=>c.r20)),dd=mean(cos.map(c=>c.dd52)),rev=median(cos.filter(c=>c.financialRevenueComparable).map(c=>c.revg));const C=2*Math.PI*48;
   const cpCol=(cp,i)=>{const T=TIGHT[cp.tight]||{k:'t2'};return`<div class="cp-col ${T.k}" style="--tc:${TC[T.k]}"><div class="cp-col-h"><span class="cp-idx">卡点 0${i+1}</span>${tbBadge(cp.tight)}</div><div class="cp-name">${esc(cp.name)}</div><div class="cp-seg" title="${esc(cp.seg)}">${esc(cp.seg)}</div>${(byCp[cp.name]||[]).map(leadRow).join('')}</div>`};
   $('#topCard').innerHTML=`<div class="card-h"><div class="card-t">${ICON.target}主线拆解 · ${esc(d.name)}</div>${lvBadge(d.total)}</div>
+  ${researchNotice(d.review)}
   <div class="top-strip">
     <div class="ring"><svg width="112" height="112" viewBox="0 0 112 112"><circle class="trk" cx="56" cy="56" r="48" stroke-width="9" fill="none"/><circle class="bar" cx="56" cy="56" r="48" stroke-width="9" fill="none" stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${C.toFixed(2)}" data-to="${(C*(1-d.total/20)).toFixed(2)}"/></svg><div class="ctr"><div><div class="big num" data-count="${d.total}">0</div><div class="of">/ 20 综合分</div></div></div></div>
     <div class="dims">${DIMS.map(x=>`<div class="dim"><span>${x.n}</span><span class="pips" style="--c:${x.c}">${[1,2,3,4,5].map(i=>`<i class="pip ${i<=d.s[x.k]?'on':''}" style="transition-delay:${250+i*90}ms"></i>`).join('')}</span><b class="num">${d.s[x.k]}</b></div>`).join('')}</div>
@@ -163,11 +187,11 @@ function renderTop(){
   </div>
   <div class="mini-h"><span>关键卡点 → 细分龙头</span><span class="hint">按紧缺度排序 · 点击公司看走势与财务</span></div>
   <div class="cp-cols">${cps.slice(0,3).map(cpCol).join('')}</div>
-  <div class="top-foot"><span class="lbl">${ICON.cal}下一个验证窗口</span>${nextEvents(cos,3).map(e=>`<span class="ev"><b>${md(e.d)}</b>${e.cs.map(c=>esc(c.short)).join('、')}</span>`).join('')}${cps.length>3?`<span class="more">另有：${cps.slice(3).map(c=>esc(c.name)+'（'+(TIGHT[c.tight]?TIGHT[c.tight].l:'')+'）').join('、')}</span>`:''}</div>`}
+  <div class="top-foot"><span class="lbl">${ICON.cal}下一个验证窗口</span>${nextEvents(cos,3).map(e=>`<span class="ev"><b>${md(e.d)}</b>${e.cs.map(c=>esc(c.short)+'（'+eventLabel(c)+'）').join('、')}</span>`).join('')}${cps.length>3?`<span class="more">另有：${cps.slice(3).map(c=>esc(c.name)+'（'+(TIGHT[c.tight]?TIGHT[c.tight].l:'')+'）').join('、')}</span>`:''}</div>`}
 
 function renderRank(){
-  $('#rankCard').innerHTML=`<div class="card-h"><div class="card-t">${ICON.radar}行业热度榜</div><span class="hint">四维打分 · 满分 20</span></div>
-  <div class="rk-list">${IND.map((d,i)=>`<div class="rk ${i<3?'top':''}" data-ind="${esc(d.name)}" data-tip="${esc(d.name)}｜${DIMS.map(x=>x.n+' '+d.s[x.k]).join(' · ')}"><span class="n">${String(i+1).padStart(2,'0')}</span><span class="nm">${esc(d.name)}</span><span class="bar"><span class="fill" style="width:${d.total/20*100}%;transition-delay:${120+i*45}ms">${d.s.map((v,k)=>`<i style="flex:${v};background:${DIMS[k].c}"></i>`).join('')}</span></span><b class="sc num">${d.total}</b></div>`).join('')}</div>
+  $('#rankCard').innerHTML=`<div class="card-h"><div class="card-t">${ICON.radar}行业人工评分</div><span class="hint">原评分 · 核验状态见行业详情</span></div>
+  <div class="rk-list">${IND.map((d,i)=>`<div class="rk ${i<3?'top':''}" data-ind="${esc(d.name)}" data-tip="${esc(d.name)}｜${DIMS.map(x=>x.n+' '+d.s[x.k]).join(' · ')}"><span class="n">${String(i+1).padStart(2,'0')}</span><span class="nm">${esc(d.name)}${researchBadge(d.review)}</span><span class="bar"><span class="fill" style="width:${d.total/20*100}%;transition-delay:${120+i*45}ms">${d.s.map((v,k)=>`<i style="flex:${v};background:${DIMS[k].c}"></i>`).join('')}</span></span><b class="sc num">${d.total}</b></div>`).join('')}</div>
   <div class="legend-dims">${DIMS.map(x=>`<span><i style="background:${x.c}"></i>${x.n}</span>`).join('')}</div>`}
 
 function renderThermo(){
@@ -196,14 +220,15 @@ function renderThermo(){
 
 function renderSoon(){
   const end=addDays(TODAY,14),list=CO.filter(c=>c.next&&c.next>=TODAY&&c.next<=end).sort((a,b)=>a.next.localeCompare(b.next)),dates=Array.from(new Set(list.map(c=>c.next)));
-  $('#soonCard').innerHTML=`<div class="card-h"><div class="card-t">${ICON.cal}两周内财报</div><span class="hint">${md(TODAY)} – ${md(end)} · ${list.length} 家</span></div>
-  <div class="soon-list">${dates.map(d=>{const cs=list.filter(c=>c.next===d);return`<div class="sr"><div class="sd"><b class="num">${md(d)}</b><span>${wd(d)}</span></div><div class="scd">${daysTo(d)}天后</div><div class="sp">${cs.map(c=>`<span class="pill" data-co="${c.id}" style="--ic:${IC(c.ind)}"><i></i>${esc(c.short)}</span>`).join('')}</div></div>`}).join('')}</div>
+  $('#soonCard').innerHTML=`<div class="card-h"><div class="card-t">${ICON.cal}两周内财报日期</div><span class="hint">${md(TODAY)} – ${md(end)} · ${list.length} 家</span></div>
+  <p class="review-note">${eventSummary(list)} · 各日期按所列来源时区；未注明时区的日期待核。${CO.some(c=>eventState(c)==='overdue')?' 已过期日期保留在财报日历，待复核。':''}</p>
+  <div class="soon-list">${dates.map(d=>{const cs=list.filter(c=>c.next===d);return`<div class="sr"><div class="sd"><b class="num">${md(d)}</b><span>${wd(d)}</span></div><div class="scd">${eventCountdown(d)}</div><div class="sp">${cs.map(eventPill).join('')}</div></div>`}).join('')}</div>
   <div class="legend-dims" style="padding-top:0">${KEY_IND.map(n=>`<span><i style="background:${IC(n)};border-radius:50%"></i>${esc(n)}</span>`).join('')}</div>`}
 
 /* ---------- radar section ---------- */
 function renderIndList(){
   const L=IND.filter(d=>S.level==='all'||levelOf(d.total).k===S.level);
-  $('#indList').innerHTML=L.map(d=>{const i=IND.indexOf(d),lv=levelOf(d.total);return`<div class="ir lvl-${lv.k} ${d.name===S.sel?'sel':''}" data-pick="${esc(d.name)}"><span class="ir-n">${String(i+1).padStart(2,'0')}</span><div style="min-width:0"><div class="ir-t"><b>${esc(d.name)}</b>${lvBadge(d.total)}</div><div class="ir-r">${esc(d.reps)}</div></div><div class="ir-mid" data-tip="${DIMS.map(x=>x.n+' '+d.s[x.k]).join(' · ')}"><div class="ir-bar on"><div class="fill" style="width:${d.total/20*100}%">${d.s.map((v,k)=>`<i style="flex:${v};background:${DIMS[k].c}"></i>`).join('')}</div></div><div class="ir-sub">${d.s.map((v,k)=>`<span>${DIMS[k].n.slice(0,2)}${v}</span>`).join('')}</div></div><b class="ir-s num">${d.total}</b></div>`}).join('')||'<div class="pempty">暂无</div>'}
+  $('#indList').innerHTML=L.map(d=>{const i=IND.indexOf(d),lv=levelOf(d.total);return`<div class="ir lvl-${lv.k} ${d.name===S.sel?'sel':''}" data-pick="${esc(d.name)}"><span class="ir-n">${String(i+1).padStart(2,'0')}</span><div style="min-width:0"><div class="ir-t"><b>${esc(d.name)}</b>${lvBadge(d.total)}${researchBadge(d.review)}</div><div class="ir-r">${esc(d.reps)}</div></div><div class="ir-mid" data-tip="${DIMS.map(x=>x.n+' '+d.s[x.k]).join(' · ')}"><div class="ir-bar on"><div class="fill" style="width:${d.total/20*100}%">${d.s.map((v,k)=>`<i style="flex:${v};background:${DIMS[k].c}"></i>`).join('')}</div></div><div class="ir-sub">${d.s.map((v,k)=>`<span>${DIMS[k].n.slice(0,2)}${v}</span>`).join('')}</div></div><b class="ir-s num">${d.total}</b></div>`}).join('')||'<div class="pempty">暂无</div>'}
 
 let RC=[0,0,0,0],raf=0;
 const RG={cx:150,cy:108,R:70},ANG=[-90,0,90,180].map(a=>a*Math.PI/180);
@@ -220,9 +245,10 @@ function renderIndDetail(){
   const rs=cos.length?[['龙头近20日 · 均值',mean(cos.map(c=>c.r20)),coverageText(cos,c=>c.r20)],['距52周高点 · 均值',mean(cos.map(c=>c.dd52)),coverageText(cos,c=>c.dd52)],['单季营收同比 · 中位数',median(cos.filter(c=>c.financialRevenueComparable).map(c=>c.revg)),coverageText(cos,c=>c.financialRevenueComparable?c.revg:null)]]:null;
   const el=$('#indDetail');
   el.innerHTML=`<div class="fade-swap"><div class="dt-h"><div><div class="eyebrow">#${String(i+1).padStart(2,'0')} · ${lv.l}</div><h3>${esc(d.name)}</h3></div><div class="dt-score"><b class="num">${d.total}</b><span> / 20</span></div></div>
+  <div class="hint">人工观点与评分</div>${researchNotice(d.review)}
   <div class="dt-body"><div>${radarSVG()}</div><div class="rstats">${rs?rs.map(r=>`<div class="rstat"><div class="l">${r[0]} · 有效 ${r[2]}</div><div class="v num ${ud(r[1])}">${pct(r[1])}</div></div>`).join('')+`<div class="hint">分母为本行业 ${cos.length} 家 · 各项仅计有效样本</div>`:`<div class="rstat"><div class="l">龙头数据</div><div class="v" style="font-size:13px;font-weight:500;color:var(--text-2)">该行业暂未拆解卡点与龙头，低频跟踪即可</div></div>`}</div></div>
   <div class="blk"><div class="bl">${ICON.target}一句话逻辑</div><p>${esc(d.logic)}</p></div>
-  <div class="blk"><div class="bl">${ICON.bolt}最新信号</div><p>${esc(d.signal)}</p></div>
+  <div class="blk"><div class="bl">${ICON.bolt}原研究信号 · 核验状态见上方</div><p>${esc(d.signal)}</p></div>
   <div class="blk risk"><div class="bl">${ICON.alert}主要风险</div><p>${esc(d.risk)}</p></div>
   <div class="blk"><div class="bl">${ICON.grid}代表公司</div><div class="chips">${reps.map(r=>{const c=findCo(r);return c?`<button class="chip link" data-co="${c.id}">${esc(r)}</button>`:`<span class="chip">${esc(r)}</span>`}).join('')}</div></div>
   <div class="dt-actions">${cps.length?`<button class="btn primary" data-gocp="${esc(d.name)}">查看卡点地图 ${ICON.arrow}</button>`:''}${d.url?`<a class="btn" href="${esc(d.url)}" target="_blank" rel="noopener">${ICON.book}知识库笔记 ${ICON.ext}</a>`:''}</div></div>`;
@@ -237,8 +263,9 @@ function renderFlow(){const cps=cpsOf(S.cpInd);
     return`<article class="card cp-card ${T.k} fade-swap" style="--tc:${TC[T.k]};animation-delay:${i*70}ms" data-cpname="${esc(cp.name)}"><div class="accent"></div>
     <div class="cp-top"><span class="cp-no mono">卡点 0${i+1}</span>${tbBadge(cp.tight)}</div>
     <h3 class="cp-title">${esc(cp.name)}</h3><div class="chips">${segs.map(s=>`<span class="chip">${esc(s)}</span>`).join('')}</div>
+    ${researchNotice(cp.review)}
     <div class="sec-l">为什么卡</div><p class="why">${esc(cp.why)}</p>
-    <div class="sec-l">跟踪指标</div><ul class="track">${tr.map(t=>`<li>${hlDates(esc(t))}</li>`).join('')}</ul>
+    <div class="sec-l">跟踪指标</div><ul class="track">${tr.map(t=>`<li>${hlDates(esc(earningsText(t)))}</li>`).join('')}</ul>
     <div class="cp-leads"><div class="sec-l">细分龙头</div>${(byCp[cp.name]||[]).map(c=>leadRow(c)+`<div style="margin:-2px 0 6px 2px">${sgBadges(c)}</div>`).join('')}</div></article>`}).join('')}
 
 /* ---------- treemap ---------- */
@@ -295,7 +322,7 @@ const COLS=[
   .concat([{k:'gm',l:'毛利率',coverage:1,v:c=>rankValue(c,'gm'),f:c=>`<span class="num">${fin(rankValue(c,'gm'))?(c.gm*100).toFixed(1)+'%':'—'}</span>`},
   {k:'pe',l:'PE(TTM)',coverage:1,v:c=>c.pe,f:c=>`<span class="num">${fin(c.pe)?c.pe.toFixed(1):'—'}</span><div class="muted" style="font-size:10px">${esc(peStatusText(c))}${peStatusText(c)?' · ':''}${esc(c.provenance?.valuation?.asOf||'日期未知')}</div>`},
   {k:'mcapUSD',l:'市值(亿$)',coverage:1,v:c=>c.mcapUSD,f:c=>`<span class="num">${c.mcapEstimated&&fin(c.mcapUSD)?'≈ ':''}${fin(c.mcapUSD)?Math.round(c.mcapUSD).toLocaleString('en-US'):'—'}</span><div class="muted" style="font-size:10px" data-tip="${esc(timeDetail(c))}">${c.mcapEstimated&&fin(c.mcapUSD)?'估算 · ':''}${esc(c.provenance?.valuation?.asOf||'日期未知')}<br>FX ${esc(c.provenance?.valuation?.fx?.asOf||'暂未取得')}<br>${esc(nativeCapText(c))}</div>`},
-  {k:'next',l:'下次财报',v:c=>c.next,s:1,f:c=>c.next?`<span class="num">${md(c.next)}</span> <span class="muted">${daysTo(c.next)}天</span>`:'<span class="muted">待定</span>'}]);
+  {k:'next',l:'财报日期',v:c=>c.next,s:1,f:c=>`<span class="num">${c.next?md(c.next):'—'}</span><div class="hint">${eventLabel(c)}${c.next?'<br>'+eventCountdown(c.next):''}</div>`}]);
 function renderTable(){const col=COLS.find(x=>x.k===S.sort.k)||COLS[6],dir=S.sort.d;
   const rows=filtered().slice().sort((a,b)=>compareRows(a,b,col,dir));
   $('#tbl').innerHTML=`<thead><tr>${COLS.map(c=>`<th class="${c.c||''} ${c.k===S.sort.k?'sorted':''}" data-sort="${c.ns?'':c.k}">${c.l}${c.k===S.sort.k?`<span class="ar">${dir<0?'↓':'↑'}</span>`:''}${c.coverage?`<div class="muted" style="font-size:10px">有效 ${coverageText(rows,c.v)}</div>`:''}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr data-co="${r.id}">${COLS.map(c=>`<td class="${c.c||''}">${c.f(r)}</td>`).join('')}</tr>`).join(''):`<tr class="empty-state"><td colspan="${COLS.length}">当前筛选无匹配公司，请调整行业或市场。</td></tr>`}</tbody>`}
@@ -304,12 +331,11 @@ function renderLeaders(){if(S.view==='map'){$('#mapCard').hidden=false;$('#table
   $('#leadSub').textContent=(S.view==='map'?'按行业 → 卡点分组 · 已知市值决定面积；缺失用占位面积 · 颜色=所选指标':'点击表头排序 · 点击行查看走势与财务 · 颜色：'+(S.conv==='cn'?'红涨绿跌':'绿涨红跌'))+coverage}
 
 /* ---------- calendar ---------- */
-function renderCal(){const list=CO.filter(c=>c.next&&c.next>=TODAY).sort((a,b)=>a.next.localeCompare(b.next)||(b.mcapUSD||0)-(a.mcapUSD||0)),dates=Array.from(new Set(list.map(c=>c.next)));
-  const aw=list.filter(c=>c.mkt==='A股').map(c=>c.next);
-  $('#calSub').textContent=`今天 ${md(TODAY)} ${wd(TODAY)} · 共 ${list.length} 家已排期`+(aw.length?` · A股三季报集中在 ${md(aw[0])}–${md(aw[aw.length-1])}`:'');
+function renderCal(){const list=CO.filter(c=>c.next).sort((a,b)=>a.next.localeCompare(b.next)||(b.mcapUSD||0)-(a.mcapUSD||0)),dates=Array.from(new Set(list.map(c=>c.next)));
+  $('#calSub').textContent=`今天 ${md(TODAY)} ${wd(TODAY)} · ${eventSummary(CO)} · 日期按来源时区；点击公司查看核验依据`;
   let h=`<div class="cal-col today"><div class="cal-top"><div class="cal-d num">${md(TODAY)}</div><div class="cal-cd">今天</div></div><div class="cal-w">${wd(TODAY)}</div><div class="hint">行情截至 ${ASOFL}${WK.calHint?'<br>'+esc(WK.calHint):''}</div></div>`,prev=TODAY;
   dates.forEach(d=>{const gap=daysTo(d)-daysTo(prev);if(gap>4)h+=`<div class="cal-gap mono">··· ${gap} 天 ···</div>`;const cs=list.filter(c=>c.next===d);
-    h+=`<div class="cal-col ${cs.length>=4?'busy':''}"><div class="cal-top"><div class="cal-d num">${md(d)}</div><div class="cal-cd">${daysTo(d)}天后</div></div><div class="cal-w">${wd(d)} · ${cs.length} 家</div>${cs.map(c=>`<div class="pill" data-co="${c.id}" style="--ic:${IC(c.ind)}" data-tip="${esc(c.name)}｜${esc(c.flash||c.view)}"><i></i><span>${esc(c.short)}</span><em>${esc(c.mkt)}</em></div>`).join('')}</div>`;prev=d});
+    h+=`<div class="cal-col ${cs.length>=4?'busy':''}"><div class="cal-top"><div class="cal-d num">${md(d)}</div><div class="cal-cd">${eventCountdown(d)}</div></div><div class="cal-w">${wd(d)} · ${cs.length} 家</div>${cs.map(eventPill).join('')}</div>`;prev=d});
   $('#cal').innerHTML=h;$('#calLegend').innerHTML=KEY_IND.map(n=>`<span><i style="background:${IC(n)}"></i>${esc(n)}</span>`).join('')}
 
 /* ---------- drawer ---------- */
@@ -329,9 +355,10 @@ function openDrawer(id){const c=byId[id];if(!c)return;S.drawer=id;const cp=CP.fi
   <div class="mgrid">${[['近5日','r5'],['近20日','r20'],['近60日','r60'],['年初至今','ytd'],['距52周高点','dd52']].map(([label,key])=>`<div class="mt"><div class="l">${label}</div><div class="v num ${ud(c[key])}">${pct(c[key])}</div>${metricGap(c,key)?`<div class="muted" style="font-size:10px">${esc(metricGap(c,key))}</div>`:''}</div>`).join('')}</div>
   <div class="dw-sec" data-tip="${esc(finDetail(c))}">近期财务<span>${esc(finLabel(c))}</span></div>
   <div class="mgrid four">${[['营收同比',pct(c.revg),ud(c.revg)],['净利同比',pct(c.earng),ud(c.earng)],['毛利率',fin(c.gm)?(c.gm*100).toFixed(1)+'%':'—',''],[peLabel(c),fin(c.pe)?c.pe.toFixed(1):'—','']].map(m=>`<div class="mt"><div class="l">${m[0]}</div><div class="v num ${m[2]}">${m[1]}</div></div>`).join('')}</div>
-  ${c.flash?`<div class="flash-box">${ICON.bolt}<div><div class="t">业绩快讯 · 待核实</div><p>${hlDates(esc(c.flash))}</p></div></div>`:''}
-  ${c.view?`<div class="view-box"><div class="t">一句话看点</div><p>${esc(c.view)}</p></div>`:''}
-  <div class="dw-next">${ICON.cal}${c.next?`下次财报 <b>${md(c.next)} ${wd(c.next)}</b><span class="cd">${daysTo(c.next)} 天后</span>`:'下次财报日期待定'}</div>
+  ${c.flash?`<div class="flash-box">${ICON.bolt}<div><div class="t">业绩快讯 · 待核实</div><p>${hlDates(esc(earningsText(c.flash)))}</p></div></div>`:''}
+  ${c.view?`<div class="view-box"><div class="t">一句话看点 · 待核</div><p>${esc(c.view)}</p></div>`:''}
+  <div class="dw-next">${ICON.cal}${c.next?`财报日期 <b>${esc(c.next)} ${wd(c.next)}</b><span class="cd">${eventCountdown(c.next)}</span>`:'财报日期待定'}</div>
+  <div class="review-note earnings-evidence"><b>${eventLabel(c)}</b> · ${esc(c.earnings?.timezone||'时区待核')}<br>披露 ${esc(c.earnings?.published_at||'待核')} · 核验 ${esc(c.earnings?.verified_at||'日期缺失')}${c.earnings?.time_note?'<br>'+esc(c.earnings.time_note):''}${c.earnings?.source_url?`<br><a href="${esc(c.earnings.source_url)}" target="_blank" rel="noopener">官方日期来源 ↗</a>`:''}</div>
   <div class="dw-actions">${c.url?`<a class="btn primary" href="${esc(c.url)}" target="_blank" rel="noopener">${ICON.book}知识库笔记 ${ICON.ext}</a>`:''}<button class="btn${c.url?'':' primary'}" data-gocp="${esc(c.ind)}" data-cpname="${esc(c.cp)}">查看所在卡点 ${ICON.arrow}</button></div></div>`;
   seg($('#rangeSeg'),[{v:'1m',l:'1月'},{v:'3m',l:'3月'},{v:'6m',l:'6月'},{v:'ytd',l:'年初至今'},{v:'1y',l:'1年'},{v:'2y',l:'2年'}].map(o=>({...o,l:rangeComplete(c,o.v)?o.l:o.l+'·不足'})),S.range,v=>{S.range=v;drawChart(c)});
   dr.classList.add('on');dr.setAttribute('aria-hidden','false');$('#mask').classList.add('on');document.body.style.overflow='hidden';
@@ -423,7 +450,7 @@ function renderFoot(){
   const detail=[...gaps,...partial,...unknown,estimated.length?`${estimated.length} 家美元市值使用跨日 FX 估算（FX 日期 ${fxDates.join('、')}），≈ 数值的原币市值见列表与详情`:'',D.ratio&&!D.ratio.simultaneousObservationProven?`比值保留 ${D.ratio.asOf||'原日期未知'}，同步时刻未核`:''].filter(Boolean).map(x=>`<li>${esc(x)}</li>`).join('');
   $('#foot').innerHTML=`<div class="foot-grid">
   <div><div class="bl">${ICON.grid}数据口径</div><p>行情：Yahoo Finance（备用：腾讯财经），截至 ${ASOFL}${STALE.length?`，${STALE.length} 只日线沿用缓存`:''}；比值：腾讯财经指数月线。财务：按公司所列期别、币种及会计口径；单季中位数只含已核实正式单季。缺失、半年累计、初步结果与扭亏不作为普通季度增长信号；详情悬停查看来源与核验日期。业绩快讯待核实。价格与估值按各自最新可得报价；5/20/60日、YTD、距52周高按各市场最新完成日线，详见每行时点。市值保留本币值；美元折算优先同日报价，缺少同日汇率时仅允许已证明完成、早于估值且相差不超过4个日历日的汇率，并标为估算（汇率收讫不超过36小时）。详情列来源和日期；缺失用占位面积。</p></div>
-  <div><div class="bl">${ICON.target}信号规则</div><p>业绩（已核实正式单季、三项齐备且利润可比）：高增 ≥ 50% · 增长 ≥ 10% · 平稳 &gt; −10% · 其余为下滑。<br>股价：走强 = 近20日 ≥ +5%；深度回调 = 距52周高点 ≤ −40%；回调 = 近20日 ≤ −10%；其余为震荡。</p><p>有效样本按当前筛选和指标计算；缺值、不参排项不填 0、不参与均值/中位数，升降序均置底。走势图为收盘折线。</p></div>
+  <div><div class="bl">${ICON.target}信号规则</div><p>业绩（已核实正式单季、三项齐备且利润可比）：高增 ≥ 50% · 增长 ≥ 10% · 平稳 &gt; −10% · 其余为下滑。<br>股价：走强 = 近20日 ≥ +5%；深度回调 = 距52周高点 ≤ −40%，可与走强并存；回调 = 近20日 ≤ −10%；其余为震荡。深度回调家数直接按距高点条件统计。</p><p>有效样本按当前筛选和指标计算；缺值、不参排项不填 0、不参与均值/中位数，升降序均置底。走势图为收盘折线。</p></div>
   <div><div class="bl">${ICON.alert}说明</div><p>评分与观点由仓库 radar/data 维护，当前为验收版本，自动刷新与发布未启用。本页仅用于研究跟踪，不构成投资建议。</p>${REPO?`<a class="btn" href="${esc(REPO)}" target="_blank" rel="noopener">打开 GitHub 仓库 ${ICON.ext}</a>`:''}</div></div>
   <details id="dataDetails"><summary>数据状态与缺项说明 · ${esc(dataStateLabel(D.meta.coverage))}</summary><p>暂未取得表示当前快照没有有效值，不据此推断接口失败。访问受阻仅按已记录的拒绝标记；已知不适用不计为失败。各项保留原观察时间和来源。</p><ul>${detail}</ul></details>
   <div class="foot-b">投研雷达 · ALPHA RADAR · 更新于 ${D.meta.generatedAt?md(D.meta.generatedAt.slice(0,10))+' '+D.meta.generatedAt.slice(11,16):TODAY} · 快捷键：${isMac?'⌘K':'Ctrl K'} 搜索 · ←/→ 切换公司 · Esc 关闭</div>`;
