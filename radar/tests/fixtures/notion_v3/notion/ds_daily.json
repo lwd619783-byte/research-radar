@@ -1,0 +1,120 @@
+{
+ "object": "data_source",
+ "id": "8c8f38ad-be8d-4fce-bbdf-7701492f9e8e",
+ "created_time": "2026-10-21T02:40:00.000Z",
+ "last_edited_time": "2026-10-21T09:52:00.000Z",
+ "created_by": {
+  "object": "user",
+  "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+ },
+ "last_edited_by": {
+  "object": "user",
+  "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+ },
+ "properties": {
+  "涉及行业": {
+   "id": "%3CJid",
+   "name": "涉及行业",
+   "description": "0–3 个",
+   "type": "relation",
+   "relation": {
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467",
+    "type": "single_property",
+    "single_property": {}
+   }
+  },
+  "日期": {
+   "id": "%40ptF",
+   "name": "日期",
+   "description": "交易日（该市场当地日期）",
+   "type": "date",
+   "date": {}
+  },
+  "复盘链接": {
+   "id": "AeDn",
+   "name": "复盘链接",
+   "description": "当天复盘页链接",
+   "type": "url",
+   "url": {}
+  },
+  "一句话": {
+   "id": "DrhH",
+   "name": "一句话",
+   "description": "≤40 字，只写已发生的事实；不写预测、不写建议",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "市场": {
+   "id": "RV%5E%7C",
+   "name": "市场",
+   "description": "同一天同一市场只保留一行",
+   "type": "select",
+   "select": {
+    "options": [
+     {
+      "id": "O=qX",
+      "name": "A股",
+      "color": "red",
+      "description": null
+     },
+     {
+      "id": "WqtE",
+      "name": "美股",
+      "color": "blue",
+      "description": null
+     },
+     {
+      "id": "zQO:",
+      "name": "港股",
+      "color": "purple",
+      "description": null
+     }
+    ]
+   }
+  },
+  "标题": {
+   "id": "title",
+   "name": "标题",
+   "description": "格式：2026-10-21 A股",
+   "type": "title",
+   "title": {}
+  }
+ },
+ "parent": {
+  "type": "database_id",
+  "database_id": "94a84484-238d-4159-8438-7e999a4ff302"
+ },
+ "database_parent": {
+  "type": "page_id",
+  "page_id": "65314065-9aa7-4497-abcc-6d5041a4d3f8"
+ },
+ "title": [
+  {
+   "type": "text",
+   "text": {
+    "content": "每日要点",
+    "link": null
+   },
+   "annotations": {
+    "bold": false,
+    "italic": false,
+    "strikethrough": false,
+    "underline": false,
+    "code": false,
+    "color": "default"
+   },
+   "plain_text": "每日要点",
+   "href": null
+  }
+ ],
+ "description": [],
+ "icon": {
+  "type": "emoji",
+  "emoji": "🗓️"
+ },
+ "in_trash": false,
+ "url": "https://app.notion.com/p/94a84484238d415984387e999a4ff302",
+ "public_url": null,
+ "request_id": "59c85c83-f5f2-593e-a6f1-e1c07e92004d"
+}

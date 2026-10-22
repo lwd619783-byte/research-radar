@@ -1,0 +1,3769 @@
+{
+  "contract_version": "v3.0",
+  "as_of": "2026-10-21T18:15:00+08:00",
+  "today": "2026-10-21",
+  "trading_days": {
+    "A股": "2026-10-21",
+    "美股": "2026-10-20"
+  },
+  "index_changes": {
+    "000001.SS": -0.00598,
+    "399006.SZ": -0.01624,
+    "HSTECH.HK": -0.01264,
+    "^IXIC": -0.00023,
+    "^GSPC": 0.00284,
+    "^SOX": -0.00287
+  },
+  "daily_chips": {
+    "A股": [
+      "000001.SS",
+      "399006.SZ",
+      "HSTECH.HK"
+    ],
+    "美股": [
+      "^IXIC",
+      "^GSPC",
+      "^SOX"
+    ]
+  },
+  "baseline": "默认：先用未修改的 fixtures 跑一次，得到 research-snapshot.json 作为 last-good；given.baseline=\"none\" 表示没有 last-good",
+  "outcomes": {
+    "ok": "没有 warn 级 code（info 级 text_long 允许）",
+    "warning": "照常构建；meta.notion.warnings 里有对应 code；字段按规则置空/截断/降级",
+    "exclude": "行被静默排除（停用 / in_trash / 父级停用）；不报警",
+    "quarantine_row": "该行不用；industries/chokepoints/companies/financials 若 last-good 有同 page id → 用旧版本（rowSource=last_good，研判标签强制 stale + row_quarantined）；否则不显示。daily/weekly 坏行直接跳过",
+    "table_last_good": "整张表用 last-good；meta.notion.fallbackTables 记录 {table, code, detail, lastGoodFetchedAt}",
+    "all_last_good": "6 张表都用 last-good；数据脉搏黄点；行情照常",
+    "abort": "exit 2，不写任何发布文件，线上保持上一次部署"
+  },
+  "severity": {
+    "info": [
+      "text_long"
+    ],
+    "warn": "其余全部 code"
+  },
+  "codes": {
+    "transport": [
+      "notion_token_missing",
+      "notion_unauthorized",
+      "notion_forbidden",
+      "notion_not_found",
+      "notion_rate_limited",
+      "notion_server_error",
+      "notion_timeout",
+      "notion_bad_json",
+      "notion_cursor_loop",
+      "notion_too_many_pages",
+      "notion_body_too_large",
+      "notion_http_error",
+      "no_last_good"
+    ],
+    "schema": [
+      "notion_schema_changed"
+    ],
+    "table": [
+      "table_quality_low"
+    ],
+    "row": [
+      "missing_required",
+      "number_out_of_range",
+      "number_not_integer",
+      "invalid_enum",
+      "regex_mismatch",
+      "relation_missing",
+      "relation_multiple",
+      "duplicate_key",
+      "period_after_publish",
+      "publish_in_future"
+    ],
+    "field": [
+      "text_long",
+      "text_truncated",
+      "list_truncated",
+      "relation_truncated",
+      "banned_words",
+      "prediction_words",
+      "token_unknown_company",
+      "cp_industry_mismatch",
+      "earnings_confirmed_without_source",
+      "earnings_date_past",
+      "timezone_invalid",
+      "url_invalid",
+      "pct_out_of_range",
+      "pct_suspicious",
+      "pct_maybe_fraction",
+      "flash_date_future",
+      "financial_duplicate",
+      "daily_duplicate",
+      "daily_future_date",
+      "company_cap_exceeded"
+    ],
+    "judgment_reasons": [
+      "missing_reason",
+      "missing_source",
+      "missing_dates",
+      "future_judgment_date",
+      "expired",
+      "validity_too_long",
+      "banned_words",
+      "row_quarantined",
+      "not_current_week",
+      "no_weekly_row"
+    ]
+  },
+  "cases": [
+    {
+      "id": "T01",
+      "group": "transport",
+      "title": "NOTION_TOKEN 未设置",
+      "mutations": [
+        {
+          "op": "env",
+          "unset": [
+            "NOTION_TOKEN"
+          ]
+        }
+      ],
+      "expect": {
+        "outcome": "all_last_good",
+        "exit": 0,
+        "codes": [
+          "notion_token_missing"
+        ],
+        "assert": [
+          {
+            "path": "transport.requests",
+            "eq": 0
+          },
+          {
+            "path": "meta.notion.fallbackTables",
+            "len": 6
+          },
+          {
+            "path": "industries",
+            "len": 15
+          }
+        ],
+        "ui": "研究数据全部沿用上次成功版本；数据脉搏显示黄点「研究数据未更新」；行情照常更新"
+      }
+    },
+    {
+      "id": "T02",
+      "group": "transport",
+      "title": "401 unauthorized（token 失效 / 被撤销）",
+      "mutations": [
+        {
+          "op": "http",
+          "match": {
+            "kind": "any"
+          },
+          "responses": [
+            {
+              "status": 401,
+              "body": {
+                "object": "error",
+                "status": 401,
+                "code": "unauthorized",
+                "message": "API token is invalid."
+              }
+            }
+          ],
+          "then": "repeat_last"
+        }
+      ],
+      "expect": {
+        "outcome": "all_last_good",
+        "exit": 0,
+        "codes": [
+          "notion_unauthorized"
+        ],
+        "assert": [
+          {
+            "path": "transport.requests",
+            "eq": 1
+          },
+          {
+            "path": "meta.notion.fallbackTables",
+            "len": 6
+          },
+          {
+            "path": "transport.sleeps",
+            "eq": []
+          }
+        ],
+        "ui": "401/403 不重试，且立即停止读取其他表；全部沿用上次成功版本 + 黄点"
+      }
+    },
+    {
+      "id": "T03",
+      "group": "transport",
+      "title": "每周主线库 404（未共享给 connection / 被移动）",
+      "mutations": [
+        {
+          "op": "http",
+          "match": {
+            "kind": "schema",
+            "table": "weekly"
+          },
+          "responses": [
+            {
+              "status": 404,
+              "body": {
+                "object": "error",
+                "status": 404,
+                "code": "object_not_found",
+                "message": "Could not find data source."
+              }
+            }
+          ],
+          "then": "repeat_last"
+        }
+      ],
+      "expect": {
+        "outcome": "table_last_good",
+        "exit": 0,
+        "codes": [
+          "notion_not_found"
+        ],
+        "assert": [
+          {
+            "path": "meta.notion.fallbackTables[table=weekly].code",
+            "eq": "notion_not_found"
+          },
+          {
+            "path": "meta.notion.fallbackTables",
+            "len": 1
+          },
+          {
+            "path": "transport.requests",
+            "eq": 12
+          },
+          {
+            "path": "meta.weekly.mode",
+            "eq": "stale"
+          },
+          {
+            "path": "meta.weekly.sourceWeek",
+            "eq": "2026-W42"
+          }
+        ],
+        "ui": "只有每周主线沿用上次版本，其余 5 张表正常更新"
+      }
+    },
+    {
+      "id": "T04",
+      "group": "transport",
+      "title": "429 + Retry-After: 2（一次）",
+      "mutations": [
+        {
+          "op": "http",
+          "match": {
+            "kind": "query",
+            "table": "industries"
+          },
+          "responses": [
+            {
+              "status": 429,
+              "headers": {
+                "Retry-After": "2"
+              },
+              "body": {
+                "object": "error",
+                "status": 429,
+                "code": "rate_limited",
+                "message": "Rate limited"
+              }
+            }
+          ],
+          "then": "normal"
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "transport.sleeps",
+            "eq": [
+              2
+            ]
+          },
+          {
+            "path": "transport.requests",
+            "eq": 14
+          },
+          {
+            "path": "meta.notion.fallbackTables",
+            "len": 0
+          }
+        ],
+        "ui": "无可见变化"
+      }
+    },
+    {
+      "id": "T05",
+      "group": "transport",
+      "title": "502、503 各一次后恢复",
+      "mutations": [
+        {
+          "op": "http",
+          "match": {
+            "kind": "query",
+            "table": "chokepoints"
+          },
+          "responses": [
+            {
+              "status": 502,
+              "body_text": "Bad Gateway"
+            },
+            {
+              "status": 503,
+              "body_text": "Service Unavailable"
+            }
+          ],
+          "then": "normal"
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "transport.sleeps",
+            "eq": [
+              1,
+              2
+            ]
+          },
+          {
+            "path": "transport.requests",
+            "eq": 15
+          }
+        ],
+        "ui": "无可见变化"
+      }
+    },
+    {
+      "id": "T06",
+      "group": "transport",
+      "title": "超时 4 次（超过 3 次重试）",
+      "mutations": [
+        {
+          "op": "http",
+          "match": {
+            "kind": "query",
+            "table": "weekly"
+          },
+          "responses": [
+            {
+              "timeout": true
+            }
+          ],
+          "then": "repeat_last"
+        }
+      ],
+      "expect": {
+        "outcome": "table_last_good",
+        "exit": 0,
+        "codes": [
+          "notion_timeout"
+        ],
+        "assert": [
+          {
+            "path": "transport.sleeps",
+            "eq": [
+              1,
+              2,
+              4
+            ]
+          },
+          {
+            "path": "meta.notion.fallbackTables[table=weekly].code",
+            "eq": "notion_timeout"
+          }
+        ],
+        "ui": "每周主线沿用上次版本"
+      }
+    },
+    {
+      "id": "T07",
+      "group": "transport",
+      "title": "200 但 body 不是 JSON",
+      "mutations": [
+        {
+          "op": "http",
+          "match": {
+            "kind": "query",
+            "table": "chokepoints"
+          },
+          "responses": [
+            {
+              "status": 200,
+              "body_text": "<html>gateway error</html>"
+            }
+          ],
+          "then": "normal"
+        }
+      ],
+      "expect": {
+        "outcome": "table_last_good",
+        "exit": 0,
+        "codes": [
+          "notion_bad_json"
+        ],
+        "assert": [
+          {
+            "path": "meta.notion.fallbackTables[table=chokepoints].code",
+            "eq": "notion_bad_json"
+          },
+          {
+            "path": "transport.sleeps",
+            "eq": []
+          }
+        ],
+        "ui": "卡点表沿用上次版本（不重试）"
+      }
+    },
+    {
+      "id": "T08",
+      "group": "transport",
+      "title": "分页游标循环（第 2 页又返回第 1 页的 next_cursor）",
+      "mutations": [
+        {
+          "op": "cursor_loop",
+          "table": "companies"
+        }
+      ],
+      "expect": {
+        "outcome": "table_last_good",
+        "exit": 0,
+        "codes": [
+          "notion_cursor_loop"
+        ],
+        "assert": [
+          {
+            "path": "meta.notion.fallbackTables[table=companies].code",
+            "eq": "notion_cursor_loop"
+          },
+          {
+            "path": "companies",
+            "len": 42
+          }
+        ],
+        "ui": "公司表沿用上次版本；不会死循环（另有 >50 页保护，code notion_too_many_pages）"
+      }
+    },
+    {
+      "id": "T09",
+      "group": "transport",
+      "title": "响应体超过 8 MB",
+      "mutations": [
+        {
+          "op": "http",
+          "match": {
+            "kind": "query",
+            "table": "financials"
+          },
+          "responses": [
+            {
+              "status": 200,
+              "body_bytes": 8388609
+            }
+          ],
+          "then": "normal"
+        }
+      ],
+      "expect": {
+        "outcome": "table_last_good",
+        "exit": 0,
+        "codes": [
+          "notion_body_too_large"
+        ],
+        "assert": [
+          {
+            "path": "meta.notion.fallbackTables[table=financials].code",
+            "eq": "notion_body_too_large"
+          }
+        ],
+        "ui": "财报记录沿用上次版本；读取时边读边计数，超过 8 MB 立即停止"
+      }
+    },
+    {
+      "id": "T10",
+      "group": "transport",
+      "title": "query 结果里混入 object=data_source",
+      "mutations": [
+        {
+          "op": "inject_result",
+          "table": "industries",
+          "object": "data_source"
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "industries",
+            "len": 15
+          }
+        ],
+        "ui": "无可见变化（非 page 结果直接跳过）"
+      }
+    },
+    {
+      "id": "T11",
+      "group": "transport",
+      "title": "page.in_trash = true",
+      "mutations": [
+        {
+          "op": "page_attr",
+          "table": "industries",
+          "row": "房地产",
+          "attr": "in_trash",
+          "value": true
+        }
+      ],
+      "expect": {
+        "outcome": "exclude",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "industries",
+            "len": 14
+          },
+          {
+            "path": "industries[name=房地产]",
+            "absent": true
+          }
+        ],
+        "ui": "房地产不再显示，不报警"
+      }
+    },
+    {
+      "id": "T12",
+      "group": "transport",
+      "title": "401 且没有上次成功版本（首次部署）",
+      "given": {
+        "baseline": "none"
+      },
+      "mutations": [
+        {
+          "op": "http",
+          "match": {
+            "kind": "any"
+          },
+          "responses": [
+            {
+              "status": 401,
+              "body": {
+                "object": "error",
+                "status": 401,
+                "code": "unauthorized",
+                "message": "API token is invalid."
+              }
+            }
+          ],
+          "then": "repeat_last"
+        }
+      ],
+      "expect": {
+        "outcome": "abort",
+        "exit": 2,
+        "codes": [
+          "notion_unauthorized",
+          "no_last_good"
+        ],
+        "assert": [
+          {
+            "path": "files.written",
+            "eq": []
+          }
+        ],
+        "ui": "构建以 exit 2 失败，不生成任何发布文件；线上继续显示上一次部署"
+      }
+    },
+    {
+      "id": "T13",
+      "group": "transport",
+      "title": "429 + Retry-After: 120 持续 4 次",
+      "mutations": [
+        {
+          "op": "http",
+          "match": {
+            "kind": "query",
+            "table": "companies",
+            "start_cursor": null
+          },
+          "responses": [
+            {
+              "status": 429,
+              "headers": {
+                "Retry-After": "120"
+              },
+              "body": {
+                "object": "error",
+                "status": 429,
+                "code": "rate_limited",
+                "message": "Rate limited"
+              }
+            }
+          ],
+          "then": "repeat_last"
+        }
+      ],
+      "expect": {
+        "outcome": "table_last_good",
+        "exit": 0,
+        "codes": [
+          "notion_rate_limited"
+        ],
+        "assert": [
+          {
+            "path": "transport.sleeps",
+            "eq": [
+              60,
+              60,
+              60
+            ]
+          }
+        ],
+        "ui": "Retry-After 封顶 60 秒、最多重试 3 次；公司表沿用上次版本"
+      }
+    },
+    {
+      "id": "S01",
+      "group": "schema",
+      "title": "行业库「一句话逻辑」被改名为「核心逻辑」",
+      "mutations": [
+        {
+          "op": "schema_rename",
+          "table": "industries",
+          "prop": "一句话逻辑",
+          "to": "核心逻辑"
+        }
+      ],
+      "expect": {
+        "outcome": "table_last_good",
+        "exit": 0,
+        "codes": [
+          "notion_schema_changed"
+        ],
+        "assert": [
+          {
+            "path": "meta.notion.fallbackTables[table=industries].code",
+            "eq": "notion_schema_changed"
+          },
+          {
+            "path": "meta.notion.fallbackTables[table=industries].detail.prop",
+            "eq": "一句话逻辑"
+          },
+          {
+            "path": "meta.notion.fallbackTables[table=industries].detail.change",
+            "eq": "missing"
+          },
+          {
+            "path": "industries[name=AI服务器].rowSource",
+            "eq": "last_good"
+          }
+        ],
+        "ui": "行业表整表沿用上次版本；Actions 摘要提示「Notion 列名被改：一句话逻辑」"
+      }
+    },
+    {
+      "id": "S02",
+      "group": "schema",
+      "title": "「景气度」从 number 改成 rich_text",
+      "mutations": [
+        {
+          "op": "schema_type",
+          "table": "industries",
+          "prop": "景气度",
+          "to": "rich_text"
+        }
+      ],
+      "expect": {
+        "outcome": "table_last_good",
+        "exit": 0,
+        "codes": [
+          "notion_schema_changed"
+        ],
+        "assert": [
+          {
+            "path": "meta.notion.fallbackTables[table=industries].detail.change",
+            "eq": "type_changed"
+          }
+        ],
+        "ui": "行业表沿用上次版本"
+      }
+    },
+    {
+      "id": "S03",
+      "group": "schema",
+      "title": "「紧缺度」新增选项「紧缺」但没有行使用",
+      "mutations": [
+        {
+          "op": "schema_add_option",
+          "table": "chokepoints",
+          "prop": "紧缺度",
+          "option": "紧缺"
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "chokepoints",
+            "len": 16
+          }
+        ],
+        "ui": "无可见变化"
+      }
+    },
+    {
+      "id": "S04",
+      "group": "schema",
+      "title": "公司库新增额外列「备注」",
+      "mutations": [
+        {
+          "op": "schema_add_prop",
+          "table": "companies",
+          "prop": "备注",
+          "type": "rich_text"
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "companies",
+            "len": 42
+          }
+        ],
+        "ui": "无可见变化（契约外的列忽略）"
+      }
+    },
+    {
+      "id": "S05",
+      "group": "schema",
+      "title": "新选项「紧缺」被某行使用",
+      "mutations": [
+        {
+          "op": "schema_add_option",
+          "table": "chokepoints",
+          "prop": "紧缺度",
+          "option": "紧缺"
+        },
+        {
+          "op": "set",
+          "table": "chokepoints",
+          "row": "钻孔设备与钻针",
+          "prop": "紧缺度",
+          "value": "紧缺"
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "invalid_enum"
+        ],
+        "assert": [
+          {
+            "path": "chokepoints[name=钻孔设备与钻针].tight",
+            "eq": "🟠偏紧"
+          },
+          {
+            "path": "chokepoints[name=钻孔设备与钻针].rowSource",
+            "eq": "last_good"
+          },
+          {
+            "path": "chokepoints[name=钻孔设备与钻针].judgment.label",
+            "eq": "stale"
+          },
+          {
+            "path": "chokepoints[name=钻孔设备与钻针].judgment.reasons",
+            "contains": "row_quarantined"
+          }
+        ],
+        "ui": "该行改用上次成功读取的版本（rowSource=last_good），卡点卡片显示「待更新」"
+      }
+    },
+    {
+      "id": "S06",
+      "group": "schema",
+      "title": "删除公式列「研判状态」（ignore 级）",
+      "mutations": [
+        {
+          "op": "schema_remove_prop",
+          "table": "industries",
+          "prop": "研判状态"
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "meta.notion.fallbackTables",
+            "len": 0
+          }
+        ],
+        "ui": "无可见变化（程序不读公式）"
+      }
+    },
+    {
+      "id": "S07",
+      "group": "schema",
+      "title": "删除 optional 列「停用」",
+      "mutations": [
+        {
+          "op": "schema_remove_prop",
+          "table": "companies",
+          "prop": "停用"
+        }
+      ],
+      "expect": {
+        "outcome": "table_last_good",
+        "exit": 0,
+        "codes": [
+          "notion_schema_changed"
+        ],
+        "assert": [
+          {
+            "path": "meta.notion.fallbackTables[table=companies].detail.prop",
+            "eq": "停用"
+          }
+        ],
+        "ui": "契约里的任何列（ignore 级除外）缺失或类型变化都整表沿用上次版本"
+      }
+    },
+    {
+      "id": "R01",
+      "group": "industries",
+      "title": "景气度 = 6（超出 1–5）",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "AI核心半导体",
+          "prop": "景气度",
+          "value": 6
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "number_out_of_range"
+        ],
+        "assert": [
+          {
+            "path": "industries[name=AI核心半导体].s[0]",
+            "eq": 5
+          },
+          {
+            "path": "industries[name=AI核心半导体].rowSource",
+            "eq": "last_good"
+          },
+          {
+            "path": "industries[name=AI核心半导体].judgment.label",
+            "eq": "stale"
+          },
+          {
+            "path": "industries[name=AI核心半导体].judgment.reasons",
+            "contains": "row_quarantined"
+          },
+          {
+            "path": "meta.notion.quarantined[key=AI核心半导体].usedLastGood",
+            "eq": true
+          }
+        ],
+        "ui": "该行改用上次成功读取的版本（rowSource=last_good），行业卡显示「待更新」"
+      }
+    },
+    {
+      "id": "R02",
+      "group": "industries",
+      "title": "景气度 = 4.5（非整数）",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "AI核心半导体",
+          "prop": "景气度",
+          "value": 4.5
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "number_not_integer"
+        ],
+        "assert": [
+          {
+            "path": "industries[name=AI核心半导体].s[0]",
+            "eq": 5
+          }
+        ],
+        "ui": "该行改用上次成功读取的版本（rowSource=last_good）"
+      }
+    },
+    {
+      "id": "R03",
+      "group": "industries",
+      "title": "业绩兑现 为空",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "PCB与覆铜板",
+          "prop": "业绩兑现",
+          "value": null
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "missing_required"
+        ],
+        "assert": [
+          {
+            "path": "industries[name=PCB与覆铜板].s[1]",
+            "eq": 5
+          }
+        ],
+        "ui": "该行改用上次成功读取的版本（rowSource=last_good）"
+      }
+    },
+    {
+      "id": "R04",
+      "group": "industries",
+      "title": "重复名称：新建了第二行「消费」",
+      "mutations": [
+        {
+          "op": "add_row",
+          "table": "industries",
+          "copy_of": "消费",
+          "id": "00000000-0000-4000-8000-000000000401",
+          "created_time": "2026-10-21T10:00:00.000Z",
+          "last_edited_time": "2026-10-21T10:00:00.000Z",
+          "set": {
+            "景气度": 3
+          }
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "duplicate_key"
+        ],
+        "assert": [
+          {
+            "path": "industries",
+            "len": 15
+          },
+          {
+            "path": "industries[name=消费].s[0]",
+            "eq": 2
+          },
+          {
+            "path": "meta.notion.quarantined[key=消费].pageId",
+            "eq": "00000000-0000-4000-8000-000000000401"
+          },
+          {
+            "path": "meta.notion.quarantined[key=消费].usedLastGood",
+            "eq": false
+          }
+        ],
+        "ui": "created_time 较晚的那行被隔离（相同则按 page id）；原行照常显示"
+      }
+    },
+    {
+      "id": "R05",
+      "group": "judgment",
+      "title": "研判理由 为空",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "网络安全",
+          "prop": "研判理由",
+          "value": ""
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "industries[name=网络安全].judgment.label",
+            "eq": "stale"
+          },
+          {
+            "path": "industries[name=网络安全].judgment.reasons",
+            "eq": [
+              "missing_reason"
+            ]
+          },
+          {
+            "path": "industries[name=网络安全].logic",
+            "ne": ""
+          }
+        ],
+        "ui": "内容照常显示，但行业卡显示「待更新」（悬停：缺研判理由）"
+      }
+    },
+    {
+      "id": "R06",
+      "group": "judgment",
+      "title": "来源 没有 URL",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "玻璃基板",
+          "prop": "来源",
+          "value": "见知识库"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "industries[name=玻璃基板].judgment.reasons",
+            "eq": [
+              "missing_source"
+            ]
+          }
+        ],
+        "ui": "「待更新」（缺来源链接）"
+      }
+    },
+    {
+      "id": "R07",
+      "group": "judgment",
+      "title": "有效至 已过（昨天）",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "电池与储能",
+          "prop": "有效至",
+          "value": "2026-10-20"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "industries[name=电池与储能].judgment.reasons",
+            "eq": [
+              "expired"
+            ]
+          }
+        ],
+        "ui": "「待更新」（研判已过期）；有效至 = 今天仍算有效"
+      }
+    },
+    {
+      "id": "R08",
+      "group": "judgment",
+      "title": "研判日期 在未来",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "光纤光缆",
+          "prop": "研判日期",
+          "value": "2026-10-22"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "industries[name=光纤光缆].judgment.reasons",
+            "eq": [
+              "future_judgment_date"
+            ]
+          }
+        ],
+        "ui": "「待更新」"
+      }
+    },
+    {
+      "id": "R09",
+      "group": "judgment",
+      "title": "有效期超过 14 天",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "航空航天与国防",
+          "prop": "有效至",
+          "value": "2026-11-30"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "industries[name=航空航天与国防].judgment.reasons",
+            "eq": [
+              "validity_too_long"
+            ]
+          }
+        ],
+        "ui": "「待更新」（有效期最长 14 天）"
+      }
+    },
+    {
+      "id": "R10",
+      "group": "industries",
+      "title": "一句话逻辑 85 字（硬上限 80）",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "AI服务器",
+          "prop": "一句话逻辑",
+          "value": "GB300整机与ASIC服务器同步放量，液冷机柜渗透率快速提升，ODM与电源厂商营收高增但毛利率承压；北美云厂商资本开支指引继续上修，整机交付节奏取决于上游GPU与HBM"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "text_truncated"
+        ],
+        "assert": [
+          {
+            "path": "industries[name=AI服务器].logic",
+            "eq": "GB300整机与ASIC服务器同步放量，液冷机柜渗透率快速提升，ODM与电源厂商营收高增但毛利率承压；北美云厂商资本开支指引继续上修，整机交付节奏取决于上游G…"
+          },
+          {
+            "path": "industries[name=AI服务器].judgment.label",
+            "eq": "ai"
+          }
+        ],
+        "ui": "截成 79 字 + “…”；标签不变"
+      }
+    },
+    {
+      "id": "R11",
+      "group": "industries",
+      "title": "主要风险 含禁用词",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "消费",
+          "prop": "主要风险",
+          "value": "需求修复偏慢，建议逢低加仓等待拐点"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "banned_words"
+        ],
+        "assert": [
+          {
+            "path": "industries[name=消费].risk",
+            "eq": ""
+          },
+          {
+            "path": "industries[name=消费].judgment.label",
+            "eq": "stale"
+          },
+          {
+            "path": "industries[name=消费].judgment.reasons",
+            "contains": "banned_words"
+          },
+          {
+            "path": "meta.notion.warnings[code=banned_words].field",
+            "eq": "主要风险"
+          }
+        ],
+        "ui": "该字段不显示，行业卡「待更新」"
+      }
+    },
+    {
+      "id": "R12",
+      "group": "industries",
+      "title": "AI 分与数据档差 ≥ 2 → 数据冲突",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "AI网络与光互连",
+          "prop": "业绩兑现",
+          "value": 2
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "industries[name=AI网络与光互连].judgment.conflicts",
+            "eq": [
+              {
+                "field": "业绩兑现",
+                "ai": 2,
+                "anchor": 5
+              }
+            ]
+          },
+          {
+            "path": "industries[name=AI网络与光互连].judgment.label",
+            "eq": "ai"
+          },
+          {
+            "path": "industries[name=AI网络与光互连].total",
+            "eq": 16
+          }
+        ],
+        "ui": "分数照常显示，旁边加「数据冲突」标签（悬停：AI 2 · 数据档 5，营收同比中位数 +85.5%，9 家）"
+      }
+    },
+    {
+      "id": "R13",
+      "group": "industries",
+      "title": "行业停用 → 卡点/公司/财报级联排除",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "电力与数据中心",
+          "prop": "停用",
+          "value": true
+        }
+      ],
+      "expect": {
+        "outcome": "exclude",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "industries",
+            "len": 14
+          },
+          {
+            "path": "chokepoints",
+            "len": 12
+          },
+          {
+            "path": "companies",
+            "len": 30
+          },
+          {
+            "path": "companies[id=GEV]",
+            "absent": true
+          },
+          {
+            "path": "meta.notion.warnings",
+            "len": 6
+          }
+        ],
+        "ui": "整个行业及其下属卡点、公司、财报都不显示；不报警"
+      }
+    },
+    {
+      "id": "R14",
+      "group": "chokepoints",
+      "title": "卡点停用 → 公司 cp 置空",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "chokepoints",
+          "row": "钻孔设备与钻针",
+          "prop": "停用",
+          "value": true
+        }
+      ],
+      "expect": {
+        "outcome": "exclude",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "chokepoints",
+            "len": 15
+          },
+          {
+            "path": "companies[id=DZSK].cp",
+            "eq": ""
+          },
+          {
+            "path": "companies[id=DTGK].cp",
+            "eq": ""
+          },
+          {
+            "path": "companies",
+            "len": 42
+          }
+        ],
+        "ui": "卡点不显示；相关公司仍显示，只是不再挂卡点；不报警"
+      }
+    },
+    {
+      "id": "R15",
+      "group": "industries",
+      "title": "最新信号 6 条（上限 4）",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "AI核心半导体",
+          "prop": "最新信号",
+          "value": "台积电Q3营收+41%；ASML Q3营收+55%；长鑫前三季预告扭亏；海力士HBM4送样；美光HBM售罄；北方华创订单+40%"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "list_truncated"
+        ],
+        "assert": [
+          {
+            "path": "industries[name=AI核心半导体].signal",
+            "eq": "台积电Q3营收+41%；ASML Q3营收+55%；长鑫前三季预告扭亏；海力士HBM4送样"
+          }
+        ],
+        "ui": "只保留前 4 条"
+      }
+    },
+    {
+      "id": "R16",
+      "group": "judgment",
+      "title": "研判理由 写了「已核实」",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "PCB与覆铜板",
+          "prop": "研判理由",
+          "value": "已核实三季报预告，维持判断"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "banned_words"
+        ],
+        "assert": [
+          {
+            "path": "industries[name=PCB与覆铜板].judgment.reason",
+            "eq": ""
+          },
+          {
+            "path": "industries[name=PCB与覆铜板].judgment.label",
+            "eq": "stale"
+          }
+        ],
+        "ui": "网站永远不出现「已核实/已审核/人工确认/已验证」"
+      }
+    },
+    {
+      "id": "R17",
+      "group": "judgment",
+      "title": "禁用词被空格/全角拆开",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "房地产",
+          "prop": "一句话逻辑",
+          "value": "政策托底但销售仍弱，不宜 抄　底"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "banned_words"
+        ],
+        "assert": [
+          {
+            "path": "industries[name=房地产].logic",
+            "eq": ""
+          }
+        ],
+        "ui": "先 NFKC 再去掉所有空白后匹配"
+      }
+    },
+    {
+      "id": "C01",
+      "group": "chokepoints",
+      "title": "行业 relation 为空",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "chokepoints",
+          "row": "液冷与热管理",
+          "prop": "行业",
+          "value": []
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "relation_missing"
+        ],
+        "assert": [
+          {
+            "path": "chokepoints[name=液冷与热管理].ind",
+            "eq": "电力与数据中心"
+          },
+          {
+            "path": "chokepoints[name=液冷与热管理].rowSource",
+            "eq": "last_good"
+          }
+        ],
+        "ui": "该行改用上次成功读取的版本（rowSource=last_good）"
+      }
+    },
+    {
+      "id": "C02",
+      "group": "chokepoints",
+      "title": "行业 relation 有 2 个",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "chokepoints",
+          "row": "液冷与热管理",
+          "prop": "行业",
+          "value": [
+            "电力与数据中心",
+            "AI服务器"
+          ]
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "relation_multiple"
+        ],
+        "assert": [
+          {
+            "path": "chokepoints[name=液冷与热管理].ind",
+            "eq": "电力与数据中心"
+          }
+        ],
+        "ui": "该行改用上次成功读取的版本（rowSource=last_good）"
+      }
+    },
+    {
+      "id": "C03",
+      "group": "chokepoints",
+      "title": "紧缺度 为空",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "chokepoints",
+          "row": "光芯片与激光器",
+          "prop": "紧缺度",
+          "value": null
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "missing_required"
+        ],
+        "assert": [
+          {
+            "path": "chokepoints[name=光芯片与激光器].tight",
+            "eq": "🔴极紧"
+          }
+        ],
+        "ui": "该行改用上次成功读取的版本（rowSource=last_good）"
+      }
+    },
+    {
+      "id": "C04",
+      "group": "chokepoints",
+      "title": "跟踪指标 引用不存在的代号",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "chokepoints",
+          "row": "光引擎与精密光器件",
+          "prop": "跟踪指标",
+          "value": "天孚光引擎出货（{{earnings:TFTX}}）、CPO交换机（{{earnings:XXXX}}）"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "token_unknown_company"
+        ],
+        "assert": [
+          {
+            "path": "chokepoints[name=光引擎与精密光器件].track",
+            "contains": "{{earnings:XXXX}}"
+          }
+        ],
+        "ui": "DATA 保留原始 token；页面渲染为「日期待定」（不再出现「日期待核」）"
+      }
+    },
+    {
+      "id": "C05",
+      "group": "chokepoints",
+      "title": "排序 为空 → 9999",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "chokepoints",
+          "row": "先进制程与先进封装",
+          "prop": "排序",
+          "value": null
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "chokepoints[ind=AI核心半导体][-1].name",
+            "eq": "先进制程与先进封装"
+          }
+        ],
+        "ui": "该卡点排到所属行业最后"
+      }
+    },
+    {
+      "id": "C06",
+      "group": "chokepoints",
+      "title": "为什么卡 含禁用词",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "chokepoints",
+          "row": "HBM与存储",
+          "prop": "为什么卡",
+          "value": "HBM挤占DRAM产能，龙头目标价上调"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "banned_words"
+        ],
+        "assert": [
+          {
+            "path": "chokepoints[name=HBM与存储].why",
+            "eq": ""
+          },
+          {
+            "path": "chokepoints[name=HBM与存储].judgment.label",
+            "eq": "stale"
+          }
+        ],
+        "ui": "字段不显示 +「待更新」"
+      }
+    },
+    {
+      "id": "P01",
+      "group": "companies",
+      "title": "重复代号（新建第二个 NVDA）",
+      "mutations": [
+        {
+          "op": "add_row",
+          "table": "companies",
+          "copy_of": "NVDA",
+          "id": "00000000-0000-4000-8000-000000000501",
+          "created_time": "2026-10-21T10:00:00.000Z",
+          "last_edited_time": "2026-10-21T10:00:00.000Z",
+          "set": {
+            "名称": "英伟达（重复）"
+          }
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "duplicate_key"
+        ],
+        "assert": [
+          {
+            "path": "companies",
+            "len": 42
+          },
+          {
+            "path": "companies[id=NVDA].name",
+            "eq": "英伟达 NVIDIA"
+          }
+        ],
+        "ui": "新建的那行被隔离，原行照常"
+      }
+    },
+    {
+      "id": "P02",
+      "group": "companies",
+      "title": "代号 小写 nvda",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "NVDA",
+          "prop": "代号",
+          "value": "nvda"
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "regex_mismatch"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=NVDA].rowSource",
+            "eq": "last_good"
+          },
+          {
+            "path": "companies[id=nvda]",
+            "absent": true
+          }
+        ],
+        "ui": "不自动转大写；沿用上次版本，公司抽屉显示「待更新」"
+      }
+    },
+    {
+      "id": "P03",
+      "group": "companies",
+      "title": "A股 Yahoo代码 写成 .SH",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "YJKJ",
+          "prop": "Yahoo代码",
+          "value": "688498.SH"
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "regex_mismatch"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=YJKJ].sym",
+            "eq": "688498.SS"
+          }
+        ],
+        "ui": "该行改用上次成功读取的版本（rowSource=last_good）"
+      }
+    },
+    {
+      "id": "P04",
+      "group": "companies",
+      "title": "市场 为空",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "ANET",
+          "prop": "市场",
+          "value": null
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "missing_required"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=ANET].mkt",
+            "eq": "美股"
+          }
+        ],
+        "ui": "该行改用上次成功读取的版本（rowSource=last_good）"
+      }
+    },
+    {
+      "id": "P05",
+      "group": "companies",
+      "title": "卡点 与行业不一致",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "ASML",
+          "prop": "卡点",
+          "value": [
+            "光芯片与激光器"
+          ]
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "cp_industry_mismatch"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=ASML].cp",
+            "eq": ""
+          },
+          {
+            "path": "companies[id=ASML].ind",
+            "eq": "AI核心半导体"
+          }
+        ],
+        "ui": "公司照常显示，不挂卡点"
+      }
+    },
+    {
+      "id": "P06",
+      "group": "companies",
+      "title": "官方确认 但没有 财报日来源",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "ZGXD",
+          "prop": "财报日状态",
+          "value": "官方确认"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "earnings_confirmed_without_source"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=ZGXD].earnings.status",
+            "eq": "unverified"
+          }
+        ],
+        "ui": "日历仍显示「预估」"
+      }
+    },
+    {
+      "id": "P07",
+      "group": "companies",
+      "title": "下次财报日 为空",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "VRT",
+          "prop": "下次财报日",
+          "value": null
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "companies[id=VRT].next",
+            "eq": null
+          }
+        ],
+        "ui": "日历里显示虚线「待定」，KPI「待定」+1"
+      }
+    },
+    {
+      "id": "P08",
+      "group": "companies",
+      "title": "下次财报日 已过",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "ZGXD",
+          "prop": "下次财报日",
+          "value": "2026-10-20"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "earnings_date_past"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=ZGXD].next",
+            "eq": "2026-10-20"
+          }
+        ],
+        "ui": "保留日期；日历不再把它列为未来事件"
+      }
+    },
+    {
+      "id": "P09",
+      "group": "companies",
+      "title": "财报日时区 非法",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "SKH",
+          "prop": "财报日时区",
+          "value": "Asia/Beijing"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "timezone_invalid"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=SKH].earnings.timezone",
+            "eq": "Asia/Seoul"
+          }
+        ],
+        "ui": "改用市场默认时区"
+      }
+    },
+    {
+      "id": "P10",
+      "group": "companies",
+      "title": "快讯 token 代号不存在",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "MOD",
+          "prop": "快讯",
+          "value": "⏳ 财报日期：{{earnings:FOO}}"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "token_unknown_company"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=MOD].flash",
+            "eq": "⏳ 财报日期：{{earnings:FOO}}"
+          }
+        ],
+        "ui": "页面渲染为「日期待定」"
+      }
+    },
+    {
+      "id": "P11",
+      "group": "companies",
+      "title": "快讯 90 字（硬上限 80）",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "ASML",
+          "prop": "快讯",
+          "value": "Q3营收116.6亿欧元（+55%）、净利49.6亿欧元（+133%）、毛利率57.5%；Q3新增订单创历史新高，管理层上调全年营收指引，EUV与High-NA出货节奏加快，中国区"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "text_truncated"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=ASML].flash",
+            "eq": "Q3营收116.6亿欧元（+55%）、净利49.6亿欧元（+133%）、毛利率57.5%；Q3新增订单创历史新高，管理层上调全年营收指引，EUV与High-N…"
+          }
+        ],
+        "ui": "截成 79 字 + “…”"
+      }
+    },
+    {
+      "id": "P12",
+      "group": "companies",
+      "title": "快讯日期 超过 30 天",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "ANET",
+          "prop": "快讯日期",
+          "value": "2026-09-15"
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "companies[id=ANET].flashDate",
+            "eq": "2026-09-15"
+          },
+          {
+            "path": "companies[id=ANET].flashFresh",
+            "eq": false
+          }
+        ],
+        "ui": "快讯灰显并标「9/15」，不在首页突出"
+      }
+    },
+    {
+      "id": "P13",
+      "group": "companies",
+      "title": "公司超过 80 家上限",
+      "mutations": [
+        {
+          "op": "add_many",
+          "table": "companies",
+          "count": 40,
+          "id_start": 600,
+          "pattern": {
+            "代号": "ZZ{n:02d}",
+            "名称": "测试公司{n:02d}",
+            "显示代码": "SH6{n:05d}",
+            "Yahoo代码": "6{n:05d}.SS",
+            "市场": "A股",
+            "币种": "CNY",
+            "定位": "国内龙头",
+            "行业": [
+              "房地产"
+            ],
+            "快讯": "",
+            "看点": ""
+          },
+          "created_time": "2026-10-21T10:00:00.000Z",
+          "last_edited_time": "2026-10-21T10:00:00.000Z"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "company_cap_exceeded"
+        ],
+        "assert": [
+          {
+            "path": "companies",
+            "len": 80
+          },
+          {
+            "path": "companies[id=ZZ38].name",
+            "eq": "测试公司38"
+          },
+          {
+            "path": "companies[id=ZZ39]",
+            "absent": true
+          },
+          {
+            "path": "companies[id=ZZ40]",
+            "absent": true
+          },
+          {
+            "path": "meta.notion.warnings[code=company_cap_exceeded].detail.dropped",
+            "eq": [
+              "ZZ39",
+              "ZZ40"
+            ]
+          }
+        ],
+        "ui": "按「所属行业顺序 → 代号」保留前 80 家；房地产总分最低，所以 ZZ39、ZZ40 被丢弃"
+      }
+    },
+    {
+      "id": "P14",
+      "group": "companies",
+      "title": "行业 relation 有 2 个",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "HDGF",
+          "prop": "行业",
+          "value": [
+            "PCB与覆铜板",
+            "AI服务器"
+          ]
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "relation_multiple"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=HDGF].ind",
+            "eq": "PCB与覆铜板"
+          },
+          {
+            "path": "companies[id=HDGF].rowSource",
+            "eq": "last_good"
+          }
+        ],
+        "ui": "该行改用上次成功读取的版本（rowSource=last_good）"
+      }
+    },
+    {
+      "id": "P15",
+      "group": "companies",
+      "title": "快讯日期 在未来",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "LITE",
+          "prop": "快讯日期",
+          "value": "2026-10-25"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "flash_date_future"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=LITE].flashDate",
+            "eq": "2026-10-21"
+          },
+          {
+            "path": "companies[id=LITE].flashFresh",
+            "eq": true
+          }
+        ],
+        "ui": "按今天处理"
+      }
+    },
+    {
+      "id": "P16",
+      "group": "companies",
+      "title": "知识库 不是 https",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "TSM",
+          "prop": "知识库",
+          "value": "notion.so/abc"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "url_invalid"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=TSM].url",
+            "eq": ""
+          }
+        ],
+        "ui": "不显示知识库链接"
+      }
+    },
+    {
+      "id": "P17",
+      "group": "companies",
+      "title": "看点 含禁用词",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "MU",
+          "prop": "看点",
+          "value": "HBM第三极，存储牛股"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "banned_words"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=MU].view",
+            "eq": ""
+          }
+        ],
+        "ui": "看点不显示（公司没有研判标签）"
+      }
+    },
+    {
+      "id": "P18",
+      "group": "companies",
+      "title": "名称 为空",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "COHR",
+          "prop": "名称",
+          "value": ""
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "missing_required"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=COHR].name",
+            "eq": "Coherent"
+          }
+        ],
+        "ui": "该行改用上次成功读取的版本（rowSource=last_good）"
+      }
+    },
+    {
+      "id": "P19",
+      "group": "companies",
+      "title": "截断点落在 token 内",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "HDGF",
+          "prop": "快讯",
+          "value": "Q3预告：前三季归母54.5–57亿（+101%~110%），推算Q3单季+144%~168%；AI服务器与800G交换机板放量，高多层板良率爬坡顺利{{earnings:HDGF}}"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "text_truncated"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=HDGF].flash",
+            "eq": "Q3预告：前三季归母54.5–57亿（+101%~110%），推算Q3单季+144%~168%；AI服务器与800G交换机板放量，高多层板良率爬坡顺利…"
+          }
+        ],
+        "ui": "token 按 10 字计；放不下就整个 token 去掉，再加“…”"
+      }
+    },
+    {
+      "id": "F01",
+      "group": "financials",
+      "title": "来源链接 为空",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "financials",
+          "row": "中际旭创 · FY2026 Q2",
+          "prop": "来源链接",
+          "value": null
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "companies[id=ZJXC].provenance.financial.evidence",
+            "eq": "missing"
+          },
+          {
+            "path": "companies[id=ZJXC].financialRevenueComparable",
+            "eq": false
+          },
+          {
+            "path": "companies[id=ZJXC].financialSignalEligible",
+            "eq": false
+          },
+          {
+            "path": "companies[id=ZJXC].revg",
+            "approx": 1.746
+          },
+          {
+            "path": "industries[name=AI网络与光互连].judgment.anchors.业绩兑现.n",
+            "eq": 8
+          },
+          {
+            "path": "industries[name=AI网络与光互连].judgment.anchors.业绩兑现.medianRevenueYoYPct",
+            "eq": 61.6
+          }
+        ],
+        "ui": "数字灰显 +「缺来源」；不参与任何信号与中位数"
+      }
+    },
+    {
+      "id": "F02",
+      "group": "financials",
+      "title": "期末日 晚于 发布日",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "financials",
+          "row": "源杰科技 · FY2026 Q2",
+          "prop": "发布日",
+          "value": "2026-06-15"
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "period_after_publish"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=YJKJ].provenance.financial.published_at",
+            "eq": "2026-08-29"
+          },
+          {
+            "path": "companies[id=YJKJ].provenance.financial.rowSource",
+            "eq": "last_good"
+          }
+        ],
+        "ui": "该行改用上次成功读取的版本（rowSource=last_good）"
+      }
+    },
+    {
+      "id": "F03",
+      "group": "financials",
+      "title": "发布日 在未来",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "financials",
+          "row": "源杰科技 · FY2026 Q2",
+          "prop": "发布日",
+          "value": "2026-10-25"
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "publish_in_future"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=YJKJ].provenance.financial.published_at",
+            "eq": "2026-08-29"
+          }
+        ],
+        "ui": "该行改用上次成功读取的版本（rowSource=last_good）"
+      }
+    },
+    {
+      "id": "F04",
+      "group": "financials",
+      "title": "同一 (公司,财年,期间,口径) 录了两次",
+      "mutations": [
+        {
+          "op": "add_row",
+          "table": "financials",
+          "copy_of": "SK海力士 · FY2026 Q2",
+          "id": "00000000-0000-4000-8000-000000000701",
+          "created_time": "2026-10-21T10:00:00.000Z",
+          "last_edited_time": "2026-10-21T10:00:00.000Z",
+          "set": {
+            "记录": "SK海力士 · FY2026 Q2（重录）",
+            "录入日": "2026-10-20",
+            "营收同比%": 250
+          }
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "financial_duplicate"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=SKH].revg",
+            "approx": 2.5
+          }
+        ],
+        "ui": "保留 录入日 较晚的一行"
+      }
+    },
+    {
+      "id": "F05",
+      "group": "financials",
+      "title": "毛利率% 填成小数 0.82",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "financials",
+          "row": "源杰科技 · FY2026 Q2",
+          "prop": "毛利率%",
+          "value": 0.82
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "pct_maybe_fraction"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=YJKJ].gm",
+            "approx": 0.0082
+          }
+        ],
+        "ui": "照常显示 0.8%（只提醒，不猜）"
+      }
+    },
+    {
+      "id": "F06",
+      "group": "financials",
+      "title": "毛利率% = 150",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "financials",
+          "row": "源杰科技 · FY2026 Q2",
+          "prop": "毛利率%",
+          "value": 150
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "pct_out_of_range"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=YJKJ].gm",
+            "eq": null
+          }
+        ],
+        "ui": "毛利率显示「—」"
+      }
+    },
+    {
+      "id": "F07",
+      "group": "financials",
+      "title": "营收同比% = −120",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "financials",
+          "row": "源杰科技 · FY2026 Q2",
+          "prop": "营收同比%",
+          "value": -120
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "pct_out_of_range"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=YJKJ].revg",
+            "eq": null
+          }
+        ],
+        "ui": "营收同比显示「—」"
+      }
+    },
+    {
+      "id": "F08",
+      "group": "financials",
+      "title": "利润可比性 = 扭亏",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "financials",
+          "row": "中际旭创 · FY2026 Q2",
+          "prop": "利润可比性",
+          "value": "扭亏"
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "companies[id=ZJXC].financialSignalEligible",
+            "eq": false
+          },
+          {
+            "path": "companies[id=ZJXC].financialRevenueComparable",
+            "eq": true
+          },
+          {
+            "path": "companies[id=ZJXC].earng",
+            "approx": 2.282
+          },
+          {
+            "path": "companies[id=ZJXC].provenance.financial.profit_comparison",
+            "eq": "turnaround"
+          }
+        ],
+        "ui": "净利同比位置显示「扭亏」而不是 +228%"
+      }
+    },
+    {
+      "id": "F09",
+      "group": "financials",
+      "title": "新增 Q3 正式报告 → 取代 Q2 显示",
+      "mutations": [
+        {
+          "op": "add_row",
+          "table": "financials",
+          "copy_of": "中际旭创 · FY2026 Q2",
+          "id": "00000000-0000-4000-8000-000000000702",
+          "created_time": "2026-10-21T10:00:00.000Z",
+          "last_edited_time": "2026-10-21T10:00:00.000Z",
+          "set": {
+            "记录": "中际旭创 · FY2026 Q3",
+            "期间": "Q3",
+            "显示期间": "2026Q3",
+            "期末日": "2026-09-30",
+            "发布日": "2026-10-20",
+            "录入日": "2026-10-21",
+            "报告状态": "正式报告",
+            "口径": "单季",
+            "推导方式": "直接披露",
+            "营收同比%": 120,
+            "净利同比%": 150,
+            "毛利率%": 40,
+            "利润可比性": "可比",
+            "来源链接": "https://static.cninfo.com.cn/finalpage/2026-10-20/0000000001.PDF",
+            "其他来源": "",
+            "注意事项": "",
+            "计算说明": "",
+            "披露状态": ""
+          }
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "companies[id=ZJXC].provenance.financial.fiscal_period",
+            "eq": "Q3"
+          },
+          {
+            "path": "companies[id=ZJXC].period",
+            "eq": "2026Q3"
+          },
+          {
+            "path": "companies[id=ZJXC].revg",
+            "approx": 1.2
+          },
+          {
+            "path": "companies[id=ZJXC].financialSignalEligible",
+            "eq": true
+          },
+          {
+            "path": "industries[name=AI网络与光互连].judgment.anchors.业绩兑现.medianRevenueYoYPct",
+            "eq": 85.5
+          }
+        ],
+        "ui": "公司抽屉与表格切到 Q3；Q2 记录保留在 Notion 但不显示"
+      }
+    },
+    {
+      "id": "F10",
+      "group": "financials",
+      "title": "新增 Q3 业绩预告 → 显示「部分」",
+      "mutations": [
+        {
+          "op": "add_row",
+          "table": "financials",
+          "copy_of": "中际旭创 · FY2026 Q2",
+          "id": "00000000-0000-4000-8000-000000000703",
+          "created_time": "2026-10-21T10:00:00.000Z",
+          "last_edited_time": "2026-10-21T10:00:00.000Z",
+          "set": {
+            "记录": "中际旭创 · FY2026 Q3 预告",
+            "期间": "Q3",
+            "显示期间": "2026Q3预告",
+            "期末日": "2026-09-30",
+            "发布日": "2026-10-12",
+            "录入日": "2026-10-21",
+            "报告状态": "业绩预告",
+            "口径": "单季",
+            "推导方式": "直接披露",
+            "营收同比%": null,
+            "净利同比%": 160,
+            "毛利率%": null,
+            "利润可比性": "可比",
+            "来源链接": "https://static.cninfo.com.cn/finalpage/2026-10-12/0000000002.PDF",
+            "其他来源": "",
+            "注意事项": "",
+            "计算说明": "",
+            "披露状态": ""
+          }
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "companies[id=ZJXC].provenance.financial.report_status",
+            "eq": "forecast"
+          },
+          {
+            "path": "companies[id=ZJXC].provenance.financial.evidence",
+            "eq": "partial"
+          },
+          {
+            "path": "companies[id=ZJXC].financialPartial",
+            "eq": true
+          },
+          {
+            "path": "companies[id=ZJXC].financialRevenueComparable",
+            "eq": false
+          },
+          {
+            "path": "companies[id=ZJXC].revg",
+            "eq": null
+          },
+          {
+            "path": "companies[id=ZJXC].earng",
+            "approx": 1.6
+          },
+          {
+            "path": "industries[name=AI网络与光互连].judgment.anchors.业绩兑现.n",
+            "eq": 8
+          }
+        ],
+        "ui": "期末日更新的记录优先；显示「部分 · 2026Q3预告」，不参与单季信号"
+      }
+    },
+    {
+      "id": "F11",
+      "group": "financials",
+      "title": "公司 relation 为空（新行）",
+      "mutations": [
+        {
+          "op": "add_row",
+          "table": "financials",
+          "copy_of": "沪电股份 · FY2026 Q2",
+          "id": "00000000-0000-4000-8000-000000000704",
+          "created_time": "2026-10-21T10:00:00.000Z",
+          "last_edited_time": "2026-10-21T10:00:00.000Z",
+          "set": {
+            "记录": "未关联 · FY2026 Q3",
+            "公司": [],
+            "期间": "Q3",
+            "期末日": "2026-09-30",
+            "发布日": "2026-10-20"
+          }
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "relation_missing"
+        ],
+        "assert": [
+          {
+            "path": "meta.notion.quarantined[pageId=00000000-0000-4000-8000-000000000704].usedLastGood",
+            "eq": false
+          }
+        ],
+        "ui": "该行不使用"
+      }
+    },
+    {
+      "id": "F12",
+      "group": "financials",
+      "title": "公司停用 → 其财报排除",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "companies",
+          "row": "MU",
+          "prop": "停用",
+          "value": true
+        }
+      ],
+      "expect": {
+        "outcome": "exclude",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "companies[id=MU]",
+            "absent": true
+          },
+          {
+            "path": "industries[name=AI核心半导体].judgment.anchors.业绩兑现.n",
+            "eq": 8
+          },
+          {
+            "path": "industries[name=AI核心半导体].judgment.anchors.业绩兑现.medianRevenueYoYPct",
+            "eq": 53.6
+          }
+        ],
+        "ui": "不报警"
+      }
+    },
+    {
+      "id": "F13",
+      "group": "financials",
+      "title": "报告状态 为空",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "financials",
+          "row": "源杰科技 · FY2026 Q2",
+          "prop": "报告状态",
+          "value": null
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "missing_required"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=YJKJ].provenance.financial.report_status",
+            "eq": "final"
+          }
+        ],
+        "ui": "该行改用上次成功读取的版本（rowSource=last_good）"
+      }
+    },
+    {
+      "id": "F14",
+      "group": "financials",
+      "title": "来源链接 是 http://",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "financials",
+          "row": "沪电股份 · FY2026 Q2",
+          "prop": "来源链接",
+          "value": "http://static.cninfo.com.cn/finalpage/2026-08-26/1225500000.PDF"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "url_invalid"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=HDGF].provenance.financial.evidence",
+            "eq": "missing"
+          }
+        ],
+        "ui": "按「缺来源」处理"
+      }
+    },
+    {
+      "id": "F15",
+      "group": "financials",
+      "title": "期末日 = 204 天前",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "financials",
+          "row": "中际旭创 · FY2026 Q2",
+          "prop": "期末日",
+          "value": "2026-03-31"
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "companies[id=ZJXC].provenance.financial.evidence",
+            "eq": "source"
+          },
+          {
+            "path": "companies[id=ZJXC].financialRevenueComparable",
+            "eq": false
+          },
+          {
+            "path": "industries[name=AI网络与光互连].judgment.anchors.业绩兑现.n",
+            "eq": 8
+          }
+        ],
+        "ui": "仍显示「有原文」，但太旧（>200 天）不参与信号与中位数"
+      }
+    },
+    {
+      "id": "F16",
+      "group": "financials",
+      "title": "期末日 = 正好 200 天前（边界）",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "financials",
+          "row": "中际旭创 · FY2026 Q2",
+          "prop": "期末日",
+          "value": "2026-04-04"
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "companies[id=ZJXC].financialRevenueComparable",
+            "eq": true
+          },
+          {
+            "path": "industries[name=AI网络与光互连].judgment.anchors.业绩兑现.n",
+            "eq": 9
+          }
+        ],
+        "ui": "≤200 天算新鲜"
+      }
+    },
+    {
+      "id": "F17",
+      "group": "financials",
+      "title": "营收同比% = 6000",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "financials",
+          "row": "源杰科技 · FY2026 Q2",
+          "prop": "营收同比%",
+          "value": 6000
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "pct_suspicious"
+        ],
+        "assert": [
+          {
+            "path": "companies[id=YJKJ].revg",
+            "approx": 60.0
+          }
+        ],
+        "ui": "照常显示（只提醒）"
+      }
+    },
+    {
+      "id": "D01",
+      "group": "daily",
+      "title": "今天的 A股 行还没写",
+      "mutations": [
+        {
+          "op": "remove_row",
+          "table": "daily",
+          "row": "2026-10-21 A股"
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "meta.daily.A股.source",
+            "eq": "auto"
+          },
+          {
+            "path": "meta.daily.A股.date",
+            "eq": "2026-10-21"
+          },
+          {
+            "path": "meta.daily.A股.line",
+            "eq": "主要指数集体下跌，创业板指跌 1.62% 领跌"
+          },
+          {
+            "path": "meta.daily.A股.reviewUrl",
+            "eq": ""
+          }
+        ],
+        "ui": "首页「今日要点」A股行显示自动生成句 +「自动生成」标签"
+      }
+    },
+    {
+      "id": "D02",
+      "group": "daily",
+      "title": "A股 行日期不是最近交易日",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "daily",
+          "row": "2026-10-21 A股",
+          "prop": "日期",
+          "value": "2026-10-20"
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "meta.daily.A股.source",
+            "eq": "auto"
+          }
+        ],
+        "ui": "旧行忽略，改用自动生成句"
+      }
+    },
+    {
+      "id": "D03",
+      "group": "daily",
+      "title": "一句话 含预测词",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "daily",
+          "row": "2026-10-21 A股",
+          "prop": "一句话",
+          "value": "缩量回落，明天大概率反弹"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "prediction_words"
+        ],
+        "assert": [
+          {
+            "path": "meta.daily.A股.source",
+            "eq": "auto"
+          }
+        ],
+        "ui": "整行不用，改用自动生成句"
+      }
+    },
+    {
+      "id": "D04",
+      "group": "daily",
+      "title": "一句话 含禁用词",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "daily",
+          "row": "2026-10-21 A股",
+          "prop": "一句话",
+          "value": "缩量回落，建议逢低加仓"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "banned_words"
+        ],
+        "assert": [
+          {
+            "path": "meta.daily.A股.source",
+            "eq": "auto"
+          }
+        ],
+        "ui": "整行不用，改用自动生成句"
+      }
+    },
+    {
+      "id": "D05",
+      "group": "daily",
+      "title": "同一天同一市场两行",
+      "mutations": [
+        {
+          "op": "add_row",
+          "table": "daily",
+          "copy_of": "2026-10-21 A股",
+          "id": "00000000-0000-4000-8000-000000000801",
+          "created_time": "2026-10-21T10:00:00.000Z",
+          "last_edited_time": "2026-10-21T10:05:00.000Z",
+          "set": {
+            "一句话": "缩量回落，科创板走强"
+          }
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "daily_duplicate"
+        ],
+        "assert": [
+          {
+            "path": "meta.daily.A股.line",
+            "eq": "缩量回落，科创板走强"
+          },
+          {
+            "path": "meta.daily.A股.source",
+            "eq": "ai"
+          }
+        ],
+        "ui": "用 last_edited_time 较新的一行"
+      }
+    },
+    {
+      "id": "D06",
+      "group": "daily",
+      "title": "一句话 55 字（硬上限 50）",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "daily",
+          "row": "2026-10-21 A股",
+          "prop": "一句话",
+          "value": "缩量回落，科创与创业分化；半导体设备、光模块领跌，红利与银行护盘，北向资金小幅净流出，两市成交额回落至一万亿元"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "text_truncated"
+        ],
+        "assert": [
+          {
+            "path": "meta.daily.A股.line",
+            "eq": "缩量回落，科创与创业分化；半导体设备、光模块领跌，红利与银行护盘，北向资金小幅净流出，两市成交额回…"
+          },
+          {
+            "path": "meta.daily.A股.source",
+            "eq": "ai"
+          }
+        ],
+        "ui": "截成 49 字 + “…”"
+      }
+    },
+    {
+      "id": "D07",
+      "group": "daily",
+      "title": "港股 行",
+      "mutations": [
+        {
+          "op": "add_row",
+          "table": "daily",
+          "copy_of": "2026-10-21 A股",
+          "id": "00000000-0000-4000-8000-000000000802",
+          "created_time": "2026-10-21T10:00:00.000Z",
+          "last_edited_time": "2026-10-21T10:00:00.000Z",
+          "set": {
+            "标题": "2026-10-21 港股",
+            "市场": "港股",
+            "一句话": "恒指回落，科技股领跌"
+          }
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "meta.daily.港股",
+            "absent": true
+          },
+          {
+            "path": "meta.daily.A股.line",
+            "eq": "缩量回落，科创与创业分化"
+          }
+        ],
+        "ui": "v3 读取但不显示港股行"
+      }
+    },
+    {
+      "id": "D08",
+      "group": "daily",
+      "title": "复盘链接 不是 https",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "daily",
+          "row": "2026-10-21 A股",
+          "prop": "复盘链接",
+          "value": "notion.so/abc"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "url_invalid"
+        ],
+        "assert": [
+          {
+            "path": "meta.daily.A股.reviewUrl",
+            "eq": ""
+          },
+          {
+            "path": "meta.daily.A股.source",
+            "eq": "ai"
+          }
+        ],
+        "ui": "不显示「看复盘 ↗」"
+      }
+    },
+    {
+      "id": "D09",
+      "group": "daily",
+      "title": "美股 行写了北京日期（美股 10/21 还没收盘）",
+      "mutations": [
+        {
+          "op": "add_row",
+          "table": "daily",
+          "copy_of": "2026-10-20 美股",
+          "id": "00000000-0000-4000-8000-000000000803",
+          "created_time": "2026-10-21T10:00:00.000Z",
+          "last_edited_time": "2026-10-21T10:00:00.000Z",
+          "set": {
+            "标题": "2026-10-21 美股",
+            "日期": "2026-10-21",
+            "一句话": "科技股反弹"
+          }
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "daily_future_date"
+        ],
+        "assert": [
+          {
+            "path": "meta.daily.美股.date",
+            "eq": "2026-10-20"
+          },
+          {
+            "path": "meta.daily.美股.line",
+            "eq": "多数行业修复，科技内部仍分化"
+          }
+        ],
+        "ui": "日期 = 该市场最近已完成交易日（美东日期）"
+      }
+    },
+    {
+      "id": "D10",
+      "group": "daily",
+      "title": "涉及行业 4 个（上限 3）",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "daily",
+          "row": "2026-10-21 A股",
+          "prop": "涉及行业",
+          "value": [
+            "AI核心半导体",
+            "AI网络与光互连",
+            "PCB与覆铜板",
+            "消费"
+          ]
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "relation_truncated"
+        ],
+        "assert": [
+          {
+            "path": "meta.daily.A股.industries",
+            "eq": [
+              "AI核心半导体",
+              "AI网络与光互连",
+              "PCB与覆铜板"
+            ]
+          }
+        ],
+        "ui": "只保留前 3 个（按 relation 顺序）"
+      }
+    },
+    {
+      "id": "W01",
+      "group": "weekly",
+      "title": "新增有效的 2026-W43 行",
+      "mutations": [
+        {
+          "op": "add_row",
+          "table": "weekly",
+          "copy_of": "2026-W42",
+          "id": "00000000-0000-4000-8000-000000000901",
+          "created_time": "2026-10-21T10:00:00.000Z",
+          "last_edited_time": "2026-10-21T10:00:00.000Z",
+          "set": {
+            "周次": "2026-W43",
+            "主线行业": [
+              "AI网络与光互连"
+            ],
+            "导语": "1.6T光模块与CPO上量，光芯片仍是最紧卡点；本周进入三季报密集期，看龙头订单与毛利率能否兑现。",
+            "日历提示": "本周看大族数控、深南电路、思源电气三季报",
+            "研判理由": "依据本周三季报预告、光芯片涨价跟踪与知识库「AI网络与光互连」页",
+            "来源": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+            "研判日期": "2026-10-19",
+            "有效至": "2026-10-26"
+          }
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "meta.weekly.mode",
+            "eq": "ai"
+          },
+          {
+            "path": "meta.weekly.sourceWeek",
+            "eq": "2026-W43"
+          },
+          {
+            "path": "meta.weekly.judgment.label",
+            "eq": "ai"
+          },
+          {
+            "path": "meta.weekly.lead",
+            "eq": "1.6T光模块与CPO上量，光芯片仍是最紧卡点；本周进入三季报密集期，看龙头订单与毛利率能否兑现。"
+          }
+        ],
+        "ui": "hero 显示 W43 主线 +「AI 研判」"
+      }
+    },
+    {
+      "id": "W02",
+      "group": "weekly",
+      "title": "基线：只有 W42 行（已过期）",
+      "mutations": [],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "meta.weekly.mode",
+            "eq": "stale"
+          },
+          {
+            "path": "meta.weekly.sourceWeek",
+            "eq": "2026-W42"
+          },
+          {
+            "path": "meta.weekly.week",
+            "eq": "2026-W43"
+          },
+          {
+            "path": "meta.weekly.judgment.reasons",
+            "eq": [
+              "not_current_week",
+              "expired"
+            ]
+          }
+        ],
+        "ui": "hero 显示 W42 内容 +「待更新」（这是当前线上的真实状态）"
+      }
+    },
+    {
+      "id": "W03",
+      "group": "weekly",
+      "title": "没有 14 天内的行 → 自动生成",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "weekly",
+          "row": "2026-W42",
+          "prop": "研判日期",
+          "value": "2026-10-01"
+        },
+        {
+          "op": "set",
+          "table": "weekly",
+          "row": "2026-W42",
+          "prop": "有效至",
+          "value": "2026-10-08"
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "meta.weekly.mode",
+            "eq": "auto"
+          },
+          {
+            "path": "meta.weekly.focus",
+            "eq": "AI网络与光互连"
+          },
+          {
+            "path": "meta.weekly.lead",
+            "eq": "本周综合分最高：「AI网络与光互连」（19/20）；最紧卡点「光芯片与激光器」。"
+          },
+          {
+            "path": "meta.weekly.calHint",
+            "eq": "本周 6 家公司预计发布财报"
+          },
+          {
+            "path": "meta.weekly.judgment.label",
+            "eq": "auto"
+          }
+        ],
+        "ui": "hero 显示模板句 +「自动生成」"
+      }
+    },
+    {
+      "id": "W04",
+      "group": "weekly",
+      "title": "W43 行导语含禁用词",
+      "mutations": [
+        {
+          "op": "add_row",
+          "table": "weekly",
+          "copy_of": "2026-W42",
+          "id": "00000000-0000-4000-8000-000000000902",
+          "created_time": "2026-10-21T10:00:00.000Z",
+          "last_edited_time": "2026-10-21T10:00:00.000Z",
+          "set": {
+            "周次": "2026-W43",
+            "主线行业": [
+              "AI网络与光互连"
+            ],
+            "导语": "推荐关注光模块龙头，三季报是验证窗口。",
+            "日历提示": "本周看大族数控、深南电路、思源电气三季报",
+            "研判理由": "依据本周三季报预告、光芯片涨价跟踪与知识库「AI网络与光互连」页",
+            "来源": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+            "研判日期": "2026-10-19",
+            "有效至": "2026-10-26"
+          }
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [
+          "banned_words"
+        ],
+        "assert": [
+          {
+            "path": "meta.weekly.mode",
+            "eq": "stale"
+          },
+          {
+            "path": "meta.weekly.sourceWeek",
+            "eq": "2026-W42"
+          }
+        ],
+        "ui": "W43 行整行不用，退回 W42（待更新）"
+      }
+    },
+    {
+      "id": "W05",
+      "group": "weekly",
+      "title": "W43 行没有主线行业",
+      "mutations": [
+        {
+          "op": "add_row",
+          "table": "weekly",
+          "copy_of": "2026-W42",
+          "id": "00000000-0000-4000-8000-000000000903",
+          "created_time": "2026-10-21T10:00:00.000Z",
+          "last_edited_time": "2026-10-21T10:00:00.000Z",
+          "set": {
+            "周次": "2026-W43",
+            "主线行业": [],
+            "导语": "1.6T光模块与CPO上量，光芯片仍是最紧卡点；本周进入三季报密集期，看龙头订单与毛利率能否兑现。",
+            "日历提示": "本周看大族数控、深南电路、思源电气三季报",
+            "研判理由": "依据本周三季报预告、光芯片涨价跟踪与知识库「AI网络与光互连」页",
+            "来源": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+            "研判日期": "2026-10-19",
+            "有效至": "2026-10-26"
+          }
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "relation_missing"
+        ],
+        "assert": [
+          {
+            "path": "meta.weekly.sourceWeek",
+            "eq": "2026-W42"
+          },
+          {
+            "path": "meta.notion.quarantined[pageId=00000000-0000-4000-8000-000000000903].usedLastGood",
+            "eq": false
+          }
+        ],
+        "ui": "每日/每周表的坏行直接跳过（不用 last-good 替代），由回退链处理"
+      }
+    },
+    {
+      "id": "W06",
+      "group": "weekly",
+      "title": "全部研判过期且无近期周行 → 无主线",
+      "mutations": [
+        {
+          "op": "clock",
+          "as_of": "2026-11-02T18:15:00+08:00"
+        }
+      ],
+      "expect": {
+        "outcome": "warning",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "meta.weekly.mode",
+            "eq": "none"
+          },
+          {
+            "path": "meta.weekly.week",
+            "eq": "2026-W45"
+          },
+          {
+            "path": "meta.weekly.focus",
+            "eq": ""
+          },
+          {
+            "path": "meta.weekly.lead",
+            "eq": ""
+          },
+          {
+            "path": "industries[name=AI网络与光互连].judgment.reasons",
+            "eq": [
+              "expired"
+            ]
+          }
+        ],
+        "ui": "hero 显示「本周主线待更新」；所有行业卡「待更新」但内容照常显示",
+        "other_codes": "ignore"
+      }
+    },
+    {
+      "id": "W07",
+      "group": "weekly",
+      "title": "W43 行有效期 20 天",
+      "mutations": [
+        {
+          "op": "add_row",
+          "table": "weekly",
+          "copy_of": "2026-W42",
+          "id": "00000000-0000-4000-8000-000000000904",
+          "created_time": "2026-10-21T10:00:00.000Z",
+          "last_edited_time": "2026-10-21T10:00:00.000Z",
+          "set": {
+            "周次": "2026-W43",
+            "主线行业": [
+              "AI网络与光互连"
+            ],
+            "导语": "1.6T光模块与CPO上量，光芯片仍是最紧卡点；本周进入三季报密集期，看龙头订单与毛利率能否兑现。",
+            "日历提示": "本周看大族数控、深南电路、思源电气三季报",
+            "研判理由": "依据本周三季报预告、光芯片涨价跟踪与知识库「AI网络与光互连」页",
+            "来源": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+            "研判日期": "2026-10-19",
+            "有效至": "2026-11-08"
+          }
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "meta.weekly.mode",
+            "eq": "stale"
+          },
+          {
+            "path": "meta.weekly.sourceWeek",
+            "eq": "2026-W43"
+          },
+          {
+            "path": "meta.weekly.judgment.reasons",
+            "eq": [
+              "validity_too_long"
+            ]
+          }
+        ],
+        "ui": "回退链第 2 步取「研判日期最近」的行：显示 W43 内容 +「待更新」"
+      }
+    },
+    {
+      "id": "Q01",
+      "group": "quarantine",
+      "title": "行业表 4/15 行坏（>20%）",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "消费",
+          "prop": "景气度",
+          "value": 0
+        },
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "房地产",
+          "prop": "景气度",
+          "value": 0
+        },
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "玻璃基板",
+          "prop": "景气度",
+          "value": 0
+        },
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "网络安全",
+          "prop": "景气度",
+          "value": 0
+        }
+      ],
+      "expect": {
+        "outcome": "table_last_good",
+        "exit": 0,
+        "codes": [
+          "table_quality_low",
+          "number_out_of_range"
+        ],
+        "assert": [
+          {
+            "path": "meta.notion.fallbackTables[table=industries].code",
+            "eq": "table_quality_low"
+          },
+          {
+            "path": "industries[name=消费].s[0]",
+            "eq": 2
+          },
+          {
+            "path": "industries[name=AI网络与光互连].rowSource",
+            "eq": "last_good"
+          },
+          {
+            "path": "industries[name=AI网络与光互连].judgment.label",
+            "eq": "ai"
+          }
+        ],
+        "ui": "整表沿用上次版本；整表回退时各行标签照常计算（不强制「待更新」），由数据脉搏提示"
+      }
+    },
+    {
+      "id": "Q02",
+      "group": "quarantine",
+      "title": "行业表 3/15 行坏（=20%，不触发整表）",
+      "mutations": [
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "消费",
+          "prop": "景气度",
+          "value": 0
+        },
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "房地产",
+          "prop": "景气度",
+          "value": 0
+        },
+        {
+          "op": "set",
+          "table": "industries",
+          "row": "玻璃基板",
+          "prop": "景气度",
+          "value": 0
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "number_out_of_range"
+        ],
+        "assert": [
+          {
+            "path": "meta.notion.fallbackTables",
+            "len": 0
+          },
+          {
+            "path": "meta.notion.quarantined",
+            "len": 3
+          },
+          {
+            "path": "industries[name=AI网络与光互连].rowSource",
+            "eq": "notion"
+          },
+          {
+            "path": "industries[name=消费].judgment.reasons",
+            "contains": "row_quarantined"
+          }
+        ],
+        "ui": "只隔离 3 行"
+      }
+    },
+    {
+      "id": "Q03",
+      "group": "quarantine",
+      "title": "新行坏且没有上次版本",
+      "mutations": [
+        {
+          "op": "add_row",
+          "table": "industries",
+          "copy_of": "消费",
+          "id": "00000000-0000-4000-8000-000000000402",
+          "created_time": "2026-10-21T10:00:00.000Z",
+          "last_edited_time": "2026-10-21T10:00:00.000Z",
+          "set": {
+            "名称": "机器人",
+            "景气度": null
+          }
+        }
+      ],
+      "expect": {
+        "outcome": "quarantine_row",
+        "exit": 0,
+        "codes": [
+          "missing_required"
+        ],
+        "assert": [
+          {
+            "path": "industries",
+            "len": 15
+          },
+          {
+            "path": "industries[name=机器人]",
+            "absent": true
+          }
+        ],
+        "ui": "不显示，等修好"
+      }
+    },
+    {
+      "id": "X01",
+      "group": "security",
+      "title": "token 不得出现在日志与产物中",
+      "mutations": [
+        {
+          "op": "env",
+          "set": {
+            "NOTION_TOKEN": "ntn_TEST_DO_NOT_LOG_123456"
+          }
+        },
+        {
+          "op": "http",
+          "match": {
+            "kind": "any"
+          },
+          "responses": [
+            {
+              "status": 401,
+              "body": {
+                "object": "error",
+                "status": 401,
+                "code": "unauthorized",
+                "message": "API token is invalid."
+              }
+            }
+          ],
+          "then": "repeat_last"
+        }
+      ],
+      "expect": {
+        "outcome": "all_last_good",
+        "exit": 0,
+        "codes": [
+          "notion_unauthorized"
+        ],
+        "assert": [
+          {
+            "path": "logs",
+            "not_contains": "ntn_TEST_DO_NOT_LOG_123456"
+          },
+          {
+            "path": "snapshot",
+            "not_contains": "ntn_TEST_DO_NOT_LOG_123456"
+          },
+          {
+            "path": "data",
+            "not_contains": "ntn_TEST_DO_NOT_LOG_123456"
+          }
+        ],
+        "ui": "日志只写「NOTION_TOKEN 无效或无权限（401）」"
+      }
+    },
+    {
+      "id": "X02",
+      "group": "security",
+      "title": "结果顺序不同 → 输出逐字节相同",
+      "mutations": [
+        {
+          "op": "shuffle",
+          "seed": 7
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "snapshot.sha256",
+            "eq_baseline": true
+          },
+          {
+            "path": "meta.notion.snapshotSHA256",
+            "eq_baseline": true
+          }
+        ],
+        "ui": "同输入同输出（排序不依赖 API 顺序）"
+      }
+    },
+    {
+      "id": "X03",
+      "group": "security",
+      "title": "rich_text 含 mention 片段",
+      "mutations": [
+        {
+          "op": "set_raw",
+          "table": "chokepoints",
+          "row": "光芯片与激光器",
+          "prop": "跟踪指标",
+          "raw": {
+            "type": "rich_text",
+            "rich_text": [
+              {
+                "type": "text",
+                "text": {
+                  "content": "EML价格、",
+                  "link": null
+                },
+                "annotations": {},
+                "plain_text": "EML价格、",
+                "href": null
+              },
+              {
+                "type": "mention",
+                "mention": {
+                  "type": "page",
+                  "page": {
+                    "id": "00dc5abb-b7c3-41a3-bdbc-58cc2b125a09"
+                  }
+                },
+                "annotations": {},
+                "plain_text": "光芯片与激光器",
+                "href": "https://app.notion.com/p/00dc5abbb7c341a3bdbc58cc2b125a09"
+              }
+            ]
+          }
+        }
+      ],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "chokepoints[name=光芯片与激光器].track",
+            "eq": "EML价格、光芯片与激光器"
+          }
+        ],
+        "ui": "只取 plain_text，不报错"
+      }
+    },
+    {
+      "id": "X04",
+      "group": "security",
+      "title": "基线请求数与提示",
+      "mutations": [],
+      "expect": {
+        "outcome": "ok",
+        "exit": 0,
+        "codes": [],
+        "assert": [
+          {
+            "path": "transport.requests",
+            "eq": 13
+          },
+          {
+            "path": "meta.notion.warnings[*].code",
+            "eq": [
+              "text_long",
+              "text_long",
+              "text_long",
+              "text_long",
+              "text_long",
+              "text_long",
+              "text_long"
+            ]
+          },
+          {
+            "path": "meta.notion.counts.companies.used",
+            "eq": 42
+          }
+        ],
+        "ui": "6 个 GET + 7 个 POST（公司 2 页）；基线只有 7 条 info 级 text_long"
+      }
+    }
+  ]
+}

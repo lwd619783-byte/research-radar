@@ -1,0 +1,959 @@
+{
+ "contract_version": "v3.0",
+ "notion_version": "2026-03-11",
+ "timezone": "Asia/Shanghai",
+ "levels": {
+  "row": "缺失或非法 → 该行隔离（quarantine）：有上次成功版本则沿用并标「待更新」，没有则不显示",
+  "judgment": "缺失或不满足 judgment_rule → 照常显示，但标「待更新」并给出 reasons",
+  "evidence": "决定财报证据等级（有原文 / 部分 / 缺来源）",
+  "optional": "可空；格式不对 → 置空 + warning",
+  "ignore": "程序不读（Notion 公式仅供人看）"
+ },
+ "judgment_rule": {
+  "ai_when_all": [
+   "研判理由 非空",
+   "来源 至少 1 个 http(s) URL",
+   "研判日期 ≤ today",
+   "有效至 ≥ today",
+   "有效至 − 研判日期 ≤ 14 天",
+   "本行 AI 文本无禁用词"
+  ],
+  "reasons": [
+   "missing_reason",
+   "missing_source",
+   "missing_dates",
+   "future_judgment_date",
+   "expired",
+   "validity_too_long",
+   "banned_words",
+   "row_quarantined",
+   "not_current_week"
+  ],
+  "today": "build 的 fixedClock 换算到 Asia/Shanghai 的日期"
+ },
+ "text_rules": {
+  "concat": "所有 rich_text/title 片段的 plain_text 直接拼接，再 strip；不读 annotations",
+  "urls": "正则 https?://[^\\s<>\"'）)]+ 从拼接文本中提取，去重保序",
+  "tokens": "{{earnings:代号}}：代号不存在或已停用 → warning token_unknown_company；DATA 保留原始 token，页面渲染为「日期待定」",
+  "soft_len": "超过 → warning text_long（不截断）",
+  "hard_len": "超过 → 按单位累加（普通字符 1、token 10），累计放不下 hard_len−1 时停止，末尾加 “…”；截断点落在 token 内则整个 token 去掉；warning text_truncated",
+  "length_unit": "len() of Python str（按 Unicode 码位）",
+  "token_len": "计算 soft_len/hard_len 时，每个 {{earnings:代号}} 按 10 个字计（≈“10/31 · 预估”）",
+  "banned_match": "先 unicodedata.normalize(\"NFKC\")，再删除所有空白（\\s 与 U+3000），然后做子串匹配；命中 → 该字段置空 + warning banned_words（研判表同时 reasons 加 banned_words；每日/每周行整行作废）"
+ },
+ "tables": {
+  "industries": {
+   "label": "行业",
+   "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467",
+   "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+   "key": "名称",
+   "order": "总分降序 → 景气度降序 → 名称（Unicode 码位）",
+   "judgment": true,
+   "properties": {
+    "名称": {
+     "type": "title",
+     "level": "row",
+     "unique": true,
+     "hard_len": 24,
+     "data": "name",
+     "api_id_hint": "title"
+    },
+    "景气度": {
+     "type": "number",
+     "level": "row",
+     "integer": true,
+     "min": 1,
+     "max": 5,
+     "data": "s[0]",
+     "api_id_hint": "LufX"
+    },
+    "业绩兑现": {
+     "type": "number",
+     "level": "row",
+     "integer": true,
+     "min": 1,
+     "max": 5,
+     "data": "s[1]",
+     "api_id_hint": "i%5BER"
+    },
+    "卡点强度": {
+     "type": "number",
+     "level": "row",
+     "integer": true,
+     "min": 1,
+     "max": 5,
+     "data": "s[2]",
+     "api_id_hint": "SDeA"
+    },
+    "估值位置": {
+     "type": "number",
+     "level": "row",
+     "integer": true,
+     "min": 1,
+     "max": 5,
+     "data": "s[3]",
+     "api_id_hint": "y%7CX%5C"
+    },
+    "总分": {
+     "type": "formula",
+     "result": "number",
+     "level": "ignore",
+     "data": "total",
+     "note": "程序重新计算 = 四项之和，不读公式值",
+     "api_id_hint": "%3FmQU"
+    },
+    "一句话逻辑": {
+     "type": "rich_text",
+     "level": "optional",
+     "soft_len": 60,
+     "hard_len": 80,
+     "banned": true,
+     "data": "logic",
+     "api_id_hint": "XeOv"
+    },
+    "最新信号": {
+     "type": "rich_text",
+     "level": "optional",
+     "split": "；",
+     "max_items": 4,
+     "item_hard_len": 60,
+     "banned": true,
+     "data": "signal",
+     "note": "DATA 里仍是原字符串（用「；」连接），只截断条数",
+     "api_id_hint": "O%5EUE"
+    },
+    "主要风险": {
+     "type": "rich_text",
+     "level": "optional",
+     "soft_len": 80,
+     "hard_len": 110,
+     "banned": true,
+     "data": "risk",
+     "api_id_hint": "xFmB"
+    },
+    "代表公司": {
+     "type": "rich_text",
+     "level": "optional",
+     "split": "、",
+     "max_items": 12,
+     "data": "reps",
+     "api_id_hint": "J%40Pw"
+    },
+    "研判理由": {
+     "type": "rich_text",
+     "level": "judgment",
+     "data": "judgment.reason",
+     "banned": true,
+     "api_id_hint": "%5BeB%7B"
+    },
+    "来源": {
+     "type": "rich_text",
+     "level": "judgment",
+     "urls": {
+      "min": 1
+     },
+     "data": "judgment.sources",
+     "api_id_hint": "yMjE"
+    },
+    "研判日期": {
+     "type": "date",
+     "level": "judgment",
+     "data": "judgment.date",
+     "rule": "≤ today",
+     "api_id_hint": "SRSJ"
+    },
+    "有效至": {
+     "type": "date",
+     "level": "judgment",
+     "data": "judgment.validUntil",
+     "rule": "≥ today 且 ≤ 研判日期 + 14 天",
+     "api_id_hint": "DsxV"
+    },
+    "研判状态": {
+     "type": "formula",
+     "result": "string",
+     "level": "ignore",
+     "note": "仅供人在 Notion 里看；程序自己按 judgment_rule 计算",
+     "api_id_hint": "H%5C%5EM"
+    },
+    "知识库": {
+     "type": "url",
+     "level": "optional",
+     "scheme": "https",
+     "data": "kb",
+     "note": "v3 起 kb 为 Notion 页面 URL（不再是仓库路径）",
+     "api_id_hint": "RKO%5C"
+    },
+    "停用": {
+     "type": "checkbox",
+     "level": "optional",
+     "rule": "勾选 → 整行排除（不是隔离，不报警）",
+     "api_id_hint": "XdGo"
+    }
+   }
+  },
+  "chokepoints": {
+   "label": "卡点",
+   "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29",
+   "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+   "key": "名称",
+   "order": "所属行业顺序 → 排序升序（空=9999）→ 名称",
+   "judgment": true,
+   "properties": {
+    "名称": {
+     "type": "title",
+     "level": "row",
+     "unique": true,
+     "hard_len": 24,
+     "data": "name",
+     "api_id_hint": "title"
+    },
+    "行业": {
+     "type": "relation",
+     "level": "row",
+     "target": "industries",
+     "limit": 1,
+     "data": "ind",
+     "rule": "必须恰好 1 个且目标未停用；目标停用 → 本行排除",
+     "api_id_hint": "%5Cz%3Aq"
+    },
+    "紧缺度": {
+     "type": "select",
+     "level": "row",
+     "enum": {
+      "极紧": "🔴极紧",
+      "偏紧": "🟠偏紧",
+      "缓解中": "🟢缓解中"
+     },
+     "data": "tight",
+     "api_id_hint": "%3Amxf"
+    },
+    "细分": {
+     "type": "rich_text",
+     "level": "optional",
+     "soft_len": 40,
+     "hard_len": 60,
+     "data": "seg",
+     "api_id_hint": "gwXg"
+    },
+    "为什么卡": {
+     "type": "rich_text",
+     "level": "optional",
+     "soft_len": 80,
+     "hard_len": 110,
+     "banned": true,
+     "data": "why",
+     "api_id_hint": "Lx%3Ce"
+    },
+    "跟踪指标": {
+     "type": "rich_text",
+     "level": "optional",
+     "soft_len": 60,
+     "hard_len": 90,
+     "tokens": true,
+     "banned": true,
+     "data": "track",
+     "note": "长度按替换 {{earnings:代号}} 之后计算；DATA 里保留原始 token，由现有渲染逻辑替换",
+     "api_id_hint": "V%3EB%5C"
+    },
+    "排序": {
+     "type": "number",
+     "level": "optional",
+     "default": 9999,
+     "data": "(仅排序，不进 DATA)",
+     "api_id_hint": "sQF%5D"
+    },
+    "研判理由": {
+     "type": "rich_text",
+     "level": "judgment",
+     "data": "judgment.reason",
+     "banned": true,
+     "api_id_hint": "%3BYNC"
+    },
+    "来源": {
+     "type": "rich_text",
+     "level": "judgment",
+     "urls": {
+      "min": 1
+     },
+     "data": "judgment.sources",
+     "api_id_hint": "%5ELm%3E"
+    },
+    "研判日期": {
+     "type": "date",
+     "level": "judgment",
+     "data": "judgment.date",
+     "rule": "≤ today",
+     "api_id_hint": "Elfi"
+    },
+    "有效至": {
+     "type": "date",
+     "level": "judgment",
+     "data": "judgment.validUntil",
+     "rule": "≥ today 且 ≤ 研判日期 + 14 天",
+     "api_id_hint": "RXDL"
+    },
+    "研判状态": {
+     "type": "formula",
+     "result": "string",
+     "level": "ignore",
+     "note": "仅供人在 Notion 里看；程序自己按 judgment_rule 计算",
+     "api_id_hint": "%5BNUQ"
+    },
+    "停用": {
+     "type": "checkbox",
+     "level": "optional",
+     "rule": "勾选 → 整行排除（不是隔离，不报警）",
+     "api_id_hint": "zBNl"
+    }
+   }
+  },
+  "companies": {
+   "label": "公司",
+   "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d",
+   "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+   "key": "代号",
+   "order": "所属行业顺序 → 代号",
+   "cap": 80,
+   "judgment": false,
+   "properties": {
+    "名称": {
+     "type": "title",
+     "level": "row",
+     "hard_len": 24,
+     "data": "name",
+     "api_id_hint": "title"
+    },
+    "代号": {
+     "type": "rich_text",
+     "level": "row",
+     "unique": true,
+     "regex": "^[A-Z][A-Z0-9]{1,11}$",
+     "data": "id",
+     "note": "永不修改；不自动转大写，不合法直接隔离",
+     "api_id_hint": "IlF%5E"
+    },
+    "Yahoo代码": {
+     "type": "rich_text",
+     "level": "row",
+     "regex_by_market": {
+      "A股": "^\\d{6}\\.(SS|SZ|BJ)$",
+      "美股": "^[A-Z][A-Z0-9.\\-]{0,9}$",
+      "港股": "^\\d{4,5}\\.HK$",
+      "台股": "^\\d{4,6}\\.(TW|TWO)$",
+      "韩股": "^\\d{6}\\.(KS|KQ)$",
+      "日股": "^[0-9A-Z]{4}\\.T$",
+      "欧股": "^[A-Z0-9]{1,8}\\.[A-Z]{1,3}$"
+     },
+     "data": "sym",
+     "api_id_hint": "Tn%5Dn"
+    },
+    "显示代码": {
+     "type": "rich_text",
+     "level": "row",
+     "hard_len": 12,
+     "data": "code",
+     "api_id_hint": "F%3F%5D%60"
+    },
+    "市场": {
+     "type": "select",
+     "level": "row",
+     "enum": {
+      "A股": "A股",
+      "美股": "美股",
+      "港股": "港股",
+      "台股": "台股",
+      "韩股": "韩股",
+      "日股": "日股",
+      "欧股": "欧股"
+     },
+     "data": "mkt",
+     "api_id_hint": "~%60UA"
+    },
+    "币种": {
+     "type": "select",
+     "level": "row",
+     "enum": {
+      "CNY": "CNY",
+      "USD": "USD",
+      "HKD": "HKD",
+      "TWD": "TWD",
+      "KRW": "KRW",
+      "JPY": "JPY",
+      "EUR": "EUR"
+     },
+     "data": "cur",
+     "api_id_hint": "of%3EU"
+    },
+    "定位": {
+     "type": "select",
+     "level": "row",
+     "enum": {
+      "全球龙头": "全球龙头",
+      "国内龙头": "国内龙头",
+      "国产替代": "国产替代"
+     },
+     "data": "role",
+     "api_id_hint": "l_qp"
+    },
+    "行业": {
+     "type": "relation",
+     "level": "row",
+     "target": "industries",
+     "limit": 1,
+     "data": "ind",
+     "rule": "必须恰好 1 个；目标停用 → 本行排除",
+     "api_id_hint": "Yd%5B%5D"
+    },
+    "卡点": {
+     "type": "relation",
+     "level": "optional",
+     "target": "chokepoints",
+     "limit": 1,
+     "data": "cp",
+     "rule": "可空；必须恰好 0 或 1 个；属于别的行业 → 置空 + warning cp_industry_mismatch；目标卡点停用 → 置空（不报警）",
+     "api_id_hint": "_CX%40"
+    },
+    "看点": {
+     "type": "rich_text",
+     "level": "optional",
+     "soft_len": 30,
+     "hard_len": 40,
+     "banned": true,
+     "data": "view",
+     "api_id_hint": "H%60Ac"
+    },
+    "快讯": {
+     "type": "rich_text",
+     "level": "optional",
+     "soft_len": 60,
+     "hard_len": 80,
+     "tokens": true,
+     "banned": true,
+     "data": "flash",
+     "note": "长度按 token 替换后计算",
+     "api_id_hint": "AMsE"
+    },
+    "快讯日期": {
+     "type": "date",
+     "level": "optional",
+     "data": "flashDate",
+     "rule": "> 30 天 → flashFresh=false（不突出显示）；晚于 today → warning 并视为 today",
+     "api_id_hint": "vUL%3A"
+    },
+    "快讯来源": {
+     "type": "url",
+     "level": "optional",
+     "scheme": "https",
+     "data": "flashSource",
+     "api_id_hint": "W%3A%5C~"
+    },
+    "下次财报日": {
+     "type": "date",
+     "level": "optional",
+     "data": "next",
+     "rule": "空 → None（待定）；早于 today → 保留并 warning earnings_date_past",
+     "api_id_hint": "rC%3Bg"
+    },
+    "财报日状态": {
+     "type": "select",
+     "level": "optional",
+     "enum": {
+      "官方确认": "confirmed",
+      "预估": "unverified"
+     },
+     "data": "earnings.status",
+     "rule": "官方确认 但 财报日来源 不是 https → 降级为 unverified + warning earnings_confirmed_without_source；下次财报日为空时忽略",
+     "api_id_hint": "ySxK"
+    },
+    "财报日来源": {
+     "type": "url",
+     "level": "optional",
+     "scheme": "https",
+     "data": "earnings.source_url",
+     "api_id_hint": "SiCn"
+    },
+    "财报日时区": {
+     "type": "rich_text",
+     "level": "optional",
+     "iana_tz": true,
+     "data": "earnings.timezone",
+     "rule": "空 → \"\"（不报警，页面用市场默认时区显示）；非法 IANA → 用 market_timezones 里的市场默认时区 + warning timezone_invalid",
+     "api_id_hint": "Luxw"
+    },
+    "财报日备注": {
+     "type": "rich_text",
+     "level": "optional",
+     "soft_len": 40,
+     "hard_len": 60,
+     "data": "earnings.time_note",
+     "api_id_hint": "tUx%3D"
+    },
+    "知识库": {
+     "type": "url",
+     "level": "optional",
+     "scheme": "https",
+     "data": "url",
+     "api_id_hint": "e_WE"
+    },
+    "停用": {
+     "type": "checkbox",
+     "level": "optional",
+     "rule": "勾选 → 整行排除（不是隔离，不报警）",
+     "api_id_hint": "%5C%3Ar%7B"
+    }
+   }
+  },
+  "financials": {
+   "label": "财报记录",
+   "database_id": "f2e6f09d-be6f-4206-99b1-2fad27220d3e",
+   "data_source_id": "adfa9345-7f74-42c0-88c8-cc706b7970cf",
+   "key": "(公司, 财年, 期间, 口径)",
+   "judgment": false,
+   "properties": {
+    "记录": {
+     "type": "title",
+     "level": "optional",
+     "data": "(不进 DATA；只用于人读)",
+     "api_id_hint": "title"
+    },
+    "公司": {
+     "type": "relation",
+     "level": "row",
+     "target": "companies",
+     "limit": 1,
+     "data": "(归属公司)",
+     "rule": "必须恰好 1 个；目标公司停用或最终不显示 → 本行排除（不报警）；目标公司用了 last-good 版本 → 照常挂上",
+     "api_id_hint": "UFpP"
+    },
+    "财年": {
+     "type": "rich_text",
+     "level": "row",
+     "regex": "^FY\\d{4}$",
+     "data": "financial.fiscal_year",
+     "api_id_hint": "S%5Bcg"
+    },
+    "期间": {
+     "type": "select",
+     "level": "row",
+     "enum": {
+      "Q1": "Q1",
+      "Q2": "Q2",
+      "Q3": "Q3",
+      "Q4": "Q4",
+      "H1": "H1",
+      "H2": "H2",
+      "FY": "FY"
+     },
+     "data": "financial.fiscal_period",
+     "api_id_hint": "fq%5Bu"
+    },
+    "口径": {
+     "type": "select",
+     "level": "row",
+     "enum": {
+      "单季": "single_quarter",
+      "半年": "half_year",
+      "累计": "cumulative",
+      "全年": "annual"
+     },
+     "data": "financial.basis",
+     "api_id_hint": "T%40YE"
+    },
+    "显示期间": {
+     "type": "rich_text",
+     "level": "row",
+     "soft_len": 40,
+     "hard_len": 60,
+     "data": "period",
+     "api_id_hint": "J%5EVU"
+    },
+    "期末日": {
+     "type": "date",
+     "level": "row",
+     "data": "financial.period_end",
+     "rule": "期末日 > 发布日 → 隔离 period_after_publish",
+     "api_id_hint": "zcmV"
+    },
+    "发布日": {
+     "type": "date",
+     "level": "row",
+     "data": "financial.published_at",
+     "rule": "发布日 > today → 隔离 publish_in_future",
+     "api_id_hint": "rZpF"
+    },
+    "录入日": {
+     "type": "date",
+     "level": "optional",
+     "data": "financial.entered_at",
+     "note": "原 verified_at 改名",
+     "api_id_hint": "HQ%3BS"
+    },
+    "营收同比%": {
+     "type": "number",
+     "level": "optional",
+     "percent": true,
+     "min": -100,
+     "data": "revg (÷100)",
+     "rule": "< −100 → 置空 + warning pct_out_of_range；> 5000 → warning pct_suspicious（保留）",
+     "api_id_hint": "XR%5BH"
+    },
+    "净利同比%": {
+     "type": "number",
+     "level": "optional",
+     "percent": true,
+     "data": "earng (÷100)",
+     "rule": "可为任意值；是否显示由 利润可比性 决定（非「可比」时 UI 显示标签而不是数字）",
+     "api_id_hint": "w%60hB"
+    },
+    "毛利率%": {
+     "type": "number",
+     "level": "optional",
+     "percent": true,
+     "min": -100,
+     "max": 100,
+     "data": "gm (÷100)",
+     "rule": "越界 → 置空 + warning pct_out_of_range；0 < |x| < 1 → warning pct_maybe_fraction（保留原值）",
+     "api_id_hint": "%5Ba%5C%60"
+    },
+    "报告状态": {
+     "type": "select",
+     "level": "row",
+     "enum": {
+      "正式报告": "final",
+      "业绩快报": "express",
+      "业绩预告": "forecast",
+      "初步结果": "preliminary",
+      "仅营收": "revenue_only"
+     },
+     "data": "financial.report_status",
+     "api_id_hint": "yk%3B%3C"
+    },
+    "利润可比性": {
+     "type": "select",
+     "level": "optional",
+     "default": "未披露",
+     "enum": {
+      "可比": "comparable",
+      "扭亏": "turnaround",
+      "一次性": "one_off",
+      "未披露": "not_disclosed"
+     },
+     "data": "financial.profit_comparison",
+     "api_id_hint": "AN%5B%7C"
+    },
+    "推导方式": {
+     "type": "select",
+     "level": "optional",
+     "default": "直接披露",
+     "enum": {
+      "直接披露": "reported",
+      "累计差额": "cumulative_difference"
+     },
+     "data": "financial.derivation",
+     "api_id_hint": "%3C%3B%3Fo"
+    },
+    "币种": {
+     "type": "select",
+     "level": "row",
+     "enum": {
+      "CNY": "CNY",
+      "USD": "USD",
+      "HKD": "HKD",
+      "TWD": "TWD",
+      "KRW": "KRW",
+      "JPY": "JPY",
+      "EUR": "EUR"
+     },
+     "data": "financial.currency",
+     "api_id_hint": "%3D%3CGg"
+    },
+    "利润指标": {
+     "type": "rich_text",
+     "level": "optional",
+     "data": "financial.profit_metric",
+     "api_id_hint": "Qz%3DD"
+    },
+    "会计准则": {
+     "type": "rich_text",
+     "level": "optional",
+     "data": "financial.accounting_basis",
+     "api_id_hint": "Jlz%5E"
+    },
+    "营收口径": {
+     "type": "rich_text",
+     "level": "optional",
+     "data": "financial.revenue_scope",
+     "api_id_hint": "%5Cq%5DN"
+    },
+    "利润口径": {
+     "type": "rich_text",
+     "level": "optional",
+     "data": "financial.profit_scope",
+     "api_id_hint": "%5Cnb%3D"
+    },
+    "毛利口径": {
+     "type": "rich_text",
+     "level": "optional",
+     "data": "financial.margin_scope",
+     "api_id_hint": "l%3B%5D_"
+    },
+    "来源名称": {
+     "type": "rich_text",
+     "level": "optional",
+     "data": "financial.source_name",
+     "api_id_hint": "eMjD"
+    },
+    "来源链接": {
+     "type": "url",
+     "level": "evidence",
+     "scheme": "https",
+     "data": "financial.source_url",
+     "rule": "空或非 https → evidence=missing（缺来源，不参与任何信号）",
+     "api_id_hint": "ajkF"
+    },
+    "其他来源": {
+     "type": "rich_text",
+     "level": "optional",
+     "urls": {
+      "min": 0
+     },
+     "data": "financial.source_urls = [来源链接] + 本列 URL（去重保序）",
+     "api_id_hint": "jpyO"
+    },
+    "计算说明": {
+     "type": "rich_text",
+     "level": "optional",
+     "data": "financial.calculation_note",
+     "api_id_hint": "POW%3F"
+    },
+    "录入说明": {
+     "type": "rich_text",
+     "level": "optional",
+     "data": "financial.review_note",
+     "api_id_hint": "%7BZ%3FG"
+    },
+    "披露状态": {
+     "type": "rich_text",
+     "level": "optional",
+     "data": "financial.disclosure_state",
+     "api_id_hint": "eLcp"
+    },
+    "注意事项": {
+     "type": "rich_text",
+     "level": "optional",
+     "split": "\n",
+     "data": "financial.conditions（按行拆成数组，去空行）",
+     "api_id_hint": "vaq_"
+    },
+    "停用": {
+     "type": "checkbox",
+     "level": "optional",
+     "rule": "勾选 → 整行排除（不是隔离，不报警）",
+     "api_id_hint": "T%5CVk"
+    }
+   }
+  },
+  "daily": {
+   "label": "每日要点",
+   "database_id": "94a84484-238d-4159-8438-7e999a4ff302",
+   "data_source_id": "8c8f38ad-be8d-4fce-bbdf-7701492f9e8e",
+   "key": "(日期, 市场)",
+   "judgment": false,
+   "properties": {
+    "标题": {
+     "type": "title",
+     "level": "optional",
+     "data": "(不进 DATA)",
+     "api_id_hint": "title"
+    },
+    "日期": {
+     "type": "date",
+     "level": "row",
+     "data": "meta.daily[市场].date",
+     "rule": "只有等于该市场最近一个已完成交易日才显示；否则该市场用自动生成句",
+     "api_id_hint": "%40ptF"
+    },
+    "市场": {
+     "type": "select",
+     "level": "row",
+     "enum": {
+      "A股": "A股",
+      "美股": "美股",
+      "港股": "港股"
+     },
+     "data": "meta.daily 的键",
+     "note": "v3 只显示 A股、美股 两行；港股 选项保留，读取但不显示",
+     "api_id_hint": "RV%5E%7C"
+    },
+    "一句话": {
+     "type": "rich_text",
+     "level": "row",
+     "soft_len": 40,
+     "hard_len": 50,
+     "banned": true,
+     "banned_prediction": true,
+     "data": "meta.daily[市场].line",
+     "api_id_hint": "DrhH"
+    },
+    "涉及行业": {
+     "type": "relation",
+     "level": "optional",
+     "target": "industries",
+     "max_items": 3,
+     "data": "meta.daily[市场].industries（行业名数组）",
+     "api_id_hint": "%3CJid",
+     "rule": "最多 3 个，多出的按 relation 顺序截掉 + warning relation_truncated；目标停用 → 去掉（不报警）"
+    },
+    "复盘链接": {
+     "type": "url",
+     "level": "optional",
+     "scheme": "https",
+     "data": "meta.daily[市场].reviewUrl",
+     "api_id_hint": "AeDn"
+    }
+   }
+  },
+  "weekly": {
+   "label": "每周主线",
+   "database_id": "7391dcc4-49ad-4085-b1c5-2691d19481f4",
+   "data_source_id": "81122088-02df-4abf-a79a-d8574cf7cbef",
+   "key": "周次",
+   "judgment": true,
+   "properties": {
+    "周次": {
+     "type": "title",
+     "level": "row",
+     "regex": "^\\d{4}-W\\d{2}$",
+     "data": "meta.weekly.week",
+     "api_id_hint": "title"
+    },
+    "主线行业": {
+     "type": "relation",
+     "level": "row",
+     "target": "industries",
+     "limit": 1,
+     "data": "meta.weekly.focus（行业名）",
+     "api_id_hint": "Eg%5Dj",
+     "rule": "必须恰好 1 个且目标未停用，否则该行作废（relation_missing / relation_multiple）"
+    },
+    "导语": {
+     "type": "rich_text",
+     "level": "row",
+     "soft_len": 90,
+     "hard_len": 120,
+     "banned": true,
+     "data": "meta.weekly.lead",
+     "api_id_hint": "O%3FSR"
+    },
+    "日历提示": {
+     "type": "rich_text",
+     "level": "optional",
+     "soft_len": 30,
+     "hard_len": 40,
+     "banned": true,
+     "data": "meta.weekly.calHint",
+     "api_id_hint": "RLjF"
+    },
+    "研判理由": {
+     "type": "rich_text",
+     "level": "judgment",
+     "data": "judgment.reason",
+     "banned": true,
+     "api_id_hint": "qQL%3D"
+    },
+    "来源": {
+     "type": "rich_text",
+     "level": "judgment",
+     "urls": {
+      "min": 1
+     },
+     "data": "judgment.sources",
+     "api_id_hint": "c_%3Ae"
+    },
+    "研判日期": {
+     "type": "date",
+     "level": "judgment",
+     "data": "judgment.date",
+     "rule": "≤ today",
+     "api_id_hint": "wNDo"
+    },
+    "有效至": {
+     "type": "date",
+     "level": "judgment",
+     "data": "judgment.validUntil",
+     "rule": "≥ today 且 ≤ 研判日期 + 14 天",
+     "api_id_hint": "%3BI_s"
+    },
+    "研判状态": {
+     "type": "formula",
+     "result": "string",
+     "level": "ignore",
+     "note": "仅供人在 Notion 里看；程序自己按 judgment_rule 计算",
+     "api_id_hint": "SP%3A%3E"
+    }
+   }
+  }
+ },
+ "banned_words": [
+  "买入",
+  "卖出",
+  "加仓",
+  "减仓",
+  "抄底",
+  "逃顶",
+  "目标价",
+  "推荐",
+  "定投",
+  "止损",
+  "止盈",
+  "建仓",
+  "清仓",
+  "满仓",
+  "重仓",
+  "必涨",
+  "稳赚",
+  "翻倍",
+  "牛股",
+  "金股",
+  "已核实",
+  "已审核",
+  "人工确认",
+  "已验证"
+ ],
+ "prediction_words": {
+  "applies_to": "每日要点.一句话",
+  "words": [
+   "明天",
+   "明日",
+   "下周",
+   "将会",
+   "预计",
+   "大概率",
+   "有望",
+   "必将",
+   "看涨",
+   "看跌",
+   "即将",
+   "反弹在即"
+  ],
+  "rule": "命中 → 整行作废 + warning prediction_words，该市场改用自动生成句"
+ },
+ "market_timezones": {
+  "A股": "Asia/Shanghai",
+  "美股": "America/New_York",
+  "港股": "Asia/Hong_Kong",
+  "台股": "Asia/Taipei",
+  "韩股": "Asia/Seoul",
+  "日股": "Asia/Tokyo",
+  "欧股": "Europe/Paris"
+ },
+ "schema_check": {
+  "rule": "GET /v1/data_sources/{id} 后逐列核对：契约里 level ≠ ignore 的属性缺失或 type 变化 → 整表 last-good（notion_schema_changed，detail {prop, change: missing|type_changed, expected, actual}）；契约外的新列忽略；select 新增选项不报警（只有被行使用才按 invalid_enum 隔离该行）",
+  "by": "属性名（property id 仅用于诊断日志）"
+ },
+ "row_identity": {
+  "key_duplicates": "同 key 多行 → created_time 较晚的隔离（duplicate_key）；相同则 page id 较大的隔离",
+  "last_good_scope": "industries/chokepoints/companies/financials 可用 last-good 同 page id 版本替代；daily/weekly 坏行直接跳过"
+ }
+}

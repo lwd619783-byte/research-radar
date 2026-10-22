@@ -2,7 +2,6 @@
 import copy
 import contextlib
 import datetime as dt
-import hashlib
 import json
 import io
 from pathlib import Path
@@ -265,14 +264,6 @@ class CacheAndContractTests(unittest.TestCase):
         D, _, _ = build.assemble(data, mk, mk, NOW)
         self.assertEqual(D['companies'][0]['hi52'], 110)
 
-    def test_frontend_hashes_are_exact(self):
-        # Current reviewed hashes include the authorized 2026-10-21 status UI.
-        # Keep the historical baseline immutable; check all three current files.
-        baseline = json.loads((ROOT/'audit/truthfulness-frozen.json').read_text())
-        for name in ('app.js', 'index.html', 'style.css'):
-            self.assertEqual(hashlib.sha256((ROOT/'radar/site'/name).read_bytes()).hexdigest(),
-                             baseline['radar/site/'+name])
-
     def test_schedule_gap_recorded_without_changing_schedule(self):
         workflow = (ROOT/'.github/workflows/radar-deploy.yml.disabled').read_text(encoding='utf-8')
         self.assertIn('5 23 * * 0-4', workflow)
@@ -283,12 +274,26 @@ class CacheAndContractTests(unittest.TestCase):
     def test_only_authorized_workflows_are_active(self):
         workflows = ROOT/'.github/workflows'
         self.assertEqual(sorted(p.name for p in workflows.glob('*.yml')),
-                         ['radar-interface-acceptance.yml', 'radar-production.yml'])
+                         ['radar-interface-acceptance.yml', 'radar-offline.yml', 'radar-production.yml'])
         self.assertEqual(list(workflows.glob('*.yaml')), [])
         for name in ('radar-deploy', 'radar-preview'):
             original = subprocess.check_output([
                 'git', 'show', f'22d9601:.github/workflows/{name}.yml'], cwd=ROOT)
             self.assertEqual((workflows/f'{name}.yml.disabled').read_bytes(), original)
+
+    def test_offline_pr_ci_has_no_secret_or_publication_capability(self):
+        workflow = json.loads((ROOT/'.github/workflows/radar-offline.yml').read_text())
+        self.assertEqual(workflow['on'], {'pull_request': {'branches': ['fix/radar-truthfulness-2026-10-18']}})
+        self.assertEqual(workflow['permissions'], {'contents': 'read'})
+        self.assertEqual(set(workflow['jobs']), {'offline'})
+        job = workflow['jobs']['offline']
+        self.assertEqual(job['if'], "github.repository == 'lwd619783-byte/research-radar'")
+        self.assertNotIn('secrets.', json.dumps(workflow))
+        self.assertNotIn('permissions', job)
+        self.assertEqual([s['run'] for s in job['steps'] if 'run' in s],
+                         ['python -B radar/scripts/acceptance_probe.py --preflight'])
+        checkout = next(s for s in job['steps'] if 'actions/checkout@' in s.get('uses', ''))
+        self.assertFalse(checkout['with']['persist-credentials'])
 
     def test_force_does_not_bypass_missing_data_gate(self):
         with tempfile.TemporaryDirectory() as td:

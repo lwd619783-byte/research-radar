@@ -1,0 +1,458 @@
+{
+ "object": "data_source",
+ "id": "adfa9345-7f74-42c0-88c8-cc706b7970cf",
+ "created_time": "2026-10-21T02:40:00.000Z",
+ "last_edited_time": "2026-10-21T09:52:00.000Z",
+ "created_by": {
+  "object": "user",
+  "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+ },
+ "last_edited_by": {
+  "object": "user",
+  "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+ },
+ "properties": {
+  "推导方式": {
+   "id": "%3C%3B%3Fo",
+   "name": "推导方式",
+   "description": "累计差额：如 Q3=前三季度−H1",
+   "type": "select",
+   "select": {
+    "options": [
+     {
+      "id": "Ozw>",
+      "name": "直接披露",
+      "color": "green",
+      "description": null
+     },
+     {
+      "id": "zEM|",
+      "name": "累计差额",
+      "color": "yellow",
+      "description": null
+     }
+    ]
+   }
+  },
+  "币种": {
+   "id": "%3D%3CGg",
+   "name": "币种",
+   "description": "财报记账币种",
+   "type": "select",
+   "select": {
+    "options": [
+     {
+      "id": "Ozw>",
+      "name": "CNY",
+      "color": "red",
+      "description": null
+     },
+     {
+      "id": "zEM|",
+      "name": "USD",
+      "color": "blue",
+      "description": null
+     },
+     {
+      "id": "c__V",
+      "name": "HKD",
+      "color": "purple",
+      "description": null
+     },
+     {
+      "id": "HeKl",
+      "name": "TWD",
+      "color": "green",
+      "description": null
+     },
+     {
+      "id": "=MG\\",
+      "name": "KRW",
+      "color": "yellow",
+      "description": null
+     },
+     {
+      "id": "uq]v",
+      "name": "JPY",
+      "color": "pink",
+      "description": null
+     },
+     {
+      "id": "?JC|",
+      "name": "EUR",
+      "color": "brown",
+      "description": null
+     }
+    ]
+   }
+  },
+  "利润可比性": {
+   "id": "AN%5B%7C",
+   "name": "利润可比性",
+   "description": null,
+   "type": "select",
+   "select": {
+    "options": [
+     {
+      "id": "Ozw>",
+      "name": "可比",
+      "color": "green",
+      "description": null
+     },
+     {
+      "id": "zEM|",
+      "name": "扭亏",
+      "color": "blue",
+      "description": null
+     },
+     {
+      "id": "c__V",
+      "name": "一次性",
+      "color": "orange",
+      "description": null
+     },
+     {
+      "id": "HeKl",
+      "name": "未披露",
+      "color": "gray",
+      "description": null
+     }
+    ]
+   }
+  },
+  "录入日": {
+   "id": "HQ%3BS",
+   "name": "录入日",
+   "description": "ChatGPT 录入并对照原文的日期",
+   "type": "date",
+   "date": {}
+  },
+  "显示期间": {
+   "id": "J%5EVU",
+   "name": "显示期间",
+   "description": "网站显示，如 2026Q3单季 / 2026H1累计",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "会计准则": {
+   "id": "Jlz%5E",
+   "name": "会计准则",
+   "description": "如 PRC_ASBE / US_GAAP / IFRS",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "计算说明": {
+   "id": "POW%3F",
+   "name": "计算说明",
+   "description": "差额推导时写清楚怎么算",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "利润指标": {
+   "id": "Qz%3DD",
+   "name": "利润指标",
+   "description": "如 归母净利润 / GAAP 净利润",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "财年": {
+   "id": "S%5Bcg",
+   "name": "财年",
+   "description": "如 FY2026（按公司自己的财年）",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "口径": {
+   "id": "T%40YE",
+   "name": "口径",
+   "description": "网站信号优先用「单季」",
+   "type": "select",
+   "select": {
+    "options": [
+     {
+      "id": "Ozw>",
+      "name": "单季",
+      "color": "green",
+      "description": null
+     },
+     {
+      "id": "zEM|",
+      "name": "半年",
+      "color": "yellow",
+      "description": null
+     },
+     {
+      "id": "c__V",
+      "name": "累计",
+      "color": "yellow",
+      "description": null
+     },
+     {
+      "id": "HeKl",
+      "name": "全年",
+      "color": "blue",
+      "description": null
+     }
+    ]
+   }
+  },
+  "停用": {
+   "id": "T%5CVk",
+   "name": "停用",
+   "description": "勾选后程序忽略本行（录错时用，不要删除）",
+   "type": "checkbox",
+   "checkbox": {}
+  },
+  "公司": {
+   "id": "UFpP",
+   "name": "公司",
+   "description": "必填",
+   "type": "relation",
+   "relation": {
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d",
+    "type": "single_property",
+    "single_property": {}
+   }
+  },
+  "营收同比%": {
+   "id": "XR%5BH",
+   "name": "营收同比%",
+   "description": "填百分数数值：+50% 填 50，−12.3% 填 -12.3",
+   "type": "number",
+   "number": {
+    "format": "number"
+   }
+  },
+  "毛利率%": {
+   "id": "%5Ba%5C%60",
+   "name": "毛利率%",
+   "description": "填百分数数值：38.5% 填 38.5；未披露留空",
+   "type": "number",
+   "number": {
+    "format": "number"
+   }
+  },
+  "利润口径": {
+   "id": "%5Cnb%3D",
+   "name": "利润口径",
+   "description": null,
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "营收口径": {
+   "id": "%5Cq%5DN",
+   "name": "营收口径",
+   "description": null,
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "来源链接": {
+   "id": "ajkF",
+   "name": "来源链接",
+   "description": "必填：官方报告/公告原文链接；空着网站显示「缺来源」且不参与信号",
+   "type": "url",
+   "url": {}
+  },
+  "披露状态": {
+   "id": "eLcp",
+   "name": "披露状态",
+   "description": "可空；如 reviewed_q3_preliminary",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "来源名称": {
+   "id": "eMjD",
+   "name": "来源名称",
+   "description": "如 2026 年第三季度报告（巨潮资讯）",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "期间": {
+   "id": "fq%5Bu",
+   "name": "期间",
+   "description": null,
+   "type": "select",
+   "select": {
+    "options": [
+     {
+      "id": "Ozw>",
+      "name": "Q1",
+      "color": "gray",
+      "description": null
+     },
+     {
+      "id": "zEM|",
+      "name": "Q2",
+      "color": "gray",
+      "description": null
+     },
+     {
+      "id": "c__V",
+      "name": "Q3",
+      "color": "gray",
+      "description": null
+     },
+     {
+      "id": "HeKl",
+      "name": "Q4",
+      "color": "gray",
+      "description": null
+     },
+     {
+      "id": "=MG\\",
+      "name": "H1",
+      "color": "brown",
+      "description": null
+     },
+     {
+      "id": "uq]v",
+      "name": "H2",
+      "color": "brown",
+      "description": null
+     },
+     {
+      "id": "?JC|",
+      "name": "FY",
+      "color": "brown",
+      "description": null
+     }
+    ]
+   }
+  },
+  "其他来源": {
+   "id": "jpyO",
+   "name": "其他来源",
+   "description": "每行一个链接",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "毛利口径": {
+   "id": "l%3B%5D_",
+   "name": "毛利口径",
+   "description": null,
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "发布日": {
+   "id": "rZpF",
+   "name": "发布日",
+   "description": "报告或公告发布日期",
+   "type": "date",
+   "date": {}
+  },
+  "注意事项": {
+   "id": "vaq_",
+   "name": "注意事项",
+   "description": "口径限制、重述等，每行一条",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "净利同比%": {
+   "id": "w%60hB",
+   "name": "净利同比%",
+   "description": "填百分数数值；扭亏/不可比时留空，并在「利润可比性」说明",
+   "type": "number",
+   "number": {
+    "format": "number"
+   }
+  },
+  "报告状态": {
+   "id": "yk%3B%3C",
+   "name": "报告状态",
+   "description": null,
+   "type": "select",
+   "select": {
+    "options": [
+     {
+      "id": "Ozw>",
+      "name": "正式报告",
+      "color": "green",
+      "description": null
+     },
+     {
+      "id": "zEM|",
+      "name": "业绩快报",
+      "color": "blue",
+      "description": null
+     },
+     {
+      "id": "c__V",
+      "name": "业绩预告",
+      "color": "yellow",
+      "description": null
+     },
+     {
+      "id": "HeKl",
+      "name": "初步结果",
+      "color": "orange",
+      "description": null
+     },
+     {
+      "id": "=MG\\",
+      "name": "仅营收",
+      "color": "gray",
+      "description": null
+     }
+    ]
+   }
+  },
+  "期末日": {
+   "id": "zcmV",
+   "name": "期末日",
+   "description": null,
+   "type": "date",
+   "date": {}
+  },
+  "录入说明": {
+   "id": "%7BZ%3FG",
+   "name": "录入说明",
+   "description": null,
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "记录": {
+   "id": "title",
+   "name": "记录",
+   "description": "格式：公司 · FY2026 Q3；每个报告期新建一行，不覆盖旧行",
+   "type": "title",
+   "title": {}
+  }
+ },
+ "parent": {
+  "type": "database_id",
+  "database_id": "f2e6f09d-be6f-4206-99b1-2fad27220d3e"
+ },
+ "database_parent": {
+  "type": "page_id",
+  "page_id": "65314065-9aa7-4497-abcc-6d5041a4d3f8"
+ },
+ "title": [
+  {
+   "type": "text",
+   "text": {
+    "content": "财报记录",
+    "link": null
+   },
+   "annotations": {
+    "bold": false,
+    "italic": false,
+    "strikethrough": false,
+    "underline": false,
+    "code": false,
+    "color": "default"
+   },
+   "plain_text": "财报记录",
+   "href": null
+  }
+ ],
+ "description": [],
+ "icon": {
+  "type": "emoji",
+  "emoji": "📑"
+ },
+ "in_trash": false,
+ "url": "https://app.notion.com/p/f2e6f09dbe6f420699b12fad27220d3e",
+ "public_url": null,
+ "request_id": "737ab550-24aa-5d87-bb8f-a014d88ce374"
+}

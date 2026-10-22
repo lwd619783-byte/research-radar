@@ -1,0 +1,173 @@
+{
+ "object": "data_source",
+ "id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+ "created_time": "2026-10-21T02:40:00.000Z",
+ "last_edited_time": "2026-10-21T09:52:00.000Z",
+ "created_by": {
+  "object": "user",
+  "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+ },
+ "last_edited_by": {
+  "object": "user",
+  "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+ },
+ "properties": {
+  "紧缺度": {
+   "id": "%3Amxf",
+   "name": "紧缺度",
+   "description": "只用这 3 个选项",
+   "type": "select",
+   "select": {
+    "options": [
+     {
+      "id": "KX@>",
+      "name": "极紧",
+      "color": "red",
+      "description": null
+     },
+     {
+      "id": "DSXU",
+      "name": "偏紧",
+      "color": "orange",
+      "description": null
+     },
+     {
+      "id": "[cxL",
+      "name": "缓解中",
+      "color": "green",
+      "description": null
+     }
+    ]
+   }
+  },
+  "研判理由": {
+   "id": "%3BYNC",
+   "name": "研判理由",
+   "description": "为什么是这个紧缺度；空着网站会显示「待更新」",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "研判日期": {
+   "id": "Elfi",
+   "name": "研判日期",
+   "description": null,
+   "type": "date",
+   "date": {}
+  },
+  "为什么卡": {
+   "id": "Lx%3Ce",
+   "name": "为什么卡",
+   "description": "≤80 字；转述信息注明（转述）",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "有效至": {
+   "id": "RXDL",
+   "name": "有效至",
+   "description": "一般为研判日期 +7 天",
+   "type": "date",
+   "date": {}
+  },
+  "跟踪指标": {
+   "id": "V%3EB%5C",
+   "name": "跟踪指标",
+   "description": "可写 {{earnings:公司代号}}，网站会替换成该公司财报日",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "研判状态": {
+   "id": "%5BNUQ",
+   "name": "研判状态",
+   "description": "自动计算，仅供查看",
+   "type": "formula",
+   "formula": {
+    "expression": "ifs(empty(prop(\"研判理由\")) or empty(prop(\"来源\")) or empty(prop(\"研判日期\")) or empty(prop(\"有效至\")), \"待更新\", prop(\"有效至\") < today(), \"已过期\", \"AI研判\")"
+   }
+  },
+  "行业": {
+   "id": "%5Cz%3Aq",
+   "name": "行业",
+   "description": "所属行业（必填，只选 1 个）",
+   "type": "relation",
+   "relation": {
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467",
+    "type": "single_property",
+    "single_property": {}
+   }
+  },
+  "来源": {
+   "id": "%5ELm%3E",
+   "name": "来源",
+   "description": "每行一个链接，至少 1 个",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "细分": {
+   "id": "gwXg",
+   "name": "细分",
+   "description": "具体环节，≤40 字",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "排序": {
+   "id": "sQF%5D",
+   "name": "排序",
+   "description": "同行业内显示顺序，小的在前",
+   "type": "number",
+   "number": {
+    "format": "number"
+   }
+  },
+  "停用": {
+   "id": "zBNl",
+   "name": "停用",
+   "description": "勾选后网站不再显示（不要删除行）",
+   "type": "checkbox",
+   "checkbox": {}
+  },
+  "名称": {
+   "id": "title",
+   "name": "名称",
+   "description": "卡点名称；被公司引用",
+   "type": "title",
+   "title": {}
+  }
+ },
+ "parent": {
+  "type": "database_id",
+  "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+ },
+ "database_parent": {
+  "type": "page_id",
+  "page_id": "65314065-9aa7-4497-abcc-6d5041a4d3f8"
+ },
+ "title": [
+  {
+   "type": "text",
+   "text": {
+    "content": "卡点",
+    "link": null
+   },
+   "annotations": {
+    "bold": false,
+    "italic": false,
+    "strikethrough": false,
+    "underline": false,
+    "code": false,
+    "color": "default"
+   },
+   "plain_text": "卡点",
+   "href": null
+  }
+ ],
+ "description": [],
+ "icon": {
+  "type": "emoji",
+  "emoji": "🔩"
+ },
+ "in_trash": false,
+ "url": "https://app.notion.com/p/545d8e99b83d4483bd5dc5ee449e5e29",
+ "public_url": null,
+ "request_id": "b768eb67-a8ad-5360-be64-fc0aeff4c88f"
+}

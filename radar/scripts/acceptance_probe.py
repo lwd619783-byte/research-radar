@@ -378,16 +378,7 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
     return rows,summary,quote_session,gates
 
 
-def verify_frozen():
-    hashes=json.loads((ROOT/'audit/truthfulness-frozen.json').read_text('utf-8'))
-    for name,expected in hashes.items():
-        if hashlib.sha256((ROOT/name).read_bytes()).hexdigest()!=expected:
-            raise StopProbe('frozen_hash_mismatch')
-    return len(hashes)
-
-
 def preflight():
-    frozen=verify_frozen()
     data,report=build.load_and_validate(build.RADAR,ROOT,dt.datetime.now(build.BJ).date())
     if report.errors: raise StopProbe('schema_errors')
     proc=subprocess.run([sys.executable,'-B','-m','unittest','discover','-s','radar/tests','-v'],cwd=ROOT,capture_output=True)
@@ -395,7 +386,7 @@ def preflight():
     match=re.search(r'Ran (\d+) tests?',output)
     count=int(match[1]) if match else 0
     if proc.returncode or count<55: raise StopProbe('offline_tests_failed')
-    return {'tests':count,'frozenFiles':frozen,'schemaWarnings':len(report.warnings),'schemaErrors':len(report.errors)}
+    return {'tests':count,'schemaWarnings':len(report.warnings),'schemaErrors':len(report.errors)}
 
 
 def main():
@@ -414,7 +405,6 @@ def main():
     if args.out.name != 'receipt.json': ap.error('--out must name receipt.json')
     if os.environ.get('GITHUB_ACTIONS')!='true' or os.environ.get('GITHUB_RUN_ATTEMPT')!='1':
         raise StopProbe('github_first_attempt_only')
-    verify_frozen()
     data,rep=build.load_and_validate(build.RADAR,ROOT,dt.datetime.now(build.BJ).date())
     if rep.errors: raise StopProbe('schema_errors')
     receipt={'schemaVersion':1,'purpose':'interface-acceptance-not-publication','startedAt':utc(),

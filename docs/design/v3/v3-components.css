@@ -1,0 +1,113 @@
+/* =====================================================================
+   投研雷达 v3 · 新增组件样式（追加到 radar/site/style.css 末尾）
+   只使用现有 design tokens（--accent / --accent-2 / --warm / --tight /
+   --ease / --text-* / --surface-* / --border*），不新增颜色。
+   深浅主题自动适配；红涨绿跌切换只影响 .up/.down，不影响本文件。
+   ===================================================================== */
+
+/* ---------- 1. 状态标签 .st ----------
+   用法：<span class="st ai" data-tip="…">AI 研判</span>
+   变体：ai=AI 研判/AI 摘要 · auto=自动生成 · stale=待更新 · conflict=数据冲突
+         src=有原文 · src part=部分 · src none=缺来源
+   规则：同一列表里不要每行重复同一个标签；只在“例外”处出现。 */
+.st{--st-c:var(--text-3);display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 7px;border-radius:6px;
+  font-size:11px;font-weight:600;line-height:1;letter-spacing:.01em;white-space:nowrap;vertical-align:middle;flex:none;
+  color:var(--st-c);background:color-mix(in srgb,var(--st-c) 12%,transparent);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--st-c) 24%,transparent);cursor:help;user-select:none}
+.st::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;flex:none}
+.st.ai{--st-c:var(--accent)}
+.st.auto{--st-c:var(--accent-2)}
+.st.stale{--st-c:var(--warm)}
+.st.conflict{--st-c:var(--tight)}
+.st.src{--st-c:var(--ease)}
+.st.src.part{--st-c:var(--text-2);background:transparent;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--text-2) 30%,transparent)}
+.st.src.part::before{background:transparent;box-shadow:inset 0 0 0 1.2px currentColor}
+.st.src.none{--st-c:var(--text-3);background:transparent;box-shadow:inset 0 0 0 1px var(--border-2)}
+.st.src.none::before{display:none}
+.st.sm{height:18px;padding:0 6px;font-size:10.5px;border-radius:5px}
+.st:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- 2. 来源行 .prov（主线标题下、行业详情顶部） ---------- */
+.prov{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin-top:12px;font-size:12px;line-height:20px;color:var(--text-3)}
+.prov .sep{opacity:.45}
+.prov b{font-weight:600;color:var(--text-2)}
+.prov a{color:var(--text-2);text-decoration:underline;text-decoration-color:var(--border-2);text-underline-offset:3px;transition:color .2s}
+.prov a:hover{color:var(--text)}
+
+/* ---------- 3. 首屏布局：左“本周主线”，右“今日要点” ---------- */
+.hero-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,440px);gap:24px 40px;align-items:start}
+.hero-split .lead{max-width:760px}
+
+/* ---------- 4. 今日要点 .today ---------- */
+.today{position:relative;border-radius:16px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);padding:12px 16px 4px;margin-top:6px}
+.today-h{display:flex;align-items:center;gap:8px;padding-bottom:9px;border-bottom:1px solid var(--border)}
+.today-t{font-size:12.5px;font-weight:650;color:var(--text)}
+.today-h .hint{margin-left:auto}
+.today-rows{display:block}
+.today-row{padding:11px 0 12px;border-bottom:1px dashed var(--border)}
+.today-row:last-child{border-bottom:0}
+.today-meta{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--text-3);min-height:20px}
+.today-mk{font-family:var(--font-mono);font-size:10.5px;font-weight:600;letter-spacing:.06em;padding:2px 6px;border-radius:5px;color:var(--text-2);background:var(--surface-2)}
+.today-go{margin-left:auto;font-size:12px;color:var(--accent-2);text-decoration:none;white-space:nowrap}
+.today-go:hover{text-decoration:underline;text-underline-offset:3px}
+.today-line{margin-top:5px;font-size:17px;line-height:1.4;font-weight:680;letter-spacing:-.01em;color:var(--text);overflow-wrap:anywhere}
+.today-row.is-auto .today-line{font-weight:600;color:var(--text-2)}
+.today-ix{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:6px;font-size:12px;color:var(--text-3)}
+.today-ix b{font-weight:620;margin-left:4px}
+.today-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:7px;font-size:11.5px;color:var(--text-2);background:var(--surface-2);cursor:pointer;transition:background .2s,color .2s}
+.chip:hover{color:var(--text);background:color-mix(in srgb,var(--ic,var(--accent)) 18%,var(--surface-2))}
+.chip i{width:6px;height:6px;border-radius:50%;background:var(--ic,var(--accent));flex:none}
+
+/* ---------- 5. 更新脉搏 .pulse（替代“当前上线快照”与“每日变化摘要”两张卡） ---------- */
+.pulse{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin-top:16px;font-size:12px;line-height:20px;color:var(--text-3)}
+.pulse b{color:var(--text-2);font-weight:600}
+.pulse .sep{opacity:.45}
+.pulse .dot{width:7px;height:7px;border-radius:50%;flex:none;background:#2ee59d;box-shadow:0 0 0 3px color-mix(in srgb,#2ee59d 18%,transparent)}
+.pulse .dot.warn{background:var(--warm);box-shadow:0 0 0 3px color-mix(in srgb,var(--warm) 18%,transparent)}
+.pulse .dot.bad{background:var(--tight);box-shadow:0 0 0 3px color-mix(in srgb,var(--tight) 18%,transparent)}
+.pulse .msg-warn{color:var(--warm)} .pulse .msg-bad{color:var(--tight)}
+.pulse a{color:var(--text-2);text-decoration:underline;text-decoration-color:var(--border-2);text-underline-offset:3px}
+.pulse a:hover{color:var(--text)}
+
+/* ---------- 6. 财报日：实心=官方确认，空心=预估，虚线=待定 ---------- */
+.pill.est i{background:transparent;box-shadow:inset 0 0 0 1.5px var(--ic)}
+.pill.tbd{background:transparent;box-shadow:inset 0 0 0 1px var(--border-2);color:var(--text-3)}
+.pill.tbd i{background:transparent;border:1px dashed var(--text-3);width:7px;height:7px}
+.ev.est b{background:transparent;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent-2) 45%,transparent)}
+.cf-legend{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px 14px;font-size:11.5px;color:var(--text-3)}
+.cf-legend span{display:inline-flex;align-items:center;gap:6px}
+.cf-legend i{width:7px;height:7px;border-radius:50%;background:var(--text-2);flex:none}
+.cf-legend .est i{background:transparent;box-shadow:inset 0 0 0 1.5px var(--text-2)}
+.cf-legend .tbd i{background:transparent;border:1px dashed var(--text-3)}
+.soon-legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:0 18px 4px;padding:8px 0 4px}
+
+/* ---------- 7. 行业评分行：例外才出标签；待更新行降低饱和度 ---------- */
+.rk .nm .st{margin-left:6px}
+.rk.is-stale .fill{filter:saturate(.3);opacity:.55}
+.rk.is-stale .sc{color:var(--text-3)}
+.card-h .meta{display:inline-flex;align-items:center;gap:8px}
+
+/* ---------- 8. 设计稿标记（仅 mockup 使用，正式站不要） ---------- */
+.mock-note{display:inline-flex;align-items:center;gap:8px;margin:16px 0 -44px;padding:5px 10px;border-radius:8px;font-size:11.5px;color:var(--text-3);border:1px dashed var(--border-2);position:relative;z-index:2}
+
+/* ---------- 8b. 页脚免责声明（全站只出现一次，文字固定，见任务书 §10.7） ---------- */
+.disclaimer{display:block;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);color:var(--text-3);font-size:12px;line-height:1.65}
+
+/* ---------- 9. 响应式 ---------- */
+@media (max-width:1180px){
+  .hero-split{grid-template-columns:1fr}
+  .today-rows{display:grid;grid-template-columns:1fr 1fr;column-gap:24px}
+  .today-row{border-bottom:0}
+}
+@media (max-width:760px){
+  .today{padding:10px 14px 2px}
+  .today-rows{grid-template-columns:1fr}
+  .today-row{border-bottom:1px dashed var(--border)}
+  .today-row:last-child{border-bottom:0}
+  .today-line{font-size:16px}
+  .pulse{font-size:11.5px}
+  .prov .opt{display:none}
+  .mock-note{font-size:11px;margin-bottom:-36px}
+}
+@media (prefers-reduced-motion:reduce){.chip,.st{transition:none}}

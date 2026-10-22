@@ -1,0 +1,328 @@
+{
+ "object": "data_source",
+ "id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+ "created_time": "2026-10-21T02:40:00.000Z",
+ "last_edited_time": "2026-10-21T09:52:00.000Z",
+ "created_by": {
+  "object": "user",
+  "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+ },
+ "last_edited_by": {
+  "object": "user",
+  "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+ },
+ "properties": {
+  "快讯": {
+   "id": "AMsE",
+   "name": "快讯",
+   "description": "≤60 字事实；可写 {{earnings:代号}}",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "显示代码": {
+   "id": "F%3F%5D%60",
+   "name": "显示代码",
+   "description": "网站显示用，如 SH688498 / AVGO",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "看点": {
+   "id": "H%60Ac",
+   "name": "看点",
+   "description": "≤30 字，公司定位与核心逻辑",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "代号": {
+   "id": "IlF%5E",
+   "name": "代号",
+   "description": "程序内部 ID，大写字母/数字，唯一；创建后不要改",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "财报日时区": {
+   "id": "Luxw",
+   "name": "财报日时区",
+   "description": "IANA 时区，如 Asia/Shanghai、America/New_York",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "财报日来源": {
+   "id": "SiCn",
+   "name": "财报日来源",
+   "description": "官方确认时必填",
+   "type": "url",
+   "url": {}
+  },
+  "Yahoo代码": {
+   "id": "Tn%5Dn",
+   "name": "Yahoo代码",
+   "description": "行情代码，如 688498.SS / AVGO / 0700.HK / 000660.KS",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "快讯来源": {
+   "id": "W%3A%5C~",
+   "name": "快讯来源",
+   "description": null,
+   "type": "url",
+   "url": {}
+  },
+  "行业": {
+   "id": "Yd%5B%5D",
+   "name": "行业",
+   "description": "必填，只选 1 个",
+   "type": "relation",
+   "relation": {
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467",
+    "type": "single_property",
+    "single_property": {}
+   }
+  },
+  "停用": {
+   "id": "%5C%3Ar%7B",
+   "name": "停用",
+   "description": "勾选后网站不再显示（不要删除行）",
+   "type": "checkbox",
+   "checkbox": {}
+  },
+  "卡点": {
+   "id": "_CX%40",
+   "name": "卡点",
+   "description": "可空；必须属于同一行业",
+   "type": "relation",
+   "relation": {
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29",
+    "type": "single_property",
+    "single_property": {}
+   }
+  },
+  "知识库": {
+   "id": "e_WE",
+   "name": "知识库",
+   "description": "对应的 Notion 公司页（可空）",
+   "type": "url",
+   "url": {}
+  },
+  "定位": {
+   "id": "l_qp",
+   "name": "定位",
+   "description": null,
+   "type": "select",
+   "select": {
+    "options": [
+     {
+      "id": "aLo|",
+      "name": "全球龙头",
+      "color": "purple",
+      "description": null
+     },
+     {
+      "id": "WFbl",
+      "name": "国内龙头",
+      "color": "blue",
+      "description": null
+     },
+     {
+      "id": "MMWo",
+      "name": "国产替代",
+      "color": "orange",
+      "description": null
+     }
+    ]
+   }
+  },
+  "币种": {
+   "id": "of%3EU",
+   "name": "币种",
+   "description": "报价币种",
+   "type": "select",
+   "select": {
+    "options": [
+     {
+      "id": "aLo|",
+      "name": "CNY",
+      "color": "red",
+      "description": null
+     },
+     {
+      "id": "WFbl",
+      "name": "USD",
+      "color": "blue",
+      "description": null
+     },
+     {
+      "id": "MMWo",
+      "name": "HKD",
+      "color": "purple",
+      "description": null
+     },
+     {
+      "id": "l\\WL",
+      "name": "TWD",
+      "color": "green",
+      "description": null
+     },
+     {
+      "id": "hPRQ",
+      "name": "KRW",
+      "color": "yellow",
+      "description": null
+     },
+     {
+      "id": "zgRm",
+      "name": "JPY",
+      "color": "pink",
+      "description": null
+     },
+     {
+      "id": "`:c^",
+      "name": "EUR",
+      "color": "brown",
+      "description": null
+     }
+    ]
+   }
+  },
+  "下次财报日": {
+   "id": "rC%3Bg",
+   "name": "下次财报日",
+   "description": "未知可空",
+   "type": "date",
+   "date": {}
+  },
+  "财报日备注": {
+   "id": "tUx%3D",
+   "name": "财报日备注",
+   "description": "如：盘前发布；电话会北京时间 08:00",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "快讯日期": {
+   "id": "vUL%3A",
+   "name": "快讯日期",
+   "description": "快讯对应事件的日期；超过 30 天网站不再突出显示",
+   "type": "date",
+   "date": {}
+  },
+  "财报日状态": {
+   "id": "ySxK",
+   "name": "财报日状态",
+   "description": "只有官方公告/投资者关系页给出日期时才选「官方确认」，并填来源",
+   "type": "select",
+   "select": {
+    "options": [
+     {
+      "id": "aLo|",
+      "name": "官方确认",
+      "color": "green",
+      "description": null
+     },
+     {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray",
+      "description": null
+     }
+    ]
+   }
+  },
+  "市场": {
+   "id": "~%60UA",
+   "name": "市场",
+   "description": null,
+   "type": "select",
+   "select": {
+    "options": [
+     {
+      "id": "aLo|",
+      "name": "A股",
+      "color": "red",
+      "description": null
+     },
+     {
+      "id": "WFbl",
+      "name": "美股",
+      "color": "blue",
+      "description": null
+     },
+     {
+      "id": "MMWo",
+      "name": "港股",
+      "color": "purple",
+      "description": null
+     },
+     {
+      "id": "l\\WL",
+      "name": "台股",
+      "color": "green",
+      "description": null
+     },
+     {
+      "id": "hPRQ",
+      "name": "韩股",
+      "color": "yellow",
+      "description": null
+     },
+     {
+      "id": "zgRm",
+      "name": "日股",
+      "color": "pink",
+      "description": null
+     },
+     {
+      "id": "`:c^",
+      "name": "欧股",
+      "color": "brown",
+      "description": null
+     }
+    ]
+   }
+  },
+  "名称": {
+   "id": "title",
+   "name": "名称",
+   "description": "公司简称",
+   "type": "title",
+   "title": {}
+  }
+ },
+ "parent": {
+  "type": "database_id",
+  "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+ },
+ "database_parent": {
+  "type": "page_id",
+  "page_id": "65314065-9aa7-4497-abcc-6d5041a4d3f8"
+ },
+ "title": [
+  {
+   "type": "text",
+   "text": {
+    "content": "公司",
+    "link": null
+   },
+   "annotations": {
+    "bold": false,
+    "italic": false,
+    "strikethrough": false,
+    "underline": false,
+    "code": false,
+    "color": "default"
+   },
+   "plain_text": "公司",
+   "href": null
+  }
+ ],
+ "description": [],
+ "icon": {
+  "type": "emoji",
+  "emoji": "🏢"
+ },
+ "in_trash": false,
+ "url": "https://app.notion.com/p/f5e1e4e584c04801b4f8c1a1892f561d",
+ "public_url": null,
+ "request_id": "5d9b384c-ace3-519d-b770-938627ec8261"
+}

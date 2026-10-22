@@ -1,0 +1,739 @@
+{
+  "as_of": "2026-10-21T18:15:00+08:00",
+  "today": "2026-10-21",
+  "iso_week": "2026-W43",
+  "industries": {
+    "AI核心半导体": {
+      "total": 18,
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+      ],
+      "anchors": {
+        "业绩兑现": {
+          "anchor": 5,
+          "n": 9,
+          "medianRevenueYoYPct": 55.2
+        },
+        "卡点强度": {
+          "anchor": 5,
+          "n": 4,
+          "maxTightness": "极紧"
+        }
+      },
+      "conflicts": []
+    },
+    "PCB与覆铜板": {
+      "total": 17,
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+      ],
+      "anchors": {
+        "业绩兑现": {
+          "anchor": 5,
+          "n": 10,
+          "medianRevenueYoYPct": 60.9
+        },
+        "卡点强度": {
+          "anchor": 5,
+          "n": 4,
+          "maxTightness": "极紧"
+        }
+      },
+      "conflicts": []
+    },
+    "探针卡与半导体测试": {
+      "total": 14,
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/df4e62a69faf82a7824381edf6a768c3"
+      ],
+      "anchors": {},
+      "conflicts": []
+    },
+    "网络安全": {
+      "total": 11,
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/c64e62a69faf83c0ace581898ca9d11e"
+      ],
+      "anchors": {},
+      "conflicts": []
+    },
+    "房地产": {
+      "total": 8,
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/089e62a69faf833fb47d01d81f2bc5d5"
+      ],
+      "anchors": {},
+      "conflicts": []
+    },
+    "玻璃基板": {
+      "total": 10,
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/f61e62a69faf8297883b017fbba2ee4f"
+      ],
+      "anchors": {},
+      "conflicts": []
+    },
+    "AI服务器": {
+      "total": 13,
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/aa6e62a69faf82fea2018196a90fcfa8"
+      ],
+      "anchors": {},
+      "conflicts": []
+    },
+    "电力与数据中心": {
+      "total": 15,
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+      ],
+      "anchors": {
+        "业绩兑现": {
+          "anchor": 3,
+          "n": 11,
+          "medianRevenueYoYPct": 18.1
+        },
+        "卡点强度": {
+          "anchor": 5,
+          "n": 4,
+          "maxTightness": "极紧"
+        }
+      },
+      "conflicts": []
+    },
+    "光纤光缆": {
+      "total": 14,
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/8dae62a69faf83ccbb2b81c119de4250"
+      ],
+      "anchors": {},
+      "conflicts": []
+    },
+    "电池与储能": {
+      "total": 12,
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/2ade62a69faf82b39631017df94064c4"
+      ],
+      "anchors": {},
+      "conflicts": []
+    },
+    "消费": {
+      "total": 10,
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/39ae62a69faf82a48bcc8155561b6f70"
+      ],
+      "anchors": {},
+      "conflicts": []
+    },
+    "AI网络与光互连": {
+      "total": 19,
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+      ],
+      "anchors": {
+        "业绩兑现": {
+          "anchor": 5,
+          "n": 9,
+          "medianRevenueYoYPct": 85.5
+        },
+        "卡点强度": {
+          "anchor": 5,
+          "n": 4,
+          "maxTightness": "极紧"
+        }
+      },
+      "conflicts": []
+    },
+    "航空航天与国防": {
+      "total": 12,
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/6f7e62a69faf8240b167019d3eb04efa"
+      ],
+      "anchors": {},
+      "conflicts": []
+    },
+    "MLCC与精密时钟": {
+      "total": 14,
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/1f3e62a69faf821fa37a81b2cda4a31e"
+      ],
+      "anchors": {},
+      "conflicts": []
+    },
+    "创新药（GLP-1/CXO/AI制药）": {
+      "total": 13,
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/bffe62a69faf83f7bf8181bd2aa03de7"
+      ],
+      "anchors": {},
+      "conflicts": []
+    }
+  },
+  "chokepoints": {
+    "燃气轮机与现场发电": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+      ]
+    },
+    "光引擎与精密光器件": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+      ]
+    },
+    "HBM与存储": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+      ]
+    },
+    "先进制程与先进封装": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+      ]
+    },
+    "网络芯片与交换系统": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+      ]
+    },
+    "上游特种玻纤布与树脂": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+      ]
+    },
+    "钻孔设备与钻针": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+      ]
+    },
+    "算力芯片 GPU/ASIC": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+      ]
+    },
+    "前道设备与材料": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+      ]
+    },
+    "液冷与热管理": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+      ]
+    },
+    "光芯片与激光器": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+      ]
+    },
+    "数据中心供配电": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+      ]
+    },
+    "变压器与电网设备": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+      ]
+    },
+    "高端覆铜板 CCL": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+      ]
+    },
+    "高多层高速PCB产能": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+      ]
+    },
+    "高速光模块产能与良率": {
+      "label": "ai",
+      "reasons": [],
+      "date": "2026-10-17",
+      "validUntil": "2026-10-24",
+      "sources": [
+        "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+      ]
+    }
+  },
+  "companies": {
+    "AMEC": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "ANET": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "ASML": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "tbd"
+    },
+    "ASMPT": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "AVGO": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "COHR": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "CXMT": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "DCKJ": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "DFDQ": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "DTGK": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "DZSK": {
+      "evidence": "partial",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "EMC": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "ENR": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "ETN": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "GEV": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "HDGF": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "HHKJ": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "JPKJ": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "tbd"
+    },
+    "KBL": {
+      "evidence": "partial",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "tbd"
+    },
+    "KHSJ": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "LITE": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "MOD": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "MRVL": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "MU": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "NAURA": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "NTB": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "NVDA": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "SHKJ": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "SKH": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "confirmed"
+    },
+    "SNDL": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "SU": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "tbd"
+    },
+    "SYDQ": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "SYST": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "TFTX": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "TSM": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "VRT": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "XYS": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "YJKJ": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "YWK": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "ZGXD": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "ZJXC": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    },
+    "ZWGX": {
+      "evidence": "source",
+      "flashDate": "2026-10-17",
+      "flashFresh": true,
+      "earnings": "unverified"
+    }
+  },
+  "weekly": {
+    "mode": "stale",
+    "sourceWeek": "2026-W42",
+    "reasons": [
+      "not_current_week",
+      "expired"
+    ],
+    "focus": "AI网络与光互连",
+    "lead": "AI集群800G→1.6T/CPO升级，光芯片与光模块产能是最紧卡点，量价齐升。最紧的卡点是「光芯片与激光器」；龙头近期大幅回调，但业绩仍在高增，三季报是验证窗口。",
+    "calHint": "三季报季：先看预告与快报，再看正式报告",
+    "date": "2026-10-17",
+    "validUntil": "2026-10-19"
+  },
+  "daily": {
+    "A股": {
+      "date": "2026-10-21",
+      "source": "ai",
+      "line": "缩量回落，科创与创业分化",
+      "reviewUrl": "https://app.notion.com/p/400e62a69faf8193b478d9c4ae98fcf1",
+      "industries": []
+    },
+    "美股": {
+      "date": "2026-10-20",
+      "source": "ai",
+      "line": "多数行业修复，科技内部仍分化",
+      "reviewUrl": "https://app.notion.com/p/400e62a69faf81b39108f877d8b51052",
+      "industries": []
+    }
+  },
+  "kpis": {
+    "focusIndustries": 3,
+    "focusIndustriesStale": 0,
+    "tightChokepoints": 7,
+    "chokepointsTotal": 16,
+    "companies": 42,
+    "earningsConfirmed": 1,
+    "earningsTbd": 4
+  },
+  "warnings": [
+    {
+      "code": "text_long",
+      "table": "companies",
+      "key": "CXMT",
+      "field": "快讯"
+    },
+    {
+      "code": "text_long",
+      "table": "companies",
+      "key": "DZSK",
+      "field": "快讯"
+    },
+    {
+      "code": "text_long",
+      "table": "companies",
+      "key": "HDGF",
+      "field": "快讯"
+    },
+    {
+      "code": "text_long",
+      "table": "companies",
+      "key": "SNDL",
+      "field": "快讯"
+    },
+    {
+      "code": "text_long",
+      "table": "companies",
+      "key": "SYST",
+      "field": "快讯"
+    },
+    {
+      "code": "text_long",
+      "table": "companies",
+      "key": "ZWGX",
+      "field": "快讯"
+    },
+    {
+      "code": "text_long",
+      "table": "financials",
+      "key": "Modine · FY2027 Q1",
+      "field": "显示期间"
+    }
+  ],
+  "quarantined": [],
+  "fallbackTables": [],
+  "requests": {
+    "total": 13,
+    "GET": 6,
+    "POST": 7,
+    "order": [
+      "industries",
+      "chokepoints",
+      "companies",
+      "financials",
+      "daily",
+      "weekly"
+    ]
+  },
+  "autoTemplates": {
+    "daily": {
+      "A股": "主要指数集体下跌，创业板指跌 1.62% 领跌",
+      "美股": "主要指数涨跌互现，标普500 +0.28%，费城半导体 −0.29%"
+    },
+    "weekly": {
+      "lead": "本周综合分最高：「AI网络与光互连」（19/20）；最紧卡点「光芯片与激光器」。",
+      "calHint": "本周 6 家公司预计发布财报"
+    },
+    "note": "这些是“若当前行无效时”自动生成的文本；基线里 daily 两行与 weekly(stale) 都来自 Notion，不使用模板"
+  }
+}
