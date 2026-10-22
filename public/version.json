@@ -2,30 +2,319 @@
   "schemaVersion": 1,
   "state": "current",
   "sourceSHA": "603181e76c4a08f406397836edb5b7c2d13faa13",
-  "runId": "39595872206",
-  "dataSHA256": "839e292bf6b02bed78f825e747243b70137a7e7ab04c3549f399a7267e8e28fa",
-  "generatedAt": "2026-10-21T19:59+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/39595872206",
+  "runId": "39705945302",
+  "dataSHA256": "db576f866360673a812bb7f662888a5b905e63a573486a2abb4f2c3665ca5750",
+  "generatedAt": "2026-10-22T09:31+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/39705945302",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
-    "mode": "previous_update",
-    "generatedAt": "2026-10-21T19:59+08:00",
-    "baselineAt": "2026-10-21T19:29+08:00",
+    "mode": "previous_day",
+    "generatedAt": "2026-10-22T09:31+08:00",
+    "baselineAt": "2026-10-21T19:59+08:00",
     "reports": [],
     "calendar": [],
-    "restored": [],
-    "lost": [],
-    "prices": [],
+    "restored": [
+      {
+        "kind": "company",
+        "symbol": "688498.SS",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "300308.SZ",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "300502.SZ",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "300394.SZ",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "688825.SS",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "002371.SZ",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "688012.SS",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "603256.SS",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "601208.SS",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "600183.SS",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "002463.SZ",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "300476.SZ",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "002916.SZ",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "301200.SZ",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "301377.SZ",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "000657.SZ",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "ENR.DE",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "600875.SS",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "002028.SZ",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "601179.SS",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "688676.SS",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "SU.PA",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "002335.SZ",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "002837.SZ",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      }
+    ],
+    "lost": [
+      {
+        "kind": "index",
+        "symbol": "000001.SS",
+        "metric": null,
+        "status": "partial"
+      },
+      {
+        "kind": "index",
+        "symbol": "^HSI",
+        "metric": null,
+        "status": "partial"
+      }
+    ],
+    "prices": [
+      {
+        "id": "VRT",
+        "name": "维谛 Vertiv",
+        "beforeDate": "2026-10-20",
+        "afterDate": "2026-10-21",
+        "before": 203.6,
+        "after": 212.1,
+        "currency": "USD",
+        "change": 0.0422
+      },
+      {
+        "id": "GEV",
+        "name": "GE Vernova",
+        "beforeDate": "2026-10-20",
+        "afterDate": "2026-10-21",
+        "before": 890.3,
+        "after": 925.9,
+        "currency": "USD",
+        "change": 0.03997
+      },
+      {
+        "id": "LITE",
+        "name": "Lumentum",
+        "beforeDate": "2026-10-20",
+        "afterDate": "2026-10-21",
+        "before": 822.5,
+        "after": 850.7,
+        "currency": "USD",
+        "change": 0.03427
+      },
+      {
+        "id": "ETN",
+        "name": "伊顿 Eaton",
+        "beforeDate": "2026-10-20",
+        "afterDate": "2026-10-21",
+        "before": 382.0,
+        "after": 393.9,
+        "currency": "USD",
+        "change": 0.03131
+      },
+      {
+        "id": "ASML",
+        "name": "阿斯麦 ASML",
+        "beforeDate": "2026-10-20",
+        "afterDate": "2026-10-21",
+        "before": 1631,
+        "after": 1677,
+        "currency": "USD",
+        "change": 0.02811
+      },
+      {
+        "id": "NVDA",
+        "name": "英伟达 NVIDIA",
+        "beforeDate": "2026-10-20",
+        "afterDate": "2026-10-21",
+        "before": 216.5,
+        "after": 222.0,
+        "currency": "USD",
+        "change": 0.02541
+      },
+      {
+        "id": "COHR",
+        "name": "Coherent",
+        "beforeDate": "2026-10-20",
+        "afterDate": "2026-10-21",
+        "before": 231.8,
+        "after": 237.5,
+        "currency": "USD",
+        "change": 0.02472
+      },
+      {
+        "id": "MOD",
+        "name": "Modine",
+        "beforeDate": "2026-10-20",
+        "afterDate": "2026-10-21",
+        "before": 146.7,
+        "after": 149.8,
+        "currency": "USD",
+        "change": 0.02093
+      },
+      {
+        "id": "MU",
+        "name": "美光 Micron",
+        "beforeDate": "2026-10-20",
+        "afterDate": "2026-10-21",
+        "before": 896.1,
+        "after": 913.7,
+        "currency": "USD",
+        "change": 0.01964
+      },
+      {
+        "id": "MRVL",
+        "name": "迈威尔 Marvell",
+        "beforeDate": "2026-10-20",
+        "afterDate": "2026-10-21",
+        "before": 240.4,
+        "after": 244.8,
+        "currency": "USD",
+        "change": 0.01805
+      },
+      {
+        "id": "ANET",
+        "name": "Arista",
+        "beforeDate": "2026-10-20",
+        "afterDate": "2026-10-21",
+        "before": 181.2,
+        "after": 184.3,
+        "currency": "USD",
+        "change": 0.01733
+      },
+      {
+        "id": "TSM",
+        "name": "台积电",
+        "beforeDate": "2026-10-20",
+        "afterDate": "2026-10-21",
+        "before": 425.1,
+        "after": 431.9,
+        "currency": "USD",
+        "change": 0.01602
+      },
+      {
+        "id": "AVGO",
+        "name": "博通 Broadcom",
+        "beforeDate": "2026-10-20",
+        "afterDate": "2026-10-21",
+        "before": 334.4,
+        "after": 337.8,
+        "currency": "USD",
+        "change": 0.01026
+      }
+    ],
     "excludedPrices": 0,
-    "sameDatePrices": 42,
+    "sameDatePrices": 29,
     "pendingResearch": 32,
     "baselineProof": {
       "state": "success",
-      "productionSHA": "7fcfced10f5bd58c47f3f4c16313daf8678ea095",
-      "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/FVvGK6Mr5g6dVe96UBg9vKezsTVj",
-      "reportedAt": "2026-10-21T11:29:18Z",
-      "sourceSHA": "fd3ffa42560209ff9481b57698f5577de0730a8a",
-      "dataSHA256": "9cc26988e1f9f033adac5751088887327f5e1f4228beb174f68f0d2cce50355c"
+      "productionSHA": "b4abcabff1aede1a339583f47d233a1896992289",
+      "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/4H9uEeuKZ6PeBXjCKPvMoHgyUBw8",
+      "reportedAt": "2026-10-21T11:59:49Z",
+      "sourceSHA": "603181e76c4a08f406397836edb5b7c2d13faa13",
+      "dataSHA256": "839e292bf6b02bed78f825e747243b70137a7e7ab04c3549f399a7267e8e28fa"
     }
   }
 }
