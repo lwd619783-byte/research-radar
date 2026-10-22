@@ -7,7 +7,7 @@ ROOT=Path(__file__).resolve().parents[2]
 
 class DisplayCoverageTests(unittest.TestCase):
     def run_js(self, assertions):
-        source=(ROOT/'radar/site/app.js').read_text()
+        source=(ROOT/'radar/site/app.js').read_text(encoding='utf-8')
         fin=next(line for line in source.splitlines() if line.startswith('const fin='))
         ranking=next(line for line in source.splitlines() if line.startswith('const rankValue='))
         helpers=source.split('/* ---------- display coverage ---------- */',1)[1].split('/* ---------- data ---------- */',1)[0]
@@ -46,7 +46,7 @@ class DisplayCoverageTests(unittest.TestCase):
             assert.deepEqual(indexAvailability([{},{}],issues),{missing:['A','B'],label:'指数有效 2/4'});
             assert.equal(indexAvailability([],issues).label,'指数有效 0/2');
             assert.equal(indexAvailability([{}],[]).label,'指数有效 1/1');
-            assert.equal(indexAvailability([{}],undefined).label,'指数已提供 1 项 · 覆盖待核');
+            assert.equal(indexAvailability([{}],undefined).label,'指数已提供 1 项 · 覆盖未提供');
         """)
 
     def test_history_labels_report_only_the_plotted_observations(self):
@@ -113,11 +113,11 @@ class DisplayCoverageTests(unittest.TestCase):
         """)
 
     def test_summary_counts_are_derived_and_keep_partial_na_missing_separate(self):
-        self.run_js("""
+        self.run_js(r"""
             const rows=[{status:'complete'},{status:'partial'},{status:'missing'},{status:'not_applicable'},{status:'access_blocked'}];
             assert.deepEqual(dataStateCounts(rows),{complete:1,partial:1,missing:1,not_applicable:1,access_blocked:1});
             assert.match(dataStateLabel(rows),/1\/5 项完整/);assert.match(dataStateLabel(rows),/1 项不适用/);
-            assert.equal(dataStateLabel([]),'数据覆盖待核');
+            assert.equal(dataStateLabel([]),'数据覆盖未提供');
             assert.equal(nativeCapText({mcapLocal:123456789,cur:'KRW'}),'1.23 亿 KRW');
             assert.equal(nativeCapText({mcapLocal:null}),'原币市值暂未取得');
         """)

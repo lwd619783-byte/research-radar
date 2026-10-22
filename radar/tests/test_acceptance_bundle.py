@@ -19,6 +19,9 @@ import acceptance_probe as probe
 
 def fixture():
     D = json.loads((ROOT / 'audit/offline-page-acceptance-2026-10-19/test-data.json').read_text())
+    # V3 retires this research action text (§1.3); the archived source remains
+    # untouched and every market datum, blocker and receipt assertion is kept.
+    D['meta']['weekly'].pop('thermoAction', None)
     clock = dt.datetime.fromisoformat(D['meta']['generatedAt'])
     receipt = {'schemaVersion': 1, 'purpose': 'OFFLINE TEST ONLY — NOT NEW MARKET DATA',
                'execution': {'GITHUB_SHA': 'a' * 40, 'GITHUB_RUN_ID': '0', 'GITHUB_RUN_ATTEMPT': '1'},

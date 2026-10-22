@@ -71,9 +71,14 @@ def prepare(source, destination, now=None, env=None, baseline=None):
     page = public/'index.html'
     html = page.read_text('utf-8')
     old = '当前为验收版本，自动刷新与发布未启用。'
-    if html.count(old) != 1:
-        raise ValueError('production_notice_slot_mismatch')
-    html = html.replace(old, '行情由定时任务更新，数据检查通过后自动发布；各字段以标注日期为准。')
+    if 'id="heroProv"' in html:
+        # V3 uses one fixed disclosure in its footer instead of a preview slot.
+        from output_scan import assert_output_safe
+        assert_output_safe(html, D)
+    else:
+        if html.count(old) != 1:
+            raise ValueError('production_notice_slot_mismatch')
+        html = html.replace(old, '行情由定时任务更新，数据检查通过后自动发布；各字段以标注日期为准。')
     page.write_text(html, encoding='utf-8', newline='\n')
     (public/'version.json').write_bytes(bundle.encoded(info))
     (destination/'history.json').write_bytes(bundle.encoded({'schemaVersion': 1, 'days': history}))
