@@ -8,7 +8,11 @@ repo_url = ""
 kb_branch = "main"
 
 [build]
-source = "toml"
+source = "notion"
+
+[schedule]
+cron_utc = ["45 0 * * 1-5", "15 4 * * 1-5", "15 10 * * 1-5", "50 22 * * 0"]
+late_after_minutes = 90
 
 [notion]
 contract = "notion_schema.json"

@@ -190,10 +190,10 @@ class WorkflowTests(unittest.TestCase):
     def test_manual_probe_stays_guarded_beside_offline_visual_job(self):
         w=self.workflow();self.assertEqual(set(w['on']),{'workflow_dispatch','pull_request'})
         self.assertEqual(w['permissions'],{'contents':'read'})
-        self.assertEqual(set(w['jobs']),{'acceptance','visual'})
+        self.assertEqual(set(w['jobs']),{'acceptance','visual','live_notion'})
         job=w['jobs']['acceptance'];self.assertEqual(job['runs-on'],'ubuntu-24.04')
         self.assertEqual(job['timeout-minutes'],20);self.assertIn('github.run_attempt == 1',job['if'])
-        self.assertNotIn('secrets.',json.dumps(w))
+        self.assertNotIn('secrets.',json.dumps(job))
 
     def test_visual_job_is_pr_only_read_only_and_uploads_only_review_evidence(self):
         w=self.workflow();job=w['jobs']['visual']
@@ -228,9 +228,9 @@ class WorkflowTests(unittest.TestCase):
     def test_current_branch_exact_sha_and_zero_cost_gate_before_runner(self):
         w=self.workflow();job=w['jobs']['acceptance']
         self.assertEqual(job['if'],
-            "github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/radar-truthfulness-2026-10-18' && github.run_attempt == 1 && inputs.zero_cost_verified == true && inputs.reviewed_sha == github.sha")
+            "github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/radar-truthfulness-2026-10-18' && github.run_attempt == 1 && inputs.zero_cost_verified == true && inputs.reviewed_sha == github.sha && inputs.live_notion != true")
         cost=w['on']['workflow_dispatch']['inputs']['zero_cost_verified']
-        self.assertEqual(cost['type'],'boolean');self.assertTrue(cost['required']);self.assertIs(cost['default'],False)
+        self.assertEqual(cost['type'],'boolean');self.assertFalse(cost['required']);self.assertIs(cost['default'],False)
         checkout=next(s for s in job['steps'] if s.get('uses','').startswith('actions/checkout@'))
         self.assertEqual(checkout['with']['ref'],'${{ github.sha }}')
         self.assertEqual(probe.MAX_REQUESTS,240)

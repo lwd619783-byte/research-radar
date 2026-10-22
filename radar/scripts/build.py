@@ -354,6 +354,10 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
             requiredFX=sorted({c['cur'] for c in data['companies']}-{'USD'}))
         out['meta']['coverage']=latest.coverage_matrix(out)
         out['meta']['coverageComplete']=all(r['status'] in ('complete','not_applicable') for r in out['meta']['coverage'])
+    from release_schedule import schedule_metadata
+    schedule = schedule_metadata(cfg, now)
+    if schedule is not None:
+        out['meta']['schedule'] = schedule
     return out, stale, missing
 
 
@@ -374,7 +378,7 @@ def render(D: dict, out_dir: Path, operations=None) -> Path:
     operations_json = script_json(operations)
     title = D["meta"].get("title") or "投研雷达"
     h = h.replace("<title>投研雷达 · Alpha Radar</title>", f"<title>{esc(title)} · Alpha Radar</title>")
-    h = render_into(h, D)
+    h = render_into(h, D, operations)
     h = h.replace("/*__CSS__*/", css).replace("/*__DATA__*/", data).replace("/*__OPERATIONS__*/", operations_json).replace("/*__JS__*/", js)
     assert_output_safe(h, D, site_dir=site)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -520,6 +524,10 @@ def apply_research(market_data, research, fixed_clock, config=None, trading_days
                 item.update(reason=evidence, status={'source': 'complete', 'partial': 'partial'}.get(evidence, 'missing'))
         meta['coverage'] = coverage
         meta['coverageComplete'] = all(item['status'] in ('complete', 'not_applicable') for item in coverage)
+    from release_schedule import schedule_metadata
+    schedule = schedule_metadata(config or research_config(), fixed_clock)
+    if schedule is not None:
+        meta['schedule'] = schedule
     return apply_views(data, research, fixed_clock, config, trading_days)
 
 
@@ -630,7 +638,7 @@ def notion_main(args, config):
 def main() -> int:
     config = research_config()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('--source', choices=('notion', 'toml'), default=config.get('build', {}).get('source', 'toml'))
+    ap.add_argument('--source', choices=('notion', 'toml'), default=config.get('build', {}).get('source', 'notion'))
     ap.add_argument('--fixed-clock', help='ISO timestamp for deterministic offline builds')
     ap.add_argument('--research-snapshot', help='Last successfully published research snapshot')
     ap.add_argument('--notion-fetch', help='Sanitized collected Notion input; no credential needed')

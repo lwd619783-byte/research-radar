@@ -3,13 +3,16 @@
   "on": {
     "schedule": [
       {
-        "cron": "15 23 * * 1-5"
+        "cron": "45 0 * * 1-5"
       },
       {
         "cron": "15 4 * * 1-5"
       },
       {
-        "cron": "35 8 * * 1-5"
+        "cron": "15 10 * * 1-5"
+      },
+      {
+        "cron": "50 22 * * 0"
       }
     ],
     "push": {
@@ -35,7 +38,7 @@
     "refresh": {
       "if": "github.repository == 'lwd619783-byte/research-radar' && github.ref == 'refs/heads/fix/radar-truthfulness-2026-10-18' && github.run_attempt == 1",
       "runs-on": "ubuntu-24.04",
-      "timeout-minutes": 30,
+      "timeout-minutes": 40,
       "permissions": {
         "contents": "write",
         "statuses": "read"
@@ -68,15 +71,18 @@
           }
         },
         {
-          "name": "Full offline tests and frozen provenance checks",
+          "name": "All offline regressions and contract checks before requests",
           "run": "python -B radar/scripts/acceptance_probe.py --preflight",
           "id": "preflight"
         },
         {
-          "name": "Collect current data with bounded requests",
-          "timeout-minutes": 16,
-          "run": "python -B radar/scripts/acceptance_probe.py --out \"$RUNNER_TEMP/radar-current/receipt.json\"",
-          "id": "collect"
+          "name": "Read Notion once, then collect bounded market data",
+          "timeout-minutes": 20,
+          "run": "python -B radar/scripts/production_collect.py --out \"$RUNNER_TEMP/radar-current/receipt.json\" --work \"$RUNNER_TEMP/radar-work\" --baseline \"$RUNNER_TEMP/radar-baseline\"",
+          "id": "collect",
+          "env": {
+            "NOTION_TOKEN": "${{ secrets.NOTION_TOKEN }}"
+          }
         },
         {
           "name": "Require fresh same-run data and all publication gates",
@@ -109,7 +115,7 @@
           "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
           "with": {
             "name": "radar-production-${{ github.run_id }}",
-            "path": "${{ runner.temp }}/radar-current/DATA.json\n${{ runner.temp }}/radar-current/index.html\n${{ runner.temp }}/radar-current/receipt.json\n${{ runner.temp }}/radar-current/manifest.json\n${{ runner.temp }}/radar-release/release.json\n${{ runner.temp }}/release-result.json",
+            "path": "${{ runner.temp }}/radar-current/DATA.json\n${{ runner.temp }}/radar-current/index.html\n${{ runner.temp }}/radar-current/receipt.json\n${{ runner.temp }}/radar-current/manifest.json\n${{ runner.temp }}/radar-release/release.json\n${{ runner.temp }}/release-result.json\n${{ runner.temp }}/radar-current/research-snapshot.json\n${{ runner.temp }}/radar-work/step-summary.md",
             "retention-days": 7,
             "if-no-files-found": "warn",
             "include-hidden-files": false

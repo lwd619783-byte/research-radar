@@ -11,7 +11,17 @@
       "steps": [
         {"uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262", "with": {"fetch-depth": 0, "persist-credentials": false}},
         {"uses": "actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065", "with": {"python-version": "3.12"}},
-        {"name": "All offline regressions and schema preflight", "run": "python -B radar/scripts/acceptance_probe.py --preflight"}
+        {"name": "All offline regressions and schema preflight", "run": "python -B radar/scripts/acceptance_probe.py --preflight"},
+        {"name": "Complete non-publishable V3 offline rehearsal", "run": "python -B radar/tools/rehearse_v3_release.py --out \"$RUNNER_TEMP/radar-v3-rehearsal\""},
+        {
+          "name": "Upload offline release manifest and summary",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "radar-v3-offline-rehearsal-${{ github.run_id }}",
+            "path": "${{ runner.temp }}/radar-v3-rehearsal/release.json\n${{ runner.temp }}/radar-v3-rehearsal/step-summary.md\n${{ runner.temp }}/radar-v3-rehearsal/rehearsal.json",
+            "retention-days": 7, "if-no-files-found": "error", "include-hidden-files": false
+          }
+        }
       ]
     }
   }

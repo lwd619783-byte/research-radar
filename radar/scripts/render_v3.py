@@ -165,8 +165,20 @@ def render_kpis(data):
     return ''.join(rows)
 
 
-def render_pulse(data, today):
+def render_pulse(data, today, operations=None):
     meta = data.get('meta') or {}
+    if (operations or {}).get('state') == 'failed':
+        generated = short_time(meta.get('generatedAt'), today)
+        schedule = meta.get('schedule') or {}
+        next_run = schedule.get('nextRunAt')
+        if operations.get('attemptedAt') and schedule.get('cronUtc'):
+            from release_schedule import schedule_metadata
+            next_run = schedule_metadata({'cron_utc': schedule['cronUtc'],
+                'late_after_minutes': schedule.get('lateAfterMinutes', 90)}, operations['attemptedAt'])['nextRunAt']
+        following = f'<span class="sep">·</span><span>下次 <b class="num">{esc(short_time(next_run, today))}</b></span>' if next_run else ''
+        return ('<span class="dot bad" aria-hidden="true"></span>'
+                f'<span class="msg-bad">本次更新未完成，显示 {esc(generated)} 的数据</span>' + following +
+                '<span class="sep">·</span><a href="#dataNotes">数据说明</a>')
     notion = meta.get('notion') or {}
     fallback = notion.get('fallbackTables') or []
     quarantined = notion.get('quarantined') or []
@@ -196,14 +208,17 @@ def render_pulse(data, today):
         next_run = (meta.get('schedule') or {}).get('nextRunAt')
         if next_run:
             parts.append(f'<span>下次 <b class="num">{esc(short_time(next_run, today))}</b></span>')
-        changes = meta.get('changesToday')
-        if changes is None or changes.get('firstRun'):
+        summary = (operations or {}).get('changes') or data.get('changes') or {}
+        changes = (summary.get('today') or (operations or {}).get('changesToday')
+                   or summary.get('changesToday') or meta.get('changesToday'))
+        if (changes is None or summary.get('mode') == 'unavailable' or changes.get('firstRun')
+                or changes.get('firstUpdate') or changes.get('mode') == 'first_update'):
             parts.append('<span>今日变化：首次更新</span>')
         else:
-            def count(name):
-                value = changes.get(name, [])
+            def count(*names):
+                value = next((changes[name] for name in names if name in changes), [])
                 return len(value) if isinstance(value, list) else value if isinstance(value, int) else 0
-            parts.append(f'<span>今日变化：财报 <b class="num">{count("financials")}</b> · 财报日确认 <b class="num">{count("earningsConfirmed")}</b> · 评分 <b class="num">{count("scores")}</b></span>')
+            parts.append(f'<span>今日变化：财报 <b class="num">{count("reports", "financials")}</b> · 财报日确认 <b class="num">{count("confirmed", "calendar", "earningsConfirmed")}</b> · 评分 <b class="num">{count("scores")}</b></span>')
     parts.append('<a href="#dataNotes">数据说明</a>')
     return '<span class="sep">·</span>'.join(parts)
 
@@ -219,7 +234,7 @@ def render_footer(data, today):
     return f'<div id="dataNotes"><div class="bl">数据说明</div><p>{esc(description)}</p></div><p class="disclaimer" id="disclaimer">{DISCLAIMER}</p>'
 
 
-def render_fragments(data):
+def render_fragments(data, operations=None):
     meta = data.get('meta') or {}
     weekly = meta.get('weekly') or {}
     today = date(meta.get('today'))
@@ -237,11 +252,11 @@ def render_fragments(data):
         'HERO_PROV': hero_provenance(weekly, today),
         'HERO_LEAD': esc('行业研判均待更新，下方数据照常显示。' if none else weekly.get('lead') or ''),
         'TODAY': render_today(meta, today), 'KPIS': render_kpis(data),
-        'PULSE': render_pulse(data, today), 'NOSCRIPT': '', 'FOOT': render_footer(data, today),
+        'PULSE': render_pulse(data, today, operations), 'NOSCRIPT': '', 'FOOT': render_footer(data, today),
     }
 
 
-def render_into(template, data):
-    for key, fragment in render_fragments(data).items():
+def render_into(template, data, operations=None):
+    for key, fragment in render_fragments(data, operations).items():
         template = template.replace('<!--__SSR_' + key + '__-->', fragment)
     return template

@@ -11,6 +11,7 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import tempfile
 import time
 import urllib.error
 import urllib.parse
@@ -63,12 +64,20 @@ def status(commit):
     return checked_status(api(f'commits/{sha(commit)}/status'), commit)
 
 
-def verify_files(root):
+def verify_files(root, allow_dry_run=False):
     root = Path(root)
+    if root.is_symlink() or (root/'public').is_symlink() or (root/'release.json').is_symlink():
+        raise ValueError('release_file_type')
     m = json.loads((root/'release.json').read_text('utf-8'))
-    if m.get('schemaVersion') not in (1, 2) or m.get('blockers') != []:
+    if m.get('schemaVersion') not in (1, 2, 3) or m.get('blockers') != []:
         raise ValueError('invalid_release_manifest')
-    expected = {'index.html', 'robots.txt'} | ({'version.json'} if m['schemaVersion'] == 2 else set())
+    diagnostic = m.get('publicationAuthorized') is False
+    if diagnostic and (not allow_dry_run or m.get('purpose') not in ('live-notion-dry-run', 'offline-rehearsal')):
+        raise ValueError('diagnostic_publication_forbidden')
+    if m.get('purpose') in ('live-notion-dry-run', 'offline-rehearsal') and not diagnostic:
+        raise ValueError('diagnostic_authorization_invalid')
+    bundle.check_sensitive(m)
+    expected = {'index.html', 'robots.txt'} | ({'version.json'} if m['schemaVersion'] >= 2 else set())
     if set(m['files']) != expected or {p.name for p in (root/'public').iterdir()} != expected:
         raise ValueError('release_file_allowlist_mismatch')
     for name, digest in m['files'].items():
@@ -76,9 +85,33 @@ def verify_files(root):
         if p.is_symlink() or not p.is_file() or bundle.digest(p.read_bytes()) != digest:
             raise ValueError('release_file_hash_mismatch')
     data = bundle.embedded_data((root/'public/index.html').read_bytes())
-    if bundle.data_digest(data) != m['dataSHA256'] or any(data['meta'].get(k) for k in ('fixture', 'offline', 'reviewPreview')):
+    synthetic = any(data['meta'].get(k) for k in ('fixture', 'offline', 'reviewPreview'))
+    if bundle.data_digest(data) != m['dataSHA256'] or (synthetic and not (diagnostic and m.get('purpose') == 'offline-rehearsal')):
         raise ValueError('release_data_invalid')
-    if m['schemaVersion'] == 2:
+    if m['schemaVersion'] == 3:
+        p = root/bundle.SNAPSHOT
+        if p.is_symlink() or not p.is_file() or bundle.digest(p.read_bytes()) != m.get('researchSnapshotSHA256'):
+            raise ValueError('research_snapshot_hash_mismatch')
+        snapshot_bytes = bundle.validate_research_snapshot(json.loads(p.read_bytes()), data, m['fixedClock'])
+        if snapshot_bytes != p.read_bytes() or m['researchSnapshotSHA256'] != data['meta']['notion']['snapshotSHA256']:
+            raise ValueError('research_snapshot_binding_mismatch')
+        if m.get('notion') != bundle.notion_summary(data):
+            raise ValueError('notion_summary_mismatch')
+        from release_schedule import schedule_metadata
+        schedule = data['meta'].get('schedule', {})
+        if not isinstance(schedule, dict) or not schedule.get('cronUtc'):
+            raise ValueError('release_schedule_missing')
+        expected_schedule = schedule_metadata({'cron_utc': schedule['cronUtc'],
+            'late_after_minutes': schedule.get('lateAfterMinutes')}, m['fixedClock'])
+        if schedule != expected_schedule:
+            raise ValueError('release_schedule_mismatch')
+        from output_scan import assert_output_safe
+        assert_output_safe((root/'public/index.html').read_text('utf-8'), data)
+    elif 'notion' in data.get('meta', {}):
+        raise ValueError('notion_release_requires_v3')
+    if m['schemaVersion'] >= 2:
+        if (root/'history.json').is_symlink() or not (root/'history.json').is_file():
+            raise ValueError('release_file_type')
         if bundle.digest((root/'history.json').read_bytes()) != m['historySHA256']:
             raise ValueError('history_hash_mismatch')
         history = json.loads((root/'history.json').read_text('utf-8'))
@@ -86,6 +119,8 @@ def verify_files(root):
             raise ValueError('history_invalid')
         ops = json.loads(SLOT.search((root/'public/index.html').read_text('utf-8')).group(2))
         version = json.loads((root/'public/version.json').read_text('utf-8'))
+        bundle.check_sensitive(history)
+        bundle.check_sensitive(version)
         if ops != version or ops.get('dataSHA256') != m['dataSHA256'] or ops.get('sourceSHA') != m['sourceSHA']:
             raise ValueError('release_status_binding_mismatch')
     return m, data
@@ -103,8 +138,10 @@ def fetch_baseline(destination):
         # objects, never executable code from the production branch.
         manifest = json.loads(command(['git', 'show', commit + ':release.json']))
         names = ['release.json', 'vercel.json', 'verify-release.cjs', 'public/index.html', 'public/robots.txt']
-        if manifest.get('schemaVersion') == 2:
+        if manifest.get('schemaVersion', 0) >= 2:
             names += ['public/version.json', 'history.json']
+        if manifest.get('schemaVersion') == 3:
+            names += [bundle.SNAPSHOT]
         destination.mkdir(parents=True, exist_ok=False)
         for name in names:
             p = destination/name
@@ -126,7 +163,7 @@ def refresh_hashes(root):
 
 def failure_release(baseline, destination, stage, run_id, source_sha):
     m, data = verify_files(baseline)
-    if m['schemaVersion'] != 2:
+    if m['schemaVersion'] < 2:
         raise ValueError('baseline_has_no_failure_notice_slot')
     if stage not in ('preflight', 'baseline', 'collect', 'prepare', 'publish', 'deployment'):
         raise ValueError('invalid_failure_stage')
@@ -134,6 +171,16 @@ def failure_release(baseline, destination, stage, run_id, source_sha):
         raise ValueError('invalid_run_id')
     sha(source_sha)
     destination = Path(destination)
+    if destination.exists() or destination.is_symlink():
+        raise ValueError('release_destination_exists')
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix='.radar-recovery-', dir=destination.parent) as temporary:
+        output = Path(temporary)/'release'
+        _failure_materialize(baseline, output, stage, run_id, source_sha, data)
+        bundle.atomic_directory_rename(output, destination)
+
+
+def _failure_materialize(baseline, destination, stage, run_id, source_sha, data):
     shutil.copytree(baseline, destination, ignore=shutil.ignore_patterns('proof.json'))
     page = destination/'public/index.html'
     text = page.read_text('utf-8')
@@ -142,10 +189,22 @@ def failure_release(baseline, destination, stage, run_id, source_sha):
                attemptedSourceSHA=source_sha, attemptRunId=run_id,
                runUrl=f'https://github.com/{REPO}/actions/runs/{run_id}')
     # generatedAt, dataSHA256, daily summary, research flags all stay unchanged.
-    encoded = json.dumps(ops, ensure_ascii=False, allow_nan=False, separators=(',', ':')).replace('</', '<\\/')
+    encoded = json.dumps(ops, ensure_ascii=False, allow_nan=False, separators=(',', ':'))
+    for char, escaped in (('<', '\\u003c'), ('>', '\\u003e'), ('&', '\\u0026'), ('\u2028', '\\u2028'), ('\u2029', '\\u2029')):
+        encoded = encoded.replace(char, escaped)
     text, count = SLOT.subn(lambda x: x[1] + encoded + x[3], text)
     if count != 1:
         raise ValueError('failure_notice_slot_mismatch')
+    if 'id="heroProv"' in text:
+        from render_v3 import date, render_pulse
+        fragment = render_pulse(data, date(data['meta'].get('today')), ops)
+        pulse = re.compile(r'(<div\b(?=[^>]*\bid="pulse")[^>]*>)(.*?)(</div>)', re.S)
+        def replace_pulse(match):
+            opening = re.sub(r'class="[^"]*"', 'class="pulse bad"', match[1])
+            return opening + fragment + match[3]
+        text, count = pulse.subn(replace_pulse, text)
+        if count != 1:
+            raise ValueError('failure_pulse_slot_mismatch')
     page.write_text(text, encoding='utf-8', newline='\n')
     (destination/'public/version.json').write_bytes(bundle.encoded(ops))
     refresh_hashes(destination)
@@ -159,27 +218,32 @@ def publish(root):
             or os.environ.get('GITHUB_RUN_ATTEMPT') != '1'
             or os.environ.get('GITHUB_EVENT_NAME') not in ('push', 'schedule', 'workflow_dispatch')):
         raise ValueError('publication_execution_not_allowed')
+    manifest, _ = verify_files(root)
     source = sha(os.environ.get('GITHUB_SHA'))
     if command(['git', 'rev-parse', 'HEAD']).decode().strip() != source:
         raise ValueError('publication_source_mismatch')
     if api('git/ref/heads/' + BRANCH)['object']['sha'] != source:
         raise ValueError('source_advanced_skip_obsolete_release')
-    verify_files(root)
     command(['gh', 'auth', 'setup-git'])
     work = Path(os.environ['RUNNER_TEMP']) / ('publish-' + Path(root).name)
     command(['git', 'init', '-q', '-b', 'production', str(work)])
     command(['git', 'remote', 'add', 'origin', f'https://github.com/{REPO}.git'], work)
     command(['git', 'fetch', '-q', '--depth=1', 'origin', 'production'], work)
     command(['git', 'reset', '-q', '--hard', 'FETCH_HEAD'], work)
-    for name in ('public/index.html', 'public/robots.txt', 'public/version.json', 'release.json',
-                 'history.json', 'vercel.json', 'verify-release.cjs'):
+    names = ['public/index.html', 'public/robots.txt', 'public/version.json', 'release.json',
+             'history.json', 'vercel.json', 'verify-release.cjs']
+    if manifest['schemaVersion'] == 3:
+        names.append(bundle.SNAPSHOT)
+    else:
+        # A TOML rollback has no usable Notion baseline, including on disk.
+        command(['git', 'rm', '-q', '--ignore-unmatch', '--', bundle.SNAPSHOT], work)
+    for name in names:
         dest = work/name
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(Path(root)/name, dest)
     command(['git', 'config', 'user.name', 'github-actions[bot]'], work)
     command(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], work)
-    command(['git', 'add', '--', 'public/index.html', 'public/robots.txt', 'public/version.json',
-             'release.json', 'history.json', 'vercel.json', 'verify-release.cjs'], work)
+    command(['git', 'add', '--', *names], work)
     command(['git', 'commit', '-q', '-m', f'Publish radar from {source} (run {os.environ["GITHUB_RUN_ID"]})'], work)
     commit = command(['git', 'rev-parse', 'HEAD'], work).decode().strip()
     command(['git', 'push', 'origin', 'HEAD:refs/heads/production'], work)
