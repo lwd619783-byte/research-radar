@@ -13,12 +13,16 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures as cf
+import copy
 import datetime as dt
 import hashlib
 import json
 import math
 import os
 import sys
+import tempfile
+import time
+import tomllib
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -408,8 +412,218 @@ def gh_summary(text: str) -> None:
             f.write(text + "\n")
 
 
+def research_config():
+    with (RADAR / 'data/config.toml').open('rb') as stream:
+        return tomllib.load(stream)
+
+
+def load_notion_contract(config):
+    """Validate local schema without reading credentials or making requests."""
+    from research_snapshot import ResearchAbort
+    try:
+        path = RADAR / 'data' / config.get('notion', {}).get('contract', 'notion_schema.json')
+        contract = json.loads(path.read_text(encoding='utf-8'))
+        tables = {'industries', 'chokepoints', 'companies', 'financials', 'daily', 'weekly'}
+        if set(contract['tables']) != tables:
+            raise ValueError('tables')
+        for table in contract['tables'].values():
+            if not table['data_source_id'] or not table['properties']:
+                raise ValueError('table')
+            for column in table['properties'].values():
+                if not column['type'] or not column['level']:
+                    raise ValueError('property')
+    except (OSError, ValueError, KeyError, TypeError):
+        raise ResearchAbort('contract_invalid') from None
+    return contract
+
+
+def load_research(*, transport, token, fixed_clock, last_good=None, config=None, sleep=None, pace=None, fetch=None):
+    """Read and normalize research before requesting any market data."""
+    from notion_source import fetch_all as fetch_notion
+    from notion_normalize import normalize
+    from research_snapshot import ResearchAbort
+    config = config or research_config()
+    contract = load_notion_contract(config)
+    if isinstance(fixed_clock, str):
+        fixed_clock = dt.datetime.fromisoformat(fixed_clock)
+    if fixed_clock.tzinfo is None:
+        raise ResearchAbort('contract_invalid')
+    if fetch is None:
+        fetch = fetch_notion(contract, config.get('notion', {}), token=token, transport=transport,
+                             sleep=sleep, pace=pace, fixed_clock=fixed_clock)
+    research = normalize(fetch, contract, fixed_clock, last_good=last_good, config=config)
+    return research, fetch
+
+
+def apply_research(market_data, research, fixed_clock, config=None, trading_days=None):
+    """Replace only research fields; quote values and their provenance stay paired."""
+    from research_view import apply_views
+    data = copy.deepcopy(market_data)
+    previous = {c['sym']: c for c in data.get('companies', [])}
+    companies = []
+    for research_row in research['companies']:
+        row = copy.deepcopy(previous.get(research_row['sym'], {}))
+        if row and row.get('mkt') != research_row['mkt']:
+            row = {}  # A different market cannot inherit another observation.
+        quote_currency = row.get('cur')
+        for key in ('price', 'pe', 'mcapUSD', 'r1d', 'r5', 'r20', 'r60', 'ytd', 'dd52', 'hi52', 'ld', 's0'):
+            row.setdefault(key, None)
+        row.setdefault('sd', [])
+        row.setdefault('sc', [])
+        row.setdefault('history', {'count': 0})
+        provenance = {**row.get('provenance', {}), **research_row.get('provenance', {})}
+        row.update(copy.deepcopy(research_row))
+        if quote_currency:
+            row['cur'] = quote_currency  # Provider currency is independent of research configuration.
+        row['provenance'] = provenance
+        row.pop('flashStatus', None)
+        row.pop('review', None)
+        companies.append(row)
+    data.update(industries=copy.deepcopy(research['industries']), chokepoints=copy.deepcopy(research['chokepoints']), companies=companies)
+    meta = data.setdefault('meta', {})
+    meta['notion'] = copy.deepcopy(research['notion'])
+    if isinstance(fixed_clock, str):
+        fixed_clock = dt.datetime.fromisoformat(fixed_clock)
+    meta.update(today=fixed_clock.astimezone(BJ).date().isoformat(), generatedAt=fixed_clock.isoformat(timespec='minutes'))
+    # V3 research uses evidence/recency labels instead of the retired manual
+    # financial-review gate. All quote/FX/time/receipt blockers are preserved.
+    meta['blockers'] = [b for b in meta.get('blockers', []) if b != 'financial_evidence_incomplete']
+    meta['issues'] = [i for i in meta.get('issues', []) if i.get('kind') != 'financial']
+    if meta.get('configuredIndices') is not None:
+        # Reuse every existing market coverage rule, adapting only the retired
+        # financial status vocabulary in a temporary copy. No such status is
+        # written into V3 DATA or used to admit a financial value.
+        coverage_input = copy.deepcopy(data)
+        for company in coverage_input['companies']:
+            provenance = company.setdefault('provenance', {})
+            provenance.setdefault('daily', {})
+            provenance.setdefault('valuation', {})
+            financial = provenance.get('financial') or {}
+            evidence = financial.get('evidence', 'missing')
+            provenance['financial'] = {**financial, 'status': {'source': 'verified', 'partial': 'verified_partial'}.get(evidence, 'missing_source')}
+        coverage = latest.coverage_matrix(coverage_input)
+        by_symbol = {c['sym']: c for c in companies}
+        for item in coverage:
+            if item.get('metric') == 'financial':
+                financial = by_symbol[item['symbol']]['provenance'].get('financial') or {}
+                evidence = financial.get('evidence', 'missing')
+                item.update(reason=evidence, status={'source': 'complete', 'partial': 'partial'}.get(evidence, 'missing'))
+        meta['coverage'] = coverage
+        meta['coverageComplete'] = all(item['status'] in ('complete', 'not_applicable') for item in coverage)
+    return apply_views(data, research, fixed_clock, config, trading_days)
+
+
+def build_notion_data(*, transport=None, token=None, fixed_clock, last_good=None, config=None,
+                      quotes_data=None, sleep=None, pace=None, trading_days=None):
+    """Injectable offline/online research pipeline; never invent missing quotes."""
+    config = config or research_config()
+    research, fetch = load_research(transport=transport, token=token, fixed_clock=fixed_clock,
+                                   last_good=last_good, config=config, sleep=sleep, pace=pace)
+    market = quotes_data if quotes_data is not None else {'meta': {}, 'companies': [], 'indices': [], 'ratio': None}
+    data = apply_research(market, research, fixed_clock, config, trading_days)
+    if quotes_data is not None or transport is not None:
+        data['meta']['reviewPreview'] = True
+    return data, research['snapshot'], fetch
+
+
+def assemble_notion(research, config_data, market, fresh, fixed_clock, config=None):
+    """Use the existing market assembler with the Notion company universe."""
+    input_data = {**config_data, 'industries': research['industries'], 'chokepoints': research['chokepoints'],
+                  'companies': research['companies']}
+    data, stale, missing = assemble(input_data, market, fresh, fixed_clock)
+    return apply_research(data, research, fixed_clock, config), stale, missing
+
+
+def write_notion_output(data, snapshot, out_dir):
+    """Stage all files, then replace the complete output directory; rollback on error."""
+    from research_snapshot import canonical_json
+    out_dir = Path(out_dir).resolve()
+    out_dir.parent.mkdir(parents=True, exist_ok=True)
+    def replace_directory(source, destination):
+        # Windows antivirus/indexers can briefly hold a newly closed directory.
+        # Retry only this reversible rename; never fall back to partial copies.
+        for attempt in range(3):
+            try:
+                os.replace(source, destination)
+                return
+            except PermissionError:
+                if attempt == 2:
+                    raise
+                time.sleep(.05 * (attempt + 1))
+    with tempfile.TemporaryDirectory(prefix='.radar-stage-', dir=out_dir.parent) as temporary:
+        stage = Path(temporary) / 'release'
+        render(data, stage)
+        (stage / 'DATA.json').write_bytes(canonical_json(data).encode('utf-8'))
+        (stage / 'research-snapshot.json').write_bytes(canonical_json(snapshot).encode('utf-8'))
+        backup = Path(temporary) / 'previous'
+        if out_dir.exists():
+            replace_directory(out_dir, backup)
+        try:
+            replace_directory(stage, out_dir)
+        except OSError:
+            if backup.exists():
+                replace_directory(backup, out_dir)
+            raise
+
+
+def notion_main(args, config):
+    from research_snapshot import ResearchAbort, load_last_good
+    from research_view import CODE_TEXT
+    try:
+        if args.check:
+            load_notion_contract(config)
+            return 0
+        now = dt.datetime.fromisoformat(args.fixed_clock) if args.fixed_clock else dt.datetime.now(BJ)
+        previous = load_last_good(Path(args.research_snapshot)) if args.research_snapshot else None
+        fetch = json.loads(Path(args.notion_fetch).read_text(encoding='utf-8')) if args.notion_fetch else None
+        research, fetch = load_research(transport=None, token=None if fetch or args.offline else os.environ.get('NOTION_TOKEN'),
+                                       fixed_clock=now, last_good=previous, config=config, fetch=fetch)
+        cfg_data, report = load_and_validate(RADAR, REPO, now.date())
+        if report.errors:
+            raise ResearchAbort('contract_invalid')
+        cfg_data['companies'] = research['companies']
+        cache_path = Path(args.cache)
+        cache = json.loads(cache_path.read_text(encoding='utf-8')) if cache_path.exists() else {}
+        fresh, notes = fetch_all(cfg_data, cache, args.offline)
+        market = merge(fresh, cache)
+        if not args.fixed_clock:
+            now = dt.datetime.now(BJ)
+            # Freeze after collection, then reevaluate validity using exactly
+            # the same collected input; no second Notion request.
+            research, _ = load_research(transport=None, token=None, fixed_clock=now,
+                                        last_good=previous, config=config, fetch=fetch)
+        data, stale, missing = assemble_notion(research, cfg_data, market, fresh, now, config)
+        if args.notion_fetch or args.fixed_clock or args.offline:
+            # Standalone replay has no same-run production receipt. Only the
+            # production collector may bind collected inputs to a release.
+            data['meta']['reviewPreview'] = True
+        blockers = release_blockers(data)
+        if len(missing) > len(research['companies']) * MAX_MISSING:
+            raise ResearchAbort('quotes_coverage_low')
+        if blockers:
+            for code in blockers:
+                log('BLOCKED:', code)
+            return 2
+        write_notion_output(data, research['snapshot'], Path(args.out))
+        log('Notion research build complete')
+        return 0
+    except ResearchAbort as error:
+        for code in error.codes:
+            log(code, CODE_TEXT.get(code, '研究数据构建中止'))
+        return 2
+    except Exception:
+        # Request exceptions may embed credentials; never log their repr or chain.
+        log('研究数据构建发生程序错误')
+        return 1
+
+
 def main() -> int:
+    config = research_config()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument('--source', choices=('notion', 'toml'), default=config.get('build', {}).get('source', 'toml'))
+    ap.add_argument('--fixed-clock', help='ISO timestamp for deterministic offline builds')
+    ap.add_argument('--research-snapshot', help='Last successfully published research snapshot')
+    ap.add_argument('--notion-fetch', help='Sanitized collected Notion input; no credential needed')
     ap.add_argument("--check", action="store_true", help="只校验数据，不联网")
     ap.add_argument("--offline", action="store_true", help="不联网，只用缓存")
     ap.add_argument("--force", action="store_true", help="无论行情是否变化都标记 changed=true")
@@ -417,6 +631,9 @@ def main() -> int:
     ap.add_argument("--cache", default=str(RADAR / ".cache" / "quotes.json"))
     ap.add_argument('--audit-json', default=str(REPO / 'audit' / 'runtime' / 'build-report.json'))
     a = ap.parse_args()
+
+    if a.source == 'notion':
+        return notion_main(a, config)
 
     now = dt.datetime.now(BJ)
     data, rep = load_and_validate(RADAR, REPO, now.date())
