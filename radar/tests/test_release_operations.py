@@ -157,8 +157,11 @@ class BrowserHelpersTests(unittest.TestCase):
         assert.equal(safeSourceUrl('https://issuer.example/report'),'https://issuer.example/report');
         assert.equal(providerUrl('ABC','unknown'), '');
         assert.match(providerUrl('HSTECH.HK','tencent'), /hkHSTECH/);
-        assert.equal(scheduledDue('2026-10-24T08:00+08:00',Date.parse('2026-10-25T23:00+08:00')),false);
-        assert.equal(scheduledDue('2026-10-24T08:00+08:00',Date.parse('2026-10-26T13:16+08:00')),true);
+        const schedule={nextRunAt:'2026-10-26T06:50+08:00',lateAfterMinutes:90};
+        assert.equal(scheduledDue('2026-10-24T08:00+08:00',Date.parse('2026-10-25T23:00+08:00'),schedule),false);
+        assert.equal(scheduledDue('2026-10-24T08:00+08:00',Date.parse('2026-10-26T08:20+08:00'),schedule),false);
+        assert.equal(scheduledDue('2026-10-24T08:00+08:00',Date.parse('2026-10-26T08:21+08:00'),schedule),true);
+        assert.equal(scheduledDue('2026-10-24T08:00+08:00',Date.parse('2026-10-26T13:16+08:00'),{}),false);
         assert.equal(validVersion({schemaVersion:1,state:'current',dataSHA256:'a'.repeat(64),sourceSHA:'b'.repeat(40),runId:'123'}),true);
         assert.equal(validVersion({state:'success'}),false);
         """

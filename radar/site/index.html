@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN" data-theme="dark" data-conv="cn">
+<html lang="zh-CN" data-theme="dark" data-conv="cn" class="no-js">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -46,15 +46,21 @@
   <!-- 总览 -->
   <section id="overview" class="section">
     <div class="hero-head reveal">
-      <div class="eyebrow"><span class="live"></span><span id="heroDate">本周结论</span></div>
-      <h1 class="h1" id="heroTitle"></h1>
-      <p class="lead" id="heroLead"></p>
-      <div class="kpis" id="kpis"></div>
+      <div class="hero-split">
+        <div class="hero-main" data-src="notion">
+          <div class="eyebrow"><span class="live"></span><span id="heroDate"><!--__SSR_HERO_DATE__--></span></div>
+          <h1 class="h1" id="heroTitle"><!--__SSR_HERO_TITLE__--></h1>
+          <div class="prov" id="heroProv"><!--__SSR_HERO_PROV__--></div>
+          <p class="lead" id="heroLead" data-src="notion"><!--__SSR_HERO_LEAD__--></p>
+        </div>
+        <aside class="today" id="today" aria-label="今日要点" data-src="notion"><!--__SSR_TODAY__--></aside>
+      </div>
+      <div class="kpis" id="kpis"><!--__SSR_KPIS__--></div>
+      <div class="pulse" id="pulse" role="status" aria-live="polite"><!--__SSR_PULSE__--></div>
     </div>
-    <div id="releaseStatus" class="release-status" role="status" aria-live="polite"></div>
-    <article id="dailyChanges" class="card daily-changes" aria-label="每日变化摘要"></article>
+    <!--__SSR_NOSCRIPT__-->
     <div class="bento">
-      <article class="card c-top reveal" id="topCard"></article>
+      <article class="card c-top reveal" id="topCard" data-src="notion"></article>
       <article class="card c-rank reveal" id="rankCard"></article>
       <article class="card c-thermo reveal" id="thermoCard"></article>
       <article class="card c-soon reveal" id="soonCard"></article>
@@ -102,14 +108,14 @@
     <div class="sec-head reveal">
       <div><div class="eyebrow">04 · 财报日历</div><h2 class="h2">接下来要验证什么？</h2><p class="sub" id="calSub"></p></div>
     </div>
-    <div class="card cal-card reveal"><div class="cal-head"><div class="ind-legend" id="calLegend"></div><span class="hint">横向滑动查看更多 →</span></div><div class="cal" id="cal"></div></div>
+    <div class="card cal-card reveal"><div class="cal-head"><div class="ind-legend" id="calLegend"></div><span class="hint">横向滑动查看更多 →</span></div><div class="cal" id="cal" data-src="notion"></div></div>
   </section>
 
-  <footer class="foot" id="foot"></footer>
+  <footer class="foot" id="foot"><!--__SSR_FOOT__--></footer>
 </main>
 
 <div class="mask" id="mask"></div>
-<aside class="drawer" id="drawer" aria-hidden="true" role="dialog" aria-label="公司详情"></aside>
+<aside class="drawer" id="drawer" aria-hidden="true" role="dialog" aria-label="详情" aria-modal="true" tabindex="-1"></aside>
 <div class="palette" id="palette" hidden>
   <div class="pbox" role="dialog" aria-label="搜索">
     <div class="pin"><span id="icSearch2"></span><input id="pq" placeholder="搜索公司、代码、行业、卡点…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>

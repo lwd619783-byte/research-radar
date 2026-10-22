@@ -187,12 +187,43 @@ class CollectionTests(unittest.TestCase):
 class WorkflowTests(unittest.TestCase):
     def workflow(self): return json.loads((ROOT/'.github/workflows/radar-interface-acceptance.yml').read_text('utf-8'))
 
-    def test_manual_only_one_standard_linux_job(self):
-        w=self.workflow();self.assertEqual(set(w['on']),{'workflow_dispatch'})
-        self.assertEqual(w['permissions'],{'contents':'read'});self.assertEqual(len(w['jobs']),1)
+    def test_manual_probe_stays_guarded_beside_offline_visual_job(self):
+        w=self.workflow();self.assertEqual(set(w['on']),{'workflow_dispatch','pull_request'})
+        self.assertEqual(w['permissions'],{'contents':'read'})
+        self.assertEqual(set(w['jobs']),{'acceptance','visual'})
         job=w['jobs']['acceptance'];self.assertEqual(job['runs-on'],'ubuntu-24.04')
         self.assertEqual(job['timeout-minutes'],20);self.assertIn('github.run_attempt == 1',job['if'])
         self.assertNotIn('secrets.',json.dumps(w))
+
+    def test_visual_job_is_pr_only_read_only_and_uploads_only_review_evidence(self):
+        w=self.workflow();job=w['jobs']['visual']
+        self.assertEqual(w['on']['pull_request'],
+            {'branches':['fix/radar-truthfulness-2026-10-18','v3/pr3-ui']})
+        self.assertEqual(job['if'],
+            "github.event_name == 'pull_request' && github.repository == 'lwd619783-byte/research-radar'")
+        self.assertEqual(job['runs-on'],'ubuntu-24.04')
+        self.assertEqual(job['timeout-minutes'],15)
+        self.assertNotIn('permissions',job)
+        self.assertNotIn('env',job)
+        self.assertNotIn('secrets.',json.dumps(job))
+        steps=job['steps']
+        checkout=next(s for s in steps if s.get('uses','').startswith('actions/checkout@'))
+        self.assertFalse(checkout['with']['persist-credentials'])
+        self.assertEqual(checkout['with']['ref'],'${{ github.sha }}')
+        for step in steps:
+            if 'uses' in step:
+                self.assertRegex(step['uses'],r'^actions/(checkout|setup-python|upload-artifact)@[0-9a-f]{40}$')
+        self.assertEqual([s['run'] for s in steps if 'run' in s],[
+            'python -m pip install --disable-pip-version-check -r radar/tools/visual-requirements.txt\npython -m playwright install --with-deps chromium',
+            'python -B radar/tools/build_visual_fixtures.py --out "$RUNNER_TEMP/radar-visual-pages"',
+            'python -B radar/tools/visual_acceptance.py --pages "$RUNNER_TEMP/radar-visual-pages" --out "$RUNNER_TEMP/radar-visual-acceptance"'])
+        upload=next(s for s in steps if s.get('uses','').startswith('actions/upload-artifact@'))
+        self.assertEqual(upload['if'],'always()')
+        self.assertEqual(upload['with']['path'].splitlines(),[
+            '${{ runner.temp }}/radar-visual-acceptance/*.png',
+            '${{ runner.temp }}/radar-visual-acceptance/report.json'])
+        self.assertEqual(upload['with']['retention-days'],7)
+        self.assertFalse(upload['with']['include-hidden-files'])
 
     def test_current_branch_exact_sha_and_zero_cost_gate_before_runner(self):
         w=self.workflow();job=w['jobs']['acceptance']
