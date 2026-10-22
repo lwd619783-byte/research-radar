@@ -1,0 +1,120 @@
+{
+ "notion_version": "2026-03-11",
+ "base_url": "https://api.notion.com",
+ "as_of": "2026-10-21T18:15:00+08:00",
+ "today": "2026-10-21",
+ "tables": {
+  "industries": {
+   "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467",
+   "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+   "rows": 15
+  },
+  "chokepoints": {
+   "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29",
+   "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+   "rows": 16
+  },
+  "companies": {
+   "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d",
+   "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+   "rows": 42
+  },
+  "financials": {
+   "database_id": "f2e6f09d-be6f-4206-99b1-2fad27220d3e",
+   "data_source_id": "adfa9345-7f74-42c0-88c8-cc706b7970cf",
+   "rows": 42
+  },
+  "daily": {
+   "database_id": "94a84484-238d-4159-8438-7e999a4ff302",
+   "data_source_id": "8c8f38ad-be8d-4fce-bbdf-7701492f9e8e",
+   "rows": 2
+  },
+  "weekly": {
+   "database_id": "7391dcc4-49ad-4085-b1c5-2691d19481f4",
+   "data_source_id": "81122088-02df-4abf-a79a-d8574cf7cbef",
+   "rows": 1
+  }
+ },
+ "routes": [
+  {
+   "method": "GET",
+   "path": "/v1/data_sources/12b00256-3ec7-4755-ad78-d14932b7f42f",
+   "file": "ds_industries.json"
+  },
+  {
+   "method": "POST",
+   "path": "/v1/data_sources/12b00256-3ec7-4755-ad78-d14932b7f42f/query",
+   "start_cursor": null,
+   "file": "query_industries.json"
+  },
+  {
+   "method": "GET",
+   "path": "/v1/data_sources/fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+   "file": "ds_chokepoints.json"
+  },
+  {
+   "method": "POST",
+   "path": "/v1/data_sources/fcb39e45-1e23-41de-bef9-9f91fef8cfb6/query",
+   "start_cursor": null,
+   "file": "query_chokepoints.json"
+  },
+  {
+   "method": "GET",
+   "path": "/v1/data_sources/51ff5113-6a00-495b-9ae9-8f66a5999f63",
+   "file": "ds_companies.json"
+  },
+  {
+   "method": "POST",
+   "path": "/v1/data_sources/51ff5113-6a00-495b-9ae9-8f66a5999f63/query",
+   "start_cursor": null,
+   "file": "query_companies_p1.json"
+  },
+  {
+   "method": "POST",
+   "path": "/v1/data_sources/51ff5113-6a00-495b-9ae9-8f66a5999f63/query",
+   "start_cursor": "0f15a335-a2fc-5eb7-8fa1-ab8bb82c91c1",
+   "file": "query_companies_p2.json"
+  },
+  {
+   "method": "GET",
+   "path": "/v1/data_sources/adfa9345-7f74-42c0-88c8-cc706b7970cf",
+   "file": "ds_financials.json"
+  },
+  {
+   "method": "POST",
+   "path": "/v1/data_sources/adfa9345-7f74-42c0-88c8-cc706b7970cf/query",
+   "start_cursor": null,
+   "file": "query_financials.json"
+  },
+  {
+   "method": "GET",
+   "path": "/v1/data_sources/8c8f38ad-be8d-4fce-bbdf-7701492f9e8e",
+   "file": "ds_daily.json"
+  },
+  {
+   "method": "POST",
+   "path": "/v1/data_sources/8c8f38ad-be8d-4fce-bbdf-7701492f9e8e/query",
+   "start_cursor": null,
+   "file": "query_daily.json"
+  },
+  {
+   "method": "GET",
+   "path": "/v1/data_sources/81122088-02df-4abf-a79a-d8574cf7cbef",
+   "file": "ds_weekly.json"
+  },
+  {
+   "method": "POST",
+   "path": "/v1/data_sources/81122088-02df-4abf-a79a-d8574cf7cbef/query",
+   "start_cursor": null,
+   "file": "query_weekly.json"
+  }
+ ],
+ "notes": [
+  "results 顺序已随机打乱：规范化输出必须自行排序，不能依赖 API 返回顺序",
+  "companies 分两页（25 + 17），第二页用 start_cursor 取；cursor 原样回传，不解析",
+  "源杰科技「快讯」被拆成 2 段 rich_text 且 {{earnings:YJKJ}} 跨段：必须先拼接 plain_text 再处理",
+  "源杰科技 · FY2026 Q2「注意事项」为 2 段（带 italic）：拼接后按换行拆成 conditions",
+  "来源/其他来源 的 URL 是自动链接（text.link + href），以 plain_text 为准",
+  "property id 与 select option id 仅供诊断，代码按属性名/选项名读取"
+ ]
+}

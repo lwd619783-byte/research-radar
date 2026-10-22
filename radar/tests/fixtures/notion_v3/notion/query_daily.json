@@ -1,0 +1,212 @@
+{
+ "object": "list",
+ "results": [
+  {
+   "object": "page",
+   "id": "a9f26838-95e6-4fbb-bd10-fca3e000d745",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "8c8f38ad-be8d-4fce-bbdf-7701492f9e8e",
+    "database_id": "94a84484-238d-4159-8438-7e999a4ff302"
+   },
+   "in_trash": false,
+   "properties": {
+    "涉及行业": {
+     "id": "%3CJid",
+     "type": "relation",
+     "relation": [],
+     "has_more": false
+    },
+    "日期": {
+     "id": "%40ptF",
+     "type": "date",
+     "date": {
+      "start": "2026-10-21",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "复盘链接": {
+     "id": "AeDn",
+     "type": "url",
+     "url": "https://app.notion.com/p/400e62a69faf8193b478d9c4ae98fcf1"
+    },
+    "一句话": {
+     "id": "DrhH",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "缩量回落，科创与创业分化",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "缩量回落，科创与创业分化",
+       "href": null
+      }
+     ]
+    },
+    "市场": {
+     "id": "RV%5E%7C",
+     "type": "select",
+     "select": {
+      "id": "O=qX",
+      "name": "A股",
+      "color": "red"
+     }
+    },
+    "标题": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-21 A股",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-21 A股",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/a9f2683895e64fbbbd10fca3e000d745",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "e18a1d81-aa33-4cdc-8174-b47ec291d7b4",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "8c8f38ad-be8d-4fce-bbdf-7701492f9e8e",
+    "database_id": "94a84484-238d-4159-8438-7e999a4ff302"
+   },
+   "in_trash": false,
+   "properties": {
+    "涉及行业": {
+     "id": "%3CJid",
+     "type": "relation",
+     "relation": [],
+     "has_more": false
+    },
+    "日期": {
+     "id": "%40ptF",
+     "type": "date",
+     "date": {
+      "start": "2026-10-20",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "复盘链接": {
+     "id": "AeDn",
+     "type": "url",
+     "url": "https://app.notion.com/p/400e62a69faf81b39108f877d8b51052"
+    },
+    "一句话": {
+     "id": "DrhH",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "多数行业修复，科技内部仍分化",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "多数行业修复，科技内部仍分化",
+       "href": null
+      }
+     ]
+    },
+    "市场": {
+     "id": "RV%5E%7C",
+     "type": "select",
+     "select": {
+      "id": "WqtE",
+      "name": "美股",
+      "color": "blue"
+     }
+    },
+    "标题": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-20 美股",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-20 美股",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/e18a1d81aa334cdc8174b47ec291d7b4",
+   "public_url": null
+  }
+ ],
+ "next_cursor": null,
+ "has_more": false,
+ "type": "page_or_data_source",
+ "page_or_data_source": {},
+ "request_id": "c77dbdee-6fc9-5f1d-b30c-c5b2d02eba01"
+}

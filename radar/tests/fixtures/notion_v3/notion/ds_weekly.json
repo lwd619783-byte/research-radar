@@ -1,0 +1,122 @@
+{
+ "object": "data_source",
+ "id": "81122088-02df-4abf-a79a-d8574cf7cbef",
+ "created_time": "2026-10-21T02:40:00.000Z",
+ "last_edited_time": "2026-10-21T09:52:00.000Z",
+ "created_by": {
+  "object": "user",
+  "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+ },
+ "last_edited_by": {
+  "object": "user",
+  "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+ },
+ "properties": {
+  "有效至": {
+   "id": "%3BI_s",
+   "name": "有效至",
+   "description": "一般为下周一",
+   "type": "date",
+   "date": {}
+  },
+  "主线行业": {
+   "id": "Eg%5Dj",
+   "name": "主线行业",
+   "description": "必填，只选 1 个",
+   "type": "relation",
+   "relation": {
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467",
+    "type": "single_property",
+    "single_property": {}
+   }
+  },
+  "导语": {
+   "id": "O%3FSR",
+   "name": "导语",
+   "description": "≤90 字；事实+逻辑，不写买卖建议",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "日历提示": {
+   "id": "RLjF",
+   "name": "日历提示",
+   "description": "≤30 字，如：三季报季：先看预告与快报，再看正式报告",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "研判状态": {
+   "id": "SP%3A%3E",
+   "name": "研判状态",
+   "description": "自动计算，仅供查看",
+   "type": "formula",
+   "formula": {
+    "expression": "ifs(empty(prop(\"研判理由\")) or empty(prop(\"来源\")) or empty(prop(\"研判日期\")) or empty(prop(\"有效至\")), \"待更新\", prop(\"有效至\") < today(), \"已过期\", \"AI研判\")"
+   }
+  },
+  "来源": {
+   "id": "c_%3Ae",
+   "name": "来源",
+   "description": "每行一个链接，至少 1 个",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "研判理由": {
+   "id": "qQL%3D",
+   "name": "研判理由",
+   "description": "为什么选这个主线；2–4 条",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "研判日期": {
+   "id": "wNDo",
+   "name": "研判日期",
+   "description": null,
+   "type": "date",
+   "date": {}
+  },
+  "周次": {
+   "id": "title",
+   "name": "周次",
+   "description": "ISO 周，格式 2026-W43；每周新建一行",
+   "type": "title",
+   "title": {}
+  }
+ },
+ "parent": {
+  "type": "database_id",
+  "database_id": "7391dcc4-49ad-4085-b1c5-2691d19481f4"
+ },
+ "database_parent": {
+  "type": "page_id",
+  "page_id": "65314065-9aa7-4497-abcc-6d5041a4d3f8"
+ },
+ "title": [
+  {
+   "type": "text",
+   "text": {
+    "content": "每周主线",
+    "link": null
+   },
+   "annotations": {
+    "bold": false,
+    "italic": false,
+    "strikethrough": false,
+    "underline": false,
+    "code": false,
+    "color": "default"
+   },
+   "plain_text": "每周主线",
+   "href": null
+  }
+ ],
+ "description": [],
+ "icon": {
+  "type": "emoji",
+  "emoji": "📌"
+ },
+ "in_trash": false,
+ "url": "https://app.notion.com/p/7391dcc449ad4085b1c52691d19481f4",
+ "public_url": null,
+ "request_id": "dd9c3e39-698b-521b-a306-f6bfc24a2b17"
+}

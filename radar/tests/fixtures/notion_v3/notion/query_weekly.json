@@ -1,0 +1,189 @@
+{
+ "object": "list",
+ "results": [
+  {
+   "object": "page",
+   "id": "e42cb976-b9b1-4c62-8608-6b15862d78e6",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "81122088-02df-4abf-a79a-d8574cf7cbef",
+    "database_id": "7391dcc4-49ad-4085-b1c5-2691d19481f4"
+   },
+   "in_trash": false,
+   "properties": {
+    "有效至": {
+     "id": "%3BI_s",
+     "type": "date",
+     "date": {
+      "start": "2026-10-19",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "主线行业": {
+     "id": "Eg%5Dj",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "f0c09fdc-4dd8-45a5-b16b-5baf592213be"
+      }
+     ],
+     "has_more": false
+    },
+    "导语": {
+     "id": "O%3FSR",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "AI集群800G→1.6T/CPO升级，光芯片与光模块产能是最紧卡点，量价齐升。最紧的卡点是「光芯片与激光器」；龙头近期大幅回调，但业绩仍在高增，三季报是验证窗口。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "AI集群800G→1.6T/CPO升级，光芯片与光模块产能是最紧卡点，量价齐升。最紧的卡点是「光芯片与激光器」；龙头近期大幅回调，但业绩仍在高增，三季报是验证窗口。",
+       "href": null
+      }
+     ]
+    },
+    "日历提示": {
+     "id": "RLjF",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "三季报季：先看预告与快报，再看正式报告",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "三季报季：先看预告与快报，再看正式报告",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "SP%3A%3E",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "已过期"
+     }
+    },
+    "来源": {
+     "id": "c_%3Ae",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+        "link": {
+         "url": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+       "href": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "qQL%3D",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（原周报主线）；v3 迁移导入。已过期，待 ChatGPT 写入 2026-W43。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（原周报主线）；v3 迁移导入。已过期，待 ChatGPT 写入 2026-W43。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "wNDo",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "周次": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-W42",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-W42",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/e42cb976b9b14c6286086b15862d78e6",
+   "public_url": null
+  }
+ ],
+ "next_cursor": null,
+ "has_more": false,
+ "type": "page_or_data_source",
+ "page_or_data_source": {},
+ "request_id": "d019389c-9c94-5e7b-a2f3-acdd493f918f"
+}

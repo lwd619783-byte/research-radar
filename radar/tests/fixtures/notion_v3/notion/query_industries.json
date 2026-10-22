@@ -1,0 +1,3805 @@
+{
+ "object": "list",
+ "results": [
+  {
+   "object": "page",
+   "id": "c57d7455-5539-41db-8d44-0584c0874814",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+   },
+   "in_trash": false,
+   "properties": {
+    "总分": {
+     "id": "%3FmQU",
+     "type": "formula",
+     "formula": {
+      "type": "number",
+      "number": 18
+     }
+    },
+    "有效至": {
+     "id": "DsxV",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "研判状态": {
+     "id": "H%5C%5EM",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "代表公司": {
+     "id": "J%40Pw",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "英伟达、台积电、ASMPT、SK海力士、美光、长鑫科技、ASML、北方华创、中微公司",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "英伟达、台积电、ASMPT、SK海力士、美光、长鑫科技、ASML、北方华创、中微公司",
+       "href": null
+      }
+     ]
+    },
+    "景气度": {
+     "id": "LufX",
+     "type": "number",
+     "number": 5
+    },
+    "最新信号": {
+     "id": "O%5EUE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "台积电Q3营收+41%、Q4指引523–543亿美元；ASML Q3营收+55%；长鑫前三季预告扭亏",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "台积电Q3营收+41%、Q4指引523–543亿美元；ASML Q3营收+55%；长鑫前三季预告扭亏",
+       "href": null
+      }
+     ]
+    },
+    "知识库": {
+     "id": "RKO%5C",
+     "type": "url",
+     "url": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+    },
+    "卡点强度": {
+     "id": "SDeA",
+     "type": "number",
+     "number": 5
+    },
+    "研判日期": {
+     "id": "SRSJ",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "停用": {
+     "id": "XdGo",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "一句话逻辑": {
+     "id": "XeOv",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "算力需求拉动先进制程、CoWoS、HBM与设备全线紧缺，龙头业绩已大幅兑现",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "算力需求拉动先进制程、CoWoS、HBM与设备全线紧缺，龙头业绩已大幅兑现",
+       "href": null
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "%5BeB%7B",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "业绩兑现": {
+     "id": "i%5BER",
+     "type": "number",
+     "number": 5
+    },
+    "主要风险": {
+     "id": "xFmB",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "存储周期见顶担忧（海力士距高点-56%）、出口管制、估值偏高",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "存储周期见顶担忧（海力士距高点-56%）、出口管制、估值偏高",
+       "href": null
+      }
+     ]
+    },
+    "来源": {
+     "id": "yMjE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454",
+        "link": {
+         "url": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454",
+       "href": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+      }
+     ]
+    },
+    "估值位置": {
+     "id": "y%7CX%5C",
+     "type": "number",
+     "number": 3
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "AI核心半导体",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "AI核心半导体",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/c57d7455553941db8d440584c0874814",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "c511817b-e0e4-44fd-aac7-4415d996d93b",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+   },
+   "in_trash": false,
+   "properties": {
+    "总分": {
+     "id": "%3FmQU",
+     "type": "formula",
+     "formula": {
+      "type": "number",
+      "number": 17
+     }
+    },
+    "有效至": {
+     "id": "DsxV",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "研判状态": {
+     "id": "H%5C%5EM",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "代表公司": {
+     "id": "J%40Pw",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "台光电子、生益科技、建滔积层板、日东纺、宏和科技、东材科技、沪电股份、胜宏科技、深南电路、大族数控、鼎泰高科、中钨高新",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "台光电子、生益科技、建滔积层板、日东纺、宏和科技、东材科技、沪电股份、胜宏科技、深南电路、大族数控、鼎泰高科、中钨高新",
+       "href": null
+      }
+     ]
+    },
+    "景气度": {
+     "id": "LufX",
+     "type": "number",
+     "number": 5
+    },
+    "最新信号": {
+     "id": "O%5EUE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Q3预告密集高增：生益前三季归母+164%~181%、沪电+101%~110%、深南+74%~78%、中钨+219%~241%",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "Q3预告密集高增：生益前三季归母+164%~181%、沪电+101%~110%、深南+74%~78%、中钨+219%~241%",
+       "href": null
+      }
+     ]
+    },
+    "知识库": {
+     "id": "RKO%5C",
+     "type": "url",
+     "url": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+    },
+    "卡点强度": {
+     "id": "SDeA",
+     "type": "number",
+     "number": 4
+    },
+    "研判日期": {
+     "id": "SRSJ",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "停用": {
+     "id": "XdGo",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "一句话逻辑": {
+     "id": "XeOv",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "AI服务器拉动高多层PCB与高速CCL，上游玻纤布/树脂/钻针供给紧，涨价沿链传导",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "AI服务器拉动高多层PCB与高速CCL，上游玻纤布/树脂/钻针供给紧，涨价沿链传导",
+       "href": null
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "%5BeB%7B",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "业绩兑现": {
+     "id": "i%5BER",
+     "type": "number",
+     "number": 5
+    },
+    "主要风险": {
+     "id": "xFmB",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "股价大幅回调（多数距高点-40%~-60%）、扩产后价格回落、客户集中",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "股价大幅回调（多数距高点-40%~-60%）、扩产后价格回落、客户集中",
+       "href": null
+      }
+     ]
+    },
+    "来源": {
+     "id": "yMjE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67",
+        "link": {
+         "url": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67",
+       "href": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+      }
+     ]
+    },
+    "估值位置": {
+     "id": "y%7CX%5C",
+     "type": "number",
+     "number": 3
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "PCB与覆铜板",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "PCB与覆铜板",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/c511817be0e444fdaac74415d996d93b",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "aa3546a9-3cca-4e9f-b347-b2b700892695",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+   },
+   "in_trash": false,
+   "properties": {
+    "总分": {
+     "id": "%3FmQU",
+     "type": "formula",
+     "formula": {
+      "type": "number",
+      "number": 14
+     }
+    },
+    "有效至": {
+     "id": "DsxV",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "研判状态": {
+     "id": "H%5C%5EM",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "代表公司": {
+     "id": "J%40Pw",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FormFactor、强一股份、和林微纳、精智达",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "FormFactor、强一股份、和林微纳、精智达",
+       "href": null
+      }
+     ]
+    },
+    "景气度": {
+     "id": "LufX",
+     "type": "number",
+     "number": 4
+    },
+    "最新信号": {
+     "id": "O%5EUE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "强一股份H1营收+67%、净利+61%",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "强一股份H1营收+67%、净利+61%",
+       "href": null
+      }
+     ]
+    },
+    "知识库": {
+     "id": "RKO%5C",
+     "type": "url",
+     "url": "https://app.notion.com/p/df4e62a69faf82a7824381edf6a768c3"
+    },
+    "卡点强度": {
+     "id": "SDeA",
+     "type": "number",
+     "number": 4
+    },
+    "研判日期": {
+     "id": "SRSJ",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "停用": {
+     "id": "XdGo",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "一句话逻辑": {
+     "id": "XeOv",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "HBM与先进封装提升晶圆测试难度，探针卡量价齐升并有国产替代空间",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "HBM与先进封装提升晶圆测试难度，探针卡量价齐升并有国产替代空间",
+       "href": null
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "%5BeB%7B",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "业绩兑现": {
+     "id": "i%5BER",
+     "type": "number",
+     "number": 4
+    },
+    "主要风险": {
+     "id": "xFmB",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "估值偏高；国产份额小、客户验证周期长",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "估值偏高；国产份额小、客户验证周期长",
+       "href": null
+      }
+     ]
+    },
+    "来源": {
+     "id": "yMjE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/df4e62a69faf82a7824381edf6a768c3",
+        "link": {
+         "url": "https://app.notion.com/p/df4e62a69faf82a7824381edf6a768c3"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/df4e62a69faf82a7824381edf6a768c3",
+       "href": "https://app.notion.com/p/df4e62a69faf82a7824381edf6a768c3"
+      }
+     ]
+    },
+    "估值位置": {
+     "id": "y%7CX%5C",
+     "type": "number",
+     "number": 2
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "探针卡与半导体测试",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "探针卡与半导体测试",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/aa3546a93cca4e9fb347b2b700892695",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "5eb9f3c1-b8fa-436d-a843-5ec51fb0a8b1",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+   },
+   "in_trash": false,
+   "properties": {
+    "总分": {
+     "id": "%3FmQU",
+     "type": "formula",
+     "formula": {
+      "type": "number",
+      "number": 11
+     }
+    },
+    "有效至": {
+     "id": "DsxV",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "研判状态": {
+     "id": "H%5C%5EM",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "代表公司": {
+     "id": "J%40Pw",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Palo Alto、CrowdStrike、Zscaler",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "Palo Alto、CrowdStrike、Zscaler",
+       "href": null
+      }
+     ]
+    },
+    "景气度": {
+     "id": "LufX",
+     "type": "number",
+     "number": 3
+    },
+    "最新信号": {
+     "id": "O%5EUE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "暂无新增强信号",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "暂无新增强信号",
+       "href": null
+      }
+     ]
+    },
+    "知识库": {
+     "id": "RKO%5C",
+     "type": "url",
+     "url": "https://app.notion.com/p/c64e62a69faf83c0ace581898ca9d11e"
+    },
+    "卡点强度": {
+     "id": "SDeA",
+     "type": "number",
+     "number": 2
+    },
+    "研判日期": {
+     "id": "SRSJ",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "停用": {
+     "id": "XdGo",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "一句话逻辑": {
+     "id": "XeOv",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "AI带来新攻击面，安全支出向平台化与身份/云安全集中",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "AI带来新攻击面，安全支出向平台化与身份/云安全集中",
+       "href": null
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "%5BeB%7B",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "业绩兑现": {
+     "id": "i%5BER",
+     "type": "number",
+     "number": 3
+    },
+    "主要风险": {
+     "id": "xFmB",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "估值高、增速放缓、平台整合竞争",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "估值高、增速放缓、平台整合竞争",
+       "href": null
+      }
+     ]
+    },
+    "来源": {
+     "id": "yMjE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/c64e62a69faf83c0ace581898ca9d11e",
+        "link": {
+         "url": "https://app.notion.com/p/c64e62a69faf83c0ace581898ca9d11e"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/c64e62a69faf83c0ace581898ca9d11e",
+       "href": "https://app.notion.com/p/c64e62a69faf83c0ace581898ca9d11e"
+      }
+     ]
+    },
+    "估值位置": {
+     "id": "y%7CX%5C",
+     "type": "number",
+     "number": 3
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "网络安全",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "网络安全",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/5eb9f3c1b8fa436da8435ec51fb0a8b1",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "94eb13a7-0f26-4800-b3c3-4244689ea077",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+   },
+   "in_trash": false,
+   "properties": {
+    "总分": {
+     "id": "%3FmQU",
+     "type": "formula",
+     "formula": {
+      "type": "number",
+      "number": 8
+     }
+    },
+    "有效至": {
+     "id": "DsxV",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "研判状态": {
+     "id": "H%5C%5EM",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "代表公司": {
+     "id": "J%40Pw",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "华润置地、D.R. Horton",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "华润置地、D.R. Horton",
+       "href": null
+      }
+     ]
+    },
+    "景气度": {
+     "id": "LufX",
+     "type": "number",
+     "number": 1
+    },
+    "最新信号": {
+     "id": "O%5EUE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "暂无新增强信号",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "暂无新增强信号",
+       "href": null
+      }
+     ]
+    },
+    "知识库": {
+     "id": "RKO%5C",
+     "type": "url",
+     "url": "https://app.notion.com/p/089e62a69faf833fb47d01d81f2bc5d5"
+    },
+    "卡点强度": {
+     "id": "SDeA",
+     "type": "number",
+     "number": 1
+    },
+    "研判日期": {
+     "id": "SRSJ",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "停用": {
+     "id": "XdGo",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "一句话逻辑": {
+     "id": "XeOv",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "政策筑底、行业仍在出清，龙头分化",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "政策筑底、行业仍在出清，龙头分化",
+       "href": null
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "%5BeB%7B",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "业绩兑现": {
+     "id": "i%5BER",
+     "type": "number",
+     "number": 2
+    },
+    "主要风险": {
+     "id": "xFmB",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "销售与房价继续下行",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "销售与房价继续下行",
+       "href": null
+      }
+     ]
+    },
+    "来源": {
+     "id": "yMjE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/089e62a69faf833fb47d01d81f2bc5d5",
+        "link": {
+         "url": "https://app.notion.com/p/089e62a69faf833fb47d01d81f2bc5d5"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/089e62a69faf833fb47d01d81f2bc5d5",
+       "href": "https://app.notion.com/p/089e62a69faf833fb47d01d81f2bc5d5"
+      }
+     ]
+    },
+    "估值位置": {
+     "id": "y%7CX%5C",
+     "type": "number",
+     "number": 4
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "房地产",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "房地产",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/94eb13a70f264800b3c34244689ea077",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "76e9d85d-dbd1-4d9a-a67a-73364ba817c3",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+   },
+   "in_trash": false,
+   "properties": {
+    "总分": {
+     "id": "%3FmQU",
+     "type": "formula",
+     "formula": {
+      "type": "number",
+      "number": 10
+     }
+    },
+    "有效至": {
+     "id": "DsxV",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "研判状态": {
+     "id": "H%5C%5EM",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "代表公司": {
+     "id": "J%40Pw",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "LPKF、康宁等",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "LPKF、康宁等",
+       "href": null
+      }
+     ]
+    },
+    "景气度": {
+     "id": "LufX",
+     "type": "number",
+     "number": 3
+    },
+    "最新信号": {
+     "id": "O%5EUE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "LPKF相关收入确认延期",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "LPKF相关收入确认延期",
+       "href": null
+      }
+     ]
+    },
+    "知识库": {
+     "id": "RKO%5C",
+     "type": "url",
+     "url": "https://app.notion.com/p/f61e62a69faf8297883b017fbba2ee4f"
+    },
+    "卡点强度": {
+     "id": "SDeA",
+     "type": "number",
+     "number": 3
+    },
+    "研判日期": {
+     "id": "SRSJ",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "停用": {
+     "id": "XdGo",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "一句话逻辑": {
+     "id": "XeOv",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "下一代先进封装基板（TGV），工程推进中，规模化交付与盈利待验证",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "下一代先进封装基板（TGV），工程推进中，规模化交付与盈利待验证",
+       "href": null
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "%5BeB%7B",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "业绩兑现": {
+     "id": "i%5BER",
+     "type": "number",
+     "number": 1
+    },
+    "主要风险": {
+     "id": "xFmB",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "量产时间表推迟、良率与成本",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "量产时间表推迟、良率与成本",
+       "href": null
+      }
+     ]
+    },
+    "来源": {
+     "id": "yMjE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/f61e62a69faf8297883b017fbba2ee4f",
+        "link": {
+         "url": "https://app.notion.com/p/f61e62a69faf8297883b017fbba2ee4f"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/f61e62a69faf8297883b017fbba2ee4f",
+       "href": "https://app.notion.com/p/f61e62a69faf8297883b017fbba2ee4f"
+      }
+     ]
+    },
+    "估值位置": {
+     "id": "y%7CX%5C",
+     "type": "number",
+     "number": 3
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "玻璃基板",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "玻璃基板",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/76e9d85ddbd14d9aa67a73364ba817c3",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "3a9f8b93-5153-43b4-a800-f4c0c3c873e3",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+   },
+   "in_trash": false,
+   "properties": {
+    "总分": {
+     "id": "%3FmQU",
+     "type": "formula",
+     "formula": {
+      "type": "number",
+      "number": 13
+     }
+    },
+    "有效至": {
+     "id": "DsxV",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "研判状态": {
+     "id": "H%5C%5EM",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "代表公司": {
+     "id": "J%40Pw",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Dell、HPE、SMCI、联想、浪潮信息、中科曙光、纬颖",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "Dell、HPE、SMCI、联想、浪潮信息、中科曙光、纬颖",
+       "href": null
+      }
+     ]
+    },
+    "景气度": {
+     "id": "LufX",
+     "type": "number",
+     "number": 5
+    },
+    "最新信号": {
+     "id": "O%5EUE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "整机厂利润率显著低于上游；SMCI自由现金流为负",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "整机厂利润率显著低于上游；SMCI自由现金流为负",
+       "href": null
+      }
+     ]
+    },
+    "知识库": {
+     "id": "RKO%5C",
+     "type": "url",
+     "url": "https://app.notion.com/p/aa6e62a69faf82fea2018196a90fcfa8"
+    },
+    "卡点强度": {
+     "id": "SDeA",
+     "type": "number",
+     "number": 2
+    },
+    "研判日期": {
+     "id": "SRSJ",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "停用": {
+     "id": "XdGo",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "一句话逻辑": {
+     "id": "XeOv",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "出货高增但整机毛利薄，价值主要被芯片与网络环节拿走",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "出货高增但整机毛利薄，价值主要被芯片与网络环节拿走",
+       "href": null
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "%5BeB%7B",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "业绩兑现": {
+     "id": "i%5BER",
+     "type": "number",
+     "number": 3
+    },
+    "主要风险": {
+     "id": "xFmB",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "低毛利、营运资金占用、客户议价强",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "低毛利、营运资金占用、客户议价强",
+       "href": null
+      }
+     ]
+    },
+    "来源": {
+     "id": "yMjE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/aa6e62a69faf82fea2018196a90fcfa8",
+        "link": {
+         "url": "https://app.notion.com/p/aa6e62a69faf82fea2018196a90fcfa8"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/aa6e62a69faf82fea2018196a90fcfa8",
+       "href": "https://app.notion.com/p/aa6e62a69faf82fea2018196a90fcfa8"
+      }
+     ]
+    },
+    "估值位置": {
+     "id": "y%7CX%5C",
+     "type": "number",
+     "number": 3
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "AI服务器",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "AI服务器",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/3a9f8b93515343b4a800f4c0c3c873e3",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "4206d7e0-a2cc-4cf5-9a2a-73dcc67aef52",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+   },
+   "in_trash": false,
+   "properties": {
+    "总分": {
+     "id": "%3FmQU",
+     "type": "formula",
+     "formula": {
+      "type": "number",
+      "number": 15
+     }
+    },
+    "有效至": {
+     "id": "DsxV",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "研判状态": {
+     "id": "H%5C%5EM",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "代表公司": {
+     "id": "J%40Pw",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "GE Vernova、西门子能源、东方电气、思源电气、中国西电、金盘科技、伊顿、施耐德、科华数据、Vertiv、英维克、Modine",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "GE Vernova、西门子能源、东方电气、思源电气、中国西电、金盘科技、伊顿、施耐德、科华数据、Vertiv、英维克、Modine",
+       "href": null
+      }
+     ]
+    },
+    "景气度": {
+     "id": "LufX",
+     "type": "number",
+     "number": 4
+    },
+    "最新信号": {
+     "id": "O%5EUE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "IEA：全球数据中心用电2025年485TWh→2030年950TWh；海外龙头10/27–11/11密集发财报",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "IEA：全球数据中心用电2025年485TWh→2030年950TWh；海外龙头10/27–11/11密集发财报",
+       "href": null
+      }
+     ]
+    },
+    "知识库": {
+     "id": "RKO%5C",
+     "type": "url",
+     "url": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+    },
+    "卡点强度": {
+     "id": "SDeA",
+     "type": "number",
+     "number": 5
+    },
+    "研判日期": {
+     "id": "SRSJ",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "停用": {
+     "id": "XdGo",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "一句话逻辑": {
+     "id": "XeOv",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "AI数据中心“缺电”：燃机、变压器、供配电、液冷交付周期长，订单确定性强",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "AI数据中心“缺电”：燃机、变压器、供配电、液冷交付周期长，订单确定性强",
+       "href": null
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "%5BeB%7B",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "业绩兑现": {
+     "id": "i%5BER",
+     "type": "number",
+     "number": 3
+    },
+    "主要风险": {
+     "id": "xFmB",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "国内公司利润与现金流滞后（8家中6家H1自由现金流为负）；液冷需求成立但利润未成熟",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "国内公司利润与现金流滞后（8家中6家H1自由现金流为负）；液冷需求成立但利润未成熟",
+       "href": null
+      }
+     ]
+    },
+    "来源": {
+     "id": "yMjE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412",
+        "link": {
+         "url": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412",
+       "href": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+      }
+     ]
+    },
+    "估值位置": {
+     "id": "y%7CX%5C",
+     "type": "number",
+     "number": 3
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "电力与数据中心",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "电力与数据中心",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/4206d7e0a2cc4cf59a2a73dcc67aef52",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "1804e7a1-0970-4870-b581-189cda17b56b",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+   },
+   "in_trash": false,
+   "properties": {
+    "总分": {
+     "id": "%3FmQU",
+     "type": "formula",
+     "formula": {
+      "type": "number",
+      "number": 14
+     }
+    },
+    "有效至": {
+     "id": "DsxV",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "研判状态": {
+     "id": "H%5C%5EM",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "代表公司": {
+     "id": "J%40Pw",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "长飞光纤、康宁、藤仓、Prysmian",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "长飞光纤、康宁、藤仓、Prysmian",
+       "href": null
+      }
+     ]
+    },
+    "景气度": {
+     "id": "LufX",
+     "type": "number",
+     "number": 4
+    },
+    "最新信号": {
+     "id": "O%5EUE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "长飞H1光传输业务收入+59%",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "长飞H1光传输业务收入+59%",
+       "href": null
+      }
+     ]
+    },
+    "知识库": {
+     "id": "RKO%5C",
+     "type": "url",
+     "url": "https://app.notion.com/p/8dae62a69faf83ccbb2b81c119de4250"
+    },
+    "卡点强度": {
+     "id": "SDeA",
+     "type": "number",
+     "number": 3
+    },
+    "研判日期": {
+     "id": "SRSJ",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "停用": {
+     "id": "XdGo",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "一句话逻辑": {
+     "id": "XeOv",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "AI数据中心与DCI拉动高端光纤（多芯/空芯等），传统运营商需求偏弱",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "AI数据中心与DCI拉动高端光纤（多芯/空芯等），传统运营商需求偏弱",
+       "href": null
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "%5BeB%7B",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "业绩兑现": {
+     "id": "i%5BER",
+     "type": "number",
+     "number": 4
+    },
+    "主要风险": {
+     "id": "xFmB",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "运营商集采价格周期；高端产品放量节奏",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "运营商集采价格周期；高端产品放量节奏",
+       "href": null
+      }
+     ]
+    },
+    "来源": {
+     "id": "yMjE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/8dae62a69faf83ccbb2b81c119de4250",
+        "link": {
+         "url": "https://app.notion.com/p/8dae62a69faf83ccbb2b81c119de4250"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/8dae62a69faf83ccbb2b81c119de4250",
+       "href": "https://app.notion.com/p/8dae62a69faf83ccbb2b81c119de4250"
+      }
+     ]
+    },
+    "估值位置": {
+     "id": "y%7CX%5C",
+     "type": "number",
+     "number": 3
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "光纤光缆",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "光纤光缆",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/1804e7a109704870b581189cda17b56b",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "2131eb34-c450-46cb-8b87-a1d33f71ff71",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+   },
+   "in_trash": false,
+   "properties": {
+    "总分": {
+     "id": "%3FmQU",
+     "type": "formula",
+     "formula": {
+      "type": "number",
+      "number": 12
+     }
+    },
+    "有效至": {
+     "id": "DsxV",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "研判状态": {
+     "id": "H%5C%5EM",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "代表公司": {
+     "id": "J%40Pw",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "宁德时代、比亚迪、LG新能源",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "宁德时代、比亚迪、LG新能源",
+       "href": null
+      }
+     ]
+    },
+    "景气度": {
+     "id": "LufX",
+     "type": "number",
+     "number": 3
+    },
+    "最新信号": {
+     "id": "O%5EUE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "全固态处中试/小批量阶段",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "全固态处中试/小批量阶段",
+       "href": null
+      }
+     ]
+    },
+    "知识库": {
+     "id": "RKO%5C",
+     "type": "url",
+     "url": "https://app.notion.com/p/2ade62a69faf82b39631017df94064c4"
+    },
+    "卡点强度": {
+     "id": "SDeA",
+     "type": "number",
+     "number": 3
+    },
+    "研判日期": {
+     "id": "SRSJ",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "停用": {
+     "id": "XdGo",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "一句话逻辑": {
+     "id": "XeOv",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "储能需求旺盛，但锂电整体产能过剩；全固态仍处产业化早期",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "储能需求旺盛，但锂电整体产能过剩；全固态仍处产业化早期",
+       "href": null
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "%5BeB%7B",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "业绩兑现": {
+     "id": "i%5BER",
+     "type": "number",
+     "number": 3
+    },
+    "主要风险": {
+     "id": "xFmB",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "价格战、技术路线不确定",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "价格战、技术路线不确定",
+       "href": null
+      }
+     ]
+    },
+    "来源": {
+     "id": "yMjE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/2ade62a69faf82b39631017df94064c4",
+        "link": {
+         "url": "https://app.notion.com/p/2ade62a69faf82b39631017df94064c4"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/2ade62a69faf82b39631017df94064c4",
+       "href": "https://app.notion.com/p/2ade62a69faf82b39631017df94064c4"
+      }
+     ]
+    },
+    "估值位置": {
+     "id": "y%7CX%5C",
+     "type": "number",
+     "number": 3
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "电池与储能",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "电池与储能",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/2131eb34c45046cb8b87a1d33f71ff71",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "6b073aee-89a5-43b2-81fa-6b1323e14eb1",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+   },
+   "in_trash": false,
+   "properties": {
+    "总分": {
+     "id": "%3FmQU",
+     "type": "formula",
+     "formula": {
+      "type": "number",
+      "number": 10
+     }
+    },
+    "有效至": {
+     "id": "DsxV",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "研判状态": {
+     "id": "H%5C%5EM",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "代表公司": {
+     "id": "J%40Pw",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "泡泡玛特、布鲁可、贵州茅台、周大福",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "泡泡玛特、布鲁可、贵州茅台、周大福",
+       "href": null
+      }
+     ]
+    },
+    "景气度": {
+     "id": "LufX",
+     "type": "number",
+     "number": 2
+    },
+    "最新信号": {
+     "id": "O%5EUE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "暂无新增强信号",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "暂无新增强信号",
+       "href": null
+      }
+     ]
+    },
+    "知识库": {
+     "id": "RKO%5C",
+     "type": "url",
+     "url": "https://app.notion.com/p/39ae62a69faf82a48bcc8155561b6f70"
+    },
+    "卡点强度": {
+     "id": "SDeA",
+     "type": "number",
+     "number": 1
+    },
+    "研判日期": {
+     "id": "SRSJ",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "停用": {
+     "id": "XdGo",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "一句话逻辑": {
+     "id": "XeOv",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "结构分化：新消费（潮玩/IP/黄金珠宝）强，传统消费弱",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "结构分化：新消费（潮玩/IP/黄金珠宝）强，传统消费弱",
+       "href": null
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "%5BeB%7B",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "业绩兑现": {
+     "id": "i%5BER",
+     "type": "number",
+     "number": 3
+    },
+    "主要风险": {
+     "id": "xFmB",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "总需求偏弱、高位新消费估值回落",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "总需求偏弱、高位新消费估值回落",
+       "href": null
+      }
+     ]
+    },
+    "来源": {
+     "id": "yMjE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/39ae62a69faf82a48bcc8155561b6f70",
+        "link": {
+         "url": "https://app.notion.com/p/39ae62a69faf82a48bcc8155561b6f70"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/39ae62a69faf82a48bcc8155561b6f70",
+       "href": "https://app.notion.com/p/39ae62a69faf82a48bcc8155561b6f70"
+      }
+     ]
+    },
+    "估值位置": {
+     "id": "y%7CX%5C",
+     "type": "number",
+     "number": 4
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "消费",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "消费",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/6b073aee89a543b281fa6b1323e14eb1",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "f0c09fdc-4dd8-45a5-b16b-5baf592213be",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+   },
+   "in_trash": false,
+   "properties": {
+    "总分": {
+     "id": "%3FmQU",
+     "type": "formula",
+     "formula": {
+      "type": "number",
+      "number": 19
+     }
+    },
+    "有效至": {
+     "id": "DsxV",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "研判状态": {
+     "id": "H%5C%5EM",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "代表公司": {
+     "id": "J%40Pw",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "中际旭创、新易盛、天孚通信、源杰科技、Lumentum、Coherent、博通、Marvell、Arista",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "中际旭创、新易盛、天孚通信、源杰科技、Lumentum、Coherent、博通、Marvell、Arista",
+       "href": null
+      }
+     ]
+    },
+    "景气度": {
+     "id": "LufX",
+     "type": "number",
+     "number": 5
+    },
+    "最新信号": {
+     "id": "O%5EUE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "1.6T放量；博通CPO 51.2T已交付；源杰Q3单季归母预告约+6倍；天孚称上游材料供应Q2末起改善",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "1.6T放量；博通CPO 51.2T已交付；源杰Q3单季归母预告约+6倍；天孚称上游材料供应Q2末起改善",
+       "href": null
+      }
+     ]
+    },
+    "知识库": {
+     "id": "RKO%5C",
+     "type": "url",
+     "url": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+    },
+    "卡点强度": {
+     "id": "SDeA",
+     "type": "number",
+     "number": 5
+    },
+    "研判日期": {
+     "id": "SRSJ",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "停用": {
+     "id": "XdGo",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "一句话逻辑": {
+     "id": "XeOv",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "AI集群800G→1.6T/CPO升级，光芯片与光模块产能是最紧卡点，量价齐升",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "AI集群800G→1.6T/CPO升级，光芯片与光模块产能是最紧卡点，量价齐升",
+       "href": null
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "%5BeB%7B",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "业绩兑现": {
+     "id": "i%5BER",
+     "type": "number",
+     "number": 5
+    },
+    "主要风险": {
+     "id": "xFmB",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "龙头近20日跌20%–25%、距高点约-50%；云厂资本开支预期、价格年降、CPO替代节奏",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "龙头近20日跌20%–25%、距高点约-50%；云厂资本开支预期、价格年降、CPO替代节奏",
+       "href": null
+      }
+     ]
+    },
+    "来源": {
+     "id": "yMjE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+        "link": {
+         "url": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+       "href": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+      }
+     ]
+    },
+    "估值位置": {
+     "id": "y%7CX%5C",
+     "type": "number",
+     "number": 4
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "AI网络与光互连",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "AI网络与光互连",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/f0c09fdc4dd845a5b16b5baf592213be",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "958bd14c-0f6c-4d72-a38e-b4216366015b",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+   },
+   "in_trash": false,
+   "properties": {
+    "总分": {
+     "id": "%3FmQU",
+     "type": "formula",
+     "formula": {
+      "type": "number",
+      "number": 12
+     }
+    },
+    "有效至": {
+     "id": "DsxV",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "研判状态": {
+     "id": "H%5C%5EM",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "代表公司": {
+     "id": "J%40Pw",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "GE Aerospace、赛峰、商业航天与军工链",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "GE Aerospace、赛峰、商业航天与军工链",
+       "href": null
+      }
+     ]
+    },
+    "景气度": {
+     "id": "LufX",
+     "type": "number",
+     "number": 3
+    },
+    "最新信号": {
+     "id": "O%5EUE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "暂无新增强信号",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "暂无新增强信号",
+       "href": null
+      }
+     ]
+    },
+    "知识库": {
+     "id": "RKO%5C",
+     "type": "url",
+     "url": "https://app.notion.com/p/6f7e62a69faf8240b167019d3eb04efa"
+    },
+    "卡点强度": {
+     "id": "SDeA",
+     "type": "number",
+     "number": 3
+    },
+    "研判日期": {
+     "id": "SRSJ",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "停用": {
+     "id": "XdGo",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "一句话逻辑": {
+     "id": "XeOv",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "民航发动机售后（MRO）长周期 + 商业航天/军工，确定性较高但与AI主线弱相关",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "民航发动机售后（MRO）长周期 + 商业航天/军工，确定性较高但与AI主线弱相关",
+       "href": null
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "%5BeB%7B",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "业绩兑现": {
+     "id": "i%5BER",
+     "type": "number",
+     "number": 3
+    },
+    "主要风险": {
+     "id": "xFmB",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "供应链交付瓶颈、军工订单节奏",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "供应链交付瓶颈、军工订单节奏",
+       "href": null
+      }
+     ]
+    },
+    "来源": {
+     "id": "yMjE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/6f7e62a69faf8240b167019d3eb04efa",
+        "link": {
+         "url": "https://app.notion.com/p/6f7e62a69faf8240b167019d3eb04efa"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/6f7e62a69faf8240b167019d3eb04efa",
+       "href": "https://app.notion.com/p/6f7e62a69faf8240b167019d3eb04efa"
+      }
+     ]
+    },
+    "估值位置": {
+     "id": "y%7CX%5C",
+     "type": "number",
+     "number": 3
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "航空航天与国防",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "航空航天与国防",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/958bd14c0f6c4d72a38eb4216366015b",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "94ec9e89-17e1-4b92-a8c6-6068ec2455bc",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+   },
+   "in_trash": false,
+   "properties": {
+    "总分": {
+     "id": "%3FmQU",
+     "type": "formula",
+     "formula": {
+      "type": "number",
+      "number": 14
+     }
+    },
+    "有效至": {
+     "id": "DsxV",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "研判状态": {
+     "id": "H%5C%5EM",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "代表公司": {
+     "id": "J%40Pw",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "村田、太阳诱电、三星电机、三环集团、风华高科、SiTime、NDK、泰晶科技",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "村田、太阳诱电、三星电机、三环集团、风华高科、SiTime、NDK、泰晶科技",
+       "href": null
+      }
+     ]
+    },
+    "景气度": {
+     "id": "LufX",
+     "type": "number",
+     "number": 4
+    },
+    "最新信号": {
+     "id": "O%5EUE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "麦高证券测算AI服务器MLCC需求2026–2028年约680/1378/3125亿颗（模型值，非已实现）",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "麦高证券测算AI服务器MLCC需求2026–2028年约680/1378/3125亿颗（模型值，非已实现）",
+       "href": null
+      }
+     ]
+    },
+    "知识库": {
+     "id": "RKO%5C",
+     "type": "url",
+     "url": "https://app.notion.com/p/1f3e62a69faf821fa37a81b2cda4a31e"
+    },
+    "卡点强度": {
+     "id": "SDeA",
+     "type": "number",
+     "number": 4
+    },
+    "研判日期": {
+     "id": "SRSJ",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "停用": {
+     "id": "XdGo",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "一句话逻辑": {
+     "id": "XeOv",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "AI服务器单机MLCC与高精度时钟用量数倍提升，高端品偏紧",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "AI服务器单机MLCC与高精度时钟用量数倍提升，高端品偏紧",
+       "href": null
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "%5BeB%7B",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "业绩兑现": {
+     "id": "i%5BER",
+     "type": "number",
+     "number": 3
+    },
+    "主要风险": {
+     "id": "xFmB",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "高端需求仍需ASP/毛利兑现；消费电子需求偏弱",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "高端需求仍需ASP/毛利兑现；消费电子需求偏弱",
+       "href": null
+      }
+     ]
+    },
+    "来源": {
+     "id": "yMjE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/1f3e62a69faf821fa37a81b2cda4a31e",
+        "link": {
+         "url": "https://app.notion.com/p/1f3e62a69faf821fa37a81b2cda4a31e"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/1f3e62a69faf821fa37a81b2cda4a31e",
+       "href": "https://app.notion.com/p/1f3e62a69faf821fa37a81b2cda4a31e"
+      }
+     ]
+    },
+    "估值位置": {
+     "id": "y%7CX%5C",
+     "type": "number",
+     "number": 3
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "MLCC与精密时钟",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "MLCC与精密时钟",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/94ec9e8917e14b92a8c66068ec2455bc",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "aa5e0b74-13d7-4c07-8798-2c3ec29e516a",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+    "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+   },
+   "in_trash": false,
+   "properties": {
+    "总分": {
+     "id": "%3FmQU",
+     "type": "formula",
+     "formula": {
+      "type": "number",
+      "number": 13
+     }
+    },
+    "有效至": {
+     "id": "DsxV",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "研判状态": {
+     "id": "H%5C%5EM",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "代表公司": {
+     "id": "J%40Pw",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "礼来、诺和诺德、恒瑞医药、信达生物、晶泰控股、英矽智能、Schrödinger",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "礼来、诺和诺德、恒瑞医药、信达生物、晶泰控股、英矽智能、Schrödinger",
+       "href": null
+      }
+     ]
+    },
+    "景气度": {
+     "id": "LufX",
+     "type": "number",
+     "number": 4
+    },
+    "最新信号": {
+     "id": "O%5EUE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "多靶点与口服小分子成为下一竞争焦点；AI制药以临床里程碑为准",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "多靶点与口服小分子成为下一竞争焦点；AI制药以临床里程碑为准",
+       "href": null
+      }
+     ]
+    },
+    "知识库": {
+     "id": "RKO%5C",
+     "type": "url",
+     "url": "https://app.notion.com/p/bffe62a69faf83f7bf8181bd2aa03de7"
+    },
+    "卡点强度": {
+     "id": "SDeA",
+     "type": "number",
+     "number": 3
+    },
+    "研判日期": {
+     "id": "SRSJ",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "停用": {
+     "id": "XdGo",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "一句话逻辑": {
+     "id": "XeOv",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "GLP-1减重大单品与中国创新药出海；AI制药仍处临床验证早期",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "GLP-1减重大单品与中国创新药出海；AI制药仍处临床验证早期",
+       "href": null
+      }
+     ]
+    },
+    "研判理由": {
+     "id": "%5BeB%7B",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "业绩兑现": {
+     "id": "i%5BER",
+     "type": "number",
+     "number": 3
+    },
+    "主要风险": {
+     "id": "xFmB",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "临床失败、医保降价、专利到期；AI制药收入兑现慢",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "临床失败、医保降价、专利到期；AI制药收入兑现慢",
+       "href": null
+      }
+     ]
+    },
+    "来源": {
+     "id": "yMjE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/bffe62a69faf83f7bf8181bd2aa03de7",
+        "link": {
+         "url": "https://app.notion.com/p/bffe62a69faf83f7bf8181bd2aa03de7"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/bffe62a69faf83f7bf8181bd2aa03de7",
+       "href": "https://app.notion.com/p/bffe62a69faf83f7bf8181bd2aa03de7"
+      }
+     ]
+    },
+    "估值位置": {
+     "id": "y%7CX%5C",
+     "type": "number",
+     "number": 3
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "创新药（GLP-1/CXO/AI制药）",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "创新药（GLP-1/CXO/AI制药）",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/aa5e0b7413d74c0787982c3ec29e516a",
+   "public_url": null
+  }
+ ],
+ "next_cursor": null,
+ "has_more": false,
+ "type": "page_or_data_source",
+ "page_or_data_source": {},
+ "request_id": "5eac348c-c9b0-5557-9349-567693f80df7"
+}

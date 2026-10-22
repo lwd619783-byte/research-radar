@@ -1,0 +1,4567 @@
+{
+ "object": "list",
+ "results": [
+  {
+   "object": "page",
+   "id": "691c64a5-56c4-43b5-b576-3e4486cc652e",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "H1营收+29%、归母+33%；⏳ 三季报{{earnings:SHKJ}}",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "H1营收+29%、归母+33%；⏳ 三季报{{earnings:SHKJ}}",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SZ300476",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "SZ300476",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "AI加速卡HDI/高多层PCB快速扩产",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "AI加速卡HDI/高多层PCB快速扩产",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SHKJ",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "SHKJ",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "300476.SZ",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "300476.SZ",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c511817b-e0e4-44fd-aac7-4415d996d93b"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "b026ad58-91c3-4c15-b679-2a25ac33b555"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "全球龙头",
+      "color": "purple"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "CNY",
+      "color": "red"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": {
+      "start": "2026-10-30",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray"
+     }
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "A股",
+      "color": "red"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "胜宏科技",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "胜宏科技",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/691c64a556c443b5b5763e4486cc652e",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "96917782-fa9a-44f1-b572-66f055206b99",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "⏳ 财报日期：{{earnings:MOD}}",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "⏳ 财报日期：{{earnings:MOD}}",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "MOD",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "MOD",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "数据中心热管理转型，高增长",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "数据中心热管理转型，高增长",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "MOD",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "MOD",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "MOD",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "MOD",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "4206d7e0-a2cc-4cf5-9a2a-73dcc67aef52"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "11734fe4-ea9f-4e5c-8331-54d80d8d6e20"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "全球龙头",
+      "color": "purple"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "USD",
+      "color": "blue"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": {
+      "start": "2026-10-27",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray"
+     }
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "美股",
+      "color": "blue"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Modine",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "Modine",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/96917782fa9a44f1b57266f055206b99",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "e545a126-da2a-405a-a37e-85aa15bd0e41",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Q3预告：前三季归母29–31亿（+219%~241%），推算Q3单季+174%~241%；⏳ 三季报{{earnings:ZWGX}}",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "Q3预告：前三季归母29–31亿（+219%~241%），推算Q3单季+174%~241%；⏳ 三季报{{earnings:ZWGX}}",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SZ000657",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "SZ000657",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "钨材+PCB微钻（金洲精工）",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "钨材+PCB微钻（金洲精工）",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "ZWGX",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "ZWGX",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "000657.SZ",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "000657.SZ",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c511817b-e0e4-44fd-aac7-4415d996d93b"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "6c42f877-20aa-485e-baa5-4eb940765c58"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "国内龙头",
+      "color": "blue"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "CNY",
+      "color": "red"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": {
+      "start": "2026-10-23",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray"
+     }
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "A股",
+      "color": "red"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "中钨高新",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "中钨高新",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/e545a126da2a405aa37e85aa15bd0e41",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "e98fd2b4-1955-4025-8196-d5b998f02d63",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "H1营收+100%、归母+91%；⏳ 三季报{{earnings:XYS}}",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "H1营收+100%、归母+91%；⏳ 三季报{{earnings:XYS}}",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SZ300502",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "SZ300502",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "高速光模块第二极，毛利率领先",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "高速光模块第二极，毛利率领先",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "XYS",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "XYS",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "300502.SZ",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "300502.SZ",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "f0c09fdc-4dd8-45a5-b16b-5baf592213be"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "b7cba2f2-2932-4734-89fc-2820d73760cf"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "全球龙头",
+      "color": "purple"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "CNY",
+      "color": "red"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": {
+      "start": "2026-10-30",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray"
+     }
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "A股",
+      "color": "red"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "新易盛",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "新易盛",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/e98fd2b4195540258196d5b998f02d63",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "cce99784-771d-40bb-a3aa-82e9818e445d",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "—",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "—",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SU",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "SU",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "全球配电与数据中心基础设施龙头",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "全球配电与数据中心基础设施龙头",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SU",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "SU",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SU.PA",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "SU.PA",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "4206d7e0-a2cc-4cf5-9a2a-73dcc67aef52"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "926335a2-fe72-4a14-bb7b-ec48a18f8ce2"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "全球龙头",
+      "color": "purple"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "`:c^",
+      "name": "EUR",
+      "color": "brown"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": null
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": null
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "`:c^",
+      "name": "欧股",
+      "color": "brown"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "施耐德电气",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "施耐德电气",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/cce99784771d40bba3aa82e9818e445d",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "e0f730da-c8f4-4a1d-9418-1b526f377568",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "⏳ 财报日期：{{earnings:ETN}}",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "⏳ 财报日期：{{earnings:ETN}}",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "ETN",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "ETN",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "数据中心配电/UPS全球龙头",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "数据中心配电/UPS全球龙头",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "ETN",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "ETN",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "ETN",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "ETN",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "4206d7e0-a2cc-4cf5-9a2a-73dcc67aef52"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "926335a2-fe72-4a14-bb7b-ec48a18f8ce2"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "全球龙头",
+      "color": "purple"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "USD",
+      "color": "blue"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": {
+      "start": "2026-11-03",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray"
+     }
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "美股",
+      "color": "blue"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "伊顿 Eaton",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "伊顿 Eaton",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/e0f730dac8f44a1d94181b526f377568",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "94dbe111-9baa-4414-a7bb-917506c4b565",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "H1营收+35%、归母+300%；⏳ 三季报{{earnings:AMEC}}",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "H1营收+35%、归母+300%；⏳ 三季报{{earnings:AMEC}}",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SH688012",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "SH688012",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "国产刻蚀龙头，先进制程份额提升",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "国产刻蚀龙头，先进制程份额提升",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "AMEC",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "AMEC",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "688012.SS",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "688012.SS",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c57d7455-5539-41db-8d44-0584c0874814"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "d6a93694-d9c6-4371-873b-1e521834fff8"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "MMWo",
+      "name": "国产替代",
+      "color": "orange"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "CNY",
+      "color": "red"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": {
+      "start": "2026-10-31",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray"
+     }
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "A股",
+      "color": "red"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "中微公司",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "中微公司",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/94dbe1119baa4414a7bb917506c4b565",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "f82c5915-587f-471b-9a6d-ec1e23475eee",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "—",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "—",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "HK1888",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "HK1888",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "全球CCL产能龙头，涨价传导受益",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "全球CCL产能龙头，涨价传导受益",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "KBL",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "KBL",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "1888.HK",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "1888.HK",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c511817b-e0e4-44fd-aac7-4415d996d93b"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "d895454a-4d54-47d2-8a75-f904749cc813"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "全球龙头",
+      "color": "purple"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "MMWo",
+      "name": "HKD",
+      "color": "purple"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": null
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": null
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "MMWo",
+      "name": "港股",
+      "color": "purple"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "建滔积层板",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "建滔积层板",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/f82c5915587f471b9a6dec1e23475eee",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "af446d31-2318-4e93-a4b9-eefc0d94b6ec",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Q3预告：单季营收6.5–7.0亿、归母4.03–4.53亿（+579%~663%）；⏳ 三季报{{earni",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "Q3预告：单季营收6.5–7.0亿、归母4.03–4.53亿（+579%~663%）；⏳ 三季报{{earni",
+       "href": null
+      },
+      {
+       "type": "text",
+       "text": {
+        "content": "ngs:YJKJ}}",
+        "link": null
+       },
+       "annotations": {
+        "bold": true,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "ngs:YJKJ}}",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SH688498",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "SH688498",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "国产高速光芯片（CW/EML）龙头，业绩爆发",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "国产高速光芯片（CW/EML）龙头，业绩爆发",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "YJKJ",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "YJKJ",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "688498.SS",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "688498.SS",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "f0c09fdc-4dd8-45a5-b16b-5baf592213be"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "00dc5abb-b7c3-41a3-bdbc-58cc2b125a09"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "MMWo",
+      "name": "国产替代",
+      "color": "orange"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "CNY",
+      "color": "red"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": {
+      "start": "2026-10-31",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray"
+     }
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "A股",
+      "color": "red"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "源杰科技",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "源杰科技",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/af446d3123184e93a4b9eefc0d94b6ec",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "8c138a11-02e9-42d2-b93d-dd285780a7a3",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Q3预告：前三季归母64.6–68.7亿（+164%~181%），推算Q3单季+212%~252%；⏳ 三季报{{earnings:SYST}}",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "Q3预告：前三季归母64.6–68.7亿（+164%~181%），推算Q3单季+212%~252%；⏳ 三季报{{earnings:SYST}}",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SH600183",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "SH600183",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "国内CCL龙头，高速材料放量",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "国内CCL龙头，高速材料放量",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SYST",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "SYST",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "600183.SS",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "600183.SS",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c511817b-e0e4-44fd-aac7-4415d996d93b"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "d895454a-4d54-47d2-8a75-f904749cc813"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "国内龙头",
+      "color": "blue"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "CNY",
+      "color": "red"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": {
+      "start": "2026-10-30",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray"
+     }
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "A股",
+      "color": "red"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "生益科技",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "生益科技",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/8c138a1102e942d2b93ddd285780a7a3",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "52aeba0b-2ec8-4626-93fb-3a6c35a47176",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "⏳ 财报日期：{{earnings:ASMPT}}",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "⏳ 财报日期：{{earnings:ASMPT}}",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "HK0522",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "HK0522",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "TCB热压键合设备，受益HBM与先进封装",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "TCB热压键合设备，受益HBM与先进封装",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "ASMPT",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "ASMPT",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "0522.HK",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "0522.HK",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c57d7455-5539-41db-8d44-0584c0874814"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "dc3e5478-3285-491b-9271-39ca1ec0f401"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "全球龙头",
+      "color": "purple"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "MMWo",
+      "name": "HKD",
+      "color": "purple"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": {
+      "start": "2026-10-28",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray"
+     }
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "MMWo",
+      "name": "港股",
+      "color": "purple"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "ASMPT",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "ASMPT",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/52aeba0b2ec8462693fb3a6c35a47176",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "40811ea3-3c70-4579-90fc-6ffa0f3edb14",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "H1营收+25%、归母+5%；⏳ 三季报{{earnings:NAURA}}",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "H1营收+25%、归母+5%；⏳ 三季报{{earnings:NAURA}}",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SZ002371",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "SZ002371",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "国产刻蚀/沉积平台型设备龙头",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "国产刻蚀/沉积平台型设备龙头",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "NAURA",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "NAURA",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "002371.SZ",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "002371.SZ",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c57d7455-5539-41db-8d44-0584c0874814"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "d6a93694-d9c6-4371-873b-1e521834fff8"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "MMWo",
+      "name": "国产替代",
+      "color": "orange"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "CNY",
+      "color": "red"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": {
+      "start": "2026-10-30",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray"
+     }
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "A股",
+      "color": "red"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "北方华创",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "北方华创",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/40811ea33c70457990fc6ffa0f3edb14",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "8277035f-db7e-4173-ab2c-1c599f7a2b5e",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "⏳ 财报日期：{{earnings:VRT}}",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "⏳ 财报日期：{{earnings:VRT}}",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "VRT",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "VRT",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "数据中心电源+液冷全球龙头",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "数据中心电源+液冷全球龙头",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "VRT",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "VRT",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "VRT",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "VRT",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "4206d7e0-a2cc-4cf5-9a2a-73dcc67aef52"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "11734fe4-ea9f-4e5c-8331-54d80d8d6e20"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "全球龙头",
+      "color": "purple"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "USD",
+      "color": "blue"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": {
+      "start": "2026-10-28",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray"
+     }
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "美股",
+      "color": "blue"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "维谛 Vertiv",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "维谛 Vertiv",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/8277035fdb7e4173ab2c1c599f7a2b5e",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "b30ea2cb-3153-4b83-aaf6-83d36bfc47b2",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "H1营收+17%、归母-14%；⏳ 三季报{{earnings:YWK}}",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "H1营收+17%、归母-14%；⏳ 三季报{{earnings:YWK}}",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SZ002837",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "SZ002837",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "国内数据中心液冷龙头，利润待兑现",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "国内数据中心液冷龙头，利润待兑现",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "YWK",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "YWK",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "002837.SZ",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "002837.SZ",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "4206d7e0-a2cc-4cf5-9a2a-73dcc67aef52"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "11734fe4-ea9f-4e5c-8331-54d80d8d6e20"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "国内龙头",
+      "color": "blue"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "CNY",
+      "color": "red"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": {
+      "start": "2026-10-27",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray"
+     }
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "A股",
+      "color": "red"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "英维克",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "英维克",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/b30ea2cb31534b83aaf683d36bfc47b2",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "e6b62170-00f1-4939-a381-baeed85bb177",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "H1营收+182%、归母+242%；⏳ 三季报{{earnings:ZJXC}}",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "H1营收+182%、归母+242%；⏳ 三季报{{earnings:ZJXC}}",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SZ300308",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "SZ300308",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "全球光模块龙头，800G/1.6T份额领先",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "全球光模块龙头，800G/1.6T份额领先",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "ZJXC",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "ZJXC",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "300308.SZ",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "300308.SZ",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "f0c09fdc-4dd8-45a5-b16b-5baf592213be"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "b7cba2f2-2932-4734-89fc-2820d73760cf"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "全球龙头",
+      "color": "purple"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "CNY",
+      "color": "red"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": {
+      "start": "2026-10-30",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray"
+     }
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "A股",
+      "color": "red"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "中际旭创",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "中际旭创",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/e6b6217000f14939a381baeed85bb177",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "b60b689a-9ce7-4d59-85e5-f4a5b5682a76",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "⏳ 财报日期：{{earnings:ANET}}",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "⏳ 财报日期：{{earnings:ANET}}",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "ANET",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "ANET",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "AI后端以太网交换机龙头",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "AI后端以太网交换机龙头",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "ANET",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "ANET",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "ANET",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "ANET",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "f0c09fdc-4dd8-45a5-b16b-5baf592213be"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "917119df-bbe9-4673-8b6e-f3601191d1b3"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "全球龙头",
+      "color": "purple"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "USD",
+      "color": "blue"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": {
+      "start": "2026-11-03",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray"
+     }
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "美股",
+      "color": "blue"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Arista",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "Arista",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/b60b689a9ce74d5985e5f4a5b5682a76",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "3ea899cb-0ec4-488b-8351-edf1c3c7ed26",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "51ff5113-6a00-495b-9ae9-8f66a5999f63",
+    "database_id": "f5e1e4e5-84c0-4801-b4f8-c1a1892f561d"
+   },
+   "in_trash": false,
+   "properties": {
+    "快讯": {
+     "id": "AMsE",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Q3营收467.2亿美元（+41%）、毛利率66.4%；Q4指引523–543亿美元；⏳ 财报日期：{{earnings:TSM}}",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "Q3营收467.2亿美元（+41%）、毛利率66.4%；Q4指引523–543亿美元；⏳ 财报日期：{{earnings:TSM}}",
+       "href": null
+      }
+     ]
+    },
+    "显示代码": {
+     "id": "F%3F%5D%60",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "TSM",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "TSM",
+       "href": null
+      }
+     ]
+    },
+    "看点": {
+     "id": "H%60Ac",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "先进制程+CoWoS近乎垄断，AI芯片总闸门",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "先进制程+CoWoS近乎垄断，AI芯片总闸门",
+       "href": null
+      }
+     ]
+    },
+    "代号": {
+     "id": "IlF%5E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "TSM",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "TSM",
+       "href": null
+      }
+     ]
+    },
+    "财报日时区": {
+     "id": "Luxw",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "财报日来源": {
+     "id": "SiCn",
+     "type": "url",
+     "url": null
+    },
+    "Yahoo代码": {
+     "id": "Tn%5Dn",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "TSM",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "TSM",
+       "href": null
+      }
+     ]
+    },
+    "快讯来源": {
+     "id": "W%3A%5C~",
+     "type": "url",
+     "url": null
+    },
+    "行业": {
+     "id": "Yd%5B%5D",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c57d7455-5539-41db-8d44-0584c0874814"
+      }
+     ],
+     "has_more": false
+    },
+    "停用": {
+     "id": "%5C%3Ar%7B",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "卡点": {
+     "id": "_CX%40",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "dc3e5478-3285-491b-9271-39ca1ec0f401"
+      }
+     ],
+     "has_more": false
+    },
+    "知识库": {
+     "id": "e_WE",
+     "type": "url",
+     "url": null
+    },
+    "定位": {
+     "id": "l_qp",
+     "type": "select",
+     "select": {
+      "id": "aLo|",
+      "name": "全球龙头",
+      "color": "purple"
+     }
+    },
+    "币种": {
+     "id": "of%3EU",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "USD",
+      "color": "blue"
+     }
+    },
+    "下次财报日": {
+     "id": "rC%3Bg",
+     "type": "date",
+     "date": {
+      "start": "2027-01-14",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日备注": {
+     "id": "tUx%3D",
+     "type": "rich_text",
+     "rich_text": []
+    },
+    "快讯日期": {
+     "id": "vUL%3A",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "财报日状态": {
+     "id": "ySxK",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "预估",
+      "color": "gray"
+     }
+    },
+    "市场": {
+     "id": "~%60UA",
+     "type": "select",
+     "select": {
+      "id": "WFbl",
+      "name": "美股",
+      "color": "blue"
+     }
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "台积电",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "台积电",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/3ea899cb0ec4488b8351edf1c3c7ed26",
+   "public_url": null
+  }
+ ],
+ "next_cursor": null,
+ "has_more": false,
+ "type": "page_or_data_source",
+ "page_or_data_source": {},
+ "request_id": "a45bc012-8990-503c-8996-459977102233"
+}

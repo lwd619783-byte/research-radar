@@ -1,0 +1,183 @@
+{
+ "object": "data_source",
+ "id": "12b00256-3ec7-4755-ad78-d14932b7f42f",
+ "created_time": "2026-10-21T02:40:00.000Z",
+ "last_edited_time": "2026-10-21T09:52:00.000Z",
+ "created_by": {
+  "object": "user",
+  "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+ },
+ "last_edited_by": {
+  "object": "user",
+  "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+ },
+ "properties": {
+  "总分": {
+   "id": "%3FmQU",
+   "name": "总分",
+   "description": "自动计算；≥17 重点追踪，14–16 持续观察，≤13 低频跟踪",
+   "type": "formula",
+   "formula": {
+    "expression": "prop(\"景气度\") + prop(\"业绩兑现\") + prop(\"卡点强度\") + prop(\"估值位置\")"
+   }
+  },
+  "有效至": {
+   "id": "DsxV",
+   "name": "有效至",
+   "description": "一般为研判日期 +7 天；过期后网站显示「待更新」",
+   "type": "date",
+   "date": {}
+  },
+  "研判状态": {
+   "id": "H%5C%5EM",
+   "name": "研判状态",
+   "description": "自动计算，仅供查看；网站以程序检查为准",
+   "type": "formula",
+   "formula": {
+    "expression": "ifs(empty(prop(\"研判理由\")) or empty(prop(\"来源\")) or empty(prop(\"研判日期\")) or empty(prop(\"有效至\")), \"待更新\", prop(\"有效至\") < today(), \"已过期\", \"AI研判\")"
+   }
+  },
+  "代表公司": {
+   "id": "J%40Pw",
+   "name": "代表公司",
+   "description": "用「、」分隔",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "景气度": {
+   "id": "LufX",
+   "name": "景气度",
+   "description": "1–5 整数，5=最强",
+   "type": "number",
+   "number": {
+    "format": "number"
+   }
+  },
+  "最新信号": {
+   "id": "O%5EUE",
+   "name": "最新信号",
+   "description": "用「；」分隔，最多 4 条",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "知识库": {
+   "id": "RKO%5C",
+   "name": "知识库",
+   "description": "对应的 Notion 行业页链接",
+   "type": "url",
+   "url": {}
+  },
+  "卡点强度": {
+   "id": "SDeA",
+   "name": "卡点强度",
+   "description": "1–5 整数，5=极紧",
+   "type": "number",
+   "number": {
+    "format": "number"
+   }
+  },
+  "研判日期": {
+   "id": "SRSJ",
+   "name": "研判日期",
+   "description": "本次评分日期",
+   "type": "date",
+   "date": {}
+  },
+  "停用": {
+   "id": "XdGo",
+   "name": "停用",
+   "description": "勾选后网站不再显示（不要删除行）",
+   "type": "checkbox",
+   "checkbox": {}
+  },
+  "一句话逻辑": {
+   "id": "XeOv",
+   "name": "一句话逻辑",
+   "description": "≤60 字，写事实与逻辑，不写买卖建议",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "研判理由": {
+   "id": "%5BeB%7B",
+   "name": "研判理由",
+   "description": "为什么给这组分数；空着网站会显示「待更新」",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "业绩兑现": {
+   "id": "i%5BER",
+   "name": "业绩兑现",
+   "description": "1–5 整数，5=大幅兑现",
+   "type": "number",
+   "number": {
+    "format": "number"
+   }
+  },
+  "主要风险": {
+   "id": "xFmB",
+   "name": "主要风险",
+   "description": "≤80 字",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "来源": {
+   "id": "yMjE",
+   "name": "来源",
+   "description": "每行一个链接，至少 1 个",
+   "type": "rich_text",
+   "rich_text": {}
+  },
+  "估值位置": {
+   "id": "y%7CX%5C",
+   "name": "估值位置",
+   "description": "1–5 整数，5=最便宜",
+   "type": "number",
+   "number": {
+    "format": "number"
+   }
+  },
+  "名称": {
+   "id": "title",
+   "name": "名称",
+   "description": "行业名称；被公司/卡点引用，改名前先告诉 Codex",
+   "type": "title",
+   "title": {}
+  }
+ },
+ "parent": {
+  "type": "database_id",
+  "database_id": "e0f96809-3f5b-4d41-9029-c8ceb4d2c467"
+ },
+ "database_parent": {
+  "type": "page_id",
+  "page_id": "65314065-9aa7-4497-abcc-6d5041a4d3f8"
+ },
+ "title": [
+  {
+   "type": "text",
+   "text": {
+    "content": "行业",
+    "link": null
+   },
+   "annotations": {
+    "bold": false,
+    "italic": false,
+    "strikethrough": false,
+    "underline": false,
+    "code": false,
+    "color": "default"
+   },
+   "plain_text": "行业",
+   "href": null
+  }
+ ],
+ "description": [],
+ "icon": {
+  "type": "emoji",
+  "emoji": "🧭"
+ },
+ "in_trash": false,
+ "url": "https://app.notion.com/p/e0f968093f5b4d419029c8ceb4d2c467",
+ "public_url": null,
+ "request_id": "e0ecb425-ac88-57b5-bbac-2014da33cf09"
+}

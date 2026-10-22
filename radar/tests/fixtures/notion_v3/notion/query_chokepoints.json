@@ -1,0 +1,3546 @@
+{
+ "object": "list",
+ "results": [
+  {
+   "object": "page",
+   "id": "a539c645-6121-41e5-807b-7b8b940489a1",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "KX@>",
+      "name": "极紧",
+      "color": "red"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "数据中心并网等待时间长，燃机是最快供电方案之一，产能有限",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "数据中心并网等待时间长，燃机是最快供电方案之一，产能有限",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "GEV燃机订单与积压（{{earnings:GEV}}）、西门子能源（{{earnings:ENR}}）",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "GEV燃机订单与积压（{{earnings:GEV}}）、西门子能源（{{earnings:ENR}}）",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "4206d7e0-a2cc-4cf5-9a2a-73dcc67aef52"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412",
+        "link": {
+         "url": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412",
+       "href": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "重型/航改燃机、现场发电",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "重型/航改燃机、现场发电",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 10
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "燃气轮机与现场发电",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "燃气轮机与现场发电",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/a539c645612141e5807b7b8b940489a1",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "d9967dea-9953-47ff-af76-d2ba33317fac",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "[cxL",
+      "name": "缓解中",
+      "color": "green"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "CPO与1.6T提升耦合与封装精度要求；天孚称有源器件材料供应自Q2末改善",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "CPO与1.6T提升耦合与封装精度要求；天孚称有源器件材料供应自Q2末改善",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "天孚三季报（{{earnings:TFTX}}）、CPO量产节奏",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "天孚三季报（{{earnings:TFTX}}）、CPO量产节奏",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "f0c09fdc-4dd8-45a5-b16b-5baf592213be"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+        "link": {
+         "url": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+       "href": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "光引擎、FAU/耦合、CPO封装",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "光引擎、FAU/耦合、CPO封装",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 40
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "光引擎与精密光器件",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "光引擎与精密光器件",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/d9967dea995347ffaf76d2ba33317fac",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "0a3af74f-4f53-4a7d-98d5-4c81db4b9464",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "KX@>",
+      "name": "极紧",
+      "color": "red"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "HBM挤占DRAM产能，存储价格大幅上涨",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "HBM挤占DRAM产能，存储价格大幅上涨",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "DRAM/HBM合约价、海力士Q3（{{earnings:SKH}}）、长鑫三季报（{{earnings:CXMT}}）",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "DRAM/HBM合约价、海力士Q3（{{earnings:SKH}}）、长鑫三季报（{{earnings:CXMT}}）",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c57d7455-5539-41db-8d44-0584c0874814"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454",
+        "link": {
+         "url": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454",
+       "href": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "HBM3E/HBM4、DRAM、企业级SSD",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "HBM3E/HBM4、DRAM、企业级SSD",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 20
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "HBM与存储",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "HBM与存储",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/0a3af74f4f534a7d98d54c81db4b9464",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "dc3e5478-3285-491b-9271-39ca1ec0f401",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "KX@>",
+      "name": "极紧",
+      "color": "red"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "CoWoS产能是AI芯片出货的总闸门，扩产周期长",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "CoWoS产能是AI芯片出货的总闸门，扩产周期长",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "台积电资本开支与CoWoS产能、ASMPT TCB订单（{{earnings:ASMPT}}）",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "台积电资本开支与CoWoS产能、ASMPT TCB订单（{{earnings:ASMPT}}）",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c57d7455-5539-41db-8d44-0584c0874814"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454",
+        "link": {
+         "url": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454",
+       "href": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "3nm/2nm、CoWoS、TCB/混合键合",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "3nm/2nm、CoWoS、TCB/混合键合",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 10
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "先进制程与先进封装",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "先进制程与先进封装",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/dc3e54783285491b927139ca1ec0f401",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "917119df-bbe9-4673-8b6e-f3601191d1b3",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "DSXU",
+      "name": "偏紧",
+      "color": "orange"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "集群规模扩大使网络带宽需求快速上升，51.2T/102.4T交换与DSP集中在少数厂商",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "集群规模扩大使网络带宽需求快速上升，51.2T/102.4T交换与DSP集中在少数厂商",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "博通AI收入指引（{{earnings:AVGO}}）、Arista AI后端订单（{{earnings:ANET}}）、Marvell定制ASIC",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "博通AI收入指引（{{earnings:AVGO}}）、Arista AI后端订单（{{earnings:ANET}}）、Marvell定制ASIC",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "f0c09fdc-4dd8-45a5-b16b-5baf592213be"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+        "link": {
+         "url": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+       "href": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "交换芯片、光DSP、AI以太网交换机、CPO交换",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "交换芯片、光DSP、AI以太网交换机、CPO交换",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 30
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "网络芯片与交换系统",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "网络芯片与交换系统",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/917119dfbbe946738b6ef3601191d1b3",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "630947ab-4a8b-4ae9-ae10-de009246ce18",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "KX@>",
+      "name": "极紧",
+      "color": "red"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "高端玻纤布由少数厂商主导、扩产慢，是CCL上游最紧环节",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "高端玻纤布由少数厂商主导、扩产慢，是CCL上游最紧环节",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "日东纺扩产与财报（{{earnings:NTB}}）、宏和/东材出货与毛利",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "日东纺扩产与财报（{{earnings:NTB}}）、宏和/东材出货与毛利",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c511817b-e0e4-44fd-aac7-4415d996d93b"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67",
+        "link": {
+         "url": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67",
+       "href": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "低介电玻纤布（NE/T-glass/石英布）、高速树脂",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "低介电玻纤布（NE/T-glass/石英布）、高速树脂",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 10
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "上游特种玻纤布与树脂",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "上游特种玻纤布与树脂",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/630947ab4a8b4ae9ae10de009246ce18",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "6c42f877-20aa-485e-baa5-4eb940765c58",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "DSXU",
+      "name": "偏紧",
+      "color": "orange"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "高多层/厚板钻孔难度上升，钻针用量与单价提升",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "高多层/厚板钻孔难度上升，钻针用量与单价提升",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "大族数控三季报（{{earnings:DZSK}}）、鼎泰/中钨钻针产能",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "大族数控三季报（{{earnings:DZSK}}）、鼎泰/中钨钻针产能",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c511817b-e0e4-44fd-aac7-4415d996d93b"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67",
+        "link": {
+         "url": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67",
+       "href": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "机械/激光钻孔设备、PCB微钻",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "机械/激光钻孔设备、PCB微钻",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 40
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "钻孔设备与钻针",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "钻孔设备与钻针",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/6c42f87720aa485ebaa54eb940765c58",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "09bc39c5-2aca-4326-872f-94bfd8091a2e",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "DSXU",
+      "name": "偏紧",
+      "color": "orange"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "需求远超供给，交付受CoWoS与HBM约束",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "需求远超供给，交付受CoWoS与HBM约束",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "英伟达FQ3财报（{{earnings:NVDA}}）：数据中心收入与指引",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "英伟达FQ3财报（{{earnings:NVDA}}）：数据中心收入与指引",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c57d7455-5539-41db-8d44-0584c0874814"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454",
+        "link": {
+         "url": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454",
+       "href": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "GPU、定制ASIC",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "GPU、定制ASIC",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 30
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "算力芯片 GPU/ASIC",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "算力芯片 GPU/ASIC",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/09bc39c52aca4326872f94bfd8091a2e",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "d6a93694-d9c6-4371-873b-1e521834fff8",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "DSXU",
+      "name": "偏紧",
+      "color": "orange"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "先进制程与存储扩产拉动设备，国产化率提升",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "先进制程与存储扩产拉动设备，国产化率提升",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "ASML订单、北方华创三季报（{{earnings:NAURA}}）、中微三季报（{{earnings:AMEC}}）",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "ASML订单、北方华创三季报（{{earnings:NAURA}}）、中微三季报（{{earnings:AMEC}}）",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c57d7455-5539-41db-8d44-0584c0874814"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454",
+        "link": {
+         "url": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454",
+       "href": "https://app.notion.com/p/f89e62a69faf83bcbcf201d55a448454"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "光刻、刻蚀、薄膜沉积",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "光刻、刻蚀、薄膜沉积",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 40
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "前道设备与材料",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "前道设备与材料",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/d6a93694d9c64371873b1e521834fff8",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "11734fe4-ea9f-4e5c-8331-54d80d8d6e20",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "DSXU",
+      "name": "偏紧",
+      "color": "orange"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "高功率机柜使液冷成刚需，但国内利润尚未成熟",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "高功率机柜使液冷成刚需，但国内利润尚未成熟",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Vertiv订单（{{earnings:VRT}}）、英维克毛利率与现金流（{{earnings:YWK}}）",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "Vertiv订单（{{earnings:VRT}}）、英维克毛利率与现金流（{{earnings:YWK}}）",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "4206d7e0-a2cc-4cf5-9a2a-73dcc67aef52"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412",
+        "link": {
+         "url": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412",
+       "href": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "冷板/浸没液冷、CDU、热管理",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "冷板/浸没液冷、CDU、热管理",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 40
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "液冷与热管理",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "液冷与热管理",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/11734fe4ea9f4e5c833154d80d8d6e20",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "00dc5abb-b7c3-41a3-bdbc-58cc2b125a09",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "KX@>",
+      "name": "极紧",
+      "color": "red"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "1.6T与CPO需要更多高速激光器，InP扩产慢、认证周期长；Lumentum部分器件订单排至2029（转述）",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "1.6T与CPO需要更多高速激光器，InP扩产慢、认证周期长；Lumentum部分器件订单排至2029（转述）",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Lumentum/Coherent订单与扩产、源杰三季报（{{earnings:YJKJ}}）、EML价格",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "Lumentum/Coherent订单与扩产、源杰三季报（{{earnings:YJKJ}}）、EML价格",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "f0c09fdc-4dd8-45a5-b16b-5baf592213be"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+        "link": {
+         "url": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+       "href": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "EML/CW激光器、InP衬底、硅光芯片",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "EML/CW激光器、InP衬底、硅光芯片",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 10
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "光芯片与激光器",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "光芯片与激光器",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/00dc5abbb7c341a3bdbc58cc2b125a09",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "926335a2-fe72-4a14-bb7b-ec48a18f8ce2",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "DSXU",
+      "name": "偏紧",
+      "color": "orange"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "机柜功率密度上升推动供电架构升级",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "机柜功率密度上升推动供电架构升级",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "伊顿Q3（{{earnings:ETN}}）、施耐德数据中心订单、科华三季报（{{earnings:KHSJ}}）",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "伊顿Q3（{{earnings:ETN}}）、施耐德数据中心订单、科华三季报（{{earnings:KHSJ}}）",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "4206d7e0-a2cc-4cf5-9a2a-73dcc67aef52"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412",
+        "link": {
+         "url": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412",
+       "href": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "UPS、HVDC/800V、配电柜",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "UPS、HVDC/800V、配电柜",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 30
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "数据中心供配电",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "数据中心供配电",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/926335a2fe724a14bb7bec48a18f8ce2",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "6b2aa07a-7919-4587-979e-3ab136dd98fc",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "KX@>",
+      "name": "极紧",
+      "color": "red"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "大型变压器交期长、电网投资上行",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "大型变压器交期长、电网投资上行",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "电网招标、出海订单；西电三季报（{{earnings:ZGXD}}）、思源三季报（{{earnings:SYDQ}}）",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "电网招标、出海订单；西电三季报（{{earnings:ZGXD}}）、思源三季报（{{earnings:SYDQ}}）",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "4206d7e0-a2cc-4cf5-9a2a-73dcc67aef52"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412",
+        "link": {
+         "url": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412",
+       "href": "https://app.notion.com/p/5bae62a69faf8367b29c01e5b0097412"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "大型电力变压器、GIS、配网设备",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "大型电力变压器、GIS、配网设备",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 20
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "变压器与电网设备",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "变压器与电网设备",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/6b2aa07a79194587979e3ab136dd98fc",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "d895454a-4d54-47d2-8a75-f904749cc813",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "KX@>",
+      "name": "极紧",
+      "color": "red"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "高速材料认证门槛高，涨价沿链传导",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "高速材料认证门槛高，涨价沿链传导",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "CCL提价、台光Q3（{{earnings:EMC}}）、生益三季报（{{earnings:SYST}}）",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "CCL提价、台光Q3（{{earnings:EMC}}）、生益三季报（{{earnings:SYST}}）",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c511817b-e0e4-44fd-aac7-4415d996d93b"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67",
+        "link": {
+         "url": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67",
+       "href": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "M7/M8/M9高速CCL",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "M7/M8/M9高速CCL",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 20
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "高端覆铜板 CCL",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "高端覆铜板 CCL",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/d895454a4d5447d28a75f904749cc813",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "b026ad58-91c3-4c15-b679-2a25ac33b555",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "DSXU",
+      "name": "偏紧",
+      "color": "orange"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "高端产能良率爬坡与扩产周期长",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "高端产能良率爬坡与扩产周期长",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "沪电/胜宏/深南三季报、扩产进度",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "沪电/胜宏/深南三季报、扩产进度",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "c511817b-e0e4-44fd-aac7-4415d996d93b"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67",
+        "link": {
+         "url": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67",
+       "href": "https://app.notion.com/p/91fe62a69faf828788ea81ee993f7f67"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "AI服务器/交换机高多层板、HDI",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "AI服务器/交换机高多层板、HDI",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 30
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "高多层高速PCB产能",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "高多层高速PCB产能",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/b026ad5891c34c15b6792a25ac33b555",
+   "public_url": null
+  },
+  {
+   "object": "page",
+   "id": "b7cba2f2-2932-4734-89fc-2820d73760cf",
+   "created_time": "2026-10-21T02:40:00.000Z",
+   "last_edited_time": "2026-10-21T09:52:00.000Z",
+   "created_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "last_edited_by": {
+    "object": "user",
+    "id": "7ebf58ca-3cf5-5125-8fe8-628dadabbc87"
+   },
+   "cover": null,
+   "icon": null,
+   "parent": {
+    "type": "data_source_id",
+    "data_source_id": "fcb39e45-1e23-41de-bef9-9f91fef8cfb6",
+    "database_id": "545d8e99-b83d-4483-bd5d-c5ee449e5e29"
+   },
+   "in_trash": false,
+   "properties": {
+    "紧缺度": {
+     "id": "%3Amxf",
+     "type": "select",
+     "select": {
+      "id": "DSXU",
+      "name": "偏紧",
+      "color": "orange"
+     }
+    },
+    "研判理由": {
+     "id": "%3BYNC",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "2026-10-17 Notion AI 初评（依据知识库对应行业页的卡点分析）；v3 迁移导入，待 ChatGPT 每周一复评。",
+       "href": null
+      }
+     ]
+    },
+    "研判日期": {
+     "id": "Elfi",
+     "type": "date",
+     "date": {
+      "start": "2026-10-17",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "为什么卡": {
+     "id": "Lx%3Ce",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "1.6T爬坡期良率与上游物料决定出货，头部两家份额高",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "1.6T爬坡期良率与上游物料决定出货，头部两家份额高",
+       "href": null
+      }
+     ]
+    },
+    "有效至": {
+     "id": "RXDL",
+     "type": "date",
+     "date": {
+      "start": "2026-10-24",
+      "end": null,
+      "time_zone": null
+     }
+    },
+    "跟踪指标": {
+     "id": "V%3EB%5C",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "1.6T出货占比、毛利率、北美云厂资本开支；中际三季报（{{earnings:ZJXC}}）、新易盛三季报（{{earnings:XYS}}）",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "1.6T出货占比、毛利率、北美云厂资本开支；中际三季报（{{earnings:ZJXC}}）、新易盛三季报（{{earnings:XYS}}）",
+       "href": null
+      }
+     ]
+    },
+    "研判状态": {
+     "id": "%5BNUQ",
+     "type": "formula",
+     "formula": {
+      "type": "string",
+      "string": "AI研判"
+     }
+    },
+    "行业": {
+     "id": "%5Cz%3Aq",
+     "type": "relation",
+     "relation": [
+      {
+       "id": "f0c09fdc-4dd8-45a5-b16b-5baf592213be"
+      }
+     ],
+     "has_more": false
+    },
+    "来源": {
+     "id": "%5ELm%3E",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+        "link": {
+         "url": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+        }
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d",
+       "href": "https://app.notion.com/p/de3e62a69faf83bb852001994b1c288d"
+      }
+     ]
+    },
+    "细分": {
+     "id": "gwXg",
+     "type": "rich_text",
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "800G/1.6T光模块",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "800G/1.6T光模块",
+       "href": null
+      }
+     ]
+    },
+    "排序": {
+     "id": "sQF%5D",
+     "type": "number",
+     "number": 20
+    },
+    "停用": {
+     "id": "zBNl",
+     "type": "checkbox",
+     "checkbox": false
+    },
+    "名称": {
+     "id": "title",
+     "type": "title",
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "高速光模块产能与良率",
+        "link": null
+       },
+       "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+       },
+       "plain_text": "高速光模块产能与良率",
+       "href": null
+      }
+     ]
+    }
+   },
+   "url": "https://app.notion.com/p/b7cba2f22932473489fc2820d73760cf",
+   "public_url": null
+  }
+ ],
+ "next_cursor": null,
+ "has_more": false,
+ "type": "page_or_data_source",
+ "page_or_data_source": {},
+ "request_id": "0d1222b4-1a69-5535-8932-86457a302b3d"
+}
