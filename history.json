@@ -4383,14 +4383,14 @@
       ]
     },
     {
-      "generatedAt": "2026-10-22T09:31+08:00",
+      "generatedAt": "2026-10-22T17:24+08:00",
       "proof": {
         "state": "success",
-        "productionSHA": "6f232330dc77a3e647d7ce2bc9298d26a317a421",
-        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/8qxxxHhtmygiApFHeTPVQbUNU7Sq",
-        "reportedAt": "2026-10-22T01:31:30Z",
+        "productionSHA": "92000c3ab52c58707f39166a00461a0159c37844",
+        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/EAL3wpnksEhGwBD3148tLGTLVs5i",
+        "reportedAt": "2026-10-22T09:24:16Z",
         "sourceSHA": "603181e76c4a08f406397836edb5b7c2d13faa13",
-        "dataSHA256": "db576f866360673a812bb7f662888a5b905e63a573486a2abb4f2c3665ca5750"
+        "dataSHA256": "61093e2578df4b46bcade15f2182c74adeaf32bca58bf2853cc47accb0b91c51"
       },
       "companies": [
         {
@@ -4408,11 +4408,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 1021,
-          "date": "2026-10-21",
+          "close": 920.0,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.01064,
+          "r1d": -0.09901,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -4515,11 +4515,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 646.8,
-          "date": "2026-10-21",
+          "close": 590.1,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.00174,
+          "r1d": -0.0876,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -4553,11 +4553,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 294.1,
-          "date": "2026-10-21",
+          "close": 258.0,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.01358,
+          "r1d": -0.12277,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -4695,11 +4695,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 215.0,
-          "date": "2026-10-21",
+          "close": 197.0,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.05104,
+          "r1d": -0.08364,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -4768,11 +4768,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 134.4,
-          "date": "2026-10-21",
+          "close": 123.1,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.01053,
+          "r1d": -0.08408,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -4804,11 +4804,11 @@
             "timezone": "Asia/Seoul",
             "time_note": "业绩公告于韩国时间09:00前发布；电话会09:00（北京时间08:00）"
           },
-          "close": 1294000,
-          "date": "2026-10-21",
+          "close": 1223000,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.05805,
+          "r1d": -0.05487,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -4875,11 +4875,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 40.97,
-          "date": "2026-10-21",
+          "close": 39.7,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.01612,
+          "r1d": -0.031,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -4982,11 +4982,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 561.0,
-          "date": "2026-10-21",
+          "close": 542.0,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.00971,
+          "r1d": -0.03385,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5018,11 +5018,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 274.0,
-          "date": "2026-10-21",
+          "close": 264.2,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.01616,
+          "r1d": -0.03584,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5054,11 +5054,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 3040,
-          "date": "2026-10-21",
+          "close": 2961,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.04396,
+          "r1d": -0.02599,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5089,11 +5089,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 102.9,
-          "date": "2026-10-21",
+          "close": 94.95,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.03868,
+          "r1d": -0.0769,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5125,11 +5125,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 40.81,
-          "date": "2026-10-21",
+          "close": 38.73,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.00488,
+          "r1d": -0.05097,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5161,11 +5161,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 4990,
-          "date": "2026-10-21",
+          "close": 5070,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.0091,
+          "r1d": 0.01603,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5197,11 +5197,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 119.0,
-          "date": "2026-10-21",
+          "close": 110.3,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.01501,
+          "r1d": -0.07337,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5233,11 +5233,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 40.62,
-          "date": "2026-10-21",
+          "close": 36.82,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.02009,
+          "r1d": -0.09355,
           "financial": {
             "status": "verified_partial",
             "basis": "half_year",
@@ -5269,11 +5269,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 115.0,
-          "date": "2026-10-21",
+          "close": 107.0,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.03567,
+          "r1d": -0.06967,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5305,11 +5305,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 187.9,
-          "date": "2026-10-21",
+          "close": 178.0,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.01716,
+          "r1d": -0.05259,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5341,11 +5341,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 305.6,
-          "date": "2026-10-21",
+          "close": 284.3,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.01532,
+          "r1d": -0.0697,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5377,11 +5377,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 173.0,
-          "date": "2026-10-21",
+          "close": 164.0,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.00081,
+          "r1d": -0.05191,
           "financial": {
             "status": "verified_partial",
             "basis": "single_quarter",
@@ -5414,11 +5414,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 263.0,
-          "date": "2026-10-21",
+          "close": 244.0,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.02307,
+          "r1d": -0.07224,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5450,11 +5450,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 44.0,
-          "date": "2026-10-21",
+          "close": 41.64,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.00434,
+          "r1d": -0.05364,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5521,11 +5521,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 130.3,
-          "date": "2026-10-20",
+          "close": 133.6,
+          "date": "2026-10-21",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.02118,
+          "r1d": 0.02548,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5556,11 +5556,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 22.26,
-          "date": "2026-10-21",
+          "close": 21.95,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.00724,
+          "r1d": -0.01393,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5592,11 +5592,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 110.8,
-          "date": "2026-10-21",
+          "close": 107.9,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.01581,
+          "r1d": -0.02626,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5629,10 +5629,10 @@
             "time_note": ""
           },
           "close": 11.19,
-          "date": "2026-10-21",
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.00811,
+          "r1d": 0.0,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5664,11 +5664,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 54.68,
-          "date": "2026-10-21",
+          "close": 53.08,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.036,
+          "r1d": -0.02926,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5735,11 +5735,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 244.3,
-          "date": "2026-10-20",
+          "close": 249.1,
+          "date": "2026-10-21",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.03286,
+          "r1d": 0.01965,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5770,11 +5770,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 26.41,
-          "date": "2026-10-21",
+          "close": 25.91,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.01072,
+          "r1d": -0.01893,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5841,11 +5841,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 45.15,
-          "date": "2026-10-21",
+          "close": 43.53,
+          "date": "2026-10-22",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.00691,
+          "r1d": -0.03588,
           "financial": {
             "status": "verified",
             "basis": "single_quarter",
@@ -5951,7 +5951,7 @@
           "kind": "company",
           "symbol": "688498.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -6149,7 +6149,7 @@
           "kind": "company",
           "symbol": "300308.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -6215,7 +6215,7 @@
           "kind": "company",
           "symbol": "300502.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -6479,7 +6479,7 @@
           "kind": "company",
           "symbol": "300394.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -6809,7 +6809,7 @@
           "kind": "company",
           "symbol": "688825.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -7007,7 +7007,7 @@
           "kind": "company",
           "symbol": "002371.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -7073,7 +7073,7 @@
           "kind": "company",
           "symbol": "688012.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -7205,7 +7205,7 @@
           "kind": "company",
           "symbol": "603256.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -7271,7 +7271,7 @@
           "kind": "company",
           "symbol": "601208.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -7403,7 +7403,7 @@
           "kind": "company",
           "symbol": "600183.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -7535,7 +7535,7 @@
           "kind": "company",
           "symbol": "002463.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -7601,7 +7601,7 @@
           "kind": "company",
           "symbol": "300476.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -7667,7 +7667,7 @@
           "kind": "company",
           "symbol": "002916.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -7733,7 +7733,7 @@
           "kind": "company",
           "symbol": "301200.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -7799,7 +7799,7 @@
           "kind": "company",
           "symbol": "301377.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -7865,7 +7865,7 @@
           "kind": "company",
           "symbol": "000657.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -7997,7 +7997,7 @@
           "kind": "company",
           "symbol": "ENR.DE",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -8063,7 +8063,7 @@
           "kind": "company",
           "symbol": "600875.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -8129,7 +8129,7 @@
           "kind": "company",
           "symbol": "002028.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -8195,7 +8195,7 @@
           "kind": "company",
           "symbol": "601179.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -8261,7 +8261,7 @@
           "kind": "company",
           "symbol": "688676.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -8393,7 +8393,7 @@
           "kind": "company",
           "symbol": "SU.PA",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -8459,7 +8459,7 @@
           "kind": "company",
           "symbol": "002335.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -8591,7 +8591,7 @@
           "kind": "company",
           "symbol": "002837.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -8675,7 +8675,7 @@
           "kind": "index",
           "symbol": "000001.SS",
           "metric": null,
-          "status": "partial"
+          "status": "complete"
         },
         {
           "kind": "index",
@@ -8693,7 +8693,7 @@
           "kind": "index",
           "symbol": "^HSI",
           "metric": null,
-          "status": "partial"
+          "status": "complete"
         },
         {
           "kind": "index",
