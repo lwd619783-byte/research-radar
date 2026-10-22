@@ -7,6 +7,27 @@ title = "投研雷达"
 repo_url = ""
 kb_branch = "main"
 
+[build]
+source = "toml"
+
+[notion]
+contract = "notion_schema.json"
+api_base = "https://api.notion.com"
+version = "2026-03-11"
+timeout_seconds = 20
+phase_budget_seconds = 180
+max_body_bytes = 8388608
+max_pages_per_table = 50
+min_interval_seconds = 0.34
+quality_threshold = 0.20
+quality_min_rows = 5
+
+[daily]
+markets = ["A股", "美股"]
+chips."A股" = ["000001.SS", "399006.SZ", "HSTECH.HK"]
+chips."美股" = ["^IXIC", "^GSPC", "^SOX"]
+short = { "000001.SS" = "上证", "399006.SZ" = "创业板", "HSTECH.HK" = "恒生科技", "^IXIC" = "纳指", "^GSPC" = "标普500", "^SOX" = "费城半导体" }
+
 # 每周更新：本周结论。focus 必须是 industries.toml 里的行业名；留空则自动取总分最高的行业。
 # lead 只在 focus 行业作为首屏时显示；留空则自动用该行业的 logic + 最紧卡点。
 [weekly]
