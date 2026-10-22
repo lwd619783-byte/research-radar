@@ -214,7 +214,7 @@ function renderTop(){
   const r20=mean(cos.map(c=>c.r20)),dd=mean(cos.map(c=>c.dd52)),rev=median(cos.filter(c=>c.financialRevenueComparable).map(c=>c.revg));const C=2*Math.PI*48;
   const cpCol=(cp,i)=>{const T=TIGHT[cp.tight]||{k:'t2'};return`<div class="cp-col ${T.k}" style="--tc:${TC[T.k]}"><div class="cp-col-h"><span class="cp-idx">卡点 0${i+1}</span>${tbBadge(cp.tight)}</div><div class="cp-name">${esc(cp.name)}</div><div class="cp-seg" title="${esc(cp.seg)}">${esc(cp.seg)}</div>${(byCp[cp.name]||[]).map(leadRow).join('')}</div>`};
   $('#topCard').innerHTML=`<div class="card-h"><div class="card-t">${ICON.target}主线拆解 · <span data-src="notion">${esc(d.name)}</span></div>${WK.mode==='none'?judgmentTag(judgmentOf(d)):lvBadge(d.total)}</div>
-  
+
   <div class="top-strip">
     <div class="ring"><svg width="112" height="112" viewBox="0 0 112 112"><circle class="trk" cx="56" cy="56" r="48" stroke-width="9" fill="none"/><circle class="bar" cx="56" cy="56" r="48" stroke-width="9" fill="none" stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${C.toFixed(2)}" data-to="${(C*(1-d.total/20)).toFixed(2)}"/></svg><div class="ctr"><div><div class="big num" data-count="${d.total}">${d.total}</div><div class="of">/ 20 综合分</div></div></div></div>
     <div class="dims">${DIMS.map(x=>`<div class="dim"><span>${x.n}</span><span class="pips" style="--c:${x.c}">${[1,2,3,4,5].map(i=>`<i class="pip ${i<=d.s[x.k]?'on':''}" style="transition-delay:${250+i*90}ms"></i>`).join('')}</span><b class="num">${d.s[x.k]}</b></div>`).join('')}</div>

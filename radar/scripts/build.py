@@ -364,8 +364,14 @@ def render(D: dict, out_dir: Path, operations=None) -> Path:
     h = (site / "index.html").read_text("utf-8")
     css = (site / "style.css").read_text("utf-8")
     js = (site / "app.js").read_text("utf-8")
-    data = json.dumps(D, ensure_ascii=False, allow_nan=False, separators=(",", ":")).replace("</", "<\\/")
-    operations_json = json.dumps(operations, ensure_ascii=False, allow_nan=False, separators=(",", ":")).replace("</", "<\\/")
+    def script_json(value):
+        encoded = json.dumps(value, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
+        for char, escaped in (('<', '\\u003c'), ('>', '\\u003e'), ('&', '\\u0026'),
+                              ('\u2028', '\\u2028'), ('\u2029', '\\u2029')):
+            encoded = encoded.replace(char, escaped)
+        return encoded
+    data = script_json(D)
+    operations_json = script_json(operations)
     title = D["meta"].get("title") or "投研雷达"
     h = h.replace("<title>投研雷达 · Alpha Radar</title>", f"<title>{esc(title)} · Alpha Radar</title>")
     h = render_into(h, D)

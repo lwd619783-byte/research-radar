@@ -69,6 +69,20 @@ class RenderV3Tests(unittest.TestCase):
             self.assertEqual(safe_url(value), '')
         self.assertEqual(safe_url('https://example.test/path'), 'https://example.test/path')
 
+    def test_embedded_json_escapes_html_and_javascript_line_separators(self):
+        import acceptance_bundle
+        data = copy.deepcopy(self.data)
+        data['meta']['title'] = '<script> & </script>\u2028\u2029'
+        operations = {'note': data['meta']['title']}
+        with tempfile.TemporaryDirectory() as directory:
+            page = build.render(data, Path(directory), operations).read_bytes()
+        self.assertEqual(acceptance_bundle.embedded_data(page), data)
+        encoded = page.decode('utf-8').split('<script>const DATA=', 1)[1].split(';</script>', 1)[0]
+        for raw in ('<', '>', '&', '\u2028', '\u2029'):
+            self.assertNotIn(raw, encoded)
+        for escaped in ('\\u003c', '\\u003e', '\\u0026', '\\u2028', '\\u2029'):
+            self.assertIn(escaped, encoded)
+
     def test_old_data_missing_optional_v3_fields_remains_readable(self):
         data = read_json(FIXTURES / 'quotes/data-2026-10-21.json')
         fragments = render_fragments(data)
