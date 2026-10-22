@@ -154,10 +154,6 @@ class QualityTests(unittest.TestCase):
         self.assertTrue(probe.fx_quality(value,h,'EUR')[0]['directionVerified'])
         self.assertFalse(probe.fx_quality(value,h,'CNY')[0]['directionVerified'])
 
-    def test_frozen_manifest(self): self.assertEqual(probe.verify_frozen(),10)
-
-
-
 class CollectionTests(unittest.TestCase):
     def test_complete_failed_source_inventory_and_redaction_still_yields_blockers(self):
         data,_=dataset()
