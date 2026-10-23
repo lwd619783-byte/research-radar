@@ -46,6 +46,26 @@ def is_session(spec, day):
     return day.weekday() < 5 and day.isoformat() not in _holidays(spec, day)
 
 
+def known_non_session(symbol, day):
+    """Can a provider tail row be excluded on confirmed calendar evidence?
+
+    An estimated weekday holiday cannot override an observed provider row.
+    Weekends use the existing exchange trading week within reviewed coverage.
+    """
+    exchange = exchange_for(symbol)
+    if not exchange:
+        return False
+    spec = calendar_data()['exchanges'][exchange]
+    try:
+        date = dt.date.fromisoformat(day)
+    except (TypeError, ValueError):
+        return False
+    if not spec['validFrom'] <= day <= spec['validThrough']:
+        return False
+    return date.weekday() >= 5 or (spec['confidenceByYear'].get(str(date.year)) == 'official'
+                                   and day in spec['holidays'])
+
+
 def session_close(spec, day):
     close = spec['earlyCloses'].get(day.isoformat(), spec['close']) if _confirmed(spec, day) else spec['close']
     return dt.datetime.combine(day, dt.time.fromisoformat(close), ZoneInfo(spec['timezone']))

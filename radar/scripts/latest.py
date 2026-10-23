@@ -5,6 +5,34 @@ from integrity import ZONES, fresh_record, number, observation_time, dated_fx
 from snapshot import completed_bars, equity_bar_final, CLOSED_QUOTE_STATES
 
 
+def calendar_completed_bars(record, bars, symbol, now):
+    """Exclude only confirmed non-session tails from provider-completed bars.
+
+    Provider-backed completed bars are checked again before removing a tail;
+    legacy closed markers alone do not authorize reselection. Do not skip an
+    actual trading day, an estimated holiday or any future provider date. The
+    exact expected close must still exist and pass the unchanged receipt gate.
+    Earlier history is retained, including dates outside calendar coverage.
+    """
+    from market_calendar import context, known_non_session
+    calendar = context(symbol, now)
+    expected, today = calendar['expectedCompletedDate'], calendar['localDate']
+    if not expected or not today or record['asOf'] > today:
+        return []
+    tail = [bar for bar in bars if bar[0] > expected]
+    if any(bar[0] > today or not known_non_session(symbol, bar[0]) for bar in tail):
+        return []
+    if tail:
+        # The legacy closed marker may preserve a series, but cannot authorize
+        # this new removal/reselection path without original provider proof.
+        timestamps = record.get('barTimestamps')
+        if not isinstance(timestamps, dict) or not equity_bar_final(
+                expected, timestamps.get(expected), record.get('timezone'),
+                record.get('finality'), record.get('receivedAt')):
+            return []
+    return [bar for bar in bars if bar[0] <= expected]
+
+
 def select_daily(companies, records, now, *, calendar_policy=False):
     selected, sources, dates = {}, {}, {}
     for c in companies:
@@ -16,6 +44,8 @@ def select_daily(companies, records, now, *, calendar_policy=False):
             try:
                 if any(dt.datetime.fromisoformat(b[0]).replace(tzinfo=ZoneInfo(r['timezone'])).utcoffset() != dt.datetime.fromisoformat(b[0]).replace(tzinfo=ZoneInfo(ZONES[c['mkt']])).utcoffset() for b in bars): bars=[]
             except (ValueError, TypeError, KeyError): bars=[]
+        if calendar_policy and bars:
+            bars = calendar_completed_bars(r, bars, c['sym'], now)
         local = now.astimezone(ZoneInfo(ZONES[c['mkt']])).date()
         if bars and (fresh_record(r, now, bars[-1][0], c['mkt'], symbol=c['sym']) if calendar_policy
                      else 0 <= (local-dt.date.fromisoformat(bars[-1][0])).days <= 4):
