@@ -192,14 +192,24 @@ def render_pulse(data, today, operations=None):
         problems.append(f'{len(quarantined)} 行研究数据有误，已沿用上次版本或暂不显示')
     # assemble() identifies cached or outdated daily observations by company
     # name in meta.stale; DATA can still carry a non-null previous price.
-    stale = set(meta.get('stale') or [])
+    missing_markers = meta.get('missing') or []
+    stale = set(meta.get('stale') or []) | set(missing_markers if isinstance(missing_markers, list) else [])
     daily_gaps = {issue.get('symbol') for issue in meta.get('issues', [])
                   if issue.get('kind') == 'daily' and issue.get('status') in ('stale', 'no_common_completed_observation')}
-    missing = sum(not number(row.get('price')) or bool(row.get('stale'))
-                  or any(row.get(key) in stale for key in ('id', 'name', 'sym'))
-                  or row.get('sym') in daily_gaps for row in data.get('companies', []))
+    missing = cached = 0
+    for row in data.get('companies', []):
+        if not number(row.get('price')):
+            missing += 1
+        elif (row.get('stale') or any(row.get(key) in stale for key in ('id', 'name', 'sym'))
+              or row.get('sym') in daily_gaps):
+            cached += 1
+    quotes = []
     if missing:
-        problems.append(f'{missing} 家行情暂缺，显示上次值')
+        quotes.append(f'{missing} 家行情暂缺')
+    if cached:
+        quotes.append(f'{cached} 家行情暂缺，显示上次值')
+    if quotes:
+        problems.append('；'.join(quotes))
     parts = [f'<span class="dot{" warn" if problems else ""}" aria-hidden="true"></span>',
              f'<span>行情更新于 <b class="num">{esc(short_time(meta.get("generatedAt"), today))}</b></span>']
     if problems:

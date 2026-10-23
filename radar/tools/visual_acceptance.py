@@ -252,8 +252,10 @@ def run(pages: Path, out: Path):
             browser = playwright.chromium.launch()
 
             def visit(name, width=1440, height=900, theme='dark', js=True, legacy=False,
-                      metadata=None, operations=None, version=None, company_patch=None):
-                result = {'name': name, 'checks': 0, 'errors': [], 'consoleErrors': [], 'pageErrors': []}
+                      metadata=None, operations=None, version=None, company_patch=None,
+                      data_patch=None):
+                result = {'name': name, 'checks': 0, 'errors': [], 'consoleErrors': [],
+                          'pageErrors': [], 'dialogs': []}
                 report['results'].append(result)
                 fixture = name if name in manifest['pages'] else 'baseline'
                 context = browser.new_context(viewport={'width': width, 'height': height},
@@ -266,6 +268,10 @@ def run(pages: Path, out: Path):
                 page.on('console', lambda message: result['consoleErrors'].append(message.text)
                         if message.type == 'error' else None)
                 page.on('pageerror', lambda error: result['pageErrors'].append(str(error)))
+                def dismiss_dialog(dialog):
+                    result['dialogs'].append({'type': dialog.type, 'message': dialog.message})
+                    dialog.dismiss()
+                page.on('dialog', dismiss_dialog)
                 navigation = {'documents': 0, 'versions': 0}
                 result['requests'] = navigation
 
@@ -278,7 +284,7 @@ def run(pages: Path, out: Path):
                         navigation['versions'] += 1
                         request.fulfill(status=200, content_type='application/json',
                                         body=json.dumps(version))
-                    elif url.path.endswith('/index.html') and (legacy or metadata or operations or company_patch):
+                    elif url.path.endswith('/index.html') and (legacy or metadata or operations or company_patch or data_patch):
                         navigation['documents'] += 1
                         html = (pages / fixture / 'index.html').read_text('utf-8')
                         data_path = pages / 'legacy-DATA.json' if legacy else pages / fixture / 'DATA.json'
@@ -287,6 +293,8 @@ def run(pages: Path, out: Path):
                             value['meta'].update(metadata)
                         if company_patch:
                             value['companies'][0].update(company_patch)
+                        if data_patch:
+                            data_patch(value)
                         data = json.dumps(value, ensure_ascii=False).replace('</', '<\\/')
                         html, count = re.subn(r'(<script>const DATA=).*?(;</script>)',
                             lambda match: match[1] + data + match[2], html, count=1, flags=re.S)
@@ -348,20 +356,21 @@ def run(pages: Path, out: Path):
             ops = {'schemaVersion': 1, 'state': 'current', 'dataSHA256': 'a' * 64,
                    'sourceSHA': 'a' * 40, 'runId': '1', 'generatedAt': manifest['fixedClock']}
             version = {**ops, 'dataSHA256': 'b' * 64}
-            for state in ('ok', 'warn', 'bad', 'new-version'):
+            for state in ('ok', 'warn', 'bad', 'new-version', 'new-version-late'):
                 metadata = dict(clean)
                 if state == 'warn':
                     metadata['notion'] = {'fallbackTables': [{'table': 'industries',
                         'code': 'notion_timeout', 'lastGoodFetchedAt': manifest['fixedClock']}],
                         'quarantined': []}
-                if state == 'bad':
+                if state in ('bad', 'new-version-late'):
                     metadata['schedule'] = {**schedule, 'nextRunAt': '2026-10-21T16:00:00+08:00'}
+                changed_version = state.startswith('new-version')
                 context, page, result = visit(f'pulse-{state}', metadata=metadata,
-                    operations=ops if state == 'new-version' else None,
-                    version=version if state == 'new-version' else None)
+                    operations=ops if changed_version else None,
+                    version=version if changed_version else None)
                 try:
                     pulse = page.locator('#pulse')
-                    expected_state = 'ok' if state == 'new-version' else state
+                    expected_state = 'ok' if changed_version else state
                     check(result, pulse.evaluate('(node, state) => node.classList.contains(state)', expected_state),
                           f'Pulse must be {expected_state}')
                     text = pulse.inner_text()
@@ -378,6 +387,8 @@ def run(pages: Path, out: Path):
                     else:
                         check(result, '有新数据' in text and page.locator('#refreshSnapshot').is_visible(),
                               'Changed version must offer refresh')
+                        check(result, '本次更新未完成' not in text,
+                              'A successful newer remote version must not inherit the old page deadline failure')
                         before = result['requests']['documents']
                         with page.expect_navigation(wait_until='networkidle'):
                             page.locator('#refreshSnapshot').click()
@@ -392,6 +403,72 @@ def run(pages: Path, out: Path):
                     result['errors'].append(f'{type(error).__name__}: {error}')
                 finally:
                     context.close()
+            context, page, result = visit('quote-without-cached-price', metadata=clean,
+                                          company_patch={'price': None})
+            try:
+                pulse = page.locator('#pulse')
+                text = pulse.inner_text()
+                check(result, 'warn' in (pulse.get_attribute('class') or '').split(),
+                      'A company without any quote must preserve a warning')
+                check(result, '行情暂缺' in text and '显示上次值' not in text and '沿用' not in text,
+                      'A company with no numeric quote must not claim a cached value exists')
+                company_id = json.loads((pages / 'baseline/DATA.json').read_text('utf-8'))['companies'][0]['id']
+                page.locator('#viewSeg button[data-v="table"]').click()
+                price_column = page.locator('#tbl thead th').evaluate_all(
+                    "nodes => nodes.findIndex(node => node.textContent.startsWith('最新价'))")
+                price = page.locator(f'#tbl tr[data-co="{company_id}"] td').nth(price_column).locator('.num')
+                check(result, price.count() == 1 and price.inner_text() == '—',
+                      'A missing quote must still render a dash in the company table')
+            except Exception as error:
+                result['errors'].append(f'{type(error).__name__}: {error}')
+            finally:
+                context.close()
+
+            # Exercise the real DATA -> KEY_IND -> startup seg() rendering path.
+            # This title fits the unmodified Notion contract, so output encoding
+            # must preserve it as literal text rather than rely on validation.
+            hostile_title = '<svg/onload=alert(1)>'
+            contract = json.loads((ROOT / 'radar/data/notion_schema.json').read_text('utf-8'))
+            def patch_industry_title(value):
+                original = value['industries'][0]['name']
+                value['industries'][0]['name'] = hostile_title
+                for collection in ('chokepoints', 'companies'):
+                    for row in value[collection]:
+                        if row.get('ind') == original:
+                            row['ind'] = hostile_title
+                if value['meta']['weekly'].get('focus') == original:
+                    value['meta']['weekly']['focus'] = hostile_title
+            context, page, result = visit('industry-title-output-encoding', data_patch=patch_industry_title)
+            try:
+                check(result, len(hostile_title) <= contract['tables']['industries']['properties']['名称']['hard_len'],
+                      'Security regression title must fit the actual industry title contract')
+                check(result, not result['dialogs'],
+                      f'Industry data must not execute JavaScript: {result["dialogs"]}')
+                for selector in ('#cpSeg', '#indSeg'):
+                    control = page.locator(selector)
+                    literal = control.get_by_role('button', name=hostile_title, exact=True)
+                    check(result, literal.count() == 1 and literal.is_visible(),
+                          f'{selector} must show the complete literal industry title')
+                    check(result, control.locator('svg,[onload],[onclick],[onerror]').count() == 0,
+                          f'{selector} must not parse industry data as markup or event attributes')
+                    if literal.count():
+                        alternate = control.locator('button').filter(has_not_text=hostile_title).first
+                        alternate.click()
+                        check(result, control.get_attribute('data-cur') != hostile_title,
+                              f'{selector} must switch away from the injected title')
+                        literal.click()
+                        check(result, control.get_attribute('data-cur') == hostile_title and
+                              'on' in (literal.get_attribute('class') or '').split(),
+                              f'{selector} must select the literal title normally')
+                page.locator('#viewSeg button[data-v="table"]').click()
+                check(result, page.locator('#tbl tbody tr[data-co]').count() > 0,
+                      'Selecting the escaped industry title must retain its linked company rows')
+                check(result, page.locator('svg[onload],svg[onclick],svg[onerror]').count() == 0,
+                      'No injected executable SVG may remain anywhere in the rendered page')
+            except Exception as error:
+                result['errors'].append(f'{type(error).__name__}: {error}')
+            finally:
+                context.close()
             company = json.loads((pages / 'baseline/DATA.json').read_text('utf-8'))['companies'][0]
             context, page, result = visit('overdue-calendar', company_patch={'next': '2026-10-20'})
             try:
@@ -405,6 +482,8 @@ def run(pages: Path, out: Path):
                           'Past earnings date must visibly state elapsed days and pending update')
                 check(result, page.locator('#soonCard ' + marker).count() == 0,
                       'Past earnings date must not enter the next-two-weeks card')
+                check(result, '官方确认 1 · 预估 36 · 待更新 1 · 待定 4' in page.locator('#calSub').inner_text(),
+                      'Calendar summary must move the past date out of upcoming estimates into pending updates')
                 external_links(page, result)
             except Exception as error:
                 result['errors'].append(f'{type(error).__name__}: {error}')
@@ -449,6 +528,7 @@ def run(pages: Path, out: Path):
     for result in report['results']:
         check(result, not result['consoleErrors'], f"Console errors: {result['consoleErrors']}")
         check(result, not result['pageErrors'], f"Page errors: {result['pageErrors']}")
+        check(result, not result['dialogs'], f"Unexpected browser dialogs: {result['dialogs']}")
     report['screenshots'] = sorted(path.name for path in out.glob('*.png'))
     report['requiredScreenshots'] = sorted(REQUIRED_SCREENSHOTS)
     report['missingScreenshots'] = sorted(REQUIRED_SCREENSHOTS - set(report['screenshots']))

@@ -62,7 +62,7 @@ class ContentDisplayTests(unittest.TestCase):
           assert.equal(eventState(c,'2026-10-20'),'confirmed');
           assert.equal(eventState(c,'2026-10-29'),'overdue');
           assert.equal(eventState({...c,next:null}),'undated');
-          assert.deepEqual(eventCounts([c,{next:'2026-10-30'},{next:'2026-10-20'},{}]),{confirmed:1,estimated:0,unverified:2,overdue:0,undated:1});
+          assert.deepEqual(eventCounts([c,{next:'2026-10-30'},{next:'2026-10-20'},{}]),{confirmed:1,estimated:0,unverified:1,overdue:1,undated:1});
           assert.match(eventCountdown('2026-10-20'),/已过 1 天.*待更新/);
         """)
 

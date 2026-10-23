@@ -130,7 +130,66 @@ class RenderV3Tests(unittest.TestCase):
                     {'id': 'B', 'name': '无报价公司', 'sym': 'BBB', 'price': None},
                     {'id': 'C', 'name': '正常公司', 'sym': 'CCC', 'price': 50},
                 ]}
-        self.assertIn('2 家行情暂缺', render_fragments(data)['PULSE'])
+        pulse = render_fragments(data)['PULSE']
+        self.assertIn('1 家行情暂缺；1 家行情暂缺，显示上次值', pulse)
+        self.assertNotIn('2 家行情暂缺，显示上次值', pulse)
+
+    def pulse_for_quotes(self, companies, **meta):
+        data = {'meta': {'today': '2026-10-21', 'generatedAt': '2026-10-21T18:15:00+08:00', **meta},
+                'industries': [], 'chokepoints': [], 'companies': companies}
+        return render_fragments(data)['PULSE']
+
+    def test_pulse_without_a_price_never_claims_a_cached_value(self):
+        for markers in ({}, {'stale': ['NEW']}, {'missing': ['NEW']},
+                        {'issues': [{'symbol': 'NEW', 'kind': 'daily', 'status': 'stale'}]}):
+            with self.subTest(markers=markers):
+                pulse = self.pulse_for_quotes([{'id': 'NEW', 'sym': 'NEW', 'price': None, 'stale': True}], **markers)
+                self.assertIn('dot warn', pulse)
+                self.assertIn('1 家行情暂缺', pulse)
+                self.assertNotIn('显示上次值', pulse)
+
+    def test_pulse_invalid_prices_are_missing_even_with_cache_markers(self):
+        for price in (None, '42', True, float('nan'), float('inf'), -float('inf')):
+            with self.subTest(price=price):
+                pulse = self.pulse_for_quotes([{'id': 'BAD', 'price': price}], stale=['BAD'])
+                self.assertIn('1 家行情暂缺', pulse)
+                self.assertNotIn('显示上次值', pulse)
+
+    def test_pulse_cached_price_accepts_all_existing_and_missing_markers(self):
+        company = {'id': 'CACHE', 'sym': 'AAA', 'name': '缓存公司', 'price': 42}
+        markers = [{'stale': [key]} for key in ('CACHE', 'AAA', '缓存公司')]
+        markers += [{'missing': [key]} for key in ('CACHE', 'AAA', '缓存公司')]
+        markers += [{'issues': [{'symbol': 'AAA', 'kind': 'daily', 'status': status}]}
+                    for status in ('stale', 'no_common_completed_observation')]
+        for meta in markers:
+            with self.subTest(markers=meta):
+                pulse = self.pulse_for_quotes([company], **meta)
+                self.assertIn('1 家行情暂缺，显示上次值', pulse)
+        self.assertIn('1 家行情暂缺，显示上次值', self.pulse_for_quotes([{**company, 'stale': True}]))
+
+    def test_pulse_duplicate_cache_markers_do_not_duplicate_a_company(self):
+        company = {'id': 'CACHE', 'sym': 'AAA', 'name': '缓存公司', 'price': 42, 'stale': True}
+        pulse = self.pulse_for_quotes([company], stale=['CACHE', 'AAA', '缓存公司', 'CACHE'],
+                                      missing=['CACHE', 'AAA'],
+                                      issues=[{'symbol': 'AAA', 'kind': 'daily', 'status': 'stale'}])
+        self.assertIn('1 家行情暂缺，显示上次值', pulse)
+        self.assertNotIn('2 家', pulse)
+
+    def test_pulse_mixed_quotes_keep_both_counts_with_research_fallback(self):
+        pulse = self.pulse_for_quotes([{'id': 'NEW', 'price': None}, {'id': 'CACHE', 'price': 42},
+                                      {'id': 'CURRENT', 'price': 50}], stale=['NEW', 'CACHE'],
+                                     notion={'fallbackTables': [{'table': 'daily'}]})
+        self.assertIn('1 张研究表沿用上次版本', pulse)
+        self.assertIn('1 家行情暂缺；1 家行情暂缺，显示上次值', pulse)
+        self.assertNotIn('2 家行情暂缺，显示上次值', pulse)
+
+    def test_pulse_current_price_ignores_other_companies_and_non_daily_issues(self):
+        pulse = self.pulse_for_quotes([{'id': 'CURRENT', 'sym': 'AAA', 'price': 0}],
+                                     stale=['OTHER'], missing=['OTHER'], issues=[
+                                         {'symbol': 'AAA', 'kind': 'financial', 'status': 'stale'},
+                                         {'symbol': 'OTHER', 'kind': 'daily', 'status': 'stale'}])
+        self.assertNotIn('行情暂缺', pulse)
+        self.assertNotIn('dot warn', pulse)
 
     def test_percentage_format_uses_half_up_unicode_minus_and_missing_marker(self):
         self.assertEqual(pct(-.00025), '−0.03%')
