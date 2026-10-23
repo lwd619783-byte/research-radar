@@ -96,7 +96,7 @@ class SlotTests(unittest.TestCase):
 
     def test_workflow_serializes_before_baseline_and_skips_every_mutation(self):
         w = json.loads((ROOT / '.github/workflows/radar-production.yml').read_text('utf-8'))
-        self.assertEqual(w['concurrency'], {'group': 'radar-production', 'cancel-in-progress': False})
+        self.assertEqual(w['concurrency'], {'group': 'radar-production', 'cancel-in-progress': False, 'queue': 'max'})
         job = w['jobs']['refresh']; steps = job['steps']; by_id = {s['id']:s for s in steps if 'id' in s}
         self.assertLess(by_id['baseline']['run'].index('release_operations.py'), by_id['baseline']['run'].index('schedule_admission.py'))
         self.assertLess(steps.index(by_id['baseline']), steps.index(by_id['collect']))
