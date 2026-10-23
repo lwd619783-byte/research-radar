@@ -1,0 +1,230 @@
+diff --git a/radar/scripts/release_operations.py b/radar/scripts/release_operations.py
+index 91a7b5e..fbe670e 100644
+--- a/radar/scripts/release_operations.py
++++ b/radar/scripts/release_operations.py
+@@ -20,6 +20,7 @@ import acceptance_bundle as bundle
+ 
+ REPO = 'lwd619783-byte/research-radar'
+ BRANCH = 'fix/radar-truthfulness-2026-10-18'
++ROLLBACK_BASELINE_SHA = 'a24e805552d8e1ce606d214a14bc08db93af50d6'
+ SITE = 'https://research-radar-lkdmkl.vercel.app'
+ WORKFLOW = f'https://github.com/{REPO}/actions/workflows/radar-production.yml'
+ DEPLOY_PREFIX = 'https://vercel.com/lkdmkl/research-radar/'
+@@ -94,14 +95,27 @@ def verify_files(root):
+ def fetch_baseline(destination):
+     destination = Path(destination)
+     commits = api('commits?sha=production&per_page=12')
++    # Keep one explicitly recorded healthy V2 candidate reachable even after
++    # weeks of V3 publications. It receives the same exact-status and content
++    # checks, plus an ancestry check; this pin never grants publication rights.
++    pinned = sha(ROLLBACK_BASELINE_SHA)
++    if not any(item.get('sha') == pinned for item in commits):
++        commits.append({'sha': pinned})
+     for c in commits:
+         commit = sha(c['sha'])
+         proof = status(commit)
+         if proof['state'] != 'success':
+             continue
++        if commit == pinned:
++            command(['git', 'merge-base', '--is-ancestor', pinned, 'origin/production'])
+         # Checkout fetched every branch without retained credentials. Read exact
+         # objects, never executable code from the production branch.
+         manifest = json.loads(command(['git', 'show', commit + ':release.json']))
++        # A rollback reads only supported historical releases; V3 is never
++        # relabelled as V2 or executed. The next supported release still goes
++        # through the unchanged file, DATA, status and history checks below.
++        if manifest.get('schemaVersion') == 3:
++            continue
+         names = ['release.json', 'vercel.json', 'verify-release.cjs', 'public/index.html', 'public/robots.txt']
+         if manifest.get('schemaVersion') == 2:
+             names += ['public/version.json', 'history.json']
+@@ -176,6 +190,9 @@ def publish(root):
+         dest = work/name
+         dest.parent.mkdir(parents=True, exist_ok=True)
+         shutil.copyfile(Path(root)/name, dest)
++    # The V2 publication has no research snapshot. Remove only this V3 file;
++    # an unexpected directory or other Git error must fail the operation.
++    command(['git', 'rm', '--ignore-unmatch', '--', 'research-snapshot.json'], work)
+     command(['git', 'config', 'user.name', 'github-actions[bot]'], work)
+     command(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], work)
+     command(['git', 'add', '--', 'public/index.html', 'public/robots.txt', 'public/version.json',
+diff --git a/radar/tests/test_rollback_v2_compatibility.py b/radar/tests/test_rollback_v2_compatibility.py
+new file mode 100644
+index 0000000..d3f3bd4
+--- /dev/null
++++ b/radar/tests/test_rollback_v2_compatibility.py
+@@ -0,0 +1,174 @@
++"""V3-to-V2 rollback preserves strict baseline checks and the V2 file set."""
++import json
++import os
++from pathlib import Path
++import shutil
++import subprocess
++import sys
++import tempfile
++import unittest
++from unittest.mock import patch
++
++ROOT = Path(__file__).resolve().parents[2]
++sys.path.insert(0, str(ROOT / 'radar/scripts'))
++import acceptance_bundle as bundle
++import release_operations as ops
++import test_release_operations as release_fixtures
++
++
++class RollbackBaselineTests(unittest.TestCase):
++    def setUp(self):
++        self.temporary = tempfile.TemporaryDirectory(prefix='radar-rollback-test-')
++        self.addCleanup(self.temporary.cleanup)
++        self.root = Path(self.temporary.name)
++        self.v2 = self.root / 'v2'
++        release_fixtures.ReleaseTests().make_release(self.v2)
++        (self.v2 / 'vercel.json').write_text('{}', encoding='utf-8')
++        shutil.copyfile(ROOT / 'radar/scripts/verify-release.cjs', self.v2 / 'verify-release.cjs')
++        self.v3sha, self.v2sha = '3' * 40, '2' * 40
++        self.reads = []
++
++    def command(self, args, cwd=None):
++        if args[:3] == ['git', 'merge-base', '--is-ancestor']:
++            self.assertEqual(args[3:], [self.v2sha, 'origin/production'])
++            self.reads.append((self.v2sha, 'ANCESTRY_CHECK'))
++            return b''
++        self.assertEqual(args[:2], ['git', 'show'])
++        commit, name = args[2].split(':', 1)
++        self.reads.append((commit, name))
++        if commit == self.v3sha:
++            self.assertEqual(name, 'release.json', 'Never read or execute V3 code as a V2 baseline')
++            return b'{"schemaVersion":3}'
++        self.assertEqual(commit, self.v2sha)
++        return (self.v2 / name).read_bytes()
++
++    def fetch(self, commits):
++        with patch.object(ops, 'api', return_value=[{'sha': c} for c in commits]), \
++             patch.object(ops, 'ROLLBACK_BASELINE_SHA', self.v2sha, create=True), \
++             patch.object(ops, 'status', side_effect=lambda c: {'state': 'success', 'productionSHA': c}), \
++             patch.object(ops, 'command', self.command):
++            return ops.fetch_baseline(self.root / 'selected')
++
++    def test_v3_is_skipped_then_complete_v2_is_strictly_verified(self):
++        proof = self.fetch([self.v3sha, self.v2sha])
++        self.assertEqual(proof['productionSHA'], self.v2sha)
++        self.assertEqual(self.reads[0], (self.v3sha, 'release.json'))
++        self.assertEqual(sum(c == self.v3sha for c, _ in self.reads), 1)
++        manifest, data = ops.verify_files(self.root / 'selected')
++        self.assertEqual(manifest['schemaVersion'], 2)
++        self.assertEqual(manifest['dataSHA256'], bundle.data_digest(data))
++
++    def test_corrupt_v2_remains_rejected_after_v3_is_skipped(self):
++        with (self.v2 / 'public/index.html').open('a', encoding='utf-8') as stream:
++            stream.write('tampered')
++        with self.assertRaisesRegex(ValueError, '^release_file_hash_mismatch$'):
++            self.fetch([self.v3sha, self.v2sha])
++
++    def test_no_supported_v2_history_fails_closed(self):
++        with patch.object(ops, 'api', return_value=[{'sha': self.v3sha}]), \
++             patch.object(ops, 'ROLLBACK_BASELINE_SHA', self.v2sha, create=True), \
++             patch.object(ops, 'status', side_effect=lambda c: {'state': 'success' if c == self.v3sha else 'failure', 'productionSHA': c}), \
++             patch.object(ops, 'command', self.command):
++            with self.assertRaisesRegex(ValueError, '^no_verified_production_baseline$'):
++                ops.fetch_baseline(self.root / 'selected')
++
++    def test_pinned_v2_after_twenty_v3_releases_still_gets_all_checks(self):
++        history = [f'{i + 100:040x}' for i in range(20)] + [self.v2sha]
++        original_command = self.command
++
++        def read(args, cwd=None):
++            if args[:2] == ['git', 'show'] and args[2].split(':', 1)[0] in history[:20]:
++                self.assertTrue(args[2].endswith(':release.json'))
++                return b'{"schemaVersion":3}'
++            return original_command(args, cwd)
++
++        with patch.object(ops, 'api', return_value=[{'sha': c} for c in history[:12]]) as api, \
++             patch.object(ops, 'ROLLBACK_BASELINE_SHA', self.v2sha), \
++             patch.object(ops, 'status', side_effect=lambda c: {'state': 'success', 'productionSHA': c}), \
++             patch.object(ops, 'command', read):
++            proof = ops.fetch_baseline(self.root / 'selected')
++        api.assert_called_once_with('commits?sha=production&per_page=12')
++        self.assertEqual(proof['productionSHA'], self.v2sha)
++        self.assertIn((self.v2sha, 'ANCESTRY_CHECK'), self.reads)
++        self.assertIn((self.v2sha, 'public/version.json'), self.reads)
++        self.assertIn((self.v2sha, 'history.json'), self.reads)
++
++    def test_pinned_commit_outside_production_history_is_rejected(self):
++        def read(args, cwd=None):
++            if args[:3] == ['git', 'merge-base', '--is-ancestor']:
++                raise ValueError('command_failed_git')
++            return self.command(args, cwd)
++        with patch.object(ops, 'api', return_value=[{'sha': self.v3sha}]), \
++             patch.object(ops, 'ROLLBACK_BASELINE_SHA', self.v2sha), \
++             patch.object(ops, 'status', side_effect=lambda c: {'state': 'success', 'productionSHA': c}), \
++             patch.object(ops, 'command', read):
++            with self.assertRaisesRegex(ValueError, '^command_failed_git$'):
++                ops.fetch_baseline(self.root / 'selected')
++
++
++class RollbackPublicationTests(unittest.TestCase):
++    def git(self, args, cwd):
++        result = subprocess.run(['git', *args], cwd=cwd, capture_output=True, timeout=30)
++        self.assertEqual(result.returncode, 0, result.stderr.decode(errors='replace'))
++        return result.stdout
++
++    def test_publication_removes_only_v3_snapshot_and_verifies_v2(self):
++        with tempfile.TemporaryDirectory(prefix='radar-rollback-publication-') as temporary:
++            root = Path(temporary)
++            release = root / 'release'
++            release_fixtures.ReleaseTests().make_release(release)
++            (release / 'vercel.json').write_text('{}', encoding='utf-8')
++            shutil.copyfile(ROOT / 'radar/scripts/verify-release.cjs', release / 'verify-release.cjs')
++            remote = root / 'local-production-history'
++            remote.mkdir()
++            self.git(['init', '-q', '-b', 'production'], remote)
++            self.git(['config', 'user.name', 'Offline rollback test'], remote)
++            self.git(['config', 'user.email', 'offline-test@example.invalid'], remote)
++            # This deliberately unusable V3 placeholder is a Git-tree input,
++            # never passed off as a valid or publishable V3 snapshot.
++            (remote / 'research-snapshot.json').write_text('{"testOnly":true}', encoding='utf-8')
++            (remote / 'retained-unrelated.txt').write_text('preserve unrelated file', encoding='utf-8')
++            self.git(['add', '--', 'research-snapshot.json', 'retained-unrelated.txt'], remote)
++            self.git(['commit', '-q', '-m', 'Local V3-shaped tree input'], remote)
++            real_command = ops.command
++            calls = []
++
++            def offline_command(args, cwd=None):
++                calls.append(args)
++                if args == ['git', 'rev-parse', 'HEAD'] and cwd is None:
++                    return ('a' * 40 + '\n').encode()
++                if args == ['gh', 'auth', 'setup-git']:
++                    return b''
++                if args[:3] == ['git', 'remote', 'add']:
++                    return real_command(args[:-1] + [str(remote)], cwd)
++                if args[:2] == ['git', 'push']:
++                    # Record the intended exact refspec, never push anywhere.
++                    self.assertEqual(args, ['git', 'push', 'origin', 'HEAD:refs/heads/production'])
++                    return b''
++                self.assertNotEqual(args[0], 'gh', 'No GitHub or credential calls in offline rehearsal')
++                return real_command(args, cwd)
++
++            env = {'GITHUB_REPOSITORY': ops.REPO, 'GITHUB_REF': 'refs/heads/' + ops.BRANCH,
++                   'GITHUB_RUN_ATTEMPT': '1', 'GITHUB_EVENT_NAME': 'push',
++                   'GITHUB_SHA': 'a' * 40, 'GITHUB_RUN_ID': '0', 'RUNNER_TEMP': str(root)}
++            with patch.dict(os.environ, env), \
++                 patch.object(ops, 'api', return_value={'object': {'sha': 'a' * 40}}), \
++                 patch.object(ops, 'command', offline_command):
++                commit = ops.publish(release)
++            checkout = root / 'publish-release'
++            self.assertEqual(commit, self.git(['rev-parse', 'HEAD'], checkout).decode().strip())
++            tree = self.git(['ls-tree', '-r', '--name-only', 'HEAD'], checkout).decode().splitlines()
++            self.assertNotIn('research-snapshot.json', tree)
++            self.assertIn('retained-unrelated.txt', tree)
++            self.assertEqual(self.git(['status', '--porcelain'], checkout), b'')
++            manifest, _ = ops.verify_files(checkout)
++            self.assertEqual(manifest['schemaVersion'], 2)
++            verified = subprocess.run(['node', 'verify-release.cjs', '--check-only'], cwd=checkout,
++                                      capture_output=True, timeout=30)
++            self.assertEqual(verified.returncode, 0, verified.stderr.decode(errors='replace'))
++            self.assertTrue(json.loads(verified.stdout)['verified'])
++            self.assertEqual(sum(args[:2] == ['git', 'push'] for args in calls), 1)
++
++
++if __name__ == '__main__':
++    unittest.main()
