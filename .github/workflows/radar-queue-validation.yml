@@ -1,0 +1,127 @@
+name: Radar queue validation (temporary)
+run-name: Radar queue validation · ${{ github.sha }}
+
+'on':
+  push:
+    branches: [v3/pr5-stable-operations]
+    paths: [.github/workflows/radar-queue-validation.yml]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: research-radar-pr5-queue-validation
+  cancel-in-progress: false
+  queue: max
+
+# Change only this literal to "2", then "3", in separate authorized pushes.
+env:
+  QUEUE_VALIDATION_SEQUENCE: '1'
+
+jobs:
+  queue_validation:
+    if: >-
+      github.repository == 'lwd619783-byte/research-radar' &&
+      github.ref == 'refs/heads/v3/pr5-stable-operations' &&
+      github.event_name == 'push' && github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Record identity and bounded execution interval
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import datetime as dt
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import time
+
+          repository = 'lwd619783-byte/research-radar'
+          ref = 'refs/heads/v3/pr5-stable-operations'
+          workflow_ref = repository + '/.github/workflows/radar-queue-validation.yml@' + ref
+          env = os.environ
+          sequence = env.get('QUEUE_VALIDATION_SEQUENCE', '')
+          if sequence not in ('1', '2', '3'):
+              raise SystemExit('queue_validation_sequence_rejected')
+          expected = {
+              'GITHUB_ACTIONS': 'true',
+              'GITHUB_REPOSITORY': repository,
+              'GITHUB_REF': ref,
+              'GITHUB_EVENT_NAME': 'push',
+              'GITHUB_RUN_ATTEMPT': '1',
+              'GITHUB_WORKFLOW_REF': workflow_ref,
+          }
+          if any(env.get(key) != value for key, value in expected.items()):
+              raise SystemExit('queue_validation_identity_rejected')
+          source_sha = env.get('GITHUB_SHA', '')
+          run_id = env.get('GITHUB_RUN_ID', '')
+          if (not re.fullmatch(r'[0-9a-f]{40}', source_sha)
+                  or env.get('GITHUB_WORKFLOW_SHA') != source_sha
+                  or not re.fullmatch(r'[0-9]+', run_id)):
+              raise SystemExit('queue_validation_sha_or_run_rejected')
+
+          output = Path(env['RUNNER_TEMP']) / 'radar-queue-validation'
+          output.mkdir(exist_ok=False)
+          receipt = output / 'receipt.json'
+          hold_seconds = 90 if sequence == '1' else 3
+          def utc_now():
+              return dt.datetime.now(dt.timezone.utc).isoformat(timespec='microseconds')
+          record = {
+              'schemaVersion': 1,
+              'purpose': 'temporary-concurrency-validation',
+              'publicationAuthorized': False,
+              'repository': repository,
+              'ref': ref,
+              'event': 'push',
+              'runId': run_id,
+              'runAttempt': 1,
+              'sourceSHA': source_sha,
+              'workflowSHA': env['GITHUB_WORKFLOW_SHA'],
+              'workflowRef': workflow_ref,
+              'sequence': int(sequence),
+              'concurrencyGroup': 'research-radar-pr5-queue-validation',
+              'queue': 'max',
+              'cancelInProgress': False,
+              'holdSeconds': hold_seconds,
+              'measurement': 'Python observation step; not queue arrival or job completion',
+              'startedAt': utc_now(),
+              'finishedAt': None,
+              'elapsedSeconds': None,
+              'state': 'running',
+          }
+          receipt.write_text(json.dumps(record, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps({'event': 'observation_started', **record}), flush=True)
+          started = time.monotonic()
+          try:
+              time.sleep(hold_seconds)
+              record['state'] = 'success'
+          finally:
+              record['finishedAt'] = utc_now()
+              record['elapsedSeconds'] = round(time.monotonic() - started, 6)
+              receipt.write_text(json.dumps(record, indent=2) + '\n', encoding='utf-8')
+              summary = (
+                  '## Temporary queue validation\n\n'
+                  '| Field | Value |\n|---|---|\n'
+                  + ''.join('| ' + key + ' | `' + str(value) + '` |\n'
+                            for key, value in record.items())
+                  + '\nObservation timestamps cover this Python step only. '
+                    'Fetch GitHub run and job records separately for queue and completion evidence.\n'
+              )
+              (output / 'summary.md').write_text(summary, encoding='utf-8')
+              with open(env['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as handle:
+                  handle.write(summary)
+              print(json.dumps({'event': 'observation_finished', **record}), flush=True)
+          PY
+      - name: Upload bounded queue evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: radar-queue-validation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/radar-queue-validation/receipt.json
+            ${{ runner.temp }}/radar-queue-validation/summary.md
+          retention-days: 7
+          if-no-files-found: error
+          include-hidden-files: false
