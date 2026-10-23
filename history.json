@@ -4383,14 +4383,14 @@
       ]
     },
     {
-      "generatedAt": "2026-10-22T22:05+08:00",
+      "generatedAt": "2026-10-22T22:17+08:00",
       "proof": {
         "state": "success",
-        "productionSHA": "3ef3b75a6985712deced1ac30c3b755a4f013f0e",
-        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/3sDritcu5wnAvi1Zk87qW2cFgsXw",
-        "reportedAt": "2026-10-22T14:05:34Z",
-        "sourceSHA": "d6ae15630139c82ff3f6fa15c8910d970816feb8",
-        "dataSHA256": "cf6b3d13ac5b47ee205b9112f4e677351771e00184365910cf9ae9ee09360b1e"
+        "productionSHA": "ef8671284dcc534c2dc9d2631541760dfae83258",
+        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/9GkcizfnHgJyR3WMfgP5q695Ec9C",
+        "reportedAt": "2026-10-23T01:31:12Z",
+        "sourceSHA": "988c6d289d9347ffb253abca0582fa19771f932f",
+        "dataSHA256": "c6e843d0f1234149af93bad23dd863c0adc278f8219d3267fb3c6867091bc95b"
       },
       "companies": [
         {
