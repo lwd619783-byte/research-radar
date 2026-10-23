@@ -31,7 +31,7 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual(schedule_metadata(data['config'], '2026-10-23T18:15:00+08:00'), {
             'cronUtc': self.config['schedule']['cron_utc'],
             'nextRunAt': '2026-10-26T06:50:00+08:00',
-            'lateAfterMinutes': 90,
+            'lateAfterMinutes': 180,
         })
 
     def test_next_run_at_weekday_friday_sunday_and_week_boundary(self):
@@ -47,7 +47,7 @@ class ScheduleTests(unittest.TestCase):
             with self.subTest(source=source):
                 result = schedule_metadata(self.config, source)
                 self.assertEqual(result['nextRunAt'], expected)
-                self.assertEqual(result['lateAfterMinutes'], 90)
+                self.assertEqual(result['lateAfterMinutes'], 180)
                 self.assertEqual(schedule_metadata(self.config, dt.datetime.fromisoformat(source)), result)
         self.assertEqual(schedule_metadata(self.config, '2026-10-21T10:15:00Z'),
                          schedule_metadata(self.config, '2026-10-21T18:15:00+08:00'))
