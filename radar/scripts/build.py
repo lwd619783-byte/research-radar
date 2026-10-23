@@ -338,7 +338,7 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
         "asOf": asof, "asOfLabel": asof_label(asof, now) if asof else None, "today": now.date().isoformat(),
         "generatedAt": now.isoformat(timespec="minutes"), "repoUrl": cfg["repo_url"], "title": cfg["title"],
         "weekly": {"week": wk.get("week", ""), "focus": wk.get("focus", ""), "lead": wk.get("lead", ""),
-                   "calHint": wk.get("calendar_hint", ""), "thermoAction": wk.get("thermo_action", ""),
+                   "calHint": wk.get("calendar_hint", ""),
                    "review": wk.get("review", {})},
         "stale": stale, "fx": {k: round(v, 4) for k, v in fx.items()},
         'asOfByMarket': {k: sorted(v) for k, v in market_dates.items()}, 'fxProvenance': fx_meta,
@@ -349,24 +349,38 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
            "companies": cos, "indices": idx, "ratio": ratio}
     if selectors:
         price_dates=sorted({c['priceAsOf'] for c in cos if c.get('priceAsOf')})
-        out['meta'].update(asOfLabel='各市场最新可得 · '+('—'.join([price_dates[0],price_dates[-1]]) if price_dates else '日期待核'),
+        out['meta'].update(asOfLabel='各市场最新可得 · '+('—'.join([price_dates[0],price_dates[-1]]) if price_dates else '日期未提供'),
             priceDateRange=price_dates, configuredIndices=[x['symbol'] for x in cfg['indices']],
             requiredFX=sorted({c['cur'] for c in data['companies']}-{'USD'}))
         out['meta']['coverage']=latest.coverage_matrix(out)
         out['meta']['coverageComplete']=all(r['status'] in ('complete','not_applicable') for r in out['meta']['coverage'])
+    from release_schedule import schedule_metadata
+    schedule = schedule_metadata(cfg, now)
+    if schedule is not None:
+        out['meta']['schedule'] = schedule
     return out, stale, missing
 
 
 def render(D: dict, out_dir: Path, operations=None) -> Path:
+    from render_v3 import esc, render_into
+    from output_scan import assert_output_safe
     site = RADAR / "site"
     h = (site / "index.html").read_text("utf-8")
     css = (site / "style.css").read_text("utf-8")
     js = (site / "app.js").read_text("utf-8")
-    data = json.dumps(D, ensure_ascii=False, allow_nan=False, separators=(",", ":")).replace("</", "<\\/")
-    operations_json = json.dumps(operations, ensure_ascii=False, allow_nan=False, separators=(",", ":")).replace("</", "<\\/")
+    def script_json(value):
+        encoded = json.dumps(value, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
+        for char, escaped in (('<', '\\u003c'), ('>', '\\u003e'), ('&', '\\u0026'),
+                              ('\u2028', '\\u2028'), ('\u2029', '\\u2029')):
+            encoded = encoded.replace(char, escaped)
+        return encoded
+    data = script_json(D)
+    operations_json = script_json(operations)
     title = D["meta"].get("title") or "投研雷达"
-    h = h.replace("<title>投研雷达 · Alpha Radar</title>", f"<title>{title} · Alpha Radar</title>")
+    h = h.replace("<title>投研雷达 · Alpha Radar</title>", f"<title>{esc(title)} · Alpha Radar</title>")
+    h = render_into(h, D, operations)
     h = h.replace("/*__CSS__*/", css).replace("/*__DATA__*/", data).replace("/*__OPERATIONS__*/", operations_json).replace("/*__JS__*/", js)
+    assert_output_safe(h, D, site_dir=site)
     out_dir.mkdir(parents=True, exist_ok=True)
     p = out_dir / "index.html"
     p.write_text(h, "utf-8")
@@ -510,6 +524,10 @@ def apply_research(market_data, research, fixed_clock, config=None, trading_days
                 item.update(reason=evidence, status={'source': 'complete', 'partial': 'partial'}.get(evidence, 'missing'))
         meta['coverage'] = coverage
         meta['coverageComplete'] = all(item['status'] in ('complete', 'not_applicable') for item in coverage)
+    from release_schedule import schedule_metadata
+    schedule = schedule_metadata(config or research_config(), fixed_clock)
+    if schedule is not None:
+        meta['schedule'] = schedule
     return apply_views(data, research, fixed_clock, config, trading_days)
 
 
@@ -620,7 +638,7 @@ def notion_main(args, config):
 def main() -> int:
     config = research_config()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('--source', choices=('notion', 'toml'), default=config.get('build', {}).get('source', 'toml'))
+    ap.add_argument('--source', choices=('notion', 'toml'), default=config.get('build', {}).get('source', 'notion'))
     ap.add_argument('--fixed-clock', help='ISO timestamp for deterministic offline builds')
     ap.add_argument('--research-snapshot', help='Last successfully published research snapshot')
     ap.add_argument('--notion-fetch', help='Sanitized collected Notion input; no credential needed')
@@ -688,7 +706,15 @@ def main() -> int:
         gh_summary('### 构建阻断：冻结前端无法安全表达当前数据\n' + '\n'.join('- ' + b for b in blockers))
         return 3
 
-    p = render(D, Path(a.out))
+    from research_snapshot import ResearchAbort
+    from research_view import CODE_TEXT
+    try:
+        p = render(D, Path(a.out))
+    except ResearchAbort as error:
+        for code in error.codes:
+            log(code, CODE_TEXT.get(code, '产物检查未通过'))
+        gh_out(changed='false')
+        return 2
     fp = fingerprint(D)
     changed = a.force or fp != cache.get("fingerprint")
     if not a.offline:
