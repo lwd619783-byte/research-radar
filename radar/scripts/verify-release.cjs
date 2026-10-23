@@ -111,6 +111,7 @@ if(embedded)checkSensitive(embedded);
 const operationSlots=[...html.matchAll(/<script id="radar-operations">const OPERATIONS=(.*?);<\/script>/gs)];
 if(operationSlots.length!==1)throw Error('release_status_slot_mismatch');
 assert.deepEqual(JSON.parse(operationSlots[0][1]),version);
+checkOperationalSchedule(m,embedded,version);
 if(needsV3Scan(html,embedded,m)) {
   assert.equal(matches.length,1);
   scanOutput(html,embedded);
@@ -184,6 +185,48 @@ function checkSchedule(schedule,clock) {
     }
   }
   if(Date.parse(schedule.nextRunAt)!==Math.min(...candidates))throw Error('release_schedule_mismatch');
+  return Math.min(...candidates);
+}
+function checkOperationalSchedule(manifest,data,version) {
+  const owns=Object.hasOwn(manifest,'scheduleAdmission');
+  if(!owns) {
+    if(Object.hasOwn(version,'schedule'))throw Error('publication_schedule_without_ownership');
+    return; // Legacy releases retain the original DATA fixed-clock contract.
+  }
+  const record=manifest.scheduleAdmission, keys=['schemaVersion','kind','slot','plannedAt','createdAt','sourceSHA','runId'];
+  const slots={'weekday-0845':[8,45,[1,2,3,4,5]],'weekday-1215':[12,15,[1,2,3,4,5]],
+    'weekday-1815':[18,15,[1,2,3,4,5]],'monday-0650':[6,50,[1]]};
+  const aware=value=>typeof value==='string'&&/(Z|[+-]\d\d:\d\d)$/.test(value)&&Number.isFinite(Date.parse(value));
+  const beijing=instant=>new Date(instant+8*3600000).toISOString().slice(0,19)+'+08:00';
+  if(!record||typeof record!=='object'||Array.isArray(record)||Object.keys(record).sort().join('|')!==keys.sort().join('|')
+    ||record.schemaVersion!==1||!['schedule','external_schedule'].includes(record.kind)||typeof record.slot!=='string'||!Object.hasOwn(slots,record.slot)
+    ||typeof record.sourceSHA!=='string'||! /^[0-9a-f]{40}$/.test(record.sourceSHA)
+    ||typeof record.runId!=='string'||! /^[0-9]+$/.test(record.runId)
+    ||record.sourceSHA!==manifest.sourceSHA||record.runId!==manifest.runId
+    ||!aware(record.createdAt)||!aware(record.plannedAt)||!aware(manifest.fixedClock))throw Error('schedule_publication_invalid');
+  const created=Date.parse(record.createdAt),fixed=Date.parse(manifest.fixedClock),local=new Date(created+8*3600000);
+  if(created>fixed)throw Error('schedule_publication_after_collection');
+  const [hour,minute,days]=slots[record.slot];
+  let planned=Date.UTC(local.getUTCFullYear(),local.getUTCMonth(),local.getUTCDate(),hour,minute)-8*3600000;
+  if(record.kind==='external_schedule') {
+    if(!days.includes(local.getUTCDay())||created<planned||created-planned>180*60000)throw Error('external_schedule_outside_slot');
+  } else {
+    for(let i=0;i<8;i++) {
+      if(planned<=created&&days.includes(new Date(planned+8*3600000).getUTCDay()))break;
+      planned-=86400000;
+    }
+  }
+  if(record.plannedAt!==beijing(planned))throw Error('schedule_publication_slot_mismatch');
+  const schedule=data?.meta?.schedule;
+  if(schedule==null&&manifest.schemaVersion<3) {
+    if(Object.hasOwn(version,'schedule'))throw Error('publication_schedule_without_data_schedule');
+    return;
+  }
+  if(!schedule||Object.keys(schedule).sort().join('|')!==['cronUtc','lateAfterMinutes','nextRunAt'].sort().join('|'))throw Error('publication_schedule_missing');
+  checkSchedule(schedule,manifest.fixedClock);
+  const next=checkSchedule(version.schedule,record.plannedAt);
+  assert.deepEqual(version.schedule,{cronUtc:schedule.cronUtc,nextRunAt:beijing(next),lateAfterMinutes:schedule.lateAfterMinutes},
+    'publication_schedule_mismatch');
 }
 if(require.main===module)verifyRelease();
 module.exports={scanOutput,needsV3Scan,BANNED_WORDS,DISCLAIMER};

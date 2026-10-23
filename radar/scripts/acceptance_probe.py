@@ -387,6 +387,15 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
     return rows,summary,quote_session,gates
 
 
+def offline_failure_summary(output, count):
+    """Expose only bounded test identifiers, never captured traceback content."""
+    failed = re.findall(r'^(?:FAIL|ERROR): (test_[A-Za-z0-9_]{1,100}) \((test_[A-Za-z0-9_.]{1,200})\)$',
+                        output, re.M)
+    return {'fatal': 'offline_tests_failed', 'tests': count,
+            'failedTests': list(dict.fromkeys(module for _, module in failed))[:50],
+            'rawOutputOmitted': True}
+
+
 def preflight():
     data,report=build.load_and_validate(build.RADAR,ROOT,dt.datetime.now(build.BJ).date())
     if report.errors: raise StopProbe('schema_errors')
@@ -394,7 +403,9 @@ def preflight():
     output=(proc.stdout+proc.stderr).decode('utf-8','replace')
     match=re.search(r'Ran (\d+) tests?',output)
     count=int(match[1]) if match else 0
-    if proc.returncode or count<55: raise StopProbe('offline_tests_failed')
+    if proc.returncode or count<55:
+        print(json.dumps(offline_failure_summary(output, count)), file=sys.stderr)
+        raise StopProbe('offline_tests_failed')
     return {'tests':count,'schemaWarnings':len(report.warnings),'schemaErrors':len(report.errors)}
 
 

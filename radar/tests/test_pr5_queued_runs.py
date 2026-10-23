@@ -21,6 +21,7 @@ sys.path.insert(0, str(ROOT / 'radar/scripts'))
 import acceptance_bundle as bundle
 import release_operations as operations
 import schedule_admission as admission
+from release_schedule import schedule_metadata
 
 SOURCE = 'a' * 40
 DAY = '2026-11-02'
@@ -56,15 +57,24 @@ def ownership(time='13:00', slot='weekday-0845', run_id='456', created='08:46'):
 
 
 def make_release(root, time='13:00', run_id='456', source=SOURCE, *, recorded=None,
-                 generated=None, price=10):
+                 generated=None, price=10, pulse=False, schedule_enabled=True):
     root.mkdir(); (root/'public').mkdir()
-    data = {'meta': {'generatedAt': generated or clock(time)}, 'companies': [
+    schedule = schedule_metadata({'cron_utc': [spec[0] for spec in admission.SLOTS.values()],
+                                  'late_after_minutes': 180}, clock(time))
+    data = {'meta': {'generatedAt': generated or clock(time), 'schedule': schedule, 'today': DAY},
+        'industries': [], 'chokepoints': [], 'companies': [
         {'id': 'TEST', 'sym': 'TEST', 'price': price, 'pricePhase': 'unknown',
          'ld': DAY, 'next': None, 'research': {'status': 'unverified'}}]}
+    if not schedule_enabled:
+        del data['meta']['schedule']
     info = {'schemaVersion': 1, 'state': 'current', 'sourceSHA': source, 'runId': run_id,
             'dataSHA256': bundle.data_digest(data), 'generatedAt': data['meta']['generatedAt']}
     page = ('<script>const DATA=' + json.dumps(data) + ';</script>\n'
             '<script id="radar-operations">const OPERATIONS=' + json.dumps(info) + ';</script>')
+    if pulse:
+        from render_v3 import render_pulse, date, DISCLAIMER
+        page += ('<div id="heroProv"></div><div class="pulse" id="pulse">' +
+                 render_pulse(data, date(DAY), info) + '</div><p id="disclaimer">' + DISCLAIMER + '</p>')
     (root/'public/index.html').write_text(page, encoding='utf-8')
     (root/'public/robots.txt').write_text('User-agent: *\nDisallow: /\n', encoding='utf-8')
     (root/'public/version.json').write_bytes(bundle.encoded(info))
@@ -77,6 +87,11 @@ def make_release(root, time='13:00', run_id='456', source=SOURCE, *, recorded=No
     if recorded is not None:
         manifest['scheduleAdmission'] = recorded
     (root/'release.json').write_bytes(bundle.encoded(manifest))
+    if recorded is not None:
+        derived = admission.publication_schedule(manifest, data)
+        if derived is not None:
+            info['schedule'] = derived
+            operations.write_operations(root, data, info)
     operations.refresh_hashes(root)
     return operations.verify_files(root)
 
@@ -175,7 +190,7 @@ class SlotOwnershipTests(unittest.TestCase):
             self.assertEqual(json.loads(log.getvalue())['plannedAt'], clock('12:15'))
 
 
-class PublishOrderTests(unittest.TestCase):
+class PublishHarness(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
@@ -200,7 +215,7 @@ class PublishOrderTests(unittest.TestCase):
     def api(self, path):
         if path == 'git/ref/heads/' + operations.BRANCH:
             return {'object': {'sha': self.remote_source}}
-        if path == 'actions/runs/456':
+        if path == 'actions/runs/' + self.env['GITHUB_RUN_ID']:
             return self.api_run
         raise AssertionError('unexpected API path: ' + path)
 
@@ -212,6 +227,8 @@ class PublishOrderTests(unittest.TestCase):
     def assert_no_commit_or_push(self):
         self.assertFalse(any(args[:2] in (['git', 'commit'], ['git', 'push']) for args in self.calls))
 
+
+class PublishOrderTests(PublishHarness):
     def test_real_publish_writes_verified_original_slot_and_not_sender_attribution(self):
         make_release(self.current, '08:30', '123')
         original, data = make_release(self.candidate)
@@ -328,6 +345,139 @@ class PublishOrderTests(unittest.TestCase):
                 'VERCEL_GIT_COMMIT_REF': 'production', 'VERCEL_GIT_COMMIT_SHA': 'c' * 40},
             capture_output=True, text=True)
         self.assertEqual(process.returncode, 0, process.stderr)
+
+
+class OperationalScheduleTests(PublishHarness):
+    @classmethod
+    def setUpClass(cls):
+        source = (ROOT/'radar/site/app.js').read_text('utf-8')
+        cls.pulse_helpers = (source[source.index('function nextScheduledRun('):source.index('function validVersion(')]
+            + source[source.index('function shortTime('):source.index('async function checkVersion(')])
+
+    def browser(self, root, now, remote=None):
+        _, data = operations.verify_files(root)
+        version = json.loads((root/'public/version.json').read_text('utf-8'))
+        setup = 'const D=' + json.dumps(data) + '; const OP=' + json.dumps(version) + ';\n'
+        setup += 'const remoteVersion=' + json.dumps(remote) + '; Date.now=()=>Date.parse(' + json.dumps(clock(now)) + ');\n'
+        setup += "const TODAY='2026-11-02',CO=[],fin=Number.isFinite,esc=x=>String(x);\n"
+        setup += "const box={className:'',innerHTML:''}, $=selector=>selector==='#pulse'?box:null;\n"
+        result = subprocess.run(['node', '-e', setup + self.pulse_helpers +
+            '\nrenderReleaseStatus();process.stdout.write(JSON.stringify(box));'],
+            capture_output=True, encoding='utf-8')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return json.loads(result.stdout)
+
+    def published_morning(self):
+        make_release(self.current, '08:30', '123')
+        _, data = make_release(self.candidate, pulse=True)
+        self.publish()
+        published = self.base/'publish-candidate'
+        self.assertEqual(operations.verify_files(published)[1], data)
+        self.assertEqual(data['meta']['schedule']['nextRunAt'], clock('18:15'))
+        return published
+
+    def node_check(self, root):
+        return subprocess.run(['node', str(ROOT/'radar/scripts/verify-release.cjs'), '--check-only'],
+            cwd=root, capture_output=True, encoding='utf-8')
+
+    def test_publish_ssr_and_js_preserve_noon_due_and_strict_180_minute_boundary(self):
+        published = self.published_morning()
+        page = (published/'public/index.html').read_text('utf-8')
+        self.assertIn('下次 <b class="num">11/2 12:15</b>', page)
+        ops = json.loads((published/'public/version.json').read_text('utf-8'))
+        self.assertEqual(ops['schedule']['nextRunAt'], clock('12:15'))
+        for now in ('13:00', '15:15'):
+            view = self.browser(published, now)
+            self.assertEqual(view['className'], 'pulse ok')
+            self.assertIn('下次 11/2 12:15', view['innerHTML'])
+        # Browser accepts seconds in its observation clock; deadline is strict >.
+        with patch(__name__ + '.clock', side_effect=lambda value: DAY+'T'+value+'+08:00'):
+            late = self.browser(published, '15:15:01')
+        self.assertEqual(late['className'], 'pulse bad')
+        self.assertIn('本次更新未完成，显示 11/2 13:00 的数据', late['innerHTML'])
+        self.assertIn('下次 11/2 18:15', late['innerHTML'])
+        self.assertEqual(self.node_check(published).returncode, 0)
+
+    def test_next_slot_success_restores_current_status_and_moves_operational_due(self):
+        morning = self.published_morning()
+        self.current = morning
+        self.candidate = self.base/'noon'
+        self.env['GITHUB_RUN_ID'] = '790'
+        self.api_run = run(self.env, clock('12:16'), clock('15:16'))
+        (self.base/'event.json').write_bytes(bundle.encoded(event('weekday-1215')))
+        make_release(self.candidate, '15:16', '790', pulse=True)
+        self.publish()
+        published = self.base/'publish-noon'
+        _, data = operations.verify_files(published)
+        view = self.browser(published, '15:17')
+        self.assertEqual(view['className'], 'pulse ok')
+        self.assertIn('下次 11/2 18:15', view['innerHTML'])
+        self.assertIn('行情更新于 11/2 15:16', view['innerHTML'])
+        self.assertEqual(data['meta']['generatedAt'], clock('15:16'))
+        self.assertEqual(self.node_check(published).returncode, 0)
+
+    def test_failure_materialize_keeps_owned_schedule_and_unchanged_data(self):
+        morning = self.published_morning()
+        previous, data = operations.verify_files(morning)
+        recovery = self.base/'failure'
+        operations.failure_release(morning, recovery, 'collect', '790', SOURCE)
+        manifest, actual = operations.verify_files(recovery)
+        version = json.loads((recovery/'public/version.json').read_text('utf-8'))
+        self.assertEqual(actual, data)
+        self.assertEqual(manifest['scheduleAdmission'], previous['scheduleAdmission'])
+        self.assertEqual(version['schedule']['nextRunAt'], clock('12:15'))
+        self.assertEqual(self.browser(recovery, '13:10')['className'], 'pulse bad')
+        self.assertIn('本次更新未完成', (recovery/'public/index.html').read_text('utf-8'))
+        self.assertEqual(self.node_check(recovery).returncode, 0)
+
+    def test_legacy_no_operational_schedule_keeps_existing_ssr_and_js_behavior(self):
+        make_release(self.candidate, pulse=True)
+        self.assertNotIn('schedule', json.loads((self.candidate/'public/version.json').read_text('utf-8')))
+        self.assertIn('下次 <b class="num">11/2 18:15</b>', (self.candidate/'public/index.html').read_text('utf-8'))
+        self.assertEqual(self.browser(self.candidate, '15:16')['className'], 'pulse ok')
+        self.assertEqual(self.node_check(self.candidate).returncode, 0)
+
+    def test_legacy_v2_without_data_schedule_accepts_bound_ownership_without_projection(self):
+        manifest, data = make_release(self.candidate, recorded=ownership(), schedule_enabled=False)
+        self.assertIsNone(admission.publication_schedule(manifest, data))
+        self.assertNotIn('schedule', json.loads((self.candidate/'public/version.json').read_text('utf-8')))
+        self.assertEqual(self.node_check(self.candidate).returncode, 0)
+
+    def test_tampered_operational_projection_rejected_even_after_hashes_refresh(self):
+        published = self.published_morning()
+        _, data = operations.verify_files(published)
+        original = json.loads((published/'public/version.json').read_text('utf-8'))
+        for field, value in (('nextRunAt', clock('18:15')), ('lateAfterMinutes', 90),
+                             ('cronUtc', ['15 10 * * 1-5']), ('extra', 'unexpected')):
+            with self.subTest(field=field):
+                altered = json.loads(json.dumps(original))
+                altered['schedule'][field] = value
+                operations.write_operations(published, data, altered)
+                operations.refresh_hashes(published)
+                with self.assertRaises(ValueError):
+                    operations.verify_files(published)
+                self.assertNotEqual(self.node_check(published).returncode, 0)
+        operations.write_operations(published, data, original)
+        operations.refresh_hashes(published)
+
+    def test_operational_schedule_requires_ownership_and_cannot_be_removed(self):
+        published = self.published_morning()
+        _, data = operations.verify_files(published)
+        original = json.loads((published/'public/version.json').read_text('utf-8'))
+        missing = dict(original); del missing['schedule']
+        operations.write_operations(published, data, missing)
+        operations.refresh_hashes(published)
+        with self.assertRaisesRegex(ValueError, 'publication_schedule_mismatch'):
+            operations.verify_files(published)
+        self.assertNotEqual(self.node_check(published).returncode, 0)
+        operations.write_operations(published, data, original)
+        operations.refresh_hashes(published)
+        manifest = json.loads((published/'release.json').read_text('utf-8'))
+        del manifest['scheduleAdmission']
+        (published/'release.json').write_bytes(bundle.encoded(manifest))
+        with self.assertRaisesRegex(ValueError, 'publication_schedule_without_ownership'):
+            operations.verify_files(published)
+        self.assertNotEqual(self.node_check(published).returncode, 0)
 
 
 if __name__ == '__main__':

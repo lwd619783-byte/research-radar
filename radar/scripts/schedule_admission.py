@@ -95,7 +95,7 @@ def publication_slot(env, run, event, now):
 def validate_published_slot(value, manifest):
     """Check the optional manifest record before it can consume any slot."""
     expected_keys = {'schemaVersion', 'kind', 'slot', 'plannedAt', 'createdAt', 'sourceSHA', 'runId'}
-    if (not isinstance(value, dict) or set(value) != expected_keys or value.get('schemaVersion') != 1
+    if (not isinstance(value, dict) or set(value) != expected_keys or type(value.get('schemaVersion')) is not int or value.get('schemaVersion') != 1
             or value.get('kind') not in ('schedule', 'external_schedule')
             or not isinstance(value.get('slot'), str) or value.get('slot') not in SLOTS
             or value.get('sourceSHA') != manifest.get('sourceSHA')
@@ -128,6 +128,25 @@ def validate_published_run(value, manifest, run):
     if aware(run['created_at']) != aware(value['createdAt']):
         raise ValueError('schedule_publication_created_mismatch')
     return slot
+
+
+def publication_schedule(manifest, data):
+    """Operational due time follows completed slot, not delayed collection.
+
+    DATA retains its fixed-clock schedule contract. This separate, verified
+    projection is published only in OPERATIONS and version.json.
+    """
+    from release_schedule import schedule_metadata
+    recorded = validate_published_slot(manifest['scheduleAdmission'], manifest)
+    schedule = data.get('meta', {}).get('schedule')
+    if schedule is None and manifest.get('schemaVersion', 0) < 3:
+        return None  # Old v2 DATA has no schedule projection to override.
+    if not isinstance(schedule, dict):
+        raise ValueError('publication_schedule_missing')
+    config = {'cron_utc': schedule.get('cronUtc'), 'late_after_minutes': schedule.get('lateAfterMinutes')}
+    if schedule != schedule_metadata(config, manifest['fixedClock']):
+        raise ValueError('publication_data_schedule_mismatch')
+    return schedule_metadata(config, recorded['plannedAt'])
 
 
 def verified_baseline(root):

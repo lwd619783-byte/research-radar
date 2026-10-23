@@ -167,9 +167,9 @@ def render_kpis(data):
 
 def render_pulse(data, today, operations=None):
     meta = data.get('meta') or {}
+    schedule = (operations or {}).get('schedule') or meta.get('schedule') or {}
     if (operations or {}).get('state') == 'failed':
         generated = short_time(meta.get('generatedAt'), today)
-        schedule = meta.get('schedule') or {}
         next_run = schedule.get('nextRunAt')
         if operations.get('attemptedAt') and schedule.get('cronUtc'):
             from release_schedule import schedule_metadata
@@ -215,7 +215,7 @@ def render_pulse(data, today, operations=None):
     if problems:
         parts += [f'<span class="msg-warn">{esc(problem)}</span>' for problem in problems[:2]]
     else:
-        next_run = (meta.get('schedule') or {}).get('nextRunAt')
+        next_run = schedule.get('nextRunAt')
         if next_run:
             parts.append(f'<span>下次 <b class="num">{esc(short_time(next_run, today))}</b></span>')
         summary = (operations or {}).get('changes') or data.get('changes') or {}

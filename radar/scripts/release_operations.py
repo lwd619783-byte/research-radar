@@ -126,6 +126,15 @@ def verify_files(root, allow_dry_run=False):
         bundle.check_sensitive(version)
         if ops != version or ops.get('dataSHA256') != m['dataSHA256'] or ops.get('sourceSHA') != m['sourceSHA']:
             raise ValueError('release_status_binding_mismatch')
+        if 'scheduleAdmission' in m:
+            from schedule_admission import publication_schedule
+            expected_schedule = publication_schedule(m, data)
+            if expected_schedule is None and 'schedule' in version:
+                raise ValueError('publication_schedule_without_data_schedule')
+            if version.get('schedule') != expected_schedule:
+                raise ValueError('publication_schedule_mismatch')
+        elif 'schedule' in version:
+            raise ValueError('publication_schedule_without_ownership')
     return m, data
 
 
@@ -192,6 +201,18 @@ def _failure_materialize(baseline, destination, stage, run_id, source_sha, data)
                attemptedSourceSHA=source_sha, attemptRunId=run_id,
                runUrl=f'https://github.com/{REPO}/actions/runs/{run_id}')
     # generatedAt, dataSHA256, daily summary, research flags all stay unchanged.
+    write_operations(destination, data, ops)
+    refresh_hashes(destination)
+    _, result = verify_files(destination)
+    if result != data:
+        raise ValueError('failure_recovery_changed_data')
+
+
+def write_operations(destination, data, ops):
+    """Update the bounded operations slots without changing embedded DATA."""
+    destination = Path(destination)
+    page = destination/'public/index.html'
+    text = page.read_text('utf-8')
     encoded = json.dumps(ops, ensure_ascii=False, allow_nan=False, separators=(',', ':'))
     for char, escaped in (('<', '\\u003c'), ('>', '\\u003e'), ('&', '\\u0026'), ('\u2028', '\\u2028'), ('\u2029', '\\u2029')):
         encoded = encoded.replace(char, escaped)
@@ -203,17 +224,16 @@ def _failure_materialize(baseline, destination, stage, run_id, source_sha, data)
         fragment = render_pulse(data, date(data['meta'].get('today')), ops)
         pulse = re.compile(r'(<div\b(?=[^>]*\bid="pulse")[^>]*>)(.*?)(</div>)', re.S)
         def replace_pulse(match):
-            opening = re.sub(r'class="[^"]*"', 'class="pulse bad"', match[1])
+            state = ' bad' if ops.get('state') == 'failed' else ''
+            opening = re.sub(r'class="[^"]*"', 'class="pulse' + state + '"', match[1])
             return opening + fragment + match[3]
         text, count = pulse.subn(replace_pulse, text)
         if count != 1:
             raise ValueError('failure_pulse_slot_mismatch')
     page.write_text(text, encoding='utf-8', newline='\n')
     (destination/'public/version.json').write_bytes(bundle.encoded(ops))
-    refresh_hashes(destination)
-    _, result = verify_files(destination)
-    if result != data:
-        raise ValueError('failure_recovery_changed_data')
+    if bundle.embedded_data(page.read_bytes()) != data:
+        raise ValueError('operations_changed_data')
 
 
 def prevent_publication_regression(candidate, data, current, current_data):
@@ -295,6 +315,13 @@ def publish(root):
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(Path(root)/name, dest)
     (work/'release.json').write_bytes(bundle.encoded(manifest))
+    if 'scheduleAdmission' in manifest:
+        from schedule_admission import publication_schedule
+        schedule = publication_schedule(manifest, data)
+        if schedule is not None:
+            version['schedule'] = schedule
+            write_operations(work, data, version)
+            refresh_hashes(work)
     verify_files(work)
     command(['git', 'config', 'user.name', 'github-actions[bot]'], work)
     command(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], work)
