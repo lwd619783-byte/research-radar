@@ -187,7 +187,7 @@ def date_ok(value):
         return False
 
 
-def daily_quality(value, h, company):
+def daily_quality(value, h, company, *, calendar_policy=False, clock=None):
     b = value.get('bars', [])
     valid = valid_bars(b)
     meta = chart_meta(h)
@@ -202,7 +202,8 @@ def daily_quality(value, h, company):
     fields = {'validBars': valid, 'adjustmentComplete': valid and all(quotes.positive(x[2]) for x in b),
               'high52Available': m.get('hi52') is not None, 'historySufficient': bool(enough),
               'currencyMatches': value.get('currency') == company['cur'], 'timezoneValidAndOffsetMatches': timezone_ok,
-              'dateFresh': bool(last and fresh_record(value, dt.datetime.now(dt.UTC), last, company['mkt']))}
+              'dateFresh': bool(last and fresh_record(value, clock or dt.datetime.now(dt.UTC), last, company['mkt'],
+                  symbol=company['sym'] if calendar_policy else None, allow_intraday=calendar_policy, phase=value.get('phase','unknown')))}
     # Tencent cannot prove currency/timezone/closed; never inherit Yahoo's metadata.
     return fields, {'count': len(b), 'firstDate': first, 'asOf': last,
                     'adjustedCount': sum(quotes.positive(x[2]) for x in b) if valid else 0,
@@ -211,10 +212,11 @@ def daily_quality(value, h, company):
                     'timezonePresent': bool(zone)}, value.get('phase') == 'closed'
 
 
-def index_quality(value, h):
+def index_quality(value, h, *, symbol=None, clock=None):
     fields = {'positivePrice': quotes.positive(value.get('price')), 'changePresent': build.number(value.get('chg')),
               'dateValid': date_ok(value.get('date')),
-              'dateFresh': fresh_record(value, dt.datetime.now(dt.UTC), value.get('date')) if value.get('date') else False}
+              'dateFresh': fresh_record(value, clock or dt.datetime.now(dt.UTC), value.get('date'), symbol=symbol,
+                  allow_intraday=bool(symbol), phase=value.get('phase','unknown')) if value.get('date') else False}
     return fields, {'count': 1 if fields['positivePrice'] else 0, 'asOf': value.get('date') if fields['dateValid'] else None,
                     'receivedAt':value.get('receivedAt'),'phase': value.get('phase', 'unknown')}, value.get('phase') == 'closed'
 
@@ -231,13 +233,13 @@ def fx_quality(value, h, currency):
                     'direction': 'USD-to-local', 'inverted': currency == 'EUR'}, True
 
 
-def month_quality(value, h):
+def month_quality(value, h, *, symbol=None, clock=None):
     b = value.get('bars', [])
     current = observation_time('ratio', value)
     ratio = build.ratio_block(b, [[m, 1.] for m, _ in b]) if b else None
     fields = {'history120Completed': bool(ratio and ratio['completedMonths'] >= 120),
               'currentDated': current is not None,
-              'dateFresh': bool(current and fresh_record(value, dt.datetime.now(dt.UTC), value['asOf']))}
+              'dateFresh': bool(current and fresh_record(value, clock or dt.datetime.now(dt.UTC), value['asOf'],symbol=symbol,allow_intraday=bool(symbol),phase='unknown'))}
     return fields, {'count': len(b), 'completedMonths': ratio['completedMonths'] if ratio else 0,
                     'asOf': value.get('asOf'), 'currentDated': current is not None}, current is not None
 
@@ -284,14 +286,15 @@ def access_affects(item, access):
             (category.startswith('index-') if item['kind']=='index' else category=='fx'))
 
 
-def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_clock=None):
+def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_clock=None, calendar_policy=False):
     companies, tencent, currencies = inventory(data)
     rows = []
     mk = {k: {} for k in ('daily', 'quote', 'index', 'fx', 'ratio')}
     for source, group, category in (('yahoo', companies, 'company-yahoo-daily'), ('tencent', tencent, 'company-tencent-backup')):
         for c in group:
             fn = quotes.yahoo_daily if source == 'yahoo' else quotes.tencent_daily
-            row, value = inspect(category, c['sym'], source, budget, lambda h: fn(h, c['sym']), lambda v,h: daily_quality(v,h,c))
+            row, value = inspect(category, c['sym'], source, budget, lambda h: fn(h, c['sym']),
+                lambda v,h: daily_quality(v,h,c,calendar_policy=calendar_policy,clock=snapshot_clock))
             rows.append(row)
             if source == 'yahoo' and value: mk['daily'][c['sym']] = value
     # The adapter executes exactly its configured 40+2 batches, with one cookie jar.
@@ -313,8 +316,9 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
                   'closedMarketState': v.get('marketState') in CLOSED_QUOTE_STATES,
                   'sourceTime': observed is not None, 'currencyMatches': v.get('currency') == c['cur'],
                   'dateMatchesDaily': bool(d and d == mk['daily'].get(c['sym'],{}).get('asOf')),
-                  'dateFresh': bool(d and fresh_record(v,snapshot_clock if snapshot_clock is not None else dt.datetime.now(dt.UTC),d,c['mkt']))}
-        selected=build.latest.select_quote(v,None,c['mkt'],c['cur'],snapshot_clock if snapshot_clock is not None else dt.datetime.now(build.BJ))[0]
+                  'dateFresh': bool(d and fresh_record(v,snapshot_clock if snapshot_clock is not None else dt.datetime.now(dt.UTC),d,c['mkt'],
+                      symbol=c['sym'] if calendar_policy else None,allow_intraday=calendar_policy,phase=build.latest.quote_phase(v)))}
+        selected=build.latest.select_quote(v,None,c['mkt'],c['cur'],snapshot_clock if snapshot_clock is not None else dt.datetime.now(build.BJ),symbol=c['sym'] if calendar_policy else None)[0]
         eps=v.get('epsTrailingTwelveMonths')
         not_applicable=v.get('trailingPE') is None and number(eps) and eps<=0
         quality=bool(selected) and fields['marketCap'] and fields['price'] and (fields['trailingPE'] or not_applicable)
@@ -329,10 +333,11 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
     for x in data['config']['indices']:
         for source in ('yahoo', 'tencent') if x.get('tencent') else ('yahoo',):
             row,value = inspect('index-'+source, x['symbol'],source,budget,
-                                lambda h: quotes.index_quote(h,x['symbol'],x.get('tencent',''),source=source),index_quality)
+                                lambda h: quotes.index_quote(h,x['symbol'],x.get('tencent',''),source=source),
+                                lambda v,h: index_quality(v,h,symbol=x['symbol'] if calendar_policy else None,clock=snapshot_clock))
             rows.append(row)
             previous=mk['index'].get(x['symbol'])
-            if value and build.latest.select_index(value,None,snapshot_clock if snapshot_clock is not None else dt.datetime.now(build.BJ)) and (not previous or value.get('date','')>previous.get('date','')):
+            if value and build.latest.select_index(value,None,snapshot_clock if snapshot_clock is not None else dt.datetime.now(build.BJ),symbol=x['symbol'] if calendar_policy else None) and (not previous or value.get('date','')>previous.get('date','')):
                 mk['index'][x['symbol']] = value
     for cur in currencies:
         row,value=inspect('fx',cur,'yahoo',budget,lambda h:quotes.fx(h,cur),lambda v,h:fx_quality(v,h,cur))
@@ -342,13 +347,17 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
     for key, prefix in (('cyb','growth'),('hl','dividend')):
         for source in ('tencent','yahoo'):
             row,value=inspect('ratio-'+source,key,source,budget,
-                lambda h:quotes.monthly(h,cfg[prefix+'_tencent'],cfg[prefix+'_yahoo']),month_quality)
+                lambda h:quotes.monthly(h,cfg[prefix+'_tencent'],cfg[prefix+'_yahoo']),
+                lambda v,h:month_quality(v,h,symbol=cfg[prefix+'_yahoo'] if calendar_policy else None,clock=snapshot_clock))
             rows.append(row)
             if source=='tencent' and value: mk['ratio'][key]=value
     # Freeze once AFTER the last source result: receivedAt must not be in the
     # future relative to this clock. Transport event times remain actual times.
     fixed_clock = snapshot_clock if snapshot_clock is not None else dt.datetime.now(build.BJ)
-    D,stale,missing=build.assemble(data,mk,mk,fixed_clock)
+    if calendar_policy:
+        D,stale,missing=build.assemble(data,mk,mk,fixed_clock,calendar_policy=True)
+    else:
+        D,stale,missing=build.assemble(data,mk,mk,fixed_clock)
     # Expose transport denial separately from empty/partial observations.
     D['meta']['sourceAccess']=[{'category':r['category'],'symbol':r['code'],'source':r['source'],'status':'access_blocked'} for r in rows if r.get('failure')=='access_refused_stop_path' or any(e.get('httpStatus') in DENIALS for e in r.get('requests',[]))]
     if any(e.get('httpStatus') in DENIALS for e in h.events):

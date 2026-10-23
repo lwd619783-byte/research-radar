@@ -19,15 +19,11 @@ from research_snapshot import (
     TABLES, SUBSTITUTABLE, ResearchAbort, load_last_good, make_snapshot,
     schema_hash, snapshot_sha256,
 )
+from research_view import public_first_sources, urls
 
 
 TOKEN = re.compile(r"\{\{earnings:([^{}]+)\}\}")
-URLS = re.compile(r"https?://[^\s<>\"'）)]+")
 SCORES = ("景气度", "业绩兑现", "卡点强度", "估值位置")
-
-
-def urls(text):
-    return list(dict.fromkeys(URLS.findall(text or "")))
 
 
 def _date(value):
@@ -372,7 +368,7 @@ def _financial_data(row, contract):
         if spec.get("enum"):
             value = spec["enum"].get(value, "")
         result[key] = value if value is not None else ""
-    result["source_urls"] = list(dict.fromkeys(([props["来源链接"]] if props.get("来源链接") else []) + urls(props.get("其他来源"))))
+    result["source_urls"] = public_first_sources(([props["来源链接"]] if props.get("来源链接") else []) + urls(props.get("其他来源")))
     result["conditions"] = [line.strip() for line in (props.get("注意事项") or "").splitlines() if line.strip()]
     if not props.get("来源链接"):
         evidence = "missing"

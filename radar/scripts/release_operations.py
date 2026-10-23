@@ -290,6 +290,23 @@ def wait_deployment(commit, timeout=300):
 
 def finish(temp, outcomes, production_sha):
     temp = Path(temp)
+    admission = os.environ.get('SCHEDULE_ADMISSION', '')
+    if admission and admission != 'allowed':
+        # Always account for skipped/rejected ticks, but never deploy a failure
+        # notice for a slot that did not attempt collection or publication.
+        safe_skip = (admission == 'skipped' and outcomes.get('baseline') == 'success'
+                     and not production_sha and all(outcomes.get(k) == 'skipped'
+                         for k in ('preflight', 'collect', 'prepare', 'publish')))
+        result = {'runId': os.environ['GITHUB_RUN_ID'], 'sourceSHA': os.environ['GITHUB_SHA'],
+                  'stages': outcomes, 'state': 'skipped' if safe_skip else 'failed',
+                  'reason': 'slot_already_published' if safe_skip else 'schedule_admission_failed'}
+        bundle.check_sensitive(result)
+        (temp/'release-result.json').write_bytes(bundle.encoded(result))
+        with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as summary:
+            summary.write('## 投研雷达发布结果\n\n' +
+                          ('该时段已有同版本成功发布，本次跳过重复刷新。' if safe_skip else
+                           '调度准入未通过，本次没有采集或发布；检查时段与安全诊断。') + '\n')
+        return result
     failed = next((k for k in ('preflight', 'baseline', 'collect', 'prepare', 'publish')
                    if outcomes.get(k) != 'success'), None)
     result = {'runId': os.environ['GITHUB_RUN_ID'], 'sourceSHA': os.environ['GITHUB_SHA'],
@@ -342,4 +359,4 @@ if __name__ == '__main__':
                     {k: v['outcome'] for k, v in json.loads(os.environ['STAGE_OUTCOMES']).items()})
         result = finish(args.path, outcomes, args.sha)
         print(json.dumps(result))
-        raise SystemExit(0 if result['state'] == 'success' else 1)
+        raise SystemExit(0 if result['state'] in ('success', 'skipped') else 1)

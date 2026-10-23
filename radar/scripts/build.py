@@ -29,6 +29,7 @@ from zoneinfo import ZoneInfo
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import quotes  # noqa: E402
 import latest
+import market_calendar
 from schema import load_and_validate  # noqa: E402
 from integrity import ZONES, fresh_record, valid_bars, financial_status, release_blockers, number, observation_time, dated_fx, pe_status
 from snapshot import select_daily, select_quote, select_index
@@ -169,7 +170,7 @@ def merge(fresh: dict, cache: dict) -> dict:
 
 
 # ---------------- 组装 DATA ----------------
-def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_policy='latest') -> tuple[dict, list[str], list[str]]:
+def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_policy='latest', calendar_policy=False) -> tuple[dict, list[str], list[str]]:
     cfg = data["config"]
     fx = {"USD": 1.0}
     fx_meta = {}
@@ -177,7 +178,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
     stale, missing, cos = [], [], []
     blockers, market_dates, issues = [], {}, []
     selectors = latest if snapshot_policy == 'latest' else None
-    daily_snapshot, snapshot = (selectors.select_daily if selectors else select_daily)(data['companies'], mk['daily'], now)
+    daily_snapshot, snapshot = (selectors.select_daily(data['companies'], mk['daily'], now, calendar_policy=calendar_policy)
+                                if selectors else select_daily(data['companies'], mk['daily'], now))
     for c in data["companies"]:
         s = c["sym"]
         original_daily = mk['daily'].get(s)
@@ -189,12 +191,12 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
             missing.append(c["name"])
             issues.append({'symbol': s, 'kind': 'daily', 'status': 'no_common_completed_observation'})
             if (isinstance(original_daily, dict) and observation_time('daily', original_daily) is not None
-                    and not fresh_record(original_daily, now, original_daily['asOf'], c['mkt'])):
+                    and not fresh_record(original_daily, now, original_daily['asOf'], c['mkt'], symbol=s if calendar_policy else None)):
                 stale.append(c['name'])
                 blockers.append('stale_quotes_not_safe_in_all_frozen_views')
             if isinstance(original_daily, dict) and original_daily.get('phase') != 'closed':
                 blockers.append('unconfirmed_close_or_intraday_needs_label_approval')
-        elif original_daily is not fresh['daily'].get(s) or not fresh_record(d, now, m['ld'], c['mkt']):
+        elif original_daily is not fresh['daily'].get(s) or not fresh_record(d, now, m['ld'], c['mkt'], symbol=s if calendar_policy else None):
             stale.append(c["name"])
             m["stale"] = True
             issues.append({'symbol': s, 'kind': 'daily', 'status': 'stale'})
@@ -210,7 +212,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
         # Quote/price currency is independent of the financial reporting currency.
         cur = (d or {}).get('currency') or c['cur']
         original_quote = mk['quote'].get(s) or {}
-        q, quote_status, observed_quote_date = (selectors.select_quote if selectors else select_quote)(original_quote, m.get('ld'), c['mkt'], cur, now)
+        q, quote_status, observed_quote_date = (selectors.select_quote(original_quote, m.get('ld'), c['mkt'], cur, now, symbol=s if calendar_policy else None)
+                                               if selectors else select_quote(original_quote, m.get('ld'), c['mkt'], cur, now))
         quote_date = observed_quote_date if q else None
         if quote_status != 'available':
             issues.append({'symbol': s, 'kind': 'valuation', 'status': quote_status,
@@ -246,6 +249,9 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
                            pricePhase=latest.quote_phase(q), priceSource=q.get('src'))
             row['metricAsOf'] = m.get('ld')
             row['mcapEstimated'] = bool(selected_fx and selected_fx.get('estimated'))
+            if calendar_policy:
+                row['marketCalendar'] = market_calendar.annotate(s, m.get('ld') or (original_daily or {}).get('asOf'), now,
+                    completed=bool(m and not m.get('stale')))
         row["hi52"] = round(hi52, 3 if hi52 < 10 else 2) if hi52 else None
         status = financial_status(c.get('financial'), now.date(), c)
         row['provenance'] = {'daily': {k: (d or {}).get(k) for k in ('src', 'asOf', 'receivedAt', 'returnBasis', 'phase', 'timezone', 'snapshotSelection')},
@@ -296,13 +302,17 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
     idx = []
     for x in cfg["indices"]:
         original_index = mk['index'].get(x['symbol'])
-        v = (selectors.select_index if selectors else select_index)(original_index, asof, now)
-        if (isinstance(v, dict) and v.get('date') and fresh_record(v, now, v['date'])
+        v = (selectors.select_index(original_index, asof, now, symbol=x['symbol'] if calendar_policy else None)
+             if selectors else select_index(original_index, asof, now))
+        if (isinstance(v, dict) and v.get('date') and fresh_record(v, now, v['date'], symbol=x['symbol'] if calendar_policy else None,
+                allow_intraday=bool(selectors), phase=v.get('phase','unknown'))
                 and number(v.get('price')) and v['price'] > 0 and number(v.get('chg'))):
             idx.append({"symbol": x["symbol"], "name": x["name"], "price": round(v["price"], 2),
                         "chg": round(v["chg"], 5), 'asOf': v['date'], 'receivedAt': v['receivedAt'], 'source': v.get('src'), 'phase': v.get('phase','unknown'),
                         'observedAt': v.get('observedAt'), 'providerLocalTime': v.get('providerLocalTime'),
                         'timezone': v.get('timezone'), 'metadataEvidence': v.get('metadataEvidence')})
+            if calendar_policy:
+                idx[-1]['marketCalendar'] = market_calendar.annotate(x['symbol'], v['date'], now, completed=v.get('phase') == 'closed')
             if not selectors and (v['date'] != asof or v.get('phase') != 'closed'):
                 blockers.append('index_date_or_phase_needs_label_approval')
         else:
@@ -315,7 +325,7 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
     ratio = None
     rc, rh = mk['ratio'].get('cyb'), mk['ratio'].get('hl')
     tc, th = observation_time('ratio', rc), observation_time('ratio', rh)
-    aligned = latest.comparable_ratio(rc,rh,now) if selectors else None
+    aligned = latest.comparable_ratio(rc,rh,now,calendar_policy=calendar_policy) if selectors else None
     ratio_date = aligned[0] if aligned else asof
     if (aligned is not None if selectors else (tc is not None and th is not None and tc == th and tc.date().isoformat() == asof
             and fresh_record(rc, now, asof) and fresh_record(rh, now, asof))):
@@ -354,6 +364,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
             requiredFX=sorted({c['cur'] for c in data['companies']}-{'USD'}))
         out['meta']['coverage']=latest.coverage_matrix(out)
         out['meta']['coverageComplete']=all(r['status'] in ('complete','not_applicable') for r in out['meta']['coverage'])
+        if calendar_policy:
+            out['meta']['marketCalendar'] = market_calendar.metadata([c['sym'] for c in data['companies']] + [x['symbol'] for x in cfg['indices']], now)
     from release_schedule import schedule_metadata
     schedule = schedule_metadata(cfg, now)
     if schedule is not None:
@@ -548,7 +560,7 @@ def assemble_notion(research, config_data, market, fresh, fixed_clock, config=No
     """Use the existing market assembler with the Notion company universe."""
     input_data = {**config_data, 'industries': research['industries'], 'chokepoints': research['chokepoints'],
                   'companies': research['companies']}
-    data, stale, missing = assemble(input_data, market, fresh, fixed_clock)
+    data, stale, missing = assemble(input_data, market, fresh, fixed_clock, calendar_policy=True)
     return apply_research(data, research, fixed_clock, config), stale, missing
 
 

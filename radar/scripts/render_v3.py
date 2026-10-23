@@ -48,7 +48,7 @@ def safe_url(value):
         return ''
     try:
         parts = urlsplit(value)
-        return value if parts.scheme in ('https', 'http') and parts.hostname and not parts.username and not parts.password else ''
+        return value if parts.scheme == 'https' and parts.hostname and not parts.username and not parts.password else ''
     except ValueError:
         return ''
 
@@ -241,7 +241,10 @@ def render_footer(data, today):
         if isinstance(requests, dict):
             requests = requests.get('total', 0)
         description = '研究数据：来自 Notion · 读取于 ' + short_time(notion.get('fetchedAt'), today) + f' · {requests} 次请求'
-    return f'<div id="dataNotes"><div class="bl">数据说明</div><p>{esc(description)}</p></div><p class="disclaimer" id="disclaimer">{DISCLAIMER}</p>'
+    warnings = (data.get('meta', {}).get('marketCalendar') or {}).get('warnings') or []
+    warnings = [value for value in warnings if isinstance(value, str) and value]
+    calendar_notes = '<ul>' + ''.join(f'<li>{esc(value)}</li>' for value in warnings) + '</ul>' if warnings else ''
+    return f'<div id="dataNotes"><div class="bl">数据说明</div><p>{esc(description)}</p>{calendar_notes}</div><p class="disclaimer" id="disclaimer">{DISCLAIMER}</p>'
 
 
 def render_fragments(data, operations=None):

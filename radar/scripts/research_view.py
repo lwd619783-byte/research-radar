@@ -5,6 +5,7 @@ import datetime as dt
 from decimal import Decimal, ROUND_HALF_UP
 import re
 import statistics
+from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo
 
 
@@ -29,8 +30,24 @@ def as_date(value):
         return None
 
 
+def is_notion_url(value):
+    try:
+        parsed = urlsplit(value)
+        host = (parsed.hostname or '').lower()
+        return (parsed.scheme in ('https', 'http') and not parsed.username and not parsed.password
+                and any(host == domain or host.endswith('.' + domain)
+                        for domain in ('notion.so', 'notion.site', 'notion.com')))
+    except (TypeError, ValueError):
+        return False
+
+
+def public_first_sources(values):
+    """Stable display order; source admission and original row contents are unchanged."""
+    return sorted(dict.fromkeys(values), key=is_notion_url)
+
+
 def urls(text):
-    return list(dict.fromkeys(re.findall(r'''https?://[^\s<>"'）)]+''', text or '')))
+    return public_first_sources(re.findall(r'''https?://[^\s<>"'）)]+''', text or ''))
 
 
 def iso_week(today):

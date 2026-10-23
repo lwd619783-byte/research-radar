@@ -22,10 +22,38 @@
       "paths": [
         "radar/**",
         ".github/workflows/radar-production.yml",
-        "audit/truthfulness-frozen.json"
+        "audit/truthfulness-frozen.json",
+        "!radar/README.md",
+        "!radar/docs/**"
       ]
     },
-    "workflow_dispatch": {}
+    "workflow_dispatch": {
+      "inputs": {
+        "trigger": {
+          "description": "Manual recovery or external schedule tick",
+          "type": "choice",
+          "required": false,
+          "default": "manual",
+          "options": [
+            "manual",
+            "external_schedule"
+          ]
+        },
+        "schedule_slot": {
+          "description": "External schedule slot; leave none for manual recovery",
+          "type": "choice",
+          "required": false,
+          "default": "none",
+          "options": [
+            "none",
+            "weekday-0845",
+            "weekday-1215",
+            "weekday-1815",
+            "monday-0650"
+          ]
+        }
+      }
+    }
   },
   "permissions": {
     "contents": "read"
@@ -41,7 +69,8 @@
       "timeout-minutes": 40,
       "permissions": {
         "contents": "write",
-        "statuses": "read"
+        "statuses": "read",
+        "actions": "read"
       },
       "steps": [
         {
@@ -63,9 +92,9 @@
           }
         },
         {
-          "name": "Read last Vercel-verified production snapshot",
+          "name": "Read verified baseline and admit scheduled slot",
           "id": "baseline",
-          "run": "python -B radar/scripts/release_operations.py baseline --path \"$RUNNER_TEMP/radar-baseline\"",
+          "run": "python -B radar/scripts/release_operations.py baseline --path \"$RUNNER_TEMP/radar-baseline\"\npython -B radar/scripts/schedule_admission.py --baseline \"$RUNNER_TEMP/radar-baseline\"",
           "env": {
             "GH_TOKEN": "${{ github.token }}"
           }
@@ -73,7 +102,8 @@
         {
           "name": "All offline regressions and contract checks before requests",
           "run": "python -B radar/scripts/acceptance_probe.py --preflight",
-          "id": "preflight"
+          "id": "preflight",
+          "if": "steps.baseline.outputs.skip != 'true'"
         },
         {
           "name": "Read Notion once, then collect bounded market data",
@@ -82,12 +112,14 @@
           "id": "collect",
           "env": {
             "NOTION_TOKEN": "${{ secrets.NOTION_TOKEN }}"
-          }
+          },
+          "if": "steps.baseline.outputs.skip != 'true'"
         },
         {
           "name": "Require fresh same-run data and all publication gates",
           "run": "python -B radar/scripts/production_release.py --bundle \"$RUNNER_TEMP/radar-current\" --out \"$RUNNER_TEMP/radar-release\" --baseline \"$RUNNER_TEMP/radar-baseline\"\ncd \"$RUNNER_TEMP/radar-release\"\nnode verify-release.cjs --check-only",
-          "id": "prepare"
+          "id": "prepare",
+          "if": "steps.baseline.outputs.skip != 'true'"
         },
         {
           "name": "Publish checked static files to production Git branch",
@@ -95,7 +127,8 @@
           "env": {
             "GH_TOKEN": "${{ github.token }}"
           },
-          "id": "publish"
+          "id": "publish",
+          "if": "steps.baseline.outputs.skip != 'true'"
         },
         {
           "name": "Verify Vercel result or retain old data with failure notice",
@@ -105,7 +138,8 @@
           "env": {
             "GH_TOKEN": "${{ github.token }}",
             "STAGE_OUTCOMES": "${{ toJSON(steps) }}",
-            "PUBLISHED_SHA": "${{ steps.publish.outputs.production_sha }}"
+            "PUBLISHED_SHA": "${{ steps.publish.outputs.production_sha }}",
+            "SCHEDULE_ADMISSION": "${{ steps.baseline.outputs.admission }}"
           },
           "run": "python -B radar/scripts/release_operations.py finish --path \"$RUNNER_TEMP\" --sha \"$PUBLISHED_SHA\""
         },

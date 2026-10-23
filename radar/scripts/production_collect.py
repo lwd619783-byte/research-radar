@@ -23,6 +23,7 @@ from notion_normalize import normalize, simplify_page
 from notion_source import TABLE_ORDER, fetch_all
 from research_snapshot import ResearchAbort, canonical_json, load_last_good, snapshot_sha256
 from research_view import CODE_TEXT
+from execution_policy import dry_run_ref_allowed
 
 REPOSITORY = 'lwd619783-byte/research-radar'
 SOURCE_BRANCH = 'fix/radar-truthfulness-2026-10-18'
@@ -39,10 +40,10 @@ class CollectError(ValueError):
 
 
 def admit(env, live_dry_run=False):
-    branch = LIVE_BRANCH if live_dry_run else SOURCE_BRANCH
+    ref_allowed = dry_run_ref_allowed(env) if live_dry_run else env.get('GITHUB_REF') == 'refs/heads/' + SOURCE_BRANCH
     events = ('workflow_dispatch',) if live_dry_run else ('schedule', 'push', 'workflow_dispatch')
     if (env.get('GITHUB_ACTIONS') != 'true' or env.get('GITHUB_REPOSITORY') != REPOSITORY or
-            env.get('GITHUB_REF') != 'refs/heads/' + branch or
+            not ref_allowed or
             env.get('GITHUB_EVENT_NAME') not in events or env.get('GITHUB_RUN_ATTEMPT') != '1' or
             not re.fullmatch(r'[0-9a-f]{40}', env.get('GITHUB_SHA', '')) or
             not re.fullmatch(r'[0-9]+', env.get('GITHUB_RUN_ID', ''))):
@@ -258,6 +259,8 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
     selected = {}
     market = {}
     kwargs = {'snapshot_sink': selected, 'market_sink': market}
+    if market_collect is None:
+        kwargs['calendar_policy'] = True
     if clock is not None:
         kwargs['snapshot_clock'] = now()
     rows, summary, session, gates = (market_collect or probe.collect)(cfg_data, budget, **kwargs)
