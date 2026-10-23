@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 import re
 import threading
+import tomllib
 from urllib.parse import urlparse
 
 from playwright.sync_api import sync_playwright
@@ -399,6 +400,29 @@ def run(pages: Path, out: Path):
                     external_links(page, result)
                     if state in ('warn', 'bad'):
                         pulse.screenshot(path=str(out / f'pulse-{state}.png'), animations='disabled')
+                except Exception as error:
+                    result['errors'].append(f'{type(error).__name__}: {error}')
+                finally:
+                    context.close()
+            threshold = tomllib.loads((ROOT / 'radar/data/config.toml').read_text('utf-8'))['schedule']['late_after_minutes']
+            fixed_clock = dt.datetime.fromisoformat(manifest['pages']['baseline']['fixedClock'])
+            for name, seconds, expected_bad in (
+                    ('threshold-179', 179 * 60, False),
+                    ('threshold-180', 180 * 60, False),
+                    ('threshold-over-180', 180 * 60 + 1, True),
+                    ('threshold-failure-persists', 24 * 60 * 60, True)):
+                due = (fixed_clock - dt.timedelta(seconds=seconds)).isoformat(timespec='seconds')
+                metadata = {**clean, 'schedule': {**schedule, 'nextRunAt': due,
+                                                'lateAfterMinutes': threshold}}
+                context, page, result = visit(name, metadata=metadata)
+                try:
+                    pulse = page.locator('#pulse')
+                    check(result, threshold == 180, 'Current configured late threshold must be exactly 180 minutes')
+                    check(result, ('bad' in (pulse.get_attribute('class') or '').split()) == expected_bad,
+                          f'{name}: actual rendered pulse must preserve the strict >180 boundary')
+                    check(result, ('本次更新未完成' in pulse.inner_text()) == expected_bad,
+                          f'{name}: absent success must retain the incomplete-update message after the deadline')
+                    pulse.screenshot(path=str(out / f'{name}.png'), animations='disabled')
                 except Exception as error:
                     result['errors'].append(f'{type(error).__name__}: {error}')
                 finally:

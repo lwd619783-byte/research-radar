@@ -170,7 +170,7 @@ function checkSnapshot(snapshot,clock) {
   }
 }
 function checkSchedule(schedule,clock) {
-  if(!schedule||!Array.isArray(schedule.cronUtc)||!schedule.cronUtc.length||!Number.isInteger(schedule.lateAfterMinutes)||schedule.lateAfterMinutes<0)throw Error('release_schedule_missing');
+  if(!schedule||!Array.isArray(schedule.cronUtc)||!schedule.cronUtc.length||!Number.isInteger(schedule.lateAfterMinutes)||(schedule.lateAfterMinutes<0||schedule.lateAfterMinutes>180))throw Error('release_schedule_missing');
   const now=Date.parse(clock), midnight=new Date(now);midnight.setUTCHours(0,0,0,0);
   const candidates=[];
   for(const expression of schedule.cronUtc) {

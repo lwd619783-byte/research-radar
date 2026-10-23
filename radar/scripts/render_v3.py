@@ -174,7 +174,7 @@ def render_pulse(data, today, operations=None):
         if operations.get('attemptedAt') and schedule.get('cronUtc'):
             from release_schedule import schedule_metadata
             next_run = schedule_metadata({'cron_utc': schedule['cronUtc'],
-                'late_after_minutes': schedule.get('lateAfterMinutes', 90)}, operations['attemptedAt'])['nextRunAt']
+                'late_after_minutes': schedule.get('lateAfterMinutes')}, operations['attemptedAt'])['nextRunAt']
         following = f'<span class="sep">·</span><span>下次 <b class="num">{esc(short_time(next_run, today))}</b></span>' if next_run else ''
         return ('<span class="dot bad" aria-hidden="true"></span>'
                 f'<span class="msg-bad">本次更新未完成，显示 {esc(generated)} 的数据</span>' + following +

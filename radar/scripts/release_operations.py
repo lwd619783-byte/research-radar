@@ -77,6 +77,9 @@ def verify_files(root, allow_dry_run=False):
     if m.get('purpose') in ('live-notion-dry-run', 'offline-rehearsal') and not diagnostic:
         raise ValueError('diagnostic_authorization_invalid')
     bundle.check_sensitive(m)
+    if 'scheduleAdmission' in m:
+        from schedule_admission import validate_published_slot
+        validate_published_slot(m['scheduleAdmission'], m)
     expected = {'index.html', 'robots.txt'} | ({'version.json'} if m['schemaVersion'] >= 2 else set())
     if set(m['files']) != expected or {p.name for p in (root/'public').iterdir()} != expected:
         raise ValueError('release_file_allowlist_mismatch')
@@ -213,23 +216,73 @@ def _failure_materialize(baseline, destination, stage, run_id, source_sha, data)
         raise ValueError('failure_recovery_changed_data')
 
 
+def prevent_publication_regression(candidate, data, current, current_data):
+    """Compare verified bytes from the freshly fetched production HEAD.
+
+    Queue order is not dispatch order. A non-force push protects the remaining
+    fetch-to-push race; these comparisons protect against an already newer HEAD.
+    Legacy releases without fixedClock still have the hash-bound generatedAt.
+    """
+    from schedule_admission import aware, validate_published_slot
+    for manifest, payload in ((candidate, data), (current, current_data)):
+        aware(payload['meta']['generatedAt'])
+        aware(manifest.get('fixedClock', payload['meta']['generatedAt']))
+    new_clock = aware(candidate.get('fixedClock', data['meta']['generatedAt']))
+    old_clock = aware(current.get('fixedClock', current_data['meta']['generatedAt']))
+    if (new_clock < old_clock or
+            aware(data['meta']['generatedAt']) < aware(current_data['meta']['generatedAt'])):
+        raise ValueError('publication_older_than_production')
+    if new_clock == old_clock and candidate['dataSHA256'] != current['dataSHA256']:
+        raise ValueError('publication_same_clock_different_data')
+    if 'scheduleAdmission' in candidate and 'scheduleAdmission' in current:
+        incoming = validate_published_slot(candidate['scheduleAdmission'], candidate)
+        previous = validate_published_slot(current['scheduleAdmission'], current)
+        if aware(incoming['plannedAt']) < aware(previous['plannedAt']):
+            raise ValueError('publication_older_schedule_slot')
+
+
 def publish(root):
     if (os.environ.get('GITHUB_REPOSITORY') != REPO or os.environ.get('GITHUB_REF') != 'refs/heads/' + BRANCH
             or os.environ.get('GITHUB_RUN_ATTEMPT') != '1'
             or os.environ.get('GITHUB_EVENT_NAME') not in ('push', 'schedule', 'workflow_dispatch')):
         raise ValueError('publication_execution_not_allowed')
-    manifest, _ = verify_files(root)
+    manifest, data = verify_files(root)
     source = sha(os.environ.get('GITHUB_SHA'))
     if command(['git', 'rev-parse', 'HEAD']).decode().strip() != source:
         raise ValueError('publication_source_mismatch')
     if api('git/ref/heads/' + BRANCH)['object']['sha'] != source:
         raise ValueError('source_advanced_skip_obsolete_release')
+    version = json.loads((Path(root)/'public/version.json').read_text('utf-8'))
+    recovery = version.get('state') == 'failed'
+    if not recovery:
+        if manifest['sourceSHA'] != source or manifest['runId'] != os.environ.get('GITHUB_RUN_ID'):
+            raise ValueError('publication_run_mismatch')
+        # Do not trust an admission clock supplied in env or in a candidate.
+        # GitHub provides the event file; API identity and created_at survive
+        # concurrency waits, unlike run_started_at or the collection clock.
+        from schedule_admission import publication_slot
+        event_path = Path(os.environ['GITHUB_EVENT_PATH'])
+        if event_path.stat().st_size > 1024 * 1024:
+            raise ValueError('schedule_event_too_large')
+        event = json.loads(event_path.read_text('utf-8'))
+        recorded = publication_slot(os.environ, api('actions/runs/' + os.environ['GITHUB_RUN_ID']),
+                                    event, manifest['fixedClock'])
+        if 'scheduleAdmission' in manifest and manifest['scheduleAdmission'] != recorded:
+            raise ValueError('publication_schedule_mismatch')
+        manifest = dict(manifest)
+        if recorded is not None:
+            manifest['scheduleAdmission'] = recorded
     command(['gh', 'auth', 'setup-git'])
     work = Path(os.environ['RUNNER_TEMP']) / ('publish-' + Path(root).name)
     command(['git', 'init', '-q', '-b', 'production', str(work)])
     command(['git', 'remote', 'add', 'origin', f'https://github.com/{REPO}.git'], work)
     command(['git', 'fetch', '-q', '--depth=1', 'origin', 'production'], work)
     command(['git', 'reset', '-q', '--hard', 'FETCH_HEAD'], work)
+    current, current_data = verify_files(work)
+    prevent_publication_regression(manifest, data, current, current_data)
+    if recovery and (manifest['dataSHA256'] != current['dataSHA256'] or
+                     manifest.get('fixedClock') != current.get('fixedClock')):
+        raise ValueError('recovery_baseline_is_no_longer_current')
     names = ['public/index.html', 'public/robots.txt', 'public/version.json', 'release.json',
              'history.json', 'vercel.json', 'verify-release.cjs']
     if manifest['schemaVersion'] == 3:
@@ -241,6 +294,8 @@ def publish(root):
         dest = work/name
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(Path(root)/name, dest)
+    (work/'release.json').write_bytes(bundle.encoded(manifest))
+    verify_files(work)
     command(['git', 'config', 'user.name', 'github-actions[bot]'], work)
     command(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], work)
     command(['git', 'add', '--', *names], work)

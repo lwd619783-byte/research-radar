@@ -82,6 +82,54 @@ def planned_slot(event_name, event, created_at, now):
     return {'kind': kind, 'slot': key, 'plannedAt': planned.isoformat(timespec='seconds')}
 
 
+def publication_slot(env, run, event, now):
+    """Derive publication ownership from the validated run, never sender clocks."""
+    validate_run(env, run)
+    slot = planned_slot(env['GITHUB_EVENT_NAME'], event, run['created_at'], now)
+    if slot is None:
+        return None
+    return dict(slot, schemaVersion=1, sourceSHA=env['GITHUB_SHA'],
+                runId=env['GITHUB_RUN_ID'], createdAt=aware(run['created_at']).isoformat(timespec='seconds'))
+
+
+def validate_published_slot(value, manifest):
+    """Check the optional manifest record before it can consume any slot."""
+    expected_keys = {'schemaVersion', 'kind', 'slot', 'plannedAt', 'createdAt', 'sourceSHA', 'runId'}
+    if (not isinstance(value, dict) or set(value) != expected_keys or value.get('schemaVersion') != 1
+            or value.get('kind') not in ('schedule', 'external_schedule')
+            or not isinstance(value.get('slot'), str) or value.get('slot') not in SLOTS
+            or value.get('sourceSHA') != manifest.get('sourceSHA')
+            or value.get('runId') != manifest.get('runId')
+            or not isinstance(value.get('sourceSHA'), str) or not isinstance(value.get('runId'), str)
+            or not re.fullmatch(r'[0-9a-f]{40}', value.get('sourceSHA', ''))
+            or not re.fullmatch(r'[0-9]+', value.get('runId', ''))):
+        raise ValueError('schedule_publication_invalid')
+    created, fixed = aware(value['createdAt']), aware(manifest['fixedClock'])
+    if created > fixed:
+        raise ValueError('schedule_publication_after_collection')
+    if value['kind'] == 'schedule':
+        name, event = 'schedule', {'schedule': SLOTS[value['slot']][0]}
+    else:
+        name, event = 'workflow_dispatch', {'inputs': {'trigger': 'external_schedule', 'schedule_slot': value['slot']}}
+    expected = planned_slot(name, event, created, fixed)
+    if any(value[key] != expected[key] for key in ('kind', 'slot', 'plannedAt')):
+        raise ValueError('schedule_publication_slot_mismatch')
+    return expected
+
+
+def validate_published_run(value, manifest, run):
+    """Verify persisted ownership against the immutable GitHub run identity."""
+    slot = validate_published_slot(value, manifest)
+    env = {'GITHUB_ACTIONS': 'true', 'GITHUB_REPOSITORY': REPOSITORY,
+           'GITHUB_REF': 'refs/heads/' + SOURCE_BRANCH, 'GITHUB_RUN_ATTEMPT': '1',
+           'GITHUB_SHA': value['sourceSHA'], 'GITHUB_RUN_ID': value['runId'],
+           'GITHUB_EVENT_NAME': 'schedule' if value['kind'] == 'schedule' else 'workflow_dispatch'}
+    validate_run(env, run)
+    if aware(run['created_at']) != aware(value['createdAt']):
+        raise ValueError('schedule_publication_created_mismatch')
+    return slot
+
+
 def verified_baseline(root):
     manifest, data = operations.verify_files(root)
     proof = json.loads((Path(root) / 'proof.json').read_text('utf-8'))
@@ -89,6 +137,10 @@ def verified_baseline(root):
             or proof.get('dataSHA256') != manifest['dataSHA256']):
         raise ValueError('schedule_baseline_unverified')
     operations.sha(proof.get('productionSHA'))
+    if 'scheduleAdmission' in manifest:
+        recorded = manifest['scheduleAdmission']
+        validate_published_slot(recorded, manifest)
+        validate_published_run(recorded, manifest, operations.api('actions/runs/' + recorded['runId']))
     state = 'current'
     if manifest['schemaVersion'] >= 2:
         state = json.loads((Path(root) / 'public/version.json').read_text('utf-8')).get('state')
@@ -103,8 +155,14 @@ def decision(slot, manifest, data, source_sha, now, *, baseline_state='current')
     fixed = aware(manifest['fixedClock'])
     if fixed > aware(now):
         raise ValueError('schedule_baseline_in_future')
+    # A queued morning run collected after noon still owns only its morning
+    # slot. Legacy manifests have no ownership record and retain the old rule.
+    published_at = fixed
+    if 'scheduleAdmission' in manifest:
+        recorded = validate_published_slot(manifest['scheduleAdmission'], manifest)
+        published_at = aware(recorded['plannedAt'])
     already_done = (baseline_state == 'current' and manifest['sourceSHA'] == source_sha and
-                    fixed >= aware(slot['plannedAt']) and
+                    published_at >= aware(slot['plannedAt']) and
                     not any(data.get('meta', {}).get(k) for k in ('fixture', 'offline', 'reviewPreview')))
     if (not already_done and slot['kind'] == 'external_schedule' and
             (aware(now) - aware(slot['plannedAt'])).total_seconds() > 60 * EXTERNAL_MAX_DELAY_MINUTES):

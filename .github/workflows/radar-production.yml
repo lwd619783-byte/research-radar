@@ -60,7 +60,8 @@
   },
   "concurrency": {
     "group": "radar-production",
-    "cancel-in-progress": false
+    "cancel-in-progress": false,
+    "queue": "max"
   },
   "jobs": {
     "refresh": {

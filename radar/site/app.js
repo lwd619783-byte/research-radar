@@ -145,7 +145,7 @@ function nextScheduledRun(crons,now=Date.now()){
     if(times.length)return Math.min(...times);
   }return null;
 }
-function scheduledDue(generated,now=Date.now(),schedule=D.meta.schedule){return!!(schedule?.nextRunAt&&Number.isFinite(Date.parse(schedule.nextRunAt))&&now>Date.parse(schedule.nextRunAt)+(schedule.lateAfterMinutes||90)*60000)}
+function scheduledDue(generated,now=Date.now(),schedule=D.meta.schedule){const late=schedule?.lateAfterMinutes;return!!(schedule?.nextRunAt&&Number.isFinite(Date.parse(schedule.nextRunAt))&&Number.isInteger(late)&&late>=0&&late<=180&&now>Date.parse(schedule.nextRunAt)+late*60000)}
 function validVersion(v){return v&&v.schemaVersion===1&&['current','failed'].includes(v.state)&&/^[a-f0-9]{64}$/.test(v.dataSHA256||'')&&/^[a-f0-9]{40}$/.test(v.sourceSHA||'')&&/^\d+$/.test(v.runId||'')}
 /* ---------- data ---------- */
 const CO=D.companies,byId={},byInd={},byCp={};
