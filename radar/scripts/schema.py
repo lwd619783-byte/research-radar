@@ -136,6 +136,19 @@ def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = 
 
     # ---- config ----
     site = cfg.get("site", {})
+    schedule = cfg.get('schedule', {})
+    if 'schedule' in cfg or cfg.get('build', {}).get('source') == 'notion':
+        from release_schedule import schedule_metadata, validate_late_after_minutes
+        try:
+            if not isinstance(schedule, dict):
+                raise ValueError('invalid_schedule')
+            # Validate this file itself; a missing field must not inherit the
+            # separately installed production configuration during --check.
+            validate_late_after_minutes(schedule.get('late_after_minutes'))
+            if schedule_metadata(schedule, dt.datetime.combine(today, dt.time(), dt.UTC)) is None:
+                raise ValueError('invalid_schedule')
+        except ValueError:
+            rep.err('config.toml [schedule]', '需要有效 cron_utc 和 0–180 的整数 late_after_minutes')
     weekly = cfg.get("weekly", {})
     weekly = {**weekly, 'review': _review(rep, 'config.toml [weekly]', weekly, today)}
     week = weekly.get('week', '')
@@ -307,6 +320,7 @@ def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = 
                     rep.err(obj['name'], f'财报日期引用不存在的公司 {ref}')
 
     data = {"config": {"title": site.get("title", "投研雷达"), "repo_url": repo_url, "kb_branch": kb_branch,
-                       "weekly": weekly, "indices": indices, "fx_fallback": fxf, "ratio": cfg.get("ratio", {})},
+                       "weekly": weekly, "indices": indices, "fx_fallback": fxf, "ratio": cfg.get("ratio", {}),
+                       "schedule": cfg.get("schedule", {})},
             "industries": industries, "chokepoints": chokepoints, "companies": companies}
     return data, rep

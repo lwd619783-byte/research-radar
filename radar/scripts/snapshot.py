@@ -12,6 +12,31 @@ from integrity import ZONES, fresh_record, fx_bar_final, number, observation_tim
 CLOSED_QUOTE_STATES = ('CLOSED', 'POST', 'POSTPOST', 'PRE', 'PREPRE')
 
 
+def equity_bar_preopen(day, timestamp, timezone, session, received_at):
+    """Classify a same-day pre-open observation, never certify its close.
+
+    Some providers return an auction/current-day bar before the regular session
+    begins. Its presence must not discard earlier, independently proven closes.
+    Both the latest bar and receipt must precede today's provider session start;
+    absent, inconsistent or future metadata remains unknown.
+    """
+    try:
+        if not isinstance(session, dict) or session.get('method') != 'provider-session-boundary':
+            return False
+        start, end = session['start'], session['end']
+        if not all(number(x) and x > 0 for x in (timestamp, start, end)) or not 0 < end-start <= 12*3600:
+            return False
+        zone = ZoneInfo(timezone)
+        received = dt.datetime.fromisoformat(received_at)
+        if received.tzinfo is None or not timestamp <= received.timestamp() < start:
+            return False
+        local_days = [dt.datetime.fromtimestamp(value, zone).date().isoformat()
+                      for value in (timestamp, start, end)]
+        return all(value == day for value in local_days) and received.astimezone(zone).date().isoformat() == day
+    except (KeyError, TypeError, ValueError, OverflowError, OSError):
+        return False
+
+
 def equity_bar_final(day, timestamp, timezone, session, received_at):
     if fx_bar_final(day, timestamp, timezone, session, received_at):
         return True
@@ -42,8 +67,14 @@ def completed_bars(record):
     if (not isinstance(record, dict) or record.get('schemaVersion') != 2
             or record.get('priceBasis') != 'raw' or not valid_bars(record.get('bars'))
             or record.get('asOf') != record['bars'][-1][0]
-            or record.get('phase') not in ('closed', 'intraday')):
+            or record.get('phase') not in ('closed', 'intraday', 'preopen')):
         return []
+    if record['phase'] == 'preopen':
+        timestamps = record.get('barTimestamps')
+        if not isinstance(timestamps, dict) or not equity_bar_preopen(
+                record['asOf'], timestamps.get(record['asOf']), record.get('timezone'),
+                record.get('finality'), record.get('receivedAt')):
+            return []
     if 'finality' in record:
         timestamps = record.get('barTimestamps') or {}
         if not isinstance(timestamps, dict):

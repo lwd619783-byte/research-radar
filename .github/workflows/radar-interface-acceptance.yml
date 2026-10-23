@@ -1,44 +1,82 @@
 {
-  "name": "Radar interface acceptance (manual only)",
-  "run-name": "Radar interface acceptance ${{ inputs.reviewed_sha }}",
+  "name": "Radar interface acceptance",
+  "run-name": "Radar interface acceptance ${{ github.event.pull_request.number || inputs.reviewed_sha }}",
   "on": {
+    "pull_request": {
+      "branches": [
+        "fix/radar-truthfulness-2026-10-18",
+        "v3/pr3-ui"
+      ]
+    },
     "workflow_dispatch": {
       "inputs": {
-        "reviewed_sha": {"description": "Exact independently reviewed commit SHA", "required": true, "type": "string"},
-        "zero_cost_verified": {"description": "Included minutes/storage and zero paid-overage budget verified", "required": true, "type": "boolean", "default": false}
+        "reviewed_sha": {
+          "description": "Exact independently reviewed commit SHA",
+          "required": false,
+          "type": "string",
+          "default": ""
+        },
+        "zero_cost_verified": {
+          "description": "Included minutes/storage and zero paid-overage budget verified",
+          "required": false,
+          "type": "boolean",
+          "default": false
+        },
+        "live_notion": {
+          "description": "Read real Notion and market data without publishing",
+          "type": "boolean",
+          "required": false,
+          "default": false
+        }
       }
     }
   },
-  "permissions": {"contents": "read"},
-  "concurrency": {"group": "radar-interface-acceptance", "cancel-in-progress": false},
+  "permissions": {
+    "contents": "read"
+  },
+  "concurrency": {
+    "group": "radar-interface-acceptance",
+    "cancel-in-progress": false
+  },
   "jobs": {
     "acceptance": {
-      "if": "github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/radar-truthfulness-2026-10-18' && github.run_attempt == 1 && inputs.zero_cost_verified == true && inputs.reviewed_sha == github.sha",
+      "if": "github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/fix/radar-truthfulness-2026-10-18' && github.run_attempt == 1 && inputs.zero_cost_verified == true && inputs.reviewed_sha == github.sha && inputs.live_notion != true",
       "runs-on": "ubuntu-24.04",
       "timeout-minutes": 20,
       "steps": [
         {
           "name": "Validate reviewed SHA and cost authorization",
-          "env": {"REVIEWED_SHA": "${{ inputs.reviewed_sha }}", "ZERO_COST_VERIFIED": "${{ inputs.zero_cost_verified }}"},
+          "env": {
+            "REVIEWED_SHA": "${{ inputs.reviewed_sha }}",
+            "ZERO_COST_VERIFIED": "${{ inputs.zero_cost_verified }}"
+          },
           "run": "set -euo pipefail\ntest \"$GITHUB_EVENT_NAME\" = workflow_dispatch\ntest \"$GITHUB_REF\" = refs/heads/fix/radar-truthfulness-2026-10-18\ntest \"$GITHUB_RUN_ATTEMPT\" = 1\ntest \"$ZERO_COST_VERIFIED\" = true\n[[ \"$REVIEWED_SHA\" =~ ^[0-9a-f]{40}$ ]]\ntest \"$REVIEWED_SHA\" = \"$GITHUB_SHA\"\n"
         },
         {
           "name": "Checkout exact execution commit",
           "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
-          "with": {"persist-credentials": false, "fetch-depth": 0, "ref": "${{ github.sha }}"}
+          "with": {
+            "persist-credentials": false,
+            "fetch-depth": 0,
+            "ref": "${{ github.sha }}"
+          }
         },
         {
           "name": "Verify checked-out HEAD equals reviewed execution SHA",
-          "env": {"REVIEWED_SHA": "${{ inputs.reviewed_sha }}"},
+          "env": {
+            "REVIEWED_SHA": "${{ inputs.reviewed_sha }}"
+          },
           "run": "set -euo pipefail\ntest \"$(git rev-parse HEAD)\" = \"$GITHUB_SHA\"\ntest \"$(git rev-parse HEAD)\" = \"$REVIEWED_SHA\"\n"
         },
         {
           "name": "Python 3.12",
           "uses": "actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
-          "with": {"python-version": "3.12"}
+          "with": {
+            "python-version": "3.12"
+          }
         },
         {
-          "name": "Offline regression, schema and frozen hashes before requests",
+          "name": "Offline regressions and schema before requests",
           "run": "python -B radar/scripts/acceptance_probe.py --preflight"
         },
         {
@@ -62,6 +100,124 @@
             "retention-days": 7,
             "if-no-files-found": "error",
             "compression-level": 9,
+            "include-hidden-files": false
+          }
+        }
+      ]
+    },
+    "visual": {
+      "if": "github.event_name == 'pull_request' && github.repository == 'lwd619783-byte/research-radar'",
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 15,
+      "steps": [
+        {
+          "name": "Checkout PR merge commit",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "persist-credentials": false,
+            "fetch-depth": 1,
+            "ref": "${{ github.sha }}"
+          }
+        },
+        {
+          "name": "Python 3.12",
+          "uses": "actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+          "with": {
+            "python-version": "3.12"
+          }
+        },
+        {
+          "name": "Install pinned browser test dependency",
+          "run": "python -m pip install --disable-pip-version-check -r radar/tools/visual-requirements.txt\npython -m playwright install --with-deps chromium"
+        },
+        {
+          "name": "Build isolated offline fixture pages",
+          "run": "python -B radar/tools/build_visual_fixtures.py --out \"$RUNNER_TEMP/radar-visual-pages\""
+        },
+        {
+          "name": "Verify six viewport/theme pairs and five state pages",
+          "run": "python -B radar/tools/visual_acceptance.py --pages \"$RUNNER_TEMP/radar-visual-pages\" --out \"$RUNNER_TEMP/radar-visual-acceptance\""
+        },
+        {
+          "name": "Upload visual review evidence",
+          "if": "always()",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "radar-v3-visual-${{ github.run_id }}",
+            "path": "${{ runner.temp }}/radar-visual-acceptance/*.png\n${{ runner.temp }}/radar-visual-acceptance/report.json",
+            "retention-days": 7,
+            "if-no-files-found": "error",
+            "compression-level": 9,
+            "include-hidden-files": false
+          }
+        }
+      ]
+    },
+    "live_notion": {
+      "if": "github.event_name == 'workflow_dispatch' && inputs.live_notion == true && github.repository == 'lwd619783-byte/research-radar' && (github.ref == 'refs/heads/v3/pr4-production' || github.ref == 'refs/heads/fix/radar-truthfulness-2026-10-18' || github.ref == 'refs/heads/v3/pr5-stable-operations') && github.run_attempt == 1",
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 40,
+      "permissions": {
+        "contents": "read",
+        "statuses": "read"
+      },
+      "steps": [
+        {
+          "name": "Checkout exact dry-run execution commit",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "ref": "${{ github.sha }}",
+            "persist-credentials": false,
+            "fetch-depth": 0
+          }
+        },
+        {
+          "name": "Validate dry-run identity",
+          "run": "set -euo pipefail\ntest \"$GITHUB_REPOSITORY\" = lwd619783-byte/research-radar\ncase \"$GITHUB_REF\" in\n  refs/heads/v3/pr4-production) ;;\n  refs/heads/fix/radar-truthfulness-2026-10-18|refs/heads/v3/pr5-stable-operations)\n    test \"$GITHUB_WORKFLOW_REF\" = \"$GITHUB_REPOSITORY/.github/workflows/radar-interface-acceptance.yml@$GITHUB_REF\"\n    test \"$GITHUB_WORKFLOW_SHA\" = \"$GITHUB_SHA\" ;;\n  *) exit 1 ;;\nesac\ntest \"$GITHUB_EVENT_NAME\" = workflow_dispatch\ntest \"$GITHUB_RUN_ATTEMPT\" = 1\ntest \"$(git rev-parse HEAD)\" = \"$GITHUB_SHA\""
+        },
+        {
+          "name": "Python 3.12",
+          "uses": "actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+          "with": {
+            "python-version": "3.12"
+          }
+        },
+        {
+          "name": "Read last verified baseline",
+          "id": "baseline",
+          "env": {
+            "GH_TOKEN": "${{ github.token }}"
+          },
+          "run": "python -B radar/scripts/release_operations.py baseline --path \"$RUNNER_TEMP/radar-baseline\""
+        },
+        {
+          "name": "All offline regressions and schema",
+          "run": "python -B radar/scripts/acceptance_probe.py --preflight"
+        },
+        {
+          "name": "Read Notion once then bounded market data",
+          "id": "collect",
+          "timeout-minutes": 20,
+          "env": {
+            "NOTION_TOKEN": "${{ secrets.NOTION_TOKEN }}"
+          },
+          "run": "python -B radar/scripts/production_collect.py --out \"$RUNNER_TEMP/radar-live-current/receipt.json\" --work \"$RUNNER_TEMP/radar-live-work\" --baseline \"$RUNNER_TEMP/radar-baseline\" --live-dry-run"
+        },
+        {
+          "name": "Prepare non-publishable release, verify and export safe evidence",
+          "id": "verify",
+          "if": "always() && (steps.collect.outcome == 'success' || steps.collect.outcome == 'failure')",
+          "run": "python -B radar/scripts/live_notion_dry_run.py --bundle \"$RUNNER_TEMP/radar-live-current\" --out \"$RUNNER_TEMP/radar-live-release\" --artifact \"$RUNNER_TEMP/live-notion-dry-run\" --baseline \"$RUNNER_TEMP/radar-baseline\" --work \"$RUNNER_TEMP/radar-live-work\""
+        },
+        {
+          "name": "Upload only safe dry-run evidence",
+          "if": "always()",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "live-notion-dry-run",
+            "path": "${{ runner.temp }}/live-notion-dry-run/*.json\n${{ runner.temp }}/live-notion-dry-run/step-summary.md",
+            "retention-days": 7,
+            "if-no-files-found": "warn",
             "include-hidden-files": false
           }
         }

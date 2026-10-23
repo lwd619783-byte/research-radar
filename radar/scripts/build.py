@@ -29,6 +29,7 @@ from zoneinfo import ZoneInfo
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import quotes  # noqa: E402
 import latest
+import market_calendar
 from schema import load_and_validate  # noqa: E402
 from integrity import ZONES, fresh_record, valid_bars, financial_status, release_blockers, number, observation_time, dated_fx, pe_status
 from snapshot import select_daily, select_quote, select_index
@@ -169,7 +170,7 @@ def merge(fresh: dict, cache: dict) -> dict:
 
 
 # ---------------- 组装 DATA ----------------
-def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_policy='latest') -> tuple[dict, list[str], list[str]]:
+def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_policy='latest', calendar_policy=False) -> tuple[dict, list[str], list[str]]:
     cfg = data["config"]
     fx = {"USD": 1.0}
     fx_meta = {}
@@ -177,7 +178,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
     stale, missing, cos = [], [], []
     blockers, market_dates, issues = [], {}, []
     selectors = latest if snapshot_policy == 'latest' else None
-    daily_snapshot, snapshot = (selectors.select_daily if selectors else select_daily)(data['companies'], mk['daily'], now)
+    daily_snapshot, snapshot = (selectors.select_daily(data['companies'], mk['daily'], now, calendar_policy=calendar_policy)
+                                if selectors else select_daily(data['companies'], mk['daily'], now))
     for c in data["companies"]:
         s = c["sym"]
         original_daily = mk['daily'].get(s)
@@ -189,12 +191,12 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
             missing.append(c["name"])
             issues.append({'symbol': s, 'kind': 'daily', 'status': 'no_common_completed_observation'})
             if (isinstance(original_daily, dict) and observation_time('daily', original_daily) is not None
-                    and not fresh_record(original_daily, now, original_daily['asOf'], c['mkt'])):
+                    and not fresh_record(original_daily, now, original_daily['asOf'], c['mkt'], symbol=s if calendar_policy else None)):
                 stale.append(c['name'])
                 blockers.append('stale_quotes_not_safe_in_all_frozen_views')
             if isinstance(original_daily, dict) and original_daily.get('phase') != 'closed':
                 blockers.append('unconfirmed_close_or_intraday_needs_label_approval')
-        elif original_daily is not fresh['daily'].get(s) or not fresh_record(d, now, m['ld'], c['mkt']):
+        elif original_daily is not fresh['daily'].get(s) or not fresh_record(d, now, m['ld'], c['mkt'], symbol=s if calendar_policy else None):
             stale.append(c["name"])
             m["stale"] = True
             issues.append({'symbol': s, 'kind': 'daily', 'status': 'stale'})
@@ -210,7 +212,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
         # Quote/price currency is independent of the financial reporting currency.
         cur = (d or {}).get('currency') or c['cur']
         original_quote = mk['quote'].get(s) or {}
-        q, quote_status, observed_quote_date = (selectors.select_quote if selectors else select_quote)(original_quote, m.get('ld'), c['mkt'], cur, now)
+        q, quote_status, observed_quote_date = (selectors.select_quote(original_quote, m.get('ld'), c['mkt'], cur, now, symbol=s if calendar_policy else None)
+                                               if selectors else select_quote(original_quote, m.get('ld'), c['mkt'], cur, now))
         quote_date = observed_quote_date if q else None
         if quote_status != 'available':
             issues.append({'symbol': s, 'kind': 'valuation', 'status': quote_status,
@@ -246,6 +249,9 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
                            pricePhase=latest.quote_phase(q), priceSource=q.get('src'))
             row['metricAsOf'] = m.get('ld')
             row['mcapEstimated'] = bool(selected_fx and selected_fx.get('estimated'))
+            if calendar_policy:
+                row['marketCalendar'] = market_calendar.annotate(s, m.get('ld') or (original_daily or {}).get('asOf'), now,
+                    completed=bool(m and not m.get('stale')))
         row["hi52"] = round(hi52, 3 if hi52 < 10 else 2) if hi52 else None
         status = financial_status(c.get('financial'), now.date(), c)
         row['provenance'] = {'daily': {k: (d or {}).get(k) for k in ('src', 'asOf', 'receivedAt', 'returnBasis', 'phase', 'timezone', 'snapshotSelection')},
@@ -296,13 +302,17 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
     idx = []
     for x in cfg["indices"]:
         original_index = mk['index'].get(x['symbol'])
-        v = (selectors.select_index if selectors else select_index)(original_index, asof, now)
-        if (isinstance(v, dict) and v.get('date') and fresh_record(v, now, v['date'])
+        v = (selectors.select_index(original_index, asof, now, symbol=x['symbol'] if calendar_policy else None)
+             if selectors else select_index(original_index, asof, now))
+        if (isinstance(v, dict) and v.get('date') and fresh_record(v, now, v['date'], symbol=x['symbol'] if calendar_policy else None,
+                allow_intraday=bool(selectors), phase=v.get('phase','unknown'))
                 and number(v.get('price')) and v['price'] > 0 and number(v.get('chg'))):
             idx.append({"symbol": x["symbol"], "name": x["name"], "price": round(v["price"], 2),
                         "chg": round(v["chg"], 5), 'asOf': v['date'], 'receivedAt': v['receivedAt'], 'source': v.get('src'), 'phase': v.get('phase','unknown'),
                         'observedAt': v.get('observedAt'), 'providerLocalTime': v.get('providerLocalTime'),
                         'timezone': v.get('timezone'), 'metadataEvidence': v.get('metadataEvidence')})
+            if calendar_policy:
+                idx[-1]['marketCalendar'] = market_calendar.annotate(x['symbol'], v['date'], now, completed=v.get('phase') == 'closed')
             if not selectors and (v['date'] != asof or v.get('phase') != 'closed'):
                 blockers.append('index_date_or_phase_needs_label_approval')
         else:
@@ -315,7 +325,7 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
     ratio = None
     rc, rh = mk['ratio'].get('cyb'), mk['ratio'].get('hl')
     tc, th = observation_time('ratio', rc), observation_time('ratio', rh)
-    aligned = latest.comparable_ratio(rc,rh,now) if selectors else None
+    aligned = latest.comparable_ratio(rc,rh,now,calendar_policy=calendar_policy) if selectors else None
     ratio_date = aligned[0] if aligned else asof
     if (aligned is not None if selectors else (tc is not None and th is not None and tc == th and tc.date().isoformat() == asof
             and fresh_record(rc, now, asof) and fresh_record(rh, now, asof))):
@@ -338,7 +348,7 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
         "asOf": asof, "asOfLabel": asof_label(asof, now) if asof else None, "today": now.date().isoformat(),
         "generatedAt": now.isoformat(timespec="minutes"), "repoUrl": cfg["repo_url"], "title": cfg["title"],
         "weekly": {"week": wk.get("week", ""), "focus": wk.get("focus", ""), "lead": wk.get("lead", ""),
-                   "calHint": wk.get("calendar_hint", ""), "thermoAction": wk.get("thermo_action", ""),
+                   "calHint": wk.get("calendar_hint", ""),
                    "review": wk.get("review", {})},
         "stale": stale, "fx": {k: round(v, 4) for k, v in fx.items()},
         'asOfByMarket': {k: sorted(v) for k, v in market_dates.items()}, 'fxProvenance': fx_meta,
@@ -349,24 +359,40 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
            "companies": cos, "indices": idx, "ratio": ratio}
     if selectors:
         price_dates=sorted({c['priceAsOf'] for c in cos if c.get('priceAsOf')})
-        out['meta'].update(asOfLabel='各市场最新可得 · '+('—'.join([price_dates[0],price_dates[-1]]) if price_dates else '日期待核'),
+        out['meta'].update(asOfLabel='各市场最新可得 · '+('—'.join([price_dates[0],price_dates[-1]]) if price_dates else '日期未提供'),
             priceDateRange=price_dates, configuredIndices=[x['symbol'] for x in cfg['indices']],
             requiredFX=sorted({c['cur'] for c in data['companies']}-{'USD'}))
         out['meta']['coverage']=latest.coverage_matrix(out)
         out['meta']['coverageComplete']=all(r['status'] in ('complete','not_applicable') for r in out['meta']['coverage'])
+        if calendar_policy:
+            out['meta']['marketCalendar'] = market_calendar.metadata([c['sym'] for c in data['companies']] + [x['symbol'] for x in cfg['indices']], now)
+    from release_schedule import schedule_metadata
+    schedule = schedule_metadata(cfg, now)
+    if schedule is not None:
+        out['meta']['schedule'] = schedule
     return out, stale, missing
 
 
 def render(D: dict, out_dir: Path, operations=None) -> Path:
+    from render_v3 import esc, render_into
+    from output_scan import assert_output_safe
     site = RADAR / "site"
     h = (site / "index.html").read_text("utf-8")
     css = (site / "style.css").read_text("utf-8")
     js = (site / "app.js").read_text("utf-8")
-    data = json.dumps(D, ensure_ascii=False, allow_nan=False, separators=(",", ":")).replace("</", "<\\/")
-    operations_json = json.dumps(operations, ensure_ascii=False, allow_nan=False, separators=(",", ":")).replace("</", "<\\/")
+    def script_json(value):
+        encoded = json.dumps(value, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
+        for char, escaped in (('<', '\\u003c'), ('>', '\\u003e'), ('&', '\\u0026'),
+                              ('\u2028', '\\u2028'), ('\u2029', '\\u2029')):
+            encoded = encoded.replace(char, escaped)
+        return encoded
+    data = script_json(D)
+    operations_json = script_json(operations)
     title = D["meta"].get("title") or "投研雷达"
-    h = h.replace("<title>投研雷达 · Alpha Radar</title>", f"<title>{title} · Alpha Radar</title>")
+    h = h.replace("<title>投研雷达 · Alpha Radar</title>", f"<title>{esc(title)} · Alpha Radar</title>")
+    h = render_into(h, D, operations)
     h = h.replace("/*__CSS__*/", css).replace("/*__DATA__*/", data).replace("/*__OPERATIONS__*/", operations_json).replace("/*__JS__*/", js)
+    assert_output_safe(h, D, site_dir=site)
     out_dir.mkdir(parents=True, exist_ok=True)
     p = out_dir / "index.html"
     p.write_text(h, "utf-8")
@@ -510,6 +536,10 @@ def apply_research(market_data, research, fixed_clock, config=None, trading_days
                 item.update(reason=evidence, status={'source': 'complete', 'partial': 'partial'}.get(evidence, 'missing'))
         meta['coverage'] = coverage
         meta['coverageComplete'] = all(item['status'] in ('complete', 'not_applicable') for item in coverage)
+    from release_schedule import schedule_metadata
+    schedule = schedule_metadata(config or research_config(), fixed_clock)
+    if schedule is not None:
+        meta['schedule'] = schedule
     return apply_views(data, research, fixed_clock, config, trading_days)
 
 
@@ -530,7 +560,7 @@ def assemble_notion(research, config_data, market, fresh, fixed_clock, config=No
     """Use the existing market assembler with the Notion company universe."""
     input_data = {**config_data, 'industries': research['industries'], 'chokepoints': research['chokepoints'],
                   'companies': research['companies']}
-    data, stale, missing = assemble(input_data, market, fresh, fixed_clock)
+    data, stale, missing = assemble(input_data, market, fresh, fixed_clock, calendar_policy=True)
     return apply_research(data, research, fixed_clock, config), stale, missing
 
 
@@ -620,7 +650,7 @@ def notion_main(args, config):
 def main() -> int:
     config = research_config()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('--source', choices=('notion', 'toml'), default=config.get('build', {}).get('source', 'toml'))
+    ap.add_argument('--source', choices=('notion', 'toml'), default=config.get('build', {}).get('source', 'notion'))
     ap.add_argument('--fixed-clock', help='ISO timestamp for deterministic offline builds')
     ap.add_argument('--research-snapshot', help='Last successfully published research snapshot')
     ap.add_argument('--notion-fetch', help='Sanitized collected Notion input; no credential needed')
@@ -688,7 +718,15 @@ def main() -> int:
         gh_summary('### 构建阻断：冻结前端无法安全表达当前数据\n' + '\n'.join('- ' + b for b in blockers))
         return 3
 
-    p = render(D, Path(a.out))
+    from research_snapshot import ResearchAbort
+    from research_view import CODE_TEXT
+    try:
+        p = render(D, Path(a.out))
+    except ResearchAbort as error:
+        for code in error.codes:
+            log(code, CODE_TEXT.get(code, '产物检查未通过'))
+        gh_out(changed='false')
+        return 2
     fp = fingerprint(D)
     changed = a.force or fp != cache.get("fingerprint")
     if not a.offline:

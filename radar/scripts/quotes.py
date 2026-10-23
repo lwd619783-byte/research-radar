@@ -15,7 +15,7 @@ import urllib.error
 from zoneinfo import ZoneInfo
 
 from integrity import observation_time, fx_bar_final
-from snapshot import equity_bar_final
+from snapshot import equity_bar_final, equity_bar_preopen
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
@@ -127,6 +127,8 @@ def yahoo_daily(h: Http, sym: str, rng: str = "5y") -> dict:
                             'start': regular.get('start'), 'end': regular.get('end')})
     if equity_bar_final(out[-1][0], timestamps[out[-1][0]], value['timezone'], value['finality'], value['receivedAt']):
         value['phase'] = 'closed'
+    elif equity_bar_preopen(out[-1][0], timestamps[out[-1][0]], value['timezone'], value['finality'], value['receivedAt']):
+        value['phase'] = 'preopen'
     else:
         # Intraday classification requires valid provider boundaries too; missing
         # metadata stays unknown and cannot authorize historical trimming.
@@ -256,6 +258,10 @@ def index_quote(h: Http, sym: str, tencent: str = "", source: str | None = None)
             history = d
             bars = d['bars']
             provenance = {k: d.get(k) for k in ('src', 'phase','timezone','currency')}
+            # Pre-open proof only preserves older completed daily history. The
+            # current index level keeps its existing unknown/partial status.
+            if provenance['phase'] == 'preopen':
+                provenance['phase'] = 'unknown'
             provenance['observedAt'] = d.get('barTimestamps',{}).get(d.get('asOf'))
             if len(bars) < 2:
                 raise SourceDataError('yahoo_index_insufficient_daily_bars', len(bars))

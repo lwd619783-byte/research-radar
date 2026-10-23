@@ -1,5 +1,6 @@
 """Small factual projections of verified releases, never a new research opinion."""
 import datetime as dt
+import copy
 import math
 
 
@@ -7,11 +8,26 @@ def numeric(value):
     return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
 
 
-def project(data, proof):
+BEIJING = dt.timezone(dt.timedelta(hours=8))
+
+
+def clock(value):
+    parsed = dt.datetime.fromisoformat(value)
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        raise ValueError('history_clock_without_timezone')
+    return parsed
+
+
+def local_day(value):
+    return clock(value).astimezone(BEIJING).date().isoformat()
+
+
+def project(data, proof, changes_today=None):
     rows = []
     for c in data['companies']:
-        daily = c.get('provenance', {}).get('daily', {})
-        f = c.get('provenance', {}).get('financial', {})
+        provenance = c.get('provenance') or {}
+        daily = provenance.get('daily') or {}
+        f = provenance.get('financial') or {}
         # Displayed price may be intraday. Only the admitted, completed daily close
         # and its own date/basis enter comparisons.
         close = (c.get('sc') or [None])[-1]
@@ -24,10 +40,14 @@ def project(data, proof):
             'basis': daily.get('returnBasis'),
             'r1d': c.get('r1d'),
             'financial': {k: f.get(k) for k in ('status', 'basis', 'currency', 'published_at',
-                                               'report_status', 'source_urls', 'verified_at')} | {
+                                               'report_status', 'source_urls', 'verified_at',
+                                               'evidence', 'entered_at', 'period_end')} | {
                                                    k: c.get(k) for k in ('revg', 'earng', 'gm')},
         })
     return {'generatedAt': data['meta']['generatedAt'], 'proof': proof, 'companies': rows,
+            'industries': [{'name': row['name'], 's': copy.deepcopy(row.get('s'))}
+                           for row in data.get('industries', [])],
+            'changesToday': copy.deepcopy(changes_today),
             'coverage': [{k: x.get(k) for k in ('kind', 'symbol', 'metric', 'status')}
                          for x in data['meta'].get('coverage', [])]}
 
@@ -35,24 +55,70 @@ def project(data, proof):
 def history_with(previous, old_history):
     days = {}
     for item in [*old_history, previous]:
-        clock = dt.datetime.fromisoformat(item['generatedAt'])
-        if clock.tzinfo is None:
-            raise ValueError('history_clock_without_timezone')
-        day = clock.astimezone(dt.timezone(dt.timedelta(hours=8))).date().isoformat()
-        if day not in days or item['generatedAt'] > days[day]['generatedAt']:
+        day = local_day(item['generatedAt'])
+        if day not in days or clock(item['generatedAt']) >= clock(days[day]['generatedAt']):
             days[day] = item
     return [days[k] for k in sorted(days)[-8:]]
 
 
+def score_changes(current, previous):
+    old = {row['name']: row.get('s') for row in previous.get('industries', [])}
+    return [{'name': row['name'], 'before': old[row['name']], 'after': row['s']}
+            for row in current.get('industries', [])
+            if row['name'] in old and isinstance(old[row['name']], list)
+            and len(old[row['name']]) == 4 and isinstance(row.get('s'), list)
+            and len(row['s']) == 4 and row['s'] != old[row['name']]]
+
+
+def has_report_evidence(financial):
+    financial = financial or {}
+    return (financial.get('evidence') in ('source', 'partial')
+            or financial.get('status') in ('verified', 'verified_partial'))
+
+
+def changes_today(current, previous):
+    """Accumulate observed transitions since Beijing midnight, by stable key.
+
+    Unlike the older daily summary, this compares the immediately preceding
+    successful publication. A reversion later the same day remains one observed
+    change; missing prior identities are not treated as known previous values.
+    """
+    day = local_day(current['generatedAt'])
+    sets = {key: set() for key in ('reports', 'confirmed', 'scores')}
+    if previous is None:
+        return {'date': day, **{key: [] for key in sets}}
+    carry = previous.get('changesToday') or {}
+    if local_day(previous['generatedAt']) == day and carry.get('date') == day:
+        for key in sets:
+            sets[key].update(value for value in carry.get(key, []) if isinstance(value, str))
+    old = {row['id']: row for row in previous['companies']}
+    for row in current['companies']:
+        prior = old.get(row['id'])
+        if prior is None:
+            continue
+        if (row.get('period') and row.get('period') != prior.get('period')
+                and has_report_evidence(row.get('financial'))):
+            sets['reports'].add(row['id'])
+        if ((row.get('earnings') or {}).get('status') == 'confirmed'
+                and (prior.get('earnings') or {}).get('status') != 'confirmed'):
+            sets['confirmed'].add(row['id'])
+    sets['scores'].update(row['name'] for row in score_changes(current, previous))
+    return {'date': day, **{key: sorted(values) for key, values in sets.items()}}
+
+
 def summarize(data, history):
     current = project(data, {})
-    today = current['generatedAt'][:10]
-    eligible = [x for x in history if x['generatedAt'] < current['generatedAt']]
-    prior_days = [x for x in eligible if x['generatedAt'][:10] < today]
-    baseline = max(prior_days or eligible, key=lambda x: x['generatedAt'], default=None)
+    today = local_day(current['generatedAt'])
+    # DATA timestamps may be minute-precision. The verified previous release
+    # can have the same displayed clock as a second run in that minute.
+    eligible = [x for x in history if clock(x['generatedAt']) <= clock(current['generatedAt'])]
+    prior_days = [x for x in eligible if local_day(x['generatedAt']) < today]
+    baseline = max(prior_days or eligible, key=lambda x: clock(x['generatedAt']), default=None)
+    latest = max(eligible, key=lambda x: clock(x['generatedAt']), default=None)
     result = {'mode': 'previous_day' if prior_days else 'previous_update',
               'generatedAt': current['generatedAt'], 'baselineAt': None,
-              'reports': [], 'calendar': [], 'restored': [], 'lost': [], 'prices': [],
+              'reports': [], 'calendar': [], 'restored': [], 'lost': [], 'prices': [], 'scores': [],
+              'today': changes_today(current, latest),
               'excludedPrices': 0, 'sameDatePrices': 0,
               'pendingResearch': sum(review_pending(x, today)
                                      for x in [*data.get('industries', []), *data.get('chokepoints', []),
@@ -60,6 +126,7 @@ def summarize(data, history):
     if not baseline:
         return result | {'mode': 'unavailable'}
     result.update(baselineAt=baseline['generatedAt'], baselineProof=baseline['proof'])
+    result['scores'] = score_changes(current, baseline)
     old = {c['id']: c for c in baseline['companies']}
     for c in current['companies']:
         p = old.get(c['id'])
@@ -67,10 +134,10 @@ def summarize(data, history):
             result['excludedPrices'] += 1
             continue
         f, pf = c['financial'], p['financial']
-        if f.get('status') in ('verified', 'verified_partial') and (
+        if has_report_evidence(f) and (
                 c['period'] != p['period'] or f != pf):
             result['reports'].append({'id': c['id'], 'name': c['name'], 'before': p['period'],
-                                      'after': c['period'], 'status': f['status'],
+                                      'after': c['period'], 'status': f.get('evidence') or f.get('status'),
                                       'label': '财报期别变更' if c['period'] != p['period'] else '同一财报证据、数值或状态更新'})
         if c['next'] != p['next'] or c['earnings'] != p['earnings']:
             result['calendar'].append({'id': c['id'], 'name': c['name'], 'before': p['next'],
@@ -101,6 +168,8 @@ def summarize(data, history):
 
 
 def review_pending(item, day):
+    if 'judgment' in item:
+        return (item.get('judgment') or {}).get('label') != 'ai'
     review = item.get('review') or {}
     if (review.get('status') != 'verified' or not review.get('source_url') or
             not review.get('verified_at') or not review.get('valid_until') or

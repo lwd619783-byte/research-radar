@@ -19,15 +19,11 @@ from research_snapshot import (
     TABLES, SUBSTITUTABLE, ResearchAbort, load_last_good, make_snapshot,
     schema_hash, snapshot_sha256,
 )
+from research_view import public_first_sources, urls
 
 
 TOKEN = re.compile(r"\{\{earnings:([^{}]+)\}\}")
-URLS = re.compile(r"https?://[^\s<>\"'）)]+")
 SCORES = ("景气度", "业绩兑现", "卡点强度", "估值位置")
-
-
-def urls(text):
-    return list(dict.fromkeys(URLS.findall(text or "")))
 
 
 def _date(value):
@@ -372,7 +368,7 @@ def _financial_data(row, contract):
         if spec.get("enum"):
             value = spec["enum"].get(value, "")
         result[key] = value if value is not None else ""
-    result["source_urls"] = list(dict.fromkeys(([props["来源链接"]] if props.get("来源链接") else []) + urls(props.get("其他来源"))))
+    result["source_urls"] = public_first_sources(([props["来源链接"]] if props.get("来源链接") else []) + urls(props.get("其他来源")))
     result["conditions"] = [line.strip() for line in (props.get("注意事项") or "").splitlines() if line.strip()]
     if not props.get("来源链接"):
         evidence = "missing"
@@ -442,18 +438,32 @@ def normalize(fetch, contract, fixed_clock, last_good=None, config=None):
         excluded_now = set()
         source = "notion"
         if fetch.get("stopped_all") or not fetched.get("ok"):
-            rows, entry = fallback(table, fetch.get("error") if fetch.get("stopped_all") else fetched.get("error"))
+            error = fetched.get("error") or {"code": fetched.get("code", "notion_bad_json"),
+                                               "detail": fetched.get("detail", {})}
+            rows, entry = fallback(table, fetch.get("error") if fetch.get("stopped_all") else error)
             source = "last_good"
         else:
             rows = []
-            for page in fetched.get("pages", []):
-                if page.get("object") != "page":
-                    continue
-                if page.get("in_trash"):
-                    excluded_now.add(page["id"])
-                    continue
-                rows.append(simplify_page(page, contract["tables"][table]))
-        fetched_count = sum(page.get("object") == "page" for page in fetched.get("pages", []))
+            if "rows" in fetched:
+                # Credential-free production handoff. Only the same simplified
+                # row shape used by snapshots is accepted; raw identity metadata
+                # never enters the replay path. Trash remains countable/excluded.
+                for row in fetched["rows"]:
+                    if row.get("in_trash"):
+                        excluded_now.add(row["id"])
+                        continue
+                    rows.append({key: copy.deepcopy(row[key]) for key in
+                                 ("id", "created_time", "last_edited_time", "props")})
+            else:
+                for page in fetched.get("pages", []):
+                    if page.get("object") != "page":
+                        continue
+                    if page.get("in_trash"):
+                        excluded_now.add(page["id"])
+                        continue
+                    rows.append(simplify_page(page, contract["tables"][table]))
+        fetched_count = (len(fetched["rows"]) if "rows" in fetched else
+                         sum(page.get("object") == "page" for page in fetched.get("pages", [])))
         excluded[table].update(excluded_now)
         good, bad, warnings, clean_excluded = _validate_table(table, rows, contract, today, resolved, excluded)
         eligible_count = len(rows) - len(clean_excluded)
@@ -512,9 +522,12 @@ def normalize(fetch, contract, fixed_clock, last_good=None, config=None):
         metadata["counts"][table] = {"fetched": fetched_count, "used": len(good), "excluded": len(excluded[table]),
                                      "quarantined": len(original_bad) if quality_low and source == "last_good" else len(bad),
                                      "substituted": substitutions}
+        schema = fetched.get("schema", {})
+        if "properties" not in schema:
+            schema = {"properties": {name: {"type": kind} for name, kind in schema.items()}}
         snapshot_tables[table] = {
             "source": source, "fetchedAt": entry["fetchedAt"] if entry else fixed_clock,
-            "schemaHash": entry.get("schemaHash", "") if entry else schema_hash(fetched.get("schema", {}), contract["tables"][table]),
+            "schemaHash": entry.get("schemaHash", "") if entry else schema_hash(schema, contract["tables"][table]),
             "rows": [row["_original"] for row in good],
         }
 
