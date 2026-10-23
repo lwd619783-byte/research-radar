@@ -33,6 +33,106 @@ TABLE_NAMES = dict(industries='行业', chokepoints='卡点', companies='公司'
 EXECUTION_KEYS = ('GITHUB_SHA', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT', 'RUNNER_OS',
                   'RUNNER_ARCH', 'ImageOS', 'ImageVersion')
 NOTION_CODES = frozenset(CODE_TEXT) | {'notion_bad_json', 'notion_http_error'}
+# Enumerated from build.py / integrity.py. These are codes, never error text.
+RELEASE_BLOCKER_CODES = frozenset({
+    'stale_quotes_not_safe_in_all_frozen_views',
+    'unconfirmed_close_or_intraday_needs_label_approval',
+    'financial_evidence_incomplete', 'mixed_or_missing_market_dates_need_label_approval',
+    'index_date_or_phase_needs_label_approval', 'index_observation_missing_or_stale',
+    'ratio_extreme_conflicts_with_frozen_sentence', 'quotes_coverage_low',
+    'synthetic_fixture_not_publishable', 'local_review_not_publishable', 'offline_not_publishable',
+})
+DIAGNOSTIC_CODES = NOTION_CODES | RELEASE_BLOCKER_CODES | {
+    'contract_invalid', 'collection_failed', 'collection_execution_not_allowed', 'sensitive_notion_input'}
+MARKET_ISSUE_STATUSES = {
+    'daily': frozenset({'no_common_completed_observation', 'stale'}),
+    'index': frozenset({'missing_or_unconfirmed_snapshot'}),
+    'history': frozenset({'short_history'}),
+    'ratio': frozenset({'frozen_text_or_range_incompatible', 'unavailable_or_short_history'}),
+    'valuation': frozenset({'quote_date_mismatch_or_missing', 'quote_stale_or_invalid_receipt',
+        'quote_observation_after_receipt', 'quote_currency_mismatch', 'market_cap_unavailable',
+        'pe_missing', 'pe_nonpositive', 'pe_invalid', 'pe_not_meaningful'}),
+}
+
+
+def safe_market_issues(issues):
+    """Only bounded codes, ticker characters and real ISO dates may leave collect."""
+    if not isinstance(issues, list):
+        return []
+    result = []
+    for item in issues[:100]:
+        if not isinstance(item, dict):
+            continue
+        kind, status = item.get('kind'), item.get('status')
+        if not isinstance(kind, str) or not isinstance(status, str) or status not in MARKET_ISSUE_STATUSES.get(kind, ()):
+            continue
+        row = {'kind': kind, 'status': status}
+        symbol = item.get('symbol')
+        if isinstance(symbol, str) and re.fullmatch(r'[A-Z0-9^][A-Z0-9.^=-]{0,23}', symbol) and not bundle.SECRET_VALUE.search(symbol):
+            row['symbol'] = symbol
+        for key in ('sourceDate', 'observedDate', 'requiredDate', 'expectedCompletedDate'):
+            value = item.get(key)
+            try:
+                if isinstance(value, str) and dt.date.fromisoformat(value).isoformat() == value:
+                    row[key] = value
+            except ValueError:
+                pass
+        result.append(row)
+    return result
+
+
+def market_diagnostic_issues(data):
+    """Attach dates already present in assembled metadata, without response data."""
+    import market_calendar
+    companies = {row.get('sym'): row for row in data.get('companies', [])}
+    calendars = data.get('meta', {}).get('marketCalendar', {}).get('exchanges', {})
+    enriched = []
+    for issue in data.get('meta', {}).get('issues', []):
+        if not isinstance(issue, dict):
+            continue
+        row = dict(issue)
+        symbol = row.get('symbol')
+        if row.get('kind') == 'daily':
+            info = companies.get(symbol, {}).get('marketCalendar', {})
+            row.update(sourceDate=info.get('quoteDate'), expectedCompletedDate=info.get('expectedCompletedDate'))
+        elif row.get('kind') == 'index':
+            info = calendars.get(market_calendar.exchange_for(symbol), {})
+            row['expectedCompletedDate'] = info.get('expectedCompletedDate')
+        enriched.append(row)
+    return safe_market_issues(enriched)
+
+
+def safe_collection_diagnostic(code, *, blockers=(), market_issues=(), notion_errors=()):
+    code = code if isinstance(code, str) and code in DIAGNOSTIC_CODES else 'collection_failed'
+    result = {'code': code, 'notionErrors': []}
+    blockers = blockers if isinstance(blockers, (list, tuple)) else ()
+    accepted = sorted({value for value in blockers if isinstance(value, str) and value in RELEASE_BLOCKER_CODES})
+    if accepted:
+        result['blockers'] = accepted
+    issues = safe_market_issues(market_issues)
+    if issues:
+        result['marketIssues'] = issues
+    notion_errors = notion_errors if isinstance(notion_errors, (list, tuple)) else ()
+    for note in notion_errors[:20]:
+        if not isinstance(note, dict):
+            continue
+        # Existing source errors are reduced again; no arbitrary detail strings.
+        fields = {key: note[key] for key in ('code', 'http_status', 'notion_code') if key in note}
+        if not isinstance(fields.get('code'), str):
+            fields['code'] = None
+        item = safe_error(fields,
+                          note.get('table') if note.get('table') in TABLE_ORDER else None)
+        result['notionErrors'].append(item)
+    return result
+
+
+def diagnostic_notion_errors(fetched):
+    """A malformed handoff must not prevent writing the minimal safe failure."""
+    tables = fetched.get('tables', {}) if isinstance(fetched, dict) else {}
+    if not isinstance(tables, dict):
+        return []
+    return [table['error'] for name in TABLE_ORDER
+            if isinstance(table := tables.get(name), dict) and isinstance(table.get('error'), dict)]
 
 
 class CollectError(ValueError):
@@ -153,8 +253,7 @@ def diagnostic_text(note):
 def step_summary(data=None, *, error=None, fetched=None):
     """Chinese §8.6 summary, limited to 20 safe diagnostic rows."""
     if data is None:
-        code = error if error in NOTION_CODES | {'contract_invalid', 'sensitive_notion_input',
-                  'collection_failed', 'collection_execution_not_allowed', 'quotes_coverage_low'} else 'collection_failed'
+        code = error if error in DIAGNOSTIC_CODES else 'collection_failed'
         lines = ['### 投研雷达 · 本次更新未完成', '- 线上保持上一次成功版本。',
                  '- 原因：' + diagnostic_text({'code': code})]
         notes = [table.get('error') for table in (fetched or {}).get('tables', {}).values() if table.get('error')]
@@ -298,8 +397,9 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
     real_blockers = [code for code in blockers if code not in
                      ('synthetic_fixture_not_publishable', 'local_review_not_publishable', 'offline_not_publishable')]
     if real_blockers:
-        save_json(work / 'diagnostic.json', {'code': real_blockers[0], 'blockers': real_blockers,
-                  'notionErrors': [table['error'] for table in fetched['tables'].values() if table.get('error')]})
+        save_json(work / 'diagnostic.json', safe_collection_diagnostic(real_blockers[0], blockers=real_blockers,
+                  market_issues=market_diagnostic_issues(data),
+                  notion_errors=diagnostic_notion_errors(fetched)))
         raise ResearchAbort(real_blockers[0], codes=real_blockers)
     saved = bundle.write_bundle(out.parent, data, receipt, final_clock, research_snapshot=snapshot)
     return {'archive': saved, 'data': data, 'receipt': receipt, 'snapshot': snapshot,
@@ -324,18 +424,37 @@ def main(argv=None):
     except Exception as error:
         code = error.code if isinstance(error, ResearchAbort) else (
             str(error) if isinstance(error, CollectError) else 'collection_failed')
-        if code not in NOTION_CODES | {'contract_invalid', 'collection_failed',
-                    'collection_execution_not_allowed', 'sensitive_notion_input', 'quotes_coverage_low'}:
+        if not isinstance(code, str) or code not in DIAGNOSTIC_CODES:
             code = 'collection_failed'
         fetched = None
         try:
             path = args.work / 'notion-fetch.json'
             if path.is_file():
                 fetched = json.loads(path.read_text('utf-8'))
-            text = step_summary(error=code, fetched=fetched)
+        except (OSError, ValueError):
+            pass
+        try:
+            previous = {}
+            diagnostic_path = args.work / 'diagnostic.json'
+            if isinstance(error, ResearchAbort) and error.code in RELEASE_BLOCKER_CODES and diagnostic_path.is_file():
+                # Only the current controlled failure can preserve earlier codes.
+                try:
+                    candidate = json.loads(diagnostic_path.read_text('utf-8'))
+                    if isinstance(candidate, dict) and candidate.get('code') == code:
+                        previous = candidate
+                except (OSError, ValueError):
+                    pass
+            blockers = error.codes if isinstance(error, ResearchAbort) else []
+            previous_blockers = previous.get('blockers', [])
+            if not isinstance(previous_blockers, list):
+                previous_blockers = []
+            diagnostic = safe_collection_diagnostic(code, blockers=[*blockers, *previous_blockers],
+                market_issues=previous.get('marketIssues', []),
+                notion_errors=diagnostic_notion_errors(fetched))
+            save_json(diagnostic_path, diagnostic)
+            text = step_summary(error=diagnostic['code'], fetched={'tables': {
+                str(i): {'error': note} for i, note in enumerate(diagnostic['notionErrors'])}})
             write_summary(args.work, text, os.environ)
-            save_json(args.work / 'diagnostic.json', {'code': code, 'notionErrors': [
-                table['error'] for table in (fetched or {}).get('tables', {}).values() if table.get('error')]})
         except Exception:
             pass
         print(json.dumps({'collected': False, 'code': code, 'publicationAuthorized': False}))
