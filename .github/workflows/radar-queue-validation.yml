@@ -16,7 +16,7 @@ concurrency:
 
 # Change only this literal to "2", then "3", in separate authorized pushes.
 env:
-  QUEUE_VALIDATION_SEQUENCE: '2'
+  QUEUE_VALIDATION_SEQUENCE: '3'
 
 jobs:
   queue_validation:
