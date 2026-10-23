@@ -309,12 +309,15 @@
         "2026-09-25",
         "2026-09-28",
         "2026-10-09",
+        "2026-10-23",
         "2026-10-26",
         "2026-12-25"
       ],
       "earlyCloses": {},
       "sources": [
         "https://www.twse.com.tw/holidaySchedule/holidaySchedule?response=html",
+        "https://www.twse.com.tw/zh/about/news/news/content.html?8a8216d6a0fa351b01a1638507a10203",
+        "https://www.twse.com.tw/staticFiles/news/news/tsecnews/8a8216d6a0fa351b01a1638507940202.pdf",
         "https://github.com/gerrymanoim/exchange_calendars/blob/4.13.2/exchange_calendars/exchange_calendar_xtai.py"
       ],
       "provisionalHolidays": [
