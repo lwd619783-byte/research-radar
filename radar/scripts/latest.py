@@ -6,7 +6,7 @@ from snapshot import completed_bars, equity_bar_final, CLOSED_QUOTE_STATES
 import reviewed_closures
 
 
-def calendar_completed_bars(record, bars, symbol, now):
+def calendar_completed_bars(record, bars, symbol, now, *, require_reviewed_close=False):
     """Exclude only confirmed non-session tails from provider-completed bars.
 
     Provider-backed completed bars are checked again before removing a tail;
@@ -37,15 +37,19 @@ def calendar_completed_bars(record, bars, symbol, now):
         reviewed_expected = reviewed_closures.expected_close('台股', now)
         extended_carry = (dt.date.fromisoformat(today) - dt.date.fromisoformat(expected)).days > 4
         false_history = any(reviewed_closures.known_closed('台股', bar[0]) for bar in bars)
-        # Keep PR5's short, no-tail legacy compatibility, but never let it
-        # remove known false history, extend a five-day holiday carry, or
+        # Keep short, no-tail legacy compatibility for historical selectors,
+        # while the calendar-enabled assembler requires the production proof.
+        # Neither path may remove known false history, extend a five-day carry, or
         # certify the reopening close without the original provider proof.
-        if false_history or reviewed_expected and (extended_carry or expected == today):
+        # Supplied provider evidence must also meet the official close bound
+        # during short carries; contradictory evidence is not legacy data.
+        if false_history or reviewed_expected and (require_reviewed_close or extended_carry
+                or expected == today or 'finality' in record):
             bars = reviewed_closures.completed_bars(record, bars, '台股', now)
     return [bar for bar in bars if bar[0] <= expected]
 
 
-def select_daily(companies, records, now, *, calendar_policy=False):
+def select_daily(companies, records, now, *, calendar_policy=False, require_reviewed_close=False):
     selected, sources, dates = {}, {}, {}
     for c in companies:
         r = records.get(c['sym']) or {}
@@ -57,7 +61,8 @@ def select_daily(companies, records, now, *, calendar_policy=False):
                 if any(dt.datetime.fromisoformat(b[0]).replace(tzinfo=ZoneInfo(r['timezone'])).utcoffset() != dt.datetime.fromisoformat(b[0]).replace(tzinfo=ZoneInfo(ZONES[c['mkt']])).utcoffset() for b in bars): bars=[]
             except (ValueError, TypeError, KeyError): bars=[]
         if calendar_policy and bars:
-            bars = calendar_completed_bars(r, bars, c['sym'], now)
+            bars = calendar_completed_bars(r, bars, c['sym'], now,
+                                           require_reviewed_close=require_reviewed_close)
         elif not calendar_policy:
             bars = reviewed_closures.completed_bars(r, bars, c['mkt'], now)
         local = now.astimezone(ZoneInfo(ZONES[c['mkt']])).date()

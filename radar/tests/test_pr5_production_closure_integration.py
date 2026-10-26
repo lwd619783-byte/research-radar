@@ -4,9 +4,14 @@ Synthetic provider records only; no original expectations or fixtures change.
 """
 import copy
 import datetime as dt
+from pathlib import Path
+import tempfile
 import unittest
 
 import latest
+from integrity import release_blockers
+from notion_fixtures import FakeTransport, FixtureSet
+import test_pr5_calendar_release as holiday
 from test_completed_snapshot import epoch
 from test_reviewed_taiwan_closures import NOW, TW, record
 
@@ -93,6 +98,80 @@ class ProductionClosureIntegrationTests(unittest.TestCase):
     def test_calendar_path_future_source_date_stays_rejected(self):
         value = record(('2026-10-21', '2026-10-22', '2026-10-23', '2026-10-28'))
         self.assertEqual(choose(value), {})
+
+    def test_calendar_path_short_carry_rejects_provider_close_before_official_close(self):
+        cases = (
+            ('2026-10-23T08:45:00+08:00', '2026-10-23T08:45:00+08:00'),
+            ('2026-10-24T05:08:00+08:00', '2026-10-24T05:08:00+08:00'),
+            ('2026-10-26T18:15:00+08:00', '2026-10-26T18:15:00+08:00'),
+            ('2026-10-23T08:45:00+08:00', '2026-10-22T12:00:00+08:00'),
+        )
+        for clock, receipt in cases:
+            with self.subTest(clock=clock, receipt=receipt):
+                now = dt.datetime.fromisoformat(clock)
+                value = record(('2026-10-21', '2026-10-22'),
+                               now=dt.datetime.fromisoformat(receipt), session_day='2026-10-22')
+                value['finality']['end'] = epoch('2026-10-22', 'Asia/Taipei', 11)
+                before = copy.deepcopy(value)
+                self.assertEqual(choose(value, now), {})
+                self.assertEqual(value, before)
+
+    def test_calendar_path_short_carry_keeps_valid_original_provider_evidence(self):
+        for clock in ('2026-10-23T08:45:00+08:00', '2026-10-24T05:08:00+08:00',
+                      '2026-10-26T18:15:00+08:00'):
+            with self.subTest(clock=clock):
+                now = dt.datetime.fromisoformat(clock)
+                value = record(('2026-10-21', '2026-10-22'), now=now, session_day='2026-10-22')
+                before = copy.deepcopy(value)
+                chosen = choose(value, now)['2383.TW']
+                self.assertEqual(chosen['asOf'], '2026-10-22')
+                self.assertEqual(chosen['bars'], before['bars'])
+                self.assertEqual(chosen['receivedAt'], before['receivedAt'])
+                self.assertEqual(chosen['finality'], before['finality'])
+                self.assertEqual(value, before)
+
+    def test_calendar_path_cannot_skip_early_closed_real_reopening_day(self):
+        now = dt.datetime.fromisoformat('2026-10-27T12:15:00+08:00')
+        value = record(('2026-10-22', '2026-10-27'), now=now, session_day='2026-10-27')
+        value['finality']['end'] = epoch('2026-10-27', 'Asia/Taipei', 11)
+        value['phase'] = 'closed'
+        self.assertEqual(choose(value, now), {})
+
+
+class ProductionClosurePublicationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        with tempfile.TemporaryDirectory() as folder:
+            fixtures = FixtureSet(Path(folder) / 'fixtures')
+            transport = FakeTransport(fixtures)
+            cls.research, _ = holiday.build.load_research(transport=transport,
+                token=fixtures.env.get('NOTION_TOKEN'), fixed_clock=fixtures.clock,
+                sleep=transport.sleep, pace=transport.pace)
+        cls.data, _ = holiday.dataset()
+        cls.data['companies'] = cls.research['companies']
+
+    def test_notion_production_cannot_publish_unproven_legacy_short_carry(self):
+        for day in ('2026-10-23', '2026-10-24', '2026-10-26'):
+            with self.subTest(day=day):
+                now = holiday.clock(day, '18:15')
+                market = holiday.synthetic_market(self.data, now)
+                value = market['daily']['2383.TW']
+                self.assertEqual(value['asOf'], '2026-10-22')
+                for key in ('finality', 'barTimestamps', 'timezone'):
+                    value.pop(key)
+                before = copy.deepcopy(market)
+                result, _, missing = holiday.build.assemble_notion(
+                    self.research, self.data, market, market, now)
+                result['meta']['fixture'] = True
+                self.assertEqual(len(result['companies']), 42)
+                company = next(c for c in result['companies'] if c['sym'] == '2383.TW')
+                self.assertIsNone(company['ld'])
+                self.assertIsNone(company['metricAsOf'])
+                self.assertIn(company['name'], missing)
+                blockers = release_blockers(result)
+                self.assertIn('mixed_or_missing_market_dates_need_label_approval', blockers)
+                self.assertIn('synthetic_fixture_not_publishable', blockers)
+                self.assertEqual(market, before)
 
 
 if __name__ == '__main__':

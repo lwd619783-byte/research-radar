@@ -178,7 +178,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
     stale, missing, cos = [], [], []
     blockers, market_dates, issues = [], {}, []
     selectors = latest if snapshot_policy == 'latest' else None
-    daily_snapshot, snapshot = (selectors.select_daily(data['companies'], mk['daily'], now, calendar_policy=calendar_policy)
+    daily_snapshot, snapshot = (selectors.select_daily(data['companies'], mk['daily'], now,
+                                calendar_policy=calendar_policy, require_reviewed_close=calendar_policy)
                                 if selectors else select_daily(data['companies'], mk['daily'], now))
     for c in data["companies"]:
         s = c["sym"]
