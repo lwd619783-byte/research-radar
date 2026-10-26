@@ -17788,6 +17788,4685 @@
           "status": "partial"
         }
       ]
+    },
+    {
+      "generatedAt": "2026-10-26T18:09+08:00",
+      "proof": {
+        "state": "success",
+        "productionSHA": "64f2ae294554ad2002bd7b2115cbfeb70dc3de3c",
+        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/DeiTxFJGhj9exJy8FDC4XjDcDgr7",
+        "reportedAt": "2026-10-26T10:09:16Z",
+        "sourceSHA": "727d91c6d9faacbf62ea787460ea52f50941b05e",
+        "dataSHA256": "355bf2730d8ce63f85dd88c6a2a6ea1561354b187a6247e53bef3f5e2364206e"
+      },
+      "companies": [
+        {
+          "id": "AMEC",
+          "sym": "688012.SS",
+          "name": "中微公司",
+          "cur": "CNY",
+          "next": "2026-10-31",
+          "period": "2026Q2 derived from H1-Q1",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 251.6,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.05681,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-08-20",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-08-20/1225482884.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-04-28/1225215453.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.35481282999999997,
+            "earng": 3.82317449,
+            "gm": 0.39625311
+          }
+        },
+        {
+          "id": "ASML",
+          "sym": "ASML",
+          "name": "阿斯麦 ASML",
+          "cur": "USD",
+          "next": "2027-01-27",
+          "period": "FY2026Q3",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/937966/000162828026048235/statutoryinterimreport20.htm",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "Europe/Amsterdam",
+            "time_note": "2026Q4及全年业绩；公司财务日历"
+          },
+          "close": 1572,
+          "date": "2026-10-23",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": 0.00722,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "EUR",
+            "published_at": "2026-10-14",
+            "report_status": "final",
+            "source_urls": [
+              "https://www.investor.asml.com/static-files/d310262b-d037-485d-83b5-92c93cc462f0",
+              "https://www.investor.asml.com/news-releases/news-release-details/asml-reports-eu11.7-billion-total-net-sales-and-eu5.0-billion-net-income-q3-2026"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-09-27",
+            "revg": 0.5516232,
+            "earng": 1.3348552599999999,
+            "gm": 0.575
+          }
+        },
+        {
+          "id": "ASMPT",
+          "sym": "0522.HK",
+          "name": "ASMPT",
+          "cur": "HKD",
+          "next": "2026-10-28",
+          "period": "2026Q2（持续经营收入/毛利；含终止经营归母净利）",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://doc.irasia.com/listco/hk/asmpt/announcement/a261009.pdf",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "Asia/Hong_Kong",
+            "time_note": "上午发布；10/27为董事会日期"
+          },
+          "close": 117.8,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.03205,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "HKD",
+            "published_at": "2026-07-29",
+            "report_status": "final",
+            "source_urls": [
+              "https://www.asmpt.com/site/assets/files/85468/q2_2026_en_announcement.pdf",
+              "https://www.asmpt.com/en/investor-relations/financial-information/"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.521,
+            "earng": 1.554,
+            "gm": 0.424
+          }
+        },
+        {
+          "id": "CXMT",
+          "sym": "688825.SS",
+          "name": "长鑫科技",
+          "cur": "CNY",
+          "next": "2026-10-31",
+          "period": "2026Q2 derived from H1-Q1",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 42.66,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.00443,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-08-29",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-08-29/1225529543.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-07-09/1225416304.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 9.773864150000001,
+            "earng": null,
+            "gm": 0.8759271099999999
+          }
+        },
+        {
+          "id": "MU",
+          "sym": "MU",
+          "name": "美光 Micron",
+          "cur": "USD",
+          "next": "2026-12-23",
+          "period": "FY2026Q4",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 877.5,
+          "date": "2026-10-23",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": 0.02459,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "USD",
+            "published_at": "2026-09-30",
+            "report_status": "final",
+            "source_urls": [
+              "https://www.sec.gov/Archives/edgar/data/723125/000072312526000018/a2026q4ex991-pressrelease.htm"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-09-03",
+            "revg": 3.7926646,
+            "earng": 10.777881910000001,
+            "gm": 0.868
+          }
+        },
+        {
+          "id": "NAURA",
+          "sym": "002371.SZ",
+          "name": "北方华创",
+          "cur": "CNY",
+          "next": "2026-10-30",
+          "period": "2026Q2 derived from H1-Q1",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 517.0,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.03812,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-08-26",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-08-26/1225501903.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259650.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.23981248,
+            "earng": 0.06637516,
+            "gm": 0.39329103000000004
+          }
+        },
+        {
+          "id": "NVDA",
+          "sym": "NVDA",
+          "name": "英伟达 NVIDIA",
+          "cur": "USD",
+          "next": "2026-11-17",
+          "period": "FY2027Q2（截至2026-07-26）",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 211.0,
+          "date": "2026-10-23",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.00589,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "USD",
+            "published_at": "2026-08-26",
+            "report_status": "final",
+            "source_urls": [
+              "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-07-26",
+            "revg": 1.0590000000000002,
+            "earng": 1.2590000000000001,
+            "gm": 0.75
+          }
+        },
+        {
+          "id": "SKH",
+          "sym": "000660.KS",
+          "name": "SK海力士",
+          "cur": "KRW",
+          "next": "2026-10-28",
+          "period": "2026Q2",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://news.skhynix.com/en/q3-2026-earnings-conference-call-invitation/",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "Asia/Seoul",
+            "time_note": "首尔09:00前发布；09:00电话会"
+          },
+          "close": 1275000,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.00157,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "KRW",
+            "published_at": "2026-08-18",
+            "report_status": "final",
+            "source_urls": [
+              "https://www.sec.gov/Archives/edgar/data/2120882/000119312526354777/d147827d6k.htm",
+              "https://www.sec.gov/Archives/edgar/data/2120882/000119312526354777/0001193125-26-354777-index.html"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 2.568,
+            "earng": 12.408,
+            "gm": 0.8320000000000001
+          }
+        },
+        {
+          "id": "TSM",
+          "sym": "TSM",
+          "name": "台积电",
+          "cur": "USD",
+          "next": "2027-01-14",
+          "period": "2026Q3",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "Asia/Taipei",
+            "time_note": "2027/1/14仍为预估，官网尚未列该季日期"
+          },
+          "close": 418.5,
+          "date": "2026-10-23",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": 0.01494,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "TWD",
+            "published_at": "2026-10-15",
+            "report_status": "final",
+            "source_urls": [
+              "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/3a94d1034b9e6b22446b674f7aaf3d088a12a193/FS.pdf",
+              "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/526b65af7305df2dde6b9ece6812b1fdf1e49f9b/3Q26%20EarningsRelease.pdf"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-09-30",
+            "revg": 0.509,
+            "earng": 0.687,
+            "gm": 0.664
+          }
+        },
+        {
+          "id": "ANET",
+          "sym": "ANET",
+          "name": "Arista",
+          "cur": "USD",
+          "next": "2026-11-03",
+          "period": "2026Q2",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-to-Announce-Q3-2026-Financial-Results-on-Tuesday-November-3-2026/default.aspx",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "America/Los_Angeles",
+            "time_note": "盘后发布；电话会13:30太平洋时间"
+          },
+          "close": 172.4,
+          "date": "2026-10-23",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": 0.0076,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "USD",
+            "published_at": "2026-08-04",
+            "report_status": "final",
+            "source_urls": [
+              "https://www.sec.gov/Archives/edgar/data/1596532/000159653226000174/ex991q226-earningsrelease.htm"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.377,
+            "earng": 0.365,
+            "gm": 0.629
+          }
+        },
+        {
+          "id": "AVGO",
+          "sym": "AVGO",
+          "name": "博通 Broadcom",
+          "cur": "USD",
+          "next": "2026-12-09",
+          "period": "FY2026Q3（截至2026-08-02）",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 321.7,
+          "date": "2026-10-23",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.00483,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "USD",
+            "published_at": "2026-09-02",
+            "report_status": "final",
+            "source_urls": [
+              "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-08-02",
+            "revg": 0.855,
+            "earng": 2.161,
+            "gm": 0.691
+          }
+        },
+        {
+          "id": "COHR",
+          "sym": "COHR",
+          "name": "Coherent",
+          "cur": "USD",
+          "next": "2026-11-04",
+          "period": "FY2026Q4（截至2026-06-30）",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://ir.coherent.com/node/18371/pdf",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "America/New_York",
+            "time_note": "纽约收盘后发布；16:30 ET电话会"
+          },
+          "close": 209.3,
+          "date": "2026-10-23",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": 0.00707,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "USD",
+            "published_at": "2026-08-12",
+            "report_status": "final",
+            "source_urls": [
+              "https://www.sec.gov/Archives/edgar/data/820318/000119312526346860/d128030dex991.htm"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.33799999999999997,
+            "earng": null,
+            "gm": 0.385
+          }
+        },
+        {
+          "id": "LITE",
+          "sym": "LITE",
+          "name": "Lumentum",
+          "cur": "USD",
+          "next": "2026-11-05",
+          "period": "FY2026Q4（截至2026-06-27）",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://investor.lumentum.com/financial-news-releases/news-details/2026/Lumentum-Announces-Reporting-Date-for-Fiscal-First-Quarter-2027-Financial-Results/default.aspx",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "America/Los_Angeles",
+            "time_note": "盘后发布；电话会14:00太平洋时间"
+          },
+          "close": 756.2,
+          "date": "2026-10-23",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": 0.00482,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "USD",
+            "published_at": "2026-08-11",
+            "report_status": "final",
+            "source_urls": [
+              "https://investor.lumentum.com/financial-news-releases/news-details/2026/Lumentum-Announces-Fourth-Quarter-and-Full-Fiscal-Year-2026-Results/default.aspx"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-27",
+            "revg": 1.093,
+            "earng": -34.576,
+            "gm": 0.474
+          }
+        },
+        {
+          "id": "MRVL",
+          "sym": "MRVL",
+          "name": "迈威尔 Marvell",
+          "cur": "USD",
+          "next": "2026-12-01",
+          "period": "FY2027Q2（截至2026-08-01）",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 228.5,
+          "date": "2026-10-23",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": 0.02255,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "USD",
+            "published_at": "2026-08-27",
+            "report_status": "final",
+            "source_urls": [
+              "https://investor.marvell.com/sec-filings/all-sec-filings/content/0001835632-26-000022/q227_8kx812026ex-991.htm"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-08-01",
+            "revg": 0.365,
+            "earng": 0.581,
+            "gm": 0.531
+          }
+        },
+        {
+          "id": "TFTX",
+          "sym": "300394.SZ",
+          "name": "天孚通信",
+          "cur": "CNY",
+          "next": "2026-10-29",
+          "period": "2026Q2单季（H1−Q1）",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://www.cninfo.com.cn/new/commonUrl?url=data/yypl&paramA=300394",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "Asia/Shanghai",
+            "time_note": "2026三季报预约披露"
+          },
+          "close": 197.0,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.01907,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-08-19",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-08-19/1225480328.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-04-21/1225128020.PDF",
+              "https://www.tfcsz.com/finace_report.html"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": -0.009000000000000001,
+            "earng": 0.268,
+            "gm": 0.647
+          }
+        },
+        {
+          "id": "XYS",
+          "sym": "300502.SZ",
+          "name": "新易盛",
+          "cur": "CNY",
+          "next": "2026-10-30",
+          "period": "2026Q2单季（H1−Q1）",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://www.cninfo.com.cn/new/commonUrl?url=data/yypl&paramA=300502",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "Asia/Shanghai",
+            "time_note": "2026三季报预约披露"
+          },
+          "close": 251.7,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.03567,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-08-25",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-08-25/1225499406.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-04-24/1225172606.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-08-25/1225499412.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.9690000000000001,
+            "earng": 1.004,
+            "gm": 0.48
+          }
+        },
+        {
+          "id": "YJKJ",
+          "sym": "688498.SS",
+          "name": "源杰科技",
+          "cur": "CNY",
+          "next": "2026-10-31",
+          "period": "2026Q2单季（H1−Q1）",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://www.sse.com.cn/disclosure/listedinfo/periodic/",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "Asia/Shanghai",
+            "time_note": "2026三季报预约披露；代码688498"
+          },
+          "close": 875.0,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.05421,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-08-29",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-08-29/1225527905.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-04-28/1225208649.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-09-03/1225543133.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 3.727,
+            "earng": 12.387,
+            "gm": 0.821
+          }
+        },
+        {
+          "id": "ZJXC",
+          "sym": "300308.SZ",
+          "name": "中际旭创",
+          "cur": "CNY",
+          "next": "2026-10-30",
+          "period": "2026Q2单季（H1−Q1）",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://www.cninfo.com.cn/new/commonUrl?url=data/yypl&paramA=300308",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "Asia/Shanghai",
+            "time_note": "2026三季报预约披露；首次10/24，变更10/30"
+          },
+          "close": 594.5,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.02959,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-08-22",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-08-22/1225491753.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-04-17/1225111941.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-08-22/1225491756.PDF",
+              "https://www.cninfo.com.cn/new/hisAnnouncement/query"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 1.746,
+            "earng": 2.282,
+            "gm": 0.46399999999999997
+          }
+        },
+        {
+          "id": "DCKJ",
+          "sym": "601208.SS",
+          "name": "东材科技",
+          "cur": "CNY",
+          "next": "2026-10-28",
+          "period": "2026Q2 derived from H1-Q1",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 36.0,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.07834,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-08-21",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486300.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-04-23/1225148309.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.27325900000000003,
+            "earng": 0.2685378,
+            "gm": 0.16524337
+          }
+        },
+        {
+          "id": "DTGK",
+          "sym": "301377.SZ",
+          "name": "鼎泰高科",
+          "cur": "CNY",
+          "next": "2026-10-28",
+          "period": "2026Q2 derived from H1-Q1",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 224.9,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.08589,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-08-20",
+            "report_status": "final",
+            "source_urls": [
+              "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-20/0a1eab9d-fc2b-42b4-9abb-10b3f85a920d.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107645.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 1.3467230000000001,
+            "earng": 3.80172014,
+            "gm": 0.57848878
+          }
+        },
+        {
+          "id": "DZSK",
+          "sym": "301200.SZ",
+          "name": "大族数控",
+          "cur": "CNY",
+          "next": null,
+          "period": "2026Q3单季",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": "下期披露日期尚待公告"
+          },
+          "close": 157.2,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.05415,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-10-21",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-10-21/1225612771.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486321.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-10-15/1225606787.PDF",
+              "https://disc.static.szse.cn/disc/disk03/finalpage/2025-10-21/7573d795-1085-45c8-803c-511d9e66f2d4.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-23",
+            "period_end": "2026-09-30",
+            "revg": 0.8776999999999999,
+            "earng": 1.5708000000000002,
+            "gm": 0.39283333
+          }
+        },
+        {
+          "id": "EMC",
+          "sym": "2383.TW",
+          "name": "台光电子",
+          "cur": "TWD",
+          "next": "2026-10-28",
+          "period": "2026Q2",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 5070,
+          "date": "2026-10-22",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": 0.01603,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "TWD",
+            "published_at": "2026-07-29",
+            "report_status": "final",
+            "source_urls": [
+              "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Quarterly_Results/Consolidated/CH/115/273512_115Q2_%E5%90%88%E4%BD%B5_%E5%AE%8C%E7%A8%BF%E8%B2%A1%E5%A0%B1_IMSv1-%E9%9B%BB%E5%AD%90%E6%9B%B8_IMSv1.pdf",
+              "https://www.emctw.com/zh-TW/investors_news/detail/2026072901/3"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 1.10040149,
+            "earng": 1.8389136,
+            "gm": 0.33850715000000003
+          }
+        },
+        {
+          "id": "HDGF",
+          "sym": "002463.SZ",
+          "name": "沪电股份",
+          "cur": "CNY",
+          "next": "2026-10-28",
+          "period": "2026Q2 derived from H1-Q1",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 98.9,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.07622,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-08-26",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-08-26/1225502252.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-04-23/1225147393.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.6774822399999999,
+            "earng": 0.82685209,
+            "gm": 0.41278578000000005
+          }
+        },
+        {
+          "id": "HHKJ",
+          "sym": "603256.SS",
+          "name": "宏和科技",
+          "cur": "CNY",
+          "next": null,
+          "period": "2026Q3单季",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": "下期披露日期尚待公告"
+          },
+          "close": 87.7,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.04362,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-10-23",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-10-23/1225616229.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-08-14/1225471942.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-23",
+            "period_end": "2026-09-30",
+            "revg": 2.0682,
+            "earng": 6.0773,
+            "gm": 0.6447724100000001
+          }
+        },
+        {
+          "id": "KBL",
+          "sym": "1888.HK",
+          "name": "建滔积层板",
+          "cur": "HKD",
+          "next": null,
+          "period": "2026H1累计",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 35.98,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.04562,
+          "financial": {
+            "status": null,
+            "basis": "half_year",
+            "currency": "HKD",
+            "published_at": "2026-08-24",
+            "report_status": "final",
+            "source_urls": [
+              "https://www.kblaminates.com/en/upload/portal/20260824/202608241223596609.pdf",
+              "https://www.kblaminates.com/en/upload/portal/20260918/202609180905142933.pdf"
+            ],
+            "verified_at": null,
+            "evidence": "partial",
+            "entered_at": "2026-10-18",
+            "period_end": "2026-06-30",
+            "revg": 0.5544179499999999,
+            "earng": 2.0927980500000003,
+            "gm": 0.30731963
+          }
+        },
+        {
+          "id": "NTB",
+          "sym": "3110.T",
+          "name": "日东纺 Nittobo",
+          "cur": "JPY",
+          "next": "2026-11-05",
+          "period": "FY2027Q1 (CY2026Q2)",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://www.nittobo.co.jp/eng/ir/calender.htm",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "Asia/Tokyo",
+            "time_note": "FY2026第二季度业绩"
+          },
+          "close": 2794,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.02546,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "JPY",
+            "published_at": "2026-08-05",
+            "report_status": "final",
+            "source_urls": [
+              "https://www2.jpx.co.jp/disc/31100/140120260805509788.pdf"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.20600000000000002,
+            "earng": 0.8420000000000001,
+            "gm": 0.43822173
+          }
+        },
+        {
+          "id": "SHKJ",
+          "sym": "300476.SZ",
+          "name": "胜宏科技",
+          "cur": "CNY",
+          "next": "2026-10-30",
+          "period": "2026Q2 derived from H1-Q1",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 188.0,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": 0.02469,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-08-28",
+            "report_status": "final",
+            "source_urls": [
+              "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-28/296a3692-b153-48c1-9201-2bbb41886183.PDF",
+              "https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-29/74f20b93-58e2-4e54-b46c-11ccaf116614.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.29487108,
+            "earng": 0.28293393,
+            "gm": 0.32103748000000004
+          }
+        },
+        {
+          "id": "SNDL",
+          "sym": "002916.SZ",
+          "name": "深南电路",
+          "cur": "CNY",
+          "next": null,
+          "period": "2026Q3单季",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": "下期披露日期尚待公告"
+          },
+          "close": 267.5,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.05467,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-10-23",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-10-23/1225616402.PDF",
+              "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-27/99646b65-8037-44b1-9cd8-61351de243a2.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-23",
+            "period_end": "2026-09-30",
+            "revg": 0.6629,
+            "earng": 0.9442,
+            "gm": 0.34852805
+          }
+        },
+        {
+          "id": "SYST",
+          "sym": "600183.SS",
+          "name": "生益科技",
+          "cur": "CNY",
+          "next": "2026-10-30",
+          "period": "2026Q2 derived from H1-Q1",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-10-17/1225608514.PDF",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "Asia/Shanghai",
+            "time_note": "公司公告预约10月30日披露"
+          },
+          "close": 100.3,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.09521,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-08-15",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-08-15/1225475783.PDF",
+              "https://www.syst.com.cn/Ajax/Download.aspx?name=2026/04/20260429142025111.pdf"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.53980564,
+            "earng": 1.4672350399999998,
+            "gm": 0.32630335000000005
+          }
+        },
+        {
+          "id": "ZWGX",
+          "sym": "000657.SZ",
+          "name": "中钨高新",
+          "cur": "CNY",
+          "next": null,
+          "period": "2026Q3单季",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": "下期披露日期尚待公告"
+          },
+          "close": 40.07,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.05227,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-10-23",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-10-23/1225615883.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-08-24/1225490814.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-23",
+            "period_end": "2026-09-30",
+            "revg": 0.4888,
+            "earng": 1.4881,
+            "gm": 0.32420541
+          }
+        },
+        {
+          "id": "DFDQ",
+          "sym": "600875.SS",
+          "name": "东方电气",
+          "cur": "CNY",
+          "next": "2026-10-30",
+          "period": "2026Q2",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 21.96,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.01921,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-08-26",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-08-26/1225505169.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-04-30/1225257541.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": -0.02076611,
+            "earng": 0.49184105,
+            "gm": 0.14693943
+          }
+        },
+        {
+          "id": "ENR",
+          "sym": "ENR.DE",
+          "name": "西门子能源",
+          "cur": "EUR",
+          "next": "2026-11-11",
+          "period": "FY2026Q3 (calendar 2026Q2)",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "https://www.siemensenergy.com/global/en/home/investor-relations.html",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "Europe/Berlin",
+            "time_note": "11月11日官方Q4业绩会；发布日待定"
+          },
+          "close": 118.7,
+          "date": "2026-10-23",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.02881,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "EUR",
+            "published_at": "2026-08-05",
+            "report_status": "final",
+            "source_urls": [
+              "https://assets.siemens-energy.com/dam/30018eed-275d-4e73-811e-b49d004cdc3d/2026-08-05-Earnings_Release_Q3_FY26_EN-pdf_Original%20file.pdf"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.17465367,
+            "earng": 0.76097561,
+            "gm": 0.23316153
+          }
+        },
+        {
+          "id": "ETN",
+          "sym": "ETN",
+          "name": "伊顿 Eaton",
+          "cur": "USD",
+          "next": "2026-11-03",
+          "period": "2026Q2",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://www.eaton.com/us/en-us/company/news-insights/news-releases/2026/eaton-to-announce-third-quarter-2026-earnings-on-november-3--202.html",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "America/New_York",
+            "time_note": "盘前发布；11:00 ET电话会"
+          },
+          "close": 366.1,
+          "date": "2026-10-23",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.00781,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "USD",
+            "published_at": "2026-07-31",
+            "report_status": "final",
+            "source_urls": [
+              "https://www.eaton.com/content/dam/eaton/company/investor-relations/quarterly-earnings/filings/2026/q2/q2-2026-financials-only.pdf"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.21385885,
+            "earng": -0.16395112,
+            "gm": 0.33466182000000005
+          }
+        },
+        {
+          "id": "GEV",
+          "sym": "GEV",
+          "name": "GE Vernova",
+          "cur": "USD",
+          "next": "2026-10-28",
+          "period": "2026Q2",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://www.gevernova.com/news/press-releases/ge-vernova-announce-third-quarter-2026-financial-results-october-28",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "America/New_York",
+            "time_note": "盘前发布；07:30 ET电话会"
+          },
+          "close": 815.0,
+          "date": "2026-10-23",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.01501,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "USD",
+            "published_at": "2026-07-22",
+            "report_status": "final",
+            "source_urls": [
+              "https://www.gevernova.com/sites/default/files/gev_webcast_10q_07222026.pdf"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.21874657,
+            "earng": 0.29961089,
+            "gm": 0.21253602000000002
+          }
+        },
+        {
+          "id": "JPKJ",
+          "sym": "688676.SS",
+          "name": "金盘科技",
+          "cur": "CNY",
+          "next": null,
+          "period": "2026Q3",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 50.16,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.07077,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-10-14",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-10-14/1225603297.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-08-21/1225486537.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-09-30",
+            "revg": 0.2492,
+            "earng": 0.09359999999999999,
+            "gm": 0.26896558
+          }
+        },
+        {
+          "id": "KHSJ",
+          "sym": "002335.SZ",
+          "name": "科华数据",
+          "cur": "CNY",
+          "next": "2026-10-29",
+          "period": "2026Q2",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 25.77,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.02755,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-08-28",
+            "report_status": "final",
+            "source_urls": [
+              "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-28/546247bf-7c7f-4a0b-9f83-f6b37c8a10d9.PDF",
+              "https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-27/3ca00555-fa6a-4007-b504-355f39d80b35.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": -0.02485938,
+            "earng": 0.82248962,
+            "gm": 0.22308304
+          }
+        },
+        {
+          "id": "MOD",
+          "sym": "MOD",
+          "name": "Modine",
+          "cur": "USD",
+          "next": "2026-10-27",
+          "period": "FY2027Q1（自然2026Q2，分拆前集团）",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 133.3,
+          "date": "2026-10-23",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.01354,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "USD",
+            "published_at": "2026-07-29",
+            "report_status": "final",
+            "source_urls": [
+              "https://s205.q4cdn.com/270741342/files/doc_financials/2027/q1/Modine-Reports-First-Quarter-Fiscal-2027-Results.pdf"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.28016989,
+            "earng": 0.44335937999999997,
+            "gm": 0.20800000000000002
+          }
+        },
+        {
+          "id": "SU",
+          "sym": "SU.PA",
+          "name": "施耐德电气",
+          "cur": "EUR",
+          "next": "2027-02-18",
+          "period": "2026Q3",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://www.se.com/ww/en/assets/pdf/release-Q3-revenues-2026",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "Europe/Paris",
+            "time_note": "2026全年业绩；10/16官方Q3公告第11页"
+          },
+          "close": 231.4,
+          "date": "2026-10-23",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.01845,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "EUR",
+            "published_at": "2026-10-16",
+            "report_status": "revenue_only",
+            "source_urls": [
+              "https://www.se.com/ww/en/assets/pdf/release-Q3-revenues-2026"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-09-30",
+            "revg": 0.179,
+            "earng": null,
+            "gm": null
+          }
+        },
+        {
+          "id": "SYDQ",
+          "sym": "002028.SZ",
+          "name": "思源电气",
+          "cur": "CNY",
+          "next": null,
+          "period": "2026Q3单季",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": "2026Q3已于10/24披露；下一期日期待定"
+          },
+          "close": 106.8,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.02385,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-10-24",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-10-24/1225618525.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-08-15/1225473691.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-24",
+            "period_end": "2026-09-30",
+            "revg": 0.3071,
+            "earng": 0.0453,
+            "gm": 0.30881047
+          }
+        },
+        {
+          "id": "VRT",
+          "sym": "VRT",
+          "name": "维谛 Vertiv",
+          "cur": "USD",
+          "next": "2026-10-28",
+          "period": "2026Q2",
+          "earnings": {
+            "status": "confirmed",
+            "source_url": "https://investors.vertiv.com/news/news-details/2026/Vertiv-Announces-Date-of-Third-Quarter-2026-Earnings-Release-and-Conference-Call/",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "America/New_York",
+            "time_note": "盘前发布；11:00 ET电话会"
+          },
+          "close": 194.3,
+          "date": "2026-10-23",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.00649,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "USD",
+            "published_at": "2026-07-29",
+            "report_status": "final",
+            "source_urls": [
+              "https://s205.q4cdn.com/554782763/files/doc_financials/2026/q2/Vertiv-Second-Quarter-2026-Earnings-Release.pdf"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.24115841,
+            "earng": 0.53547193,
+            "gm": 0.37714931
+          }
+        },
+        {
+          "id": "YWK",
+          "sym": "002837.SZ",
+          "name": "英维克",
+          "cur": "CNY",
+          "next": "2026-10-27",
+          "period": "2026Q2",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": ""
+          },
+          "close": 42.97,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.03177,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-08-25",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-08-25/1225495981.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-04-21/1225131821.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-17",
+            "period_end": "2026-06-30",
+            "revg": 0.122417,
+            "earng": 0.050587400000000005,
+            "gm": 0.25342747
+          }
+        },
+        {
+          "id": "ZGXD",
+          "sym": "601179.SS",
+          "name": "中国西电",
+          "cur": "CNY",
+          "next": null,
+          "period": "2026Q3单季",
+          "earnings": {
+            "status": "unverified",
+            "source_url": "",
+            "published_at": "",
+            "verified_at": "",
+            "timezone": "",
+            "time_note": "下期披露日期尚待公告"
+          },
+          "close": 11.08,
+          "date": "2026-10-26",
+          "source": "yahoo",
+          "basis": "yahoo-adjclose",
+          "r1d": -0.03147,
+          "financial": {
+            "status": null,
+            "basis": "single_quarter",
+            "currency": "CNY",
+            "published_at": "2026-10-22",
+            "report_status": "final",
+            "source_urls": [
+              "https://static.cninfo.com.cn/finalpage/2026-10-22/1225614154.PDF",
+              "https://static.cninfo.com.cn/finalpage/2026-08-20/1225482387.PDF"
+            ],
+            "verified_at": null,
+            "evidence": "source",
+            "entered_at": "2026-10-23",
+            "period_end": "2026-09-30",
+            "revg": 0.16269999999999998,
+            "earng": 0.3688,
+            "gm": 0.23989627
+          }
+        }
+      ],
+      "industries": [
+        {
+          "name": "AI核心半导体",
+          "s": [
+            5,
+            5,
+            5,
+            3
+          ]
+        },
+        {
+          "name": "AI网络与光互连",
+          "s": [
+            5,
+            5,
+            4,
+            4
+          ]
+        },
+        {
+          "name": "PCB与覆铜板",
+          "s": [
+            5,
+            5,
+            5,
+            3
+          ]
+        },
+        {
+          "name": "电力与数据中心",
+          "s": [
+            4,
+            3,
+            5,
+            3
+          ]
+        },
+        {
+          "name": "MLCC与精密时钟",
+          "s": [
+            4,
+            3,
+            4,
+            3
+          ]
+        },
+        {
+          "name": "光纤光缆",
+          "s": [
+            4,
+            4,
+            3,
+            3
+          ]
+        },
+        {
+          "name": "探针卡与半导体测试",
+          "s": [
+            4,
+            4,
+            4,
+            2
+          ]
+        },
+        {
+          "name": "AI服务器",
+          "s": [
+            5,
+            3,
+            2,
+            3
+          ]
+        },
+        {
+          "name": "创新药（GLP-1/CXO/AI制药）",
+          "s": [
+            4,
+            3,
+            3,
+            3
+          ]
+        },
+        {
+          "name": "电池与储能",
+          "s": [
+            4,
+            3,
+            3,
+            3
+          ]
+        },
+        {
+          "name": "航空航天与国防",
+          "s": [
+            3,
+            3,
+            3,
+            3
+          ]
+        },
+        {
+          "name": "网络安全",
+          "s": [
+            3,
+            3,
+            2,
+            3
+          ]
+        },
+        {
+          "name": "玻璃基板",
+          "s": [
+            3,
+            1,
+            3,
+            3
+          ]
+        },
+        {
+          "name": "消费",
+          "s": [
+            2,
+            3,
+            1,
+            4
+          ]
+        },
+        {
+          "name": "房地产",
+          "s": [
+            1,
+            2,
+            1,
+            4
+          ]
+        }
+      ],
+      "changesToday": {
+        "date": "2026-10-26",
+        "reports": [
+          "DZSK",
+          "HHKJ",
+          "MOD",
+          "SNDL",
+          "SYDQ",
+          "ZGXD",
+          "ZWGX"
+        ],
+        "confirmed": [
+          "ANET",
+          "ASML",
+          "ASMPT",
+          "COHR",
+          "ETN",
+          "GEV",
+          "LITE",
+          "NTB",
+          "SU",
+          "SYST",
+          "TFTX",
+          "VRT",
+          "XYS",
+          "YJKJ",
+          "ZJXC"
+        ],
+        "scores": [
+          "AI网络与光互连",
+          "PCB与覆铜板",
+          "电池与储能"
+        ]
+      },
+      "coverage": [
+        {
+          "kind": "company",
+          "symbol": "688012.SS",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688012.SS",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688012.SS",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688012.SS",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688012.SS",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688012.SS",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688012.SS",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688012.SS",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688012.SS",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "688012.SS",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688012.SS",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ASML",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ASML",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ASML",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ASML",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ASML",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ASML",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ASML",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ASML",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ASML",
+          "metric": "marketCapUSD",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ASML",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ASML",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "0522.HK",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "0522.HK",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "0522.HK",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "0522.HK",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "0522.HK",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "0522.HK",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "0522.HK",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "0522.HK",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "0522.HK",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "0522.HK",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "0522.HK",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688825.SS",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688825.SS",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688825.SS",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688825.SS",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688825.SS",
+          "metric": "r60",
+          "status": "missing"
+        },
+        {
+          "kind": "company",
+          "symbol": "688825.SS",
+          "metric": "ytd",
+          "status": "missing"
+        },
+        {
+          "kind": "company",
+          "symbol": "688825.SS",
+          "metric": "high52",
+          "status": "missing"
+        },
+        {
+          "kind": "company",
+          "symbol": "688825.SS",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688825.SS",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "688825.SS",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688825.SS",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MU",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MU",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MU",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MU",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MU",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MU",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MU",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MU",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MU",
+          "metric": "marketCapUSD",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MU",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MU",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002371.SZ",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002371.SZ",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002371.SZ",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002371.SZ",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002371.SZ",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002371.SZ",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002371.SZ",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002371.SZ",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002371.SZ",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "002371.SZ",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002371.SZ",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "NVDA",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "NVDA",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "NVDA",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "NVDA",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "NVDA",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "NVDA",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "NVDA",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "NVDA",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "NVDA",
+          "metric": "marketCapUSD",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "NVDA",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "NVDA",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000660.KS",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000660.KS",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000660.KS",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000660.KS",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000660.KS",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000660.KS",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000660.KS",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000660.KS",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000660.KS",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "000660.KS",
+          "metric": "PE",
+          "status": "missing"
+        },
+        {
+          "kind": "company",
+          "symbol": "000660.KS",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "TSM",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "TSM",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "TSM",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "TSM",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "TSM",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "TSM",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "TSM",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "TSM",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "TSM",
+          "metric": "marketCapUSD",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "TSM",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "TSM",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ANET",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ANET",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ANET",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ANET",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ANET",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ANET",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ANET",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ANET",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ANET",
+          "metric": "marketCapUSD",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ANET",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ANET",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "AVGO",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "AVGO",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "AVGO",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "AVGO",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "AVGO",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "AVGO",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "AVGO",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "AVGO",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "AVGO",
+          "metric": "marketCapUSD",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "AVGO",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "AVGO",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "COHR",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "COHR",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "COHR",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "COHR",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "COHR",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "COHR",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "COHR",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "COHR",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "COHR",
+          "metric": "marketCapUSD",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "COHR",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "COHR",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "LITE",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "LITE",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "LITE",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "LITE",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "LITE",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "LITE",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "LITE",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "LITE",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "LITE",
+          "metric": "marketCapUSD",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "LITE",
+          "metric": "PE",
+          "status": "not_applicable"
+        },
+        {
+          "kind": "company",
+          "symbol": "LITE",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MRVL",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MRVL",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MRVL",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MRVL",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MRVL",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MRVL",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MRVL",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MRVL",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MRVL",
+          "metric": "marketCapUSD",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MRVL",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MRVL",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300394.SZ",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300394.SZ",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300394.SZ",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300394.SZ",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300394.SZ",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300394.SZ",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300394.SZ",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300394.SZ",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300394.SZ",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "300394.SZ",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300394.SZ",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300502.SZ",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300502.SZ",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300502.SZ",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300502.SZ",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300502.SZ",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300502.SZ",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300502.SZ",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300502.SZ",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300502.SZ",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "300502.SZ",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300502.SZ",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688498.SS",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688498.SS",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688498.SS",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688498.SS",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688498.SS",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688498.SS",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688498.SS",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688498.SS",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688498.SS",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "688498.SS",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688498.SS",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300308.SZ",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300308.SZ",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300308.SZ",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300308.SZ",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300308.SZ",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300308.SZ",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300308.SZ",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300308.SZ",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300308.SZ",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "300308.SZ",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300308.SZ",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601208.SS",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601208.SS",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601208.SS",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601208.SS",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601208.SS",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601208.SS",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601208.SS",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601208.SS",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601208.SS",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "601208.SS",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601208.SS",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301377.SZ",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301377.SZ",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301377.SZ",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301377.SZ",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301377.SZ",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301377.SZ",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301377.SZ",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301377.SZ",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301377.SZ",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "301377.SZ",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301377.SZ",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301200.SZ",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301200.SZ",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301200.SZ",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301200.SZ",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301200.SZ",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301200.SZ",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301200.SZ",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301200.SZ",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301200.SZ",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "301200.SZ",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "301200.SZ",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "2383.TW",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "2383.TW",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "2383.TW",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "2383.TW",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "2383.TW",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "2383.TW",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "2383.TW",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "2383.TW",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "2383.TW",
+          "metric": "marketCapUSD",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "2383.TW",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "2383.TW",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002463.SZ",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002463.SZ",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002463.SZ",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002463.SZ",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002463.SZ",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002463.SZ",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002463.SZ",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002463.SZ",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002463.SZ",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "002463.SZ",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002463.SZ",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "603256.SS",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "603256.SS",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "603256.SS",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "603256.SS",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "603256.SS",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "603256.SS",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "603256.SS",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "603256.SS",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "603256.SS",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "603256.SS",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "603256.SS",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "1888.HK",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "1888.HK",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "1888.HK",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "1888.HK",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "1888.HK",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "1888.HK",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "1888.HK",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "1888.HK",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "1888.HK",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "1888.HK",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "1888.HK",
+          "metric": "financial",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "3110.T",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "3110.T",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "3110.T",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "3110.T",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "3110.T",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "3110.T",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "3110.T",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "3110.T",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "3110.T",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "3110.T",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "3110.T",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300476.SZ",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300476.SZ",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300476.SZ",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300476.SZ",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300476.SZ",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300476.SZ",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300476.SZ",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300476.SZ",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300476.SZ",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "300476.SZ",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "300476.SZ",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002916.SZ",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002916.SZ",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002916.SZ",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002916.SZ",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002916.SZ",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002916.SZ",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002916.SZ",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002916.SZ",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002916.SZ",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "002916.SZ",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002916.SZ",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600183.SS",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600183.SS",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600183.SS",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600183.SS",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600183.SS",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600183.SS",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600183.SS",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600183.SS",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600183.SS",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "600183.SS",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600183.SS",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000657.SZ",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000657.SZ",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000657.SZ",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000657.SZ",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000657.SZ",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000657.SZ",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000657.SZ",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000657.SZ",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000657.SZ",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "000657.SZ",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "000657.SZ",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600875.SS",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600875.SS",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600875.SS",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600875.SS",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600875.SS",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600875.SS",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600875.SS",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600875.SS",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600875.SS",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "600875.SS",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "600875.SS",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ENR.DE",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ENR.DE",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ENR.DE",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ENR.DE",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ENR.DE",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ENR.DE",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ENR.DE",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ENR.DE",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ENR.DE",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "ENR.DE",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ENR.DE",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ETN",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ETN",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ETN",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ETN",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ETN",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ETN",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ETN",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ETN",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ETN",
+          "metric": "marketCapUSD",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ETN",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "ETN",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "GEV",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "GEV",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "GEV",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "GEV",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "GEV",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "GEV",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "GEV",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "GEV",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "GEV",
+          "metric": "marketCapUSD",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "GEV",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "GEV",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688676.SS",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688676.SS",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688676.SS",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688676.SS",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688676.SS",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688676.SS",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688676.SS",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688676.SS",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688676.SS",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "688676.SS",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "688676.SS",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002335.SZ",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002335.SZ",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002335.SZ",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002335.SZ",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002335.SZ",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002335.SZ",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002335.SZ",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002335.SZ",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002335.SZ",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "002335.SZ",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002335.SZ",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MOD",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MOD",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MOD",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MOD",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MOD",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MOD",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MOD",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MOD",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MOD",
+          "metric": "marketCapUSD",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MOD",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "MOD",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "SU.PA",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "SU.PA",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "SU.PA",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "SU.PA",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "SU.PA",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "SU.PA",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "SU.PA",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "SU.PA",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "SU.PA",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "SU.PA",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "SU.PA",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002028.SZ",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002028.SZ",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002028.SZ",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002028.SZ",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002028.SZ",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002028.SZ",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002028.SZ",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002028.SZ",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002028.SZ",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "002028.SZ",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002028.SZ",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "VRT",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "VRT",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "VRT",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "VRT",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "VRT",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "VRT",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "VRT",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "VRT",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "VRT",
+          "metric": "marketCapUSD",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "VRT",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "VRT",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002837.SZ",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002837.SZ",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002837.SZ",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002837.SZ",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002837.SZ",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002837.SZ",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002837.SZ",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002837.SZ",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002837.SZ",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "002837.SZ",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "002837.SZ",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601179.SS",
+          "metric": "price",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601179.SS",
+          "metric": "daily",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601179.SS",
+          "metric": "r5",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601179.SS",
+          "metric": "r20",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601179.SS",
+          "metric": "r60",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601179.SS",
+          "metric": "ytd",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601179.SS",
+          "metric": "high52",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601179.SS",
+          "metric": "marketCap",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601179.SS",
+          "metric": "marketCapUSD",
+          "status": "partial"
+        },
+        {
+          "kind": "company",
+          "symbol": "601179.SS",
+          "metric": "PE",
+          "status": "complete"
+        },
+        {
+          "kind": "company",
+          "symbol": "601179.SS",
+          "metric": "financial",
+          "status": "complete"
+        },
+        {
+          "kind": "index",
+          "symbol": "000001.SS",
+          "metric": null,
+          "status": "complete"
+        },
+        {
+          "kind": "index",
+          "symbol": "399006.SZ",
+          "metric": null,
+          "status": "partial"
+        },
+        {
+          "kind": "index",
+          "symbol": "000922.SS",
+          "metric": null,
+          "status": "partial"
+        },
+        {
+          "kind": "index",
+          "symbol": "^HSI",
+          "metric": null,
+          "status": "complete"
+        },
+        {
+          "kind": "index",
+          "symbol": "HSTECH.HK",
+          "metric": null,
+          "status": "partial"
+        },
+        {
+          "kind": "index",
+          "symbol": "^IXIC",
+          "metric": null,
+          "status": "complete"
+        },
+        {
+          "kind": "index",
+          "symbol": "^GSPC",
+          "metric": null,
+          "status": "complete"
+        },
+        {
+          "kind": "index",
+          "symbol": "^SOX",
+          "metric": null,
+          "status": "complete"
+        },
+        {
+          "kind": "fx",
+          "symbol": "CNY",
+          "metric": null,
+          "status": "complete"
+        },
+        {
+          "kind": "fx",
+          "symbol": "EUR",
+          "metric": null,
+          "status": "complete"
+        },
+        {
+          "kind": "fx",
+          "symbol": "HKD",
+          "metric": null,
+          "status": "complete"
+        },
+        {
+          "kind": "fx",
+          "symbol": "JPY",
+          "metric": null,
+          "status": "complete"
+        },
+        {
+          "kind": "fx",
+          "symbol": "KRW",
+          "metric": null,
+          "status": "complete"
+        },
+        {
+          "kind": "fx",
+          "symbol": "TWD",
+          "metric": null,
+          "status": "complete"
+        },
+        {
+          "kind": "ratio",
+          "symbol": "growth/dividend",
+          "metric": null,
+          "status": "partial"
+        }
+      ]
     }
   ]
 }
