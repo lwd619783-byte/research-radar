@@ -1,17 +1,76 @@
 {
-  "schemaVersion": 2,
-  "sourceSHA": "988c6d289d9347ffb253abca0582fa19771f932f",
-  "runId": "40050351365",
-  "fixedClock": "2026-10-24T09:35:38.332173+08:00",
+  "schemaVersion": 3,
+  "sourceSHA": "727d91c6d9faacbf62ea787460ea52f50941b05e",
+  "runId": "40304493723",
+  "fixedClock": "2026-10-26T18:09:02.355276+08:00",
   "priceDateRange": [
-    "2026-10-23"
+    "2026-10-22",
+    "2026-10-23",
+    "2026-10-26"
   ],
-  "dataSHA256": "90a1e2e3903ac7117c481c968ad30ff468f44c88d197ffd116462e5d0868a74a",
+  "dataSHA256": "355bf2730d8ce63f85dd88c6a2a6ea1561354b187a6247e53bef3f5e2364206e",
   "blockers": [],
-  "historySHA256": "9ea357669bc24f38484f66d7063436fec55730d27ee3718fa69f76679bd5469f",
+  "historySHA256": "b4f615a2b596cc09abfb1713f81f53c78189863f4588e2d2b27bd51b0b3187d9",
   "files": {
-    "index.html": "870a1e89136d6cf247f3169fd7977ad14a755609ecbf5417370e5cfb4173a63c",
-    "version.json": "eb25a5b80d365a1b9a8b5eb6ac5567fd29890ce1fcac66799636d170f4665a24",
+    "index.html": "29c554401a15695e3524c80dd8b43b591f2301cd4dced0a87e17087cc2bb5b6c",
+    "version.json": "6fb67254c7b78e2e91aaf4560c9e679709ccb73ebc8dc015451d5a46aa585355",
     "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1"
+  },
+  "researchSnapshotSHA256": "aac7f8a20e32e5848bd22aa5f3d76b50f75fb87cca3d3c0bc6cdf6c87b9dcc74",
+  "notion": {
+    "source": "notion",
+    "requests": {
+      "GET": 6,
+      "POST": 6,
+      "retries": 0,
+      "total": 12
+    },
+    "counts": {
+      "industries": {
+        "fetched": 15,
+        "used": 15,
+        "excluded": 0,
+        "quarantined": 0,
+        "substituted": 0
+      },
+      "chokepoints": {
+        "fetched": 16,
+        "used": 16,
+        "excluded": 0,
+        "quarantined": 0,
+        "substituted": 0
+      },
+      "companies": {
+        "fetched": 42,
+        "used": 42,
+        "excluded": 0,
+        "quarantined": 0,
+        "substituted": 0
+      },
+      "financials": {
+        "fetched": 47,
+        "used": 47,
+        "excluded": 0,
+        "quarantined": 0,
+        "substituted": 0
+      },
+      "daily": {
+        "fetched": 5,
+        "used": 5,
+        "excluded": 0,
+        "quarantined": 0,
+        "substituted": 0
+      },
+      "weekly": {
+        "fetched": 3,
+        "used": 3,
+        "excluded": 0,
+        "quarantined": 0,
+        "substituted": 0
+      }
+    },
+    "fallbackTables": [],
+    "warningCount": 0,
+    "quarantinedCount": 0
   }
 }
