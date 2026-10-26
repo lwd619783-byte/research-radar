@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "state": "current",
   "sourceSHA": "727d91c6d9faacbf62ea787460ea52f50941b05e",
-  "runId": "40351419252",
-  "dataSHA256": "188bc696e77aec3976bd4b58d073d658c7b003b01c7b55ba35547c78d3425e76",
-  "generatedAt": "2026-10-27T00:01+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/40351419252",
+  "runId": "40362485384",
+  "dataSHA256": "e0a0a3a8f281388dc046e0088ad2d880da17b38236476e3a1bf94357d095d392",
+  "generatedAt": "2026-10-27T00:50+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/40362485384",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-10-27T00:01+08:00",
+    "generatedAt": "2026-10-27T00:50+08:00",
     "baselineAt": "2026-10-26T18:09+08:00",
     "reports": [],
     "calendar": [
@@ -112,7 +112,28 @@
         "status": "partial"
       }
     ],
-    "prices": [],
+    "prices": [
+      {
+        "id": "ENR",
+        "name": "西门子能源",
+        "beforeDate": "2026-10-23",
+        "afterDate": "2026-10-26",
+        "before": 118.7,
+        "after": 123.8,
+        "currency": "EUR",
+        "change": 0.04297
+      },
+      {
+        "id": "SU",
+        "name": "施耐德电气",
+        "beforeDate": "2026-10-23",
+        "afterDate": "2026-10-26",
+        "before": 231.4,
+        "after": 235.4,
+        "currency": "EUR",
+        "change": 0.0175
+      }
+    ],
     "scores": [],
     "today": {
       "date": "2026-10-27",
@@ -133,7 +154,7 @@
       "scores": []
     },
     "excludedPrices": 26,
-    "sameDatePrices": 16,
+    "sameDatePrices": 14,
     "pendingResearch": 8,
     "baselineProof": {
       "state": "success",
