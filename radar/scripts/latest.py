@@ -3,6 +3,7 @@ import datetime as dt
 from zoneinfo import ZoneInfo
 from integrity import ZONES, fresh_record, number, observation_time, dated_fx
 from snapshot import completed_bars, equity_bar_final, CLOSED_QUOTE_STATES
+import reviewed_closures
 
 
 def calendar_completed_bars(record, bars, symbol, now):
@@ -12,7 +13,9 @@ def calendar_completed_bars(record, bars, symbol, now):
     legacy closed markers alone do not authorize reselection. Do not skip an
     actual trading day, an estimated holiday or any future provider date. The
     exact expected close must still exist and pass the unchanged receipt gate.
-    Earlier history is retained, including dates outside calendar coverage.
+    Earlier history is retained, except the independently disproven Taiwan
+    dates already excluded by the production correction. Calendar-free callers
+    retain that correction; this path uses the full calendar for freshness.
     """
     from market_calendar import context, known_non_session
     calendar = context(symbol, now)
@@ -30,6 +33,15 @@ def calendar_completed_bars(record, bars, symbol, now):
                 expected, timestamps.get(expected), record.get('timezone'),
                 record.get('finality'), record.get('receivedAt')):
             return []
+    if calendar['exchange'] == 'XTAI':
+        reviewed_expected = reviewed_closures.expected_close('台股', now)
+        extended_carry = (dt.date.fromisoformat(today) - dt.date.fromisoformat(expected)).days > 4
+        false_history = any(reviewed_closures.known_closed('台股', bar[0]) for bar in bars)
+        # Keep PR5's short, no-tail legacy compatibility, but never let it
+        # remove known false history, extend a five-day holiday carry, or
+        # certify the reopening close without the original provider proof.
+        if false_history or reviewed_expected and (extended_carry or expected == today):
+            bars = reviewed_closures.completed_bars(record, bars, '台股', now)
     return [bar for bar in bars if bar[0] <= expected]
 
 
@@ -46,8 +58,11 @@ def select_daily(companies, records, now, *, calendar_policy=False):
             except (ValueError, TypeError, KeyError): bars=[]
         if calendar_policy and bars:
             bars = calendar_completed_bars(r, bars, c['sym'], now)
+        elif not calendar_policy:
+            bars = reviewed_closures.completed_bars(r, bars, c['mkt'], now)
         local = now.astimezone(ZoneInfo(ZONES[c['mkt']])).date()
         if bars and (fresh_record(r, now, bars[-1][0], c['mkt'], symbol=c['sym']) if calendar_policy
+                     else fresh_record(r, now, bars[-1][0], c['mkt']) if reviewed_closures.expected_close(c['mkt'], now)
                      else 0 <= (local-dt.date.fromisoformat(bars[-1][0])).days <= 4):
             day=bars[-1][0]
             selected[c['sym']]={**r,'bars':bars,'asOf':day,'phase':'closed',
@@ -69,6 +84,7 @@ def select_quote(record, day, market, currency, now, *, symbol=None):
     observed=observation_time('quote',record)
     local=observed.astimezone(ZoneInfo(ZONES[market])).date().isoformat() if observed else None
     if not local:return {},'quote_date_mismatch_or_missing',None
+    if reviewed_closures.known_closed(market, local):return {},'quote_on_confirmed_market_closure',local
     if not fresh_record(record,now,local,market,symbol=symbol,allow_intraday=True,phase=quote_phase(record)):return {},'quote_stale_or_invalid_receipt',local
     if observed>dt.datetime.fromisoformat(record['receivedAt']):return {},'quote_observation_after_receipt',local
     if record.get('currency')!=currency:return {},'quote_currency_mismatch',local
