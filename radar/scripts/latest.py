@@ -3,6 +3,7 @@ import datetime as dt
 from zoneinfo import ZoneInfo
 from integrity import ZONES, fresh_record, number, observation_time, dated_fx
 from snapshot import completed_bars, equity_bar_final, CLOSED_QUOTE_STATES
+import reviewed_closures
 
 
 def select_daily(companies, records, now):
@@ -17,7 +18,9 @@ def select_daily(companies, records, now):
                 if any(dt.datetime.fromisoformat(b[0]).replace(tzinfo=ZoneInfo(r['timezone'])).utcoffset() != dt.datetime.fromisoformat(b[0]).replace(tzinfo=ZoneInfo(ZONES[c['mkt']])).utcoffset() for b in bars): bars=[]
             except (ValueError, TypeError, KeyError): bars=[]
         local = now.astimezone(ZoneInfo(ZONES[c['mkt']])).date()
-        if bars and 0 <= (local-dt.date.fromisoformat(bars[-1][0])).days <= 4:
+        bars = reviewed_closures.completed_bars(r, bars, c['mkt'], now)
+        if bars and (fresh_record(r, now, bars[-1][0], c['mkt']) if reviewed_closures.expected_close(c['mkt'], now)
+                     else 0 <= (local-dt.date.fromisoformat(bars[-1][0])).days <= 4):
             day=bars[-1][0]
             selected[c['sym']]={**r,'bars':bars,'asOf':day,'phase':'closed',
                 'snapshotSelection':{'method':'latest-completed-per-market','selectedDate':day,'sourceAsOf':r.get('asOf'),'sourcePhase':r.get('phase')}}
@@ -38,6 +41,7 @@ def select_quote(record, day, market, currency, now):
     observed=observation_time('quote',record)
     local=observed.astimezone(ZoneInfo(ZONES[market])).date().isoformat() if observed else None
     if not local:return {},'quote_date_mismatch_or_missing',None
+    if reviewed_closures.known_closed(market, local):return {},'quote_on_confirmed_market_closure',local
     if not fresh_record(record,now,local,market):return {},'quote_stale_or_invalid_receipt',local
     if observed>dt.datetime.fromisoformat(record['receivedAt']):return {},'quote_observation_after_receipt',local
     if record.get('currency')!=currency:return {},'quote_currency_mismatch',local

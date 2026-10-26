@@ -8,13 +8,16 @@ import os
 from pathlib import Path
 import re
 import tempfile
+import time
 
 import build
+import research_snapshot as snapshots
 
 MAX_BUNDLE = 10_000_000  # Decimal 10 MB, including manifest; never truncate.
 MAX_RECEIPT = 512 * 1024
 PAYLOADS = ('DATA.json', 'index.html', 'receipt.json')
 FILES = (*PAYLOADS, 'manifest.json')
+SNAPSHOT = 'research-snapshot.json'
 FORBIDDEN_KEYS = {
     'cookie', 'cookies', 'cookiejar', 'setcookie', 'headers', 'requestheaders',
     'responseheaders', 'authorization', 'password', 'passwd', 'credential',
@@ -22,9 +25,10 @@ FORBIDDEN_KEYS = {
     'secret', 'clientsecret', 'crumb', 'raw', 'rawbody', 'rawpayload', 'payload',
     'httpbody', 'responsebody', 'requestbody', 'documents', 'chart', 'quoteresponse',
     'body', 'rawresponse', 'httpresponse', 'authentication', 'apitoken',
+    'createdby', 'lasteditedby', 'requestid', 'notiontoken',
 }
 SECRET_VALUE = re.compile(
-    r'(?:gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}|AKIA[0-9A-Z]{16}'
+    r'(?:ntn_[A-Za-z0-9_-]{12,}|secret_[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}'
     r'|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|Bearer\s+[A-Za-z0-9._-]{12,}'
     r'|https?://[^\s/<>]+:[^\s/<>]+@'
     r'|[?&](?:token|access_token|api_key|apikey|crumb|signature|x-amz-signature)=)', re.I)
@@ -40,6 +44,20 @@ def encoded(value):
 
 def digest(blob):
     return hashlib.sha256(blob).hexdigest()
+
+
+def atomic_directory_rename(stage, destination):
+    """Keep the atomic rename; tolerate short Windows scanner sharing locks."""
+    for attempt in range(5):
+        if Path(destination).exists() or Path(destination).is_symlink():
+            raise BundleError('atomic_destination_exists')
+        try:
+            os.rename(stage, destination)
+            return
+        except PermissionError:
+            if os.name != 'nt' or attempt == 4:
+                raise
+            time.sleep(.05 * (attempt + 1))
 
 
 def data_digest(D):
@@ -113,10 +131,40 @@ def validate_binding(D, receipt, clock):
         raise BundleError('same_snapshot_binding_mismatch')
 
 
-def write_bundle(out_dir, D, receipt, clock):
-    """Validate all bytes first, then atomically expose exactly four files."""
+def validate_research_snapshot(snapshot, D, fixed_clock):
+    """Bind canonical, sanitized last-good bytes to the immutable DATA receipt."""
+    check_sensitive(snapshot)
+    if (snapshots.load_last_good(snapshot) is None or snapshot.get('contractVersion') != '3.0' or
+            set(snapshot) != {'schemaVersion', 'contractVersion', 'notionVersion', 'builtAt', 'tables'} or
+            set(snapshot['tables']) != set(snapshots.TABLES) or snapshot['builtAt'] != fixed_clock):
+        raise BundleError('research_snapshot_schema')
+    for table in snapshot['tables'].values():
+        if set(table) != {'source', 'fetchedAt', 'schemaHash', 'rows'}:
+            raise BundleError('research_snapshot_schema')
+        if table['rows'] != sorted(table['rows'], key=lambda row: row['id']):
+            raise BundleError('research_snapshot_order')
+        if any(set(row) != {'id', 'created_time', 'last_edited_time', 'props'} for row in table['rows']):
+            raise BundleError('research_snapshot_row_shape')
+    blob = snapshots.canonical_json(snapshot).encode('utf-8')
+    if D.get('meta', {}).get('notion', {}).get('snapshotSHA256') != digest(blob):
+        raise BundleError('research_snapshot_binding_mismatch')
+    return blob
+
+
+def notion_summary(D):
+    n = D['meta']['notion']
+    return {key: n[key] for key in ('source', 'requests', 'counts', 'fallbackTables')} | {
+        'warningCount': len(n['warnings']), 'quarantinedCount': len(n['quarantined'])}
+
+
+def write_bundle(out_dir, D, receipt, clock, research_snapshot=None):
+    """Validate all bytes first, then atomically expose the allowlisted archive."""
     validate_binding(D, receipt, clock)
     payload = {'DATA.json': encoded(D), 'receipt.json': encoded(receipt)}
+    if research_snapshot is not None:
+        payload[SNAPSHOT] = validate_research_snapshot(research_snapshot, D, clock.isoformat())
+    elif 'notion' in D.get('meta', {}):
+        raise BundleError('research_snapshot_required')
     if len(payload['receipt.json']) > MAX_RECEIPT:
         raise BundleError('receipt_size_limit')
     if sum(map(len, payload.values())) > MAX_BUNDLE:
@@ -127,7 +175,7 @@ def write_bundle(out_dir, D, receipt, clock):
     if SECRET_VALUE.search(payload['index.html'].decode()):
         raise BundleError('sensitive_rendered_value')
     manifest = {
-        'schemaVersion': 1, 'purpose': 'interface-acceptance-not-publication',
+        'schemaVersion': 2 if research_snapshot is not None else 1, 'purpose': 'interface-acceptance-not-publication',
         'dataClassification': classification(D), 'publicationAuthorized': False,
         'execution': {k: receipt['execution'][k] for k in
                       ('GITHUB_SHA', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT')},
@@ -138,9 +186,11 @@ def write_bundle(out_dir, D, receipt, clock):
         'blockers': receipt['publication']['blockers'], 'retentionDays': 7,
         'maxTotalBytes': MAX_BUNDLE,
         'files': {name: {'bytes': len(payload[name]), 'sha256': digest(payload[name])}
-                  for name in PAYLOADS},
+                  for name in payload},
         'totalBytes': 0,
     }
+    if research_snapshot is not None:
+        manifest['researchSnapshotSHA256'] = digest(payload[SNAPSHOT])
     # A manifest cannot contain its own hash. Its size is included in the limit;
     # the external completion log records its SHA256 along with the other files.
     for _ in range(10):
@@ -161,20 +211,25 @@ def write_bundle(out_dir, D, receipt, clock):
     with tempfile.TemporaryDirectory(prefix='.radar-bundle-', dir=out_dir.parent) as tmp:
         stage = Path(tmp) / 'bundle'
         stage.mkdir()
-        for name in FILES:
+        for name in payload:
             (stage / name).write_bytes(payload[name])
         verify_bundle(stage)
-        os.rename(stage, out_dir)
+        atomic_directory_rename(stage, out_dir)
     return {'totalBytes': total, 'files': {name: {'bytes': len(payload[name]),
-            'sha256': digest(payload[name])} for name in FILES}}
+            'sha256': digest(payload[name])} for name in payload}}
 
 
 def verify_bundle(directory):
     """Read-only verification used locally and immediately before artifact upload."""
     directory = Path(directory)
-    if directory.is_symlink() or {p.name for p in directory.iterdir()} != set(FILES):
+    manifest_path = directory/'manifest.json'
+    if directory.is_symlink() or manifest_path.is_symlink() or not manifest_path.is_file():
         raise BundleError('bundle_file_allowlist')
-    paths = {name: directory / name for name in FILES}
+    manifest = json.loads(manifest_path.read_text('utf-8'))
+    files = (*FILES, SNAPSHOT) if manifest.get('schemaVersion') == 2 else FILES
+    if {p.name for p in directory.iterdir()} != set(files):
+        raise BundleError('bundle_file_allowlist')
+    paths = {name: directory / name for name in files}
     if any(p.is_symlink() or not p.is_file() for p in paths.values()):
         raise BundleError('bundle_file_type')
     total = sum(p.stat().st_size for p in paths.values())
@@ -185,11 +240,11 @@ def verify_bundle(directory):
     check_sensitive(manifest)
     if (set(manifest) != {'schemaVersion', 'purpose', 'dataClassification', 'publicationAuthorized',
                          'execution', 'fixedClock', 'selectedDate', 'blockers', 'retentionDays',
-                         'maxTotalBytes', 'files', 'totalBytes', 'snapshotPolicy', 'priceDateRange', 'metricAsOfByMarket'} or
-            manifest.get('schemaVersion') != 1 or
+                         'maxTotalBytes', 'files', 'totalBytes', 'snapshotPolicy', 'priceDateRange', 'metricAsOfByMarket'} | ({'researchSnapshotSHA256'} if manifest.get('schemaVersion') == 2 else set()) or
+            manifest.get('schemaVersion') not in (1, 2) or
             manifest.get('purpose') != 'interface-acceptance-not-publication'):
         raise BundleError('bundle_manifest_schema')
-    expected = {name: {'bytes': len(payload[name]), 'sha256': digest(payload[name])} for name in PAYLOADS}
+    expected = {name: {'bytes': len(payload[name]), 'sha256': digest(payload[name])} for name in files if name != 'manifest.json'}
     if (manifest.get('files') != expected or manifest.get('totalBytes') != total or
             manifest.get('maxTotalBytes') != MAX_BUNDLE or manifest.get('retentionDays') != 7 or
             manifest.get('publicationAuthorized') is not False):
@@ -197,6 +252,12 @@ def verify_bundle(directory):
     D, receipt = json.loads(payload['DATA.json']), json.loads(payload['receipt.json'])
     clock = dt.datetime.fromisoformat(manifest['fixedClock'])
     validate_binding(D, receipt, clock)
+    if manifest['schemaVersion'] == 2:
+        blob = validate_research_snapshot(json.loads(payload[SNAPSHOT]), D, manifest['fixedClock'])
+        if blob != payload[SNAPSHOT] or manifest['researchSnapshotSHA256'] != digest(blob):
+            raise BundleError('research_snapshot_bytes_mismatch')
+    elif 'notion' in D.get('meta', {}):
+        raise BundleError('research_snapshot_required')
     if (manifest['execution'] != {k: receipt['execution'][k] for k in manifest['execution']} or
             set(manifest['execution']) != {'GITHUB_SHA', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT'} or
             manifest['selectedDate'] != D['meta']['asOf'] or

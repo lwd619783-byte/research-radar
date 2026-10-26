@@ -29,24 +29,27 @@ class ContentDisplayTests(unittest.TestCase):
           assert.equal(deepDrawdown({r20:1,dd52:-.5}),true);
         """)
 
-    def test_week_boundary_and_old_opinion_never_refresh_with_market_date(self):
+    def test_week_boundary_and_legacy_opinion_remain_stale(self):
         self.run_js("""
           assert.equal(isoWeek('2026-10-21'),'2026-W43');
           assert.equal(isoWeek('2021-01-01'),'2020-W53');
-          const review={status:'unverified',verified_at:''};
-          assert.match(researchText(review,'2026-W42'),/已过期.*待复核/);
-          assert.match(researchText(review,'2026-W42'),/核验日期缺失/);
-          assert.equal(review.verified_at,'');
-          assert.ok(!researchText(review,'2026-W43').includes('已核实'));
+          const legacy={review:{status:'verified',verified_at:'2026-10-21'}};
+          assert.equal(judgmentOf(legacy).label,'stale');
+          assert.deepEqual(judgmentOf(legacy).reasons,['legacy_data']);
+          assert.equal(reasonText('legacy_data'),'旧版数据，无研判信息');
+          assert.equal(legacy.review.verified_at,'2026-10-21');
         """)
 
-    def test_verified_review_expires_and_future_review_is_not_admitted(self):
-        self.run_js("""
-          const r={status:'verified',verified_at:'2026-10-20',valid_until:'2026-10-25',source_url:'https://issuer.test/report',note:'Evidence'};
-          assert.match(researchText(r,'2026-W43'),/已核实/);
-          assert.match(researchText(r,'','2026-10-26'),/已过期.*待复核/);
-          assert.ok(!researchText({...r,verified_at:'2026-10-22'},'').includes('已核实'));
-          assert.ok(!researchText({...r,source_url:''},'').includes('已核实'));
+    def test_judgment_reasons_and_provenance_preserve_dates(self):
+        self.run_js(r"""
+          const j={label:'stale',date:'2026-10-17',validUntil:'2026-10-19',reasons:['not_current_week','expired'],sources:[]};
+          const html=provenanceLine(j,'weekly','','stale');
+          assert.match(html,/待更新/);assert.match(html,/10\/17 研判/);
+          assert.match(html,/10\/19，已过期/);assert.match(html,/显示上次结论/);
+          assert.match(html,/tabindex="0"/);assert.match(html,/aria-label=/);
+          assert.equal(j.date,'2026-10-17');
+          assert.match(reasonText('future_judgment_date'),/未来/);
+          assert.match(reasonText('missing_source'),/缺来源/);
         """)
 
     def test_calendar_distinguishes_unverified_estimated_confirmed_and_past(self):
@@ -54,12 +57,13 @@ class ContentDisplayTests(unittest.TestCase):
           const c={next:'2026-10-28',earnings:{status:'confirmed',source_url:'https://issuer.test/invitation',published_at:'2026-10-21',verified_at:'2026-10-21',timezone:'Asia/Seoul'}};
           assert.equal(eventState(c),'confirmed');
           assert.equal(eventState({...c,earnings:{status:'confirmed'}}),'unverified');
-          assert.equal(eventState({...c,earnings:{...c.earnings,status:'estimated'}}),'estimated');
-          assert.equal(eventState(c,'2026-10-20'),'unverified');
+          assert.equal(eventLabel({...c,earnings:{...c.earnings,status:'estimated'}}),'预估');
+          assert.equal(eventLabel({...c,earnings:{status:'confirmed',source_url:'http://issuer.test/invitation'}}),'预估');
+          assert.equal(eventState(c,'2026-10-20'),'confirmed');
           assert.equal(eventState(c,'2026-10-29'),'overdue');
           assert.equal(eventState({...c,next:null}),'undated');
           assert.deepEqual(eventCounts([c,{next:'2026-10-30'},{next:'2026-10-20'},{}]),{confirmed:1,estimated:0,unverified:1,overdue:1,undated:1});
-          assert.match(eventCountdown('2026-10-20'),/已过 1 天.*待复核/);
+          assert.match(eventCountdown('2026-10-20'),/已过 1 天.*待更新/);
         """)
 
     def test_every_referenced_surface_follows_one_date_and_status(self):
@@ -68,8 +72,8 @@ class ContentDisplayTests(unittest.TestCase):
           const templates=['海力士Q3（{{earnings:SKH}}）','{{earnings:SKH}}发财报'];
           for(const t of templates)assert.match(earningsText(t,co),/10\/28 · 官方确认/);
           co.SKH.next='2026-10-30';co.SKH.earnings={};
-          for(const t of templates)assert.match(earningsText(t,co),/10\/30 · 日期待核/);
-          assert.equal(earningsText('{{earnings:UNKNOWN}}',co),'日期待核');
+          for(const t of templates)assert.match(earningsText(t,co),/10\/30 · 预估/);
+          assert.equal(earningsText('{{earnings:UNKNOWN}}',co),'日期待定');
         """)
 
 

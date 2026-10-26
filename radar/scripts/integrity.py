@@ -64,7 +64,9 @@ def fresh_record(record, now, date=None, market='A股'):
             return False
         if date is not None:
             age = (now.astimezone(ZoneInfo(ZONES[market])).date() - dt.date.fromisoformat(date)).days
-            if not 0 <= age <= 4:
+            from reviewed_closures import expected_close
+            expected = expected_close(market, now)
+            if (expected is not None and date != expected) or (expected is None and not 0 <= age <= 4):
                 return False
     except (KeyError, TypeError, ValueError):
         return False

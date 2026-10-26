@@ -62,12 +62,13 @@ class ProductionTests(unittest.TestCase):
         w = json.loads((ROOT/'.github/workflows/radar-production.yml').read_text('utf-8'))
         self.assertEqual(set(w['on']), {'schedule', 'push', 'workflow_dispatch'})
         self.assertEqual([x['cron'] for x in w['on']['schedule']],
-                         ['15 23 * * 1-5', '15 4 * * 1-5', '35 8 * * 1-5'])
+                         ['45 0 * * 1-5', '15 4 * * 1-5', '15 10 * * 1-5', '50 22 * * 0'])
         steps = w['jobs']['refresh']['steps']
         self.assertFalse(steps[0]['with']['persist-credentials'])
         by_id = {s['id']: s for s in steps if 'id' in s}
         self.assertEqual({s['id'] for s in steps if 'GH_TOKEN' in s.get('env', {})}, {'baseline', 'publish', 'result'})
         self.assertTrue(all('GH_TOKEN' not in by_id[k].get('env', {}) for k in ('preflight','collect','prepare')))
+        self.assertEqual({s['id'] for s in steps if 'NOTION_TOKEN' in s.get('env', {})}, {'collect'})
         self.assertIn('production_release.py', by_id['prepare']['run'])
         self.assertIn('--check-only', by_id['prepare']['run'])
         self.assertEqual(by_id['result']['if'], 'always()')

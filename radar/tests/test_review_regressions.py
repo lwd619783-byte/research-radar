@@ -232,7 +232,7 @@ class FrozenClock(dt.datetime):
 
 class CompleteMainTests(unittest.TestCase):
     def run_main(self, data, mk, root, force=False):
-        args = ['build.py', '--cache', str(root/'cache.json'), '--out', str(root/'out'),
+        args = ['build.py', '--source', 'toml', '--cache', str(root/'cache.json'), '--out', str(root/'out'),
                 '--audit-json', str(root/'audit.json')]
         if force: args.append('--force')
         with patch.object(sys, 'argv', args), patch.object(build.dt, 'datetime', FrozenClock), \

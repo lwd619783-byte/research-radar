@@ -291,13 +291,21 @@ class CacheAndContractTests(unittest.TestCase):
         self.assertNotIn('secrets.', json.dumps(workflow))
         self.assertNotIn('permissions', job)
         self.assertEqual([s['run'] for s in job['steps'] if 'run' in s],
-                         ['python -B radar/scripts/acceptance_probe.py --preflight'])
+                         ['python -B radar/scripts/acceptance_probe.py --preflight',
+                          'python -B radar/tools/rehearse_v3_release.py --out "$RUNNER_TEMP/radar-v3-rehearsal"'])
+        upload = next(s for s in job['steps'] if 'actions/upload-artifact@' in s.get('uses', ''))
+        self.assertEqual(upload['with']['path'].splitlines(), [
+            '${{ runner.temp }}/radar-v3-rehearsal/release.json',
+            '${{ runner.temp }}/radar-v3-rehearsal/step-summary.md',
+            '${{ runner.temp }}/radar-v3-rehearsal/rehearsal.json'])
+        self.assertEqual(upload['with']['retention-days'], 7)
+        self.assertFalse(upload['with']['include-hidden-files'])
         checkout = next(s for s in job['steps'] if 'actions/checkout@' in s.get('uses', ''))
         self.assertFalse(checkout['with']['persist-credentials'])
 
     def test_force_does_not_bypass_missing_data_gate(self):
         with tempfile.TemporaryDirectory() as td:
-            proc = subprocess.run([sys.executable, str(ROOT/'radar/scripts/build.py'), '--offline', '--force',
+            proc = subprocess.run([sys.executable, str(ROOT/'radar/scripts/build.py'), '--source', 'toml', '--offline', '--force',
                                    '--cache', str(Path(td)/'none.json'), '--out', str(Path(td)/'out'),
                                    '--audit-json', str(Path(td)/'report.json')], capture_output=True)
             self.assertEqual(proc.returncode, 2)
