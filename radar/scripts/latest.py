@@ -29,9 +29,8 @@ def calendar_completed_bars(record, bars, symbol, now, *, require_reviewed_close
         # The legacy closed marker may preserve a series, but cannot authorize
         # this new removal/reselection path without original provider proof.
         timestamps = record.get('barTimestamps')
-        if not isinstance(timestamps, dict) or not equity_bar_final(
-                expected, timestamps.get(expected), record.get('timezone'),
-                record.get('finality'), record.get('receivedAt')):
+        from equity_close_proof import record_bar_final
+        if not isinstance(timestamps, dict) or not record_bar_final(record, expected, symbol=symbol, now=now):
             return []
     if calendar['exchange'] == 'XTAI':
         reviewed_expected = reviewed_closures.expected_close('台股', now)
@@ -45,7 +44,7 @@ def calendar_completed_bars(record, bars, symbol, now, *, require_reviewed_close
         # during short carries; contradictory evidence is not legacy data.
         if false_history or reviewed_expected and (require_reviewed_close or extended_carry
                 or expected == today or 'finality' in record):
-            bars = reviewed_closures.completed_bars(record, bars, '台股', now)
+            bars = reviewed_closures.completed_bars(record, bars, '台股', now, symbol=symbol)
     return [bar for bar in bars if bar[0] <= expected]
 
 
@@ -54,7 +53,7 @@ def select_daily(companies, records, now, *, calendar_policy=False, require_revi
     for c in companies:
         r = records.get(c['sym']) or {}
         if r.get('asOf'): sources.setdefault(c['mkt'], set()).add(r['asOf'])
-        bars = completed_bars(r)
+        bars = completed_bars(r, symbol=c['sym'], now=now)
         if r.get('currency') not in (None, c['cur']): bars = []
         if r.get('timezone'):
             try:
@@ -64,7 +63,7 @@ def select_daily(companies, records, now, *, calendar_policy=False, require_revi
             bars = calendar_completed_bars(r, bars, c['sym'], now,
                                            require_reviewed_close=require_reviewed_close)
         elif not calendar_policy:
-            bars = reviewed_closures.completed_bars(r, bars, c['mkt'], now)
+            bars = reviewed_closures.completed_bars(r, bars, c['mkt'], now, symbol=c['sym'])
         local = now.astimezone(ZoneInfo(ZONES[c['mkt']])).date()
         if bars and (fresh_record(r, now, bars[-1][0], c['mkt'], symbol=c['sym']) if calendar_policy
                      else fresh_record(r, now, bars[-1][0], c['mkt']) if reviewed_closures.expected_close(c['mkt'], now)

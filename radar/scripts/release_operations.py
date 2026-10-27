@@ -88,6 +88,11 @@ def verify_files(root, allow_dry_run=False):
         if p.is_symlink() or not p.is_file() or bundle.digest(p.read_bytes()) != digest:
             raise ValueError('release_file_hash_mismatch')
     data = bundle.embedded_data((root/'public/index.html').read_bytes())
+    if 'independentCloseProofs' in m or any('independentCloseProof' in row.get('provenance', {}).get('daily', {})
+                                          for row in data.get('companies', [])):
+        bundle.validate_close_proofs(data, m.get('independentCloseProofs'),
+            {'GITHUB_SHA': m.get('sourceSHA'), 'GITHUB_RUN_ID': m.get('runId'), 'GITHUB_RUN_ATTEMPT': '1'},
+            dt.datetime.fromisoformat(m['fixedClock']))
     synthetic = any(data['meta'].get(k) for k in ('fixture', 'offline', 'reviewPreview'))
     if bundle.data_digest(data) != m['dataSHA256'] or (synthetic and not (diagnostic and m.get('purpose') == 'offline-rehearsal')):
         raise ValueError('release_data_invalid')

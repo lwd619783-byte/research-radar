@@ -491,6 +491,10 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
         'requestsMade': budget.count, 'deniedPaths': sorted(budget.denied),
         'finishedAt': final_clock.isoformat(), 'fixedClock': final_clock.isoformat(),
         'notion': {'requests': fetched['requests'], 'fetchSHA256': bundle.digest((work / 'notion-fetch.json').read_bytes())}}
+    close_proofs = {row['sym']: row['provenance']['daily']['independentCloseProof']
+                    for row in data['companies'] if row.get('provenance', {}).get('daily', {}).get('independentCloseProof') is not None}
+    if close_proofs:
+        receipt['independentCloseProofs'] = close_proofs
     if real_blockers:
         save_json(work / 'diagnostic.json', safe_collection_diagnostic(real_blockers[0], blockers=real_blockers,
                   market_issues=market_diagnostic_issues(data),

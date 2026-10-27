@@ -269,6 +269,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
                                            'marketCapStatus': 'available' if mcap_usd is not None else 'missing_or_incompatible'},
                              'financial': {**c.get('financial', {}), 'status': status}}
         row['financialPartial'] = status == 'verified_partial'
+        if (d or {}).get('independentCloseProof') is not None:
+            row['provenance']['daily']['independentCloseProof'] = d['independentCloseProof']
         if status not in ('verified', 'verified_partial'):
             for key in ('revg', 'earng', 'gm'):
                 row[key] = None

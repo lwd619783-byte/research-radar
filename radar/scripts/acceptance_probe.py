@@ -69,8 +69,20 @@ class Budget:
 
 def route(url):
     p = urllib.parse.urlsplit(url)
-    if p.scheme != 'https' or p.hostname not in HOSTS or p.username or p.password or p.port not in (None, 443):
+    if p.scheme != 'https' or p.hostname not in HOSTS | {'www.twse.com.tw'} or p.username is not None or p.password is not None or p.port not in (None, 443) or p.fragment:
         raise StopProbe('host_not_allowlisted')
+    if p.hostname == 'www.twse.com.tw':
+        query = urllib.parse.parse_qs(p.query, keep_blank_values=True)
+        day = query.get('date', [''])[0]
+        try:
+            valid_day = dt.datetime.strptime(day, '%Y%m%d').strftime('%Y%m%d') == day
+        except ValueError:
+            valid_day = False
+        if (p.path == '/rwd/zh/afterTrading/STOCK_DAY' and set(query) == {'date', 'stockNo', 'response'}
+                and all(len(v) == 1 for v in query.values()) and valid_day
+                and query['stockNo'] == ['2383'] and query['response'] == ['json']):
+            return 'twse-close', 'stock-day'
+        raise StopProbe('path_not_allowlisted')
     if p.hostname == 'fc.yahoo.com' and p.path in ('', '/'):
         return 'yahoo-valuation', 'cookie-seed'
     if p.hostname == 'query1.finance.yahoo.com':
@@ -279,7 +291,7 @@ def access_affects(item, access):
     if item['kind']=='company':
         metric=item.get('metric')
         if category=='quote-session':return metric in ('price','PE','marketCap','marketCapUSD')
-        return (access.get('symbol')==item.get('symbol') and category=='company-yahoo-daily'
+        return (access.get('symbol')==item.get('symbol') and category in ('company-yahoo-daily', 'company-twse-close-proof')
                 and metric in ('price','daily','r5','r20','r60','ytd','high52'))
     if item['kind']=='ratio':return category=='ratio-tencent'
     return (access.get('symbol')==item.get('symbol') and
@@ -293,7 +305,50 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
     for source, group, category in (('yahoo', companies, 'company-yahoo-daily'), ('tencent', tencent, 'company-tencent-backup')):
         for c in group:
             fn = quotes.yahoo_daily if source == 'yahoo' else quotes.tencent_daily
-            row, value = inspect(category, c['sym'], source, budget, lambda h: fn(h, c['sym']),
+            def fetch_daily(h):
+                value = fn(h, c['sym'])
+                if not (calendar_policy and source == 'yahoo' and c['sym'] == '2383.TW'
+                        and value.get('phase') == 'unknown'):
+                    return value
+                if chart_meta(h).get('symbol') != '2383.TW':
+                    return value
+                from market_calendar import context
+                from equity_close_proof import make_proof
+                current = snapshot_clock or dt.datetime.now(dt.UTC)
+                expected = context(c['sym'], current)['expectedCompletedDate']
+                if not expected or value.get('asOf') != expected:
+                    return value
+                closing = dt.datetime.fromisoformat(expected + 'T13:30:00+08:00')
+                if current < closing or value.get('currency') != 'TWD' or value.get('timezone') != 'Asia/Taipei':
+                    return value
+                official = ProbeHttp(budget, 'twse')
+                official_url = ('https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date='
+                                + expected.replace('-', '') + '&stockNo=2383&response=json')
+                extra = {'category': 'company-twse-close-proof', 'code': c['sym'], 'source': 'twse',
+                         'connection': False, 'parse': False, 'quality': False, 'publicationGate': False,
+                         'checks': {}, 'details': {}, 'failure': None, 'startedAt': utc()}
+                try:
+                    document = official.json(official_url)
+                    extra['parse'] = True
+                    source_event = next(e for e in reversed(h.events) if e.get('httpStatus') == 200 and e.get('sha256'))
+                    yahoo_url = ('https://query1.finance.yahoo.com/v8/finance/chart/2383.TW'
+                                 '?range=5y&interval=1d&includeAdjustedClose=true')
+                    proof = make_proof(value, document,
+                        official_event={**official.events[-1], 'sourceUrl': official_url},
+                        yahoo_event={**source_event, 'sourceUrl': yahoo_url}, expected_day=expected,
+                        now=snapshot_clock or dt.datetime.now(dt.UTC),
+                        execution={k: os.environ.get(k, '') for k in ('GITHUB_SHA', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT')})
+                    extra.update(quality=proof is not None, publicationGate=proof is not None,
+                                 checks={'independentCloseProof': proof is not None})
+                    if proof is not None:
+                        value = {**value, 'independentCloseProof': proof}
+                except Exception as exc:
+                    extra['failure'] = str(exc) if isinstance(exc, StopProbe) else 'official_close_proof_failed'
+                extra.update(connection=any(e.get('httpStatus') == 200 for e in official.events),
+                             requests=official.events, finishedAt=utc())
+                rows.append(extra)
+                return value
+            row, value = inspect(category, c['sym'], source, budget, fetch_daily,
                 lambda v,h: daily_quality(v,h,c,calendar_policy=calendar_policy,clock=snapshot_clock))
             rows.append(row)
             if source == 'yahoo' and value: mk['daily'][c['sym']] = value

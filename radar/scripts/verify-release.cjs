@@ -108,6 +108,7 @@ const matches=[...html.matchAll(/<script\b[^>]*>\s*const\s+DATA\s*=\s*(.*?)\s*;\
 let embedded=null;
 if(matches.length===1){try{embedded=JSON.parse(matches[0][1]);}catch{if(needsV3Scan(html,null,m))throw Error('invalid_embedded_data');}}
 if(embedded)checkSensitive(embedded);
+checkIndependentCloseProofs(m,embedded);
 const operationSlots=[...html.matchAll(/<script id="radar-operations">const OPERATIONS=(.*?);<\/script>/gs)];
 if(operationSlots.length!==1)throw Error('release_status_slot_mismatch');
 assert.deepEqual(JSON.parse(operationSlots[0][1]),version);
@@ -155,6 +156,81 @@ function checkSensitive(value) {
     }
   }
   walk(value);
+}
+function checkIndependentCloseProofs(manifest,data) {
+  // This is an additional, narrow certificate type. The provider-only path and
+  // every original date/receipt/publication check above remain unchanged.
+  const rows=Array.isArray(data?.companies)?data.companies:[];
+  const selected=rows.filter(row=>row?.provenance?.daily&&Object.hasOwn(row.provenance.daily,'independentCloseProof'));
+  const present=Object.hasOwn(manifest,'independentCloseProofs');
+  if(!present&&!selected.length)return;
+  const fail=()=>{throw Error('independent_close_proof_binding_mismatch');};
+  const exact=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)
+    &&Object.keys(value).sort().join('|')===[...keys].sort().join('|');
+  const canonical=value=>JSON.stringify(sort(value));
+  function sort(value){if(Array.isArray(value))return value.map(sort);if(value&&typeof value==='object')return Object.fromEntries(Object.keys(value).sort().map(key=>[key,sort(value[key])]));return value;}
+  const sha=value=>crypto.createHash('sha256').update(value).digest('hex');
+  const validDay=day=>typeof day==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(day)
+    &&Number.isFinite(Date.parse(day+'T00:00:00Z'))&&new Date(day+'T00:00:00Z').toISOString().slice(0,10)===day;
+  function micros(value) {
+    const match=typeof value==='string'&&/^(\d{4}-\d\d-\d\d)T(\d\d):(\d\d):(\d\d)(?:\.(\d{1,6}))?(Z|[+-]\d\d:\d\d)$/.exec(value);
+    if(!match||!validDay(match[1])||Number(match[2])>23||Number(match[3])>59||Number(match[4])>59)fail();
+    const zone=match[6],hour=zone==='Z'?0:Number(zone.slice(1,3)),minute=zone==='Z'?0:Number(zone.slice(4,6));
+    if(hour>23||minute>59)fail();
+    const offset=(hour*60+minute)*(zone.startsWith('-')?-1:1);
+    const base=Date.parse(match[1]+'T'+match[2]+':'+match[3]+':'+match[4]+'Z')-offset*60000;
+    return BigInt(base)*1000n+BigInt((match[5]||'').padEnd(6,'0'));
+  }
+  const decimal=value=>typeof value==='string'&&/^(?:0|[1-9]\d*)(?:\.\d*[1-9])?$/.test(value)&&Number.isFinite(Number(value))&&Number(value)>0;
+  const keys=['schemaVersion','method','symbol','exchange','currency','day','timezone','sourcePhase',
+    'officialSourceUrl','yahooSourceUrl','officialResponseSHA256','yahooResponseSHA256','yahooRecordSHA256',
+    'officialReceivedAt','yahooReceivedAt','parserReceivedAt','checkedAt','execution','officialResponseDate',
+    'officialTitle','officialRow','close','adjclose','high','barTimestamp','sessionStart','sessionEnd','checksum'];
+  const proofs=manifest.independentCloseProofs;
+  if(!exact(proofs,['2383.TW'])||selected.length!==1||rows.filter(row=>row.sym==='2383.TW').length!==1)fail();
+  const p=proofs['2383.TW'],row=selected[0],daily=row.provenance.daily;
+  if(!exact(p,keys)||p.schemaVersion!==1||p.method!=='twse-independent-close'||p.symbol!=='2383.TW'
+    ||p.exchange!=='XTAI'||p.currency!=='TWD'||p.timezone!=='Asia/Taipei'||p.sourcePhase!=='unknown'||!validDay(p.day))fail();
+  if(!exact(p.execution,['GITHUB_SHA','GITHUB_RUN_ID','GITHUB_RUN_ATTEMPT'])
+    ||p.execution.GITHUB_SHA!==manifest.sourceSHA||p.execution.GITHUB_RUN_ID!==manifest.runId
+    ||p.execution.GITHUB_RUN_ATTEMPT!=='1'||! /^[0-9a-f]{40}$/.test(p.execution.GITHUB_SHA)
+    ||! /^[1-9][0-9]*$/.test(p.execution.GITHUB_RUN_ID))fail();
+  const {checksum,...content}=p;
+  if(!/^[0-9a-f]{64}$/.test(checksum)||sha(canonical(content))!==checksum
+    ||['officialResponseSHA256','yahooResponseSHA256','yahooRecordSHA256'].some(key=>! /^[0-9a-f]{64}$/.test(p[key])))fail();
+  const date=p.day.replaceAll('-',''),year=Number(p.day.slice(0,4))-1911,month=Number(p.day.slice(5,7));
+  const title=typeof p.officialTitle==='string'&&p.officialTitle.length<=160
+    &&/^(\d{2,3})年(\d{1,2})月2383台光電各日成交資訊$/.exec(p.officialTitle.replace(/\s/g,''));
+  if(p.officialSourceUrl!=='https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date='+date+'&stockNo=2383&response=json'
+    ||p.yahooSourceUrl!=='https://query1.finance.yahoo.com/v8/finance/chart/2383.TW?range=5y&interval=1d&includeAdjustedClose=true'
+    ||p.officialResponseDate!==date||!title||Number(title[1])!==year||Number(title[2])!==month
+    ||!exact(p.officialRow,['date','close','high','note'])||p.officialRow.date!==year+'/'+p.day.slice(5).replace('-','/')
+    ||p.officialRow.note!==''||!decimal(p.close)||!decimal(p.adjclose)||!decimal(p.high)
+    ||p.close!==p.adjclose||p.close!==p.officialRow.close||p.high!==p.officialRow.high||Number(p.high)<Number(p.close))fail();
+  const now=micros(manifest.fixedClock),official=micros(p.officialReceivedAt),yahoo=micros(p.yahooReceivedAt),
+    parser=micros(p.parserReceivedAt),checked=micros(p.checkedAt),close=micros(p.day+'T13:30:00+08:00');
+  // This independent route certifies only today's normal Taiwan close. A
+  // rewritten output calendar must not turn a fresh receipt into an old close.
+  if(new Date(Number(now/1000n)+8*3600000).toISOString().slice(0,10)!==p.day)fail();
+  const age=36n*3600n*1000000n;
+  if(official<close||yahoo<close||official>checked||yahoo>parser||parser>checked||checked>now
+    ||now-official>age||now-yahoo>age||now-parser>age)fail();
+  const epochKeys=['barTimestamp','sessionStart','sessionEnd'];
+  if(epochKeys.some(key=>!Number.isSafeInteger(p[key])||p[key]<=0)
+    ||p.sessionEnd<=p.sessionStart||p.sessionEnd-p.sessionStart>12*3600||BigInt(p.sessionEnd)*1000000n<close
+    ||p.barTimestamp<=p.sessionEnd||BigInt(p.barTimestamp)*1000000n>yahoo
+    ||epochKeys.some(key=>new Date((p[key]+8*3600)*1000).toISOString().slice(0,10)!==p.day))fail();
+  const weekday=new Date(p.day+'T00:00:00Z').getUTCDay(),calendar=row.marketCalendar||{};
+  if(weekday===0||weekday===6||['2026-10-23','2026-10-26'].includes(p.day)
+    ||calendar.exchange!=='XTAI'||calendar.confidence!=='official'||calendar.expectedCompletedDate!==p.day||calendar.quoteDate!==p.day)fail();
+  try{assert.deepEqual(daily.independentCloseProof,p);}catch{fail();}
+  const selection=daily.snapshotSelection||{};
+  if(row.sym!=='2383.TW'||row.cur!=='TWD'||['ld','metricAsOf','priceAsOf'].some(key=>row[key]!==p.day)
+    ||daily.asOf!==p.day||daily.src!=='yahoo'||daily.phase!=='closed'||daily.returnBasis!=='yahoo-adjclose'
+    ||daily.timezone!=='Asia/Taipei'||daily.receivedAt!==p.parserReceivedAt
+    ||selection.sourcePhase!=='unknown'||selection.sourceAsOf!==p.day||selection.selectedDate!==p.day
+    ||row.pricePhase!=='closed'||row.priceSource!=='yahoo'||row.priceObservedAt!==null
+    ||row.priceSelection?.useQuote!==false||typeof row.price!=='number'||String(row.price)!==p.close)fail();
 }
 function checkSnapshot(snapshot,clock) {
   const tables=['industries','chokepoints','companies','financials','daily','weekly'];
@@ -229,4 +305,4 @@ function checkOperationalSchedule(manifest,data,version) {
     'publication_schedule_mismatch');
 }
 if(require.main===module)verifyRelease();
-module.exports={scanOutput,needsV3Scan,BANNED_WORDS,DISCLAIMER};
+module.exports={scanOutput,needsV3Scan,BANNED_WORDS,DISCLAIMER,checkIndependentCloseProofs};

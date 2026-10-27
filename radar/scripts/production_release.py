@@ -152,6 +152,8 @@ def _materialize(source, destination, D, receipt, info, history, purpose):
     if purpose is not None:
         manifest.update(purpose=purpose, publicationAuthorized=False,
                         diagnosticBlockers=receipt['publication']['blockers'])
+    if 'independentCloseProofs' in receipt:
+        manifest['independentCloseProofs'] = receipt['independentCloseProofs']
     bundle.check_sensitive(manifest)
     (destination/'release.json').write_bytes(bundle.encoded(manifest))
     return manifest
