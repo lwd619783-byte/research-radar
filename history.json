@@ -22469,14 +22469,14 @@
       ]
     },
     {
-      "generatedAt": "2026-10-27T00:01+08:00",
+      "generatedAt": "2026-10-27T00:50+08:00",
       "proof": {
         "state": "success",
-        "productionSHA": "57b5f51e3fc28e2f3b19646de5b93aaf65a000a3",
-        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/Xyag2KfgE9GoQapBmaeH6HDCZ6L7",
-        "reportedAt": "2026-10-26T16:01:54Z",
+        "productionSHA": "98d5b2d2b41efeae864c56f6485ed33ea367877f",
+        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/5buECp1C2LifytSsWrJDiBiyzTWB",
+        "reportedAt": "2026-10-26T16:50:32Z",
         "sourceSHA": "727d91c6d9faacbf62ea787460ea52f50941b05e",
-        "dataSHA256": "188bc696e77aec3976bd4b58d073d658c7b003b01c7b55ba35547c78d3425e76"
+        "dataSHA256": "e0a0a3a8f281388dc046e0088ad2d880da17b38236476e3a1bf94357d095d392"
       },
       "companies": [
         {
@@ -23702,11 +23702,11 @@
             "timezone": "Europe/Berlin",
             "time_note": "11月11日官方Q4业绩会；发布日待定"
           },
-          "close": 118.7,
-          "date": "2026-10-23",
+          "close": 123.8,
+          "date": "2026-10-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.02881,
+          "r1d": 0.04297,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -23932,11 +23932,11 @@
             "timezone": "Europe/Paris",
             "time_note": "2026全年业绩；10/16官方Q3公告第11页"
           },
-          "close": 231.4,
-          "date": "2026-10-23",
+          "close": 235.4,
+          "date": "2026-10-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.01845,
+          "r1d": 0.0175,
           "financial": {
             "status": null,
             "basis": "single_quarter",

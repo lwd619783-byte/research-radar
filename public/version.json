@@ -2,16 +2,25 @@
   "schemaVersion": 1,
   "state": "current",
   "sourceSHA": "727d91c6d9faacbf62ea787460ea52f50941b05e",
-  "runId": "40362485384",
-  "dataSHA256": "e0a0a3a8f281388dc046e0088ad2d880da17b38236476e3a1bf94357d095d392",
-  "generatedAt": "2026-10-27T00:50+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/40362485384",
+  "runId": "40456475763",
+  "dataSHA256": "fcd540082b1c7cc92d5382e36b0355db029919870bfd0888d1749bd8e6b2229a",
+  "generatedAt": "2026-10-27T13:42+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/40456475763",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-10-27T00:50+08:00",
+    "generatedAt": "2026-10-27T13:42+08:00",
     "baselineAt": "2026-10-26T18:09+08:00",
-    "reports": [],
+    "reports": [
+      {
+        "id": "YWK",
+        "name": "英维克",
+        "before": "2026Q2",
+        "after": "2026Q3单季",
+        "status": "source",
+        "label": "财报期别变更"
+      }
+    ],
     "calendar": [
       {
         "id": "AMEC",
@@ -44,6 +53,13 @@
       {
         "id": "DTGK",
         "name": "鼎泰高科",
+        "before": "2026-10-28",
+        "after": "2026-10-28",
+        "status": "confirmed"
+      },
+      {
+        "id": "EMC",
+        "name": "台光电子",
         "before": "2026-10-28",
         "after": "2026-10-28",
         "status": "confirmed"
@@ -87,63 +103,187 @@
         "id": "YWK",
         "name": "英维克",
         "before": "2026-10-27",
-        "after": "2026-10-27",
-        "status": "confirmed"
+        "after": null,
+        "status": "unverified"
       }
     ],
-    "restored": [],
+    "restored": [
+      {
+        "kind": "company",
+        "symbol": "ENR.DE",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      },
+      {
+        "kind": "company",
+        "symbol": "SU.PA",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      }
+    ],
     "lost": [
       {
         "kind": "company",
         "symbol": "2383.TW",
         "metric": "marketCapUSD",
-        "status": "missing"
-      },
-      {
-        "kind": "index",
-        "symbol": "000001.SS",
-        "metric": null,
-        "status": "partial"
-      },
-      {
-        "kind": "index",
-        "symbol": "^HSI",
-        "metric": null,
         "status": "partial"
       }
     ],
     "prices": [
       {
-        "id": "ENR",
-        "name": "西门子能源",
+        "id": "LITE",
+        "name": "Lumentum",
         "beforeDate": "2026-10-23",
         "afterDate": "2026-10-26",
-        "before": 118.7,
-        "after": 123.8,
-        "currency": "EUR",
-        "change": 0.04297
+        "before": 756.2,
+        "after": 818.1,
+        "currency": "USD",
+        "change": 0.0819
       },
       {
-        "id": "SU",
-        "name": "施耐德电气",
+        "id": "EMC",
+        "name": "台光电子",
+        "beforeDate": "2026-10-22",
+        "afterDate": "2026-10-27",
+        "before": 5070,
+        "after": 4755,
+        "currency": "TWD",
+        "change": -0.06213
+      },
+      {
+        "id": "COHR",
+        "name": "Coherent",
         "beforeDate": "2026-10-23",
         "afterDate": "2026-10-26",
-        "before": 231.4,
-        "after": 235.4,
-        "currency": "EUR",
-        "change": 0.0175
+        "before": 209.3,
+        "after": 221.5,
+        "currency": "USD",
+        "change": 0.05834
+      },
+      {
+        "id": "GEV",
+        "name": "GE Vernova",
+        "beforeDate": "2026-10-23",
+        "afterDate": "2026-10-26",
+        "before": 815.0,
+        "after": 855.1,
+        "currency": "USD",
+        "change": 0.04923
+      },
+      {
+        "id": "MU",
+        "name": "美光 Micron",
+        "beforeDate": "2026-10-23",
+        "afterDate": "2026-10-26",
+        "before": 877.5,
+        "after": 903.7,
+        "currency": "USD",
+        "change": 0.0298
+      },
+      {
+        "id": "ANET",
+        "name": "Arista",
+        "beforeDate": "2026-10-23",
+        "afterDate": "2026-10-26",
+        "before": 172.4,
+        "after": 177.2,
+        "currency": "USD",
+        "change": 0.02825
+      },
+      {
+        "id": "VRT",
+        "name": "维谛 Vertiv",
+        "beforeDate": "2026-10-23",
+        "afterDate": "2026-10-26",
+        "before": 194.3,
+        "after": 199.8,
+        "currency": "USD",
+        "change": 0.0281
+      },
+      {
+        "id": "NVDA",
+        "name": "英伟达 NVIDIA",
+        "beforeDate": "2026-10-23",
+        "afterDate": "2026-10-26",
+        "before": 211.0,
+        "after": 216.0,
+        "currency": "USD",
+        "change": 0.02389
+      },
+      {
+        "id": "AVGO",
+        "name": "博通 Broadcom",
+        "beforeDate": "2026-10-23",
+        "afterDate": "2026-10-26",
+        "before": 321.7,
+        "after": 329.2,
+        "currency": "USD",
+        "change": 0.02328
+      },
+      {
+        "id": "MRVL",
+        "name": "迈威尔 Marvell",
+        "beforeDate": "2026-10-23",
+        "afterDate": "2026-10-26",
+        "before": 228.5,
+        "after": 233.8,
+        "currency": "USD",
+        "change": 0.02306
+      },
+      {
+        "id": "MOD",
+        "name": "Modine",
+        "beforeDate": "2026-10-23",
+        "afterDate": "2026-10-26",
+        "before": 133.3,
+        "after": 130.3,
+        "currency": "USD",
+        "change": -0.02302
+      },
+      {
+        "id": "ETN",
+        "name": "伊顿 Eaton",
+        "beforeDate": "2026-10-23",
+        "afterDate": "2026-10-26",
+        "before": 366.1,
+        "after": 371.9,
+        "currency": "USD",
+        "change": 0.01587
+      },
+      {
+        "id": "TSM",
+        "name": "台积电",
+        "beforeDate": "2026-10-23",
+        "afterDate": "2026-10-26",
+        "before": 418.5,
+        "after": 424.4,
+        "currency": "USD",
+        "change": 0.014
+      },
+      {
+        "id": "ASML",
+        "name": "阿斯麦 ASML",
+        "beforeDate": "2026-10-23",
+        "afterDate": "2026-10-26",
+        "before": 1572,
+        "after": 1591,
+        "currency": "USD",
+        "change": 0.01215
       }
     ],
     "scores": [],
     "today": {
       "date": "2026-10-27",
-      "reports": [],
+      "reports": [
+        "YWK"
+      ],
       "confirmed": [
         "AMEC",
         "CXMT",
         "DCKJ",
         "DFDQ",
         "DTGK",
+        "EMC",
         "HDGF",
         "KHSJ",
         "MOD",
@@ -153,8 +293,8 @@
       ],
       "scores": []
     },
-    "excludedPrices": 26,
-    "sameDatePrices": 14,
+    "excludedPrices": 0,
+    "sameDatePrices": 28,
     "pendingResearch": 8,
     "baselineProof": {
       "state": "success",
