@@ -385,6 +385,74 @@ class FailureObservabilityTests(unittest.TestCase):
         self.assertFalse(any('*' in p for p in paths))
         self.assertEqual(upload['if'], 'always()')
 
+    def taiwan_daily_packet(self, timestamp):
+        # Boundaries and the negative timestamp reproduce the separately saved
+        # 2026-10-27 public probe. Prices and the positive packet are synthetic;
+        # neither packet is represented as the earlier live response.
+        payload={'chart':{'result':[{'meta':{'symbol':'2383.TW','currency':'TWD',
+            'exchangeTimezoneName':'Asia/Taipei','gmtoffset':28800,'regularMarketTime':timestamp,
+            'currentTradingPeriod':{'regular':{'start':1793062800,'end':1793079000}}},
+            'timestamp':[timestamp], 'indicators':{'quote':[{'close':[100.0],'high':[101.0]}],
+                'adjclose':[{'adjclose':[100.0]}]}}]}}
+        received='2026-10-27T10:53:35.803832+00:00'
+        class Packet:
+            def yahoo(self, path):
+                return payload
+        before=json.dumps(payload,sort_keys=True)
+        with patch.object(collector.build.quotes,'stamp',side_effect=lambda **values:
+                {**values,'schemaVersion':2,'receivedAt':received}):
+            record=collector.build.quotes.yahoo_daily(Packet(),'2383.TW')
+        self.assertEqual(json.dumps(payload,sort_keys=True),before)
+        return payload,record
+
+    def test_taiwan_same_day_after_close_timestamp_outside_session_stays_unconfirmed(self):
+        payload,record=self.taiwan_daily_packet(1793079015)
+        before=json.dumps(record,sort_keys=True)
+        now=dt.datetime.fromisoformat('2026-10-27T18:54:00+08:00')
+        company={'sym':'2383.TW','mkt':'台股','cur':'TWD'}
+        self.assertEqual(record['asOf'],'2026-10-27')
+        self.assertEqual(record['barTimestamps']['2026-10-27'],1793079015)
+        self.assertEqual(payload['chart']['result'][0]['meta']['regularMarketTime'],1793079015)
+        self.assertEqual(record['finality'],{'method':'provider-session-boundary',
+            'start':1793062800,'end':1793079000})
+        self.assertEqual(record['barTimestamps']['2026-10-27']-record['finality']['end'],15)
+        self.assertGreater(now.timestamp(),record['finality']['end'])
+        self.assertEqual(record['phase'],'unknown')
+        self.assertFalse(collector.build.latest.equity_bar_final('2026-10-27',1793079015,
+            record['timezone'],record['finality'],record['receivedAt']))
+        for policy in (False,True):
+            with self.subTest(calendar_policy=policy):
+                selected,snapshot=collector.build.latest.select_daily([company],{'2383.TW':record},now,
+                    calendar_policy=policy)
+                self.assertEqual(selected,{})
+                self.assertIsNone(snapshot['selectedDate'])
+                self.assertEqual(snapshot['status'],'incomplete')
+                self.assertEqual(snapshot['sourceAsOfByMarket'],{'台股':['2026-10-27']})
+                self.assertEqual(json.dumps(record,sort_keys=True),before)
+
+    def test_taiwan_same_day_session_bar_with_after_close_receipt_keeps_original_proof(self):
+        # Independent positive packet, not a repaired version of the rejected
+        # 13:30:15 observation. The bar is stamped at the real session start.
+        _,record=self.taiwan_daily_packet(1793062800)
+        before=json.dumps(record,sort_keys=True)
+        now=dt.datetime.fromisoformat('2026-10-27T18:54:00+08:00')
+        company={'sym':'2383.TW','mkt':'台股','cur':'TWD'}
+        self.assertEqual(record['asOf'],'2026-10-27')
+        self.assertEqual(record['phase'],'closed')
+        self.assertLess(record['barTimestamps']['2026-10-27'],record['finality']['end'])
+        self.assertGreater(dt.datetime.fromisoformat(record['receivedAt']).timestamp(),record['finality']['end'])
+        self.assertTrue(collector.build.latest.equity_bar_final('2026-10-27',1793062800,
+            record['timezone'],record['finality'],record['receivedAt']))
+        for policy in (False,True):
+            with self.subTest(calendar_policy=policy):
+                selected,snapshot=collector.build.latest.select_daily([company],{'2383.TW':record},now,
+                    calendar_policy=policy)
+                self.assertEqual(snapshot['selectedDate'],'2026-10-27')
+                self.assertEqual(snapshot['status'],'complete')
+                for key in ('bars','barTimestamps','finality','receivedAt','timezone'):
+                    self.assertEqual(selected['2383.TW'][key],record[key])
+                self.assertEqual(json.dumps(record,sort_keys=True),before)
+
 
 if __name__ == '__main__':
     unittest.main()
