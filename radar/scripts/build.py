@@ -541,6 +541,15 @@ def apply_research(market_data, research, fixed_clock, config=None, trading_days
     schedule = schedule_metadata(config or research_config(), fixed_clock)
     if schedule is not None:
         meta['schedule'] = schedule
+    if trading_days is None:
+        # A fresh fetch may still contain old bars. Do not let their dates
+        # invalidate newer research for an already completed market session.
+        markets = (config or {}).get('daily', {}).get('markets', ('A股', '美股'))
+        trading_days = market_calendar.completed_market_dates(markets, fixed_clock)
+        for market in markets:
+            if market not in trading_days:
+                meta['notion']['warnings'].append({'code': 'daily_calendar_unavailable',
+                    'table': 'daily', 'key': market, 'field': '日期'})
     return apply_views(data, research, fixed_clock, config, trading_days)
 
 

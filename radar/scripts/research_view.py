@@ -216,7 +216,7 @@ def daily_view(rows, indices, trading_days, warnings, config=None, internal=None
                 continue
             if target and p.get('日期') and p['日期'] > target:
                 warnings.append({'code': 'daily_future_date', 'table': 'daily', 'key': p.get('标题', ''), 'field': '日期'})
-            elif p.get('日期') == target and p.get('一句话') and not row.get('banned'):
+            elif target and p.get('日期') == target and p.get('一句话') and not row.get('banned'):
                 candidates.append(row)
         candidates.sort(key=lambda r: r['id'])
         candidates.sort(key=lambda r: r.get('last_edited_time', ''), reverse=True)
@@ -245,7 +245,9 @@ def apply_views(data, research, fixed_clock, config=None, trading_days=None):
     add_anchors(data['industries'], data['chokepoints'], data['companies'])
     internal = research.get('internal', {})
     data['meta']['weekly'] = weekly_view(research['weekly_rows'], data['industries'], data['chokepoints'], data['companies'], today, internal)
-    days = trading_days if trading_days is not None else data['meta'].get('snapshot', {}).get('sourceAsOfByMarket', {})
+    # The build layer supplies calendar-confirmed dates. A pure view cannot
+    # infer a completed session from an old or intraday market observation.
+    days = trading_days if trading_days is not None else {}
     data['meta']['daily'] = daily_view(research['daily_rows'], data.get('indices', []), days,
                                       data['meta']['notion']['warnings'], (config or {}).get('daily'), internal)
     data['meta']['kpis'] = kpis(data['industries'], data['chokepoints'], data['companies'])
@@ -259,6 +261,7 @@ CODE_TEXT = {'banned_words': '含禁用词「{词}」，该内容不显示',
  'company_cap_exceeded': '公司超过 80 家，多出的不显示',
  'contract_invalid': '契约文件不合法：{原因}',
  'cp_industry_mismatch': '所属卡点不属于该公司的行业，不挂卡点',
+ 'daily_calendar_unavailable': '无法确认已结束交易日，日要点暂不显示；请核实交易日历和构建时钟',
  'daily_duplicate': '同一市场同一天有多条，用最近编辑的一条',
  'daily_future_date': '日期晚于该市场最近交易日，已忽略',
  'duplicate_key': '与另一行重复：{key}（保留较早创建的一行）',

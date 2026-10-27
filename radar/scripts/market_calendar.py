@@ -119,6 +119,25 @@ def date_is_fresh(symbol, day, now, *, allow_intraday=False, phase='closed'):
                 and day == ctx['localDate'] and day > ctx['expectedCompletedDate'])
 
 
+def completed_market_dates(markets, now):
+    """Content dates come from reviewed sessions, never the received quote dates.
+
+    Both primary exchanges must agree. Provisional or unavailable calendars do
+    not prove that a content date has completed; callers must show that gap.
+    """
+    symbols = {'A股': ('000001.SS', '399006.SZ'), '美股': ('^GSPC', '^IXIC')}
+    if not isinstance(now, dt.datetime) or now.utcoffset() is None:
+        return {}
+    result = {}
+    for market in markets:
+        contexts = [context(symbol, now) for symbol in symbols.get(market, ())]
+        dates = {item['expectedCompletedDate'] for item in contexts}
+        if (contexts and len(dates) == 1 and None not in dates
+                and all(item['confidence'] in ('official', 'rule_based') for item in contexts)):
+            result[market] = dates.pop()
+    return result
+
+
 def annotate(symbol, day, now, *, completed=False):
     ctx = context(symbol, now)
     matches = bool(day and day == ctx['expectedCompletedDate'])
