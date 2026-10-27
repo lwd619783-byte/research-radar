@@ -397,17 +397,17 @@ def finish(temp, outcomes, production_sha):
         try:
             result['deployment'] = wait_deployment(production_sha)
             result['state'] = 'success'
-        except Exception as exc:
+        except Exception:
             failed = 'deployment'
-            result.update(state='failed', reason=type(exc).__name__ + ':' + str(exc)[:100])
+            result.update(state='failed', reason='deployment_failed')
     if failed:
         result['failedStage'] = failed
         try:
             recovery = temp/'radar-recovery'
             failure_release(temp/'radar-baseline', recovery, failed, os.environ['GITHUB_RUN_ID'], os.environ['GITHUB_SHA'])
             result['recovery'] = wait_deployment(publish(recovery), timeout=180)
-        except Exception as exc:
-            result['recovery'] = {'state': 'unavailable', 'reason': type(exc).__name__ + ':' + str(exc)[:100]}
+        except Exception:
+            result['recovery'] = {'state': 'unavailable', 'reason': 'recovery_failed'}
         print(f'::error title=投研雷达更新失败::{failed} 阶段未通过；保留已核实快照，详见运行摘要与诊断附件。')
     bundle.check_sensitive(result)
     (temp/'release-result.json').write_bytes(bundle.encoded(result))

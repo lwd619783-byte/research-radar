@@ -145,8 +145,7 @@ def verify(*, source, destination, artifact, baseline=None, work=None, env=None,
     source, destination, artifact = Path(source), Path(destination), Path(artifact)
     diagnostics = {}
     if work and (Path(work) / 'diagnostic.json').is_file():
-        diagnostics = json.loads((Path(work) / 'diagnostic.json').read_text('utf-8'))
-        bundle.check_sensitive(diagnostics)
+        diagnostics = collector.read_diagnostic(Path(work) / 'diagnostic.json')
     data, snapshot = None, None
     if (source / 'DATA.json').is_file():
         # verify_bundle checks the complete allowlist and byte bindings before
