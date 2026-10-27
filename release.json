@@ -12,8 +12,8 @@
   "blockers": [],
   "historySHA256": "79ba93ba480da0c0c802b7b9cc71d339d29c47a85de17b1451f7cd59cfe76765",
   "files": {
-    "index.html": "ea4b4428ab926c09e739e9afbea89adfd8e9e4cfbe261d473fe44534742f7d07",
-    "version.json": "562607e9b9024d9eac65ed9f95fdb79636ed71cb31976a835ce99efcf2190767",
+    "index.html": "8fbaa5352081b6b53dd434fe2585794bde403a4d95cf4f4d235018ac5077cf4a",
+    "version.json": "df8d03eda0bff8b48be17e9b47215d597f1fd44521ed8899a4db2f70acf71930",
     "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1"
   },
   "researchSnapshotSHA256": "99865da28278ea749cf860f21fb53625d32842795f941473c6df5cf3a97da653",
