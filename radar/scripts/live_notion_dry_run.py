@@ -115,6 +115,13 @@ def export_artifact(destination, *, data=None, snapshot=None, summary, result, d
         raise DryRunError('artifact_destination_exists')
     values = {'result.json': result}
     if data is not None:
+        close_proofs = {row['sym']: row['provenance']['daily']['independentCloseProof']
+                        for row in data.get('companies', [])
+                        if row.get('provenance', {}).get('daily', {}).get('independentCloseProof') is not None}
+        if close_proofs:
+            # The caller already validated the DATA/receipt binding. Retain only
+            # the same safe proof summary, never the original source response.
+            values['result.json'] = {**result, 'independentCloseProofs': close_proofs}
         for key in ('notion', 'weekly', 'daily'):
             values[f'meta.{key}.json'] = data['meta'].get(key, {})
     if snapshot is not None:
