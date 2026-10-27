@@ -5,7 +5,7 @@
   "runId": "40456475763",
   "dataSHA256": "fcd540082b1c7cc92d5382e36b0355db029919870bfd0888d1749bd8e6b2229a",
   "generatedAt": "2026-10-27T13:42+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/40483308046",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/40535342973",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
@@ -306,7 +306,7 @@
     }
   },
   "failedStage": "collect",
-  "attemptedAt": "2026-10-27T09:48:49.111735+00:00",
+  "attemptedAt": "2026-10-27T15:55:47.679832+00:00",
   "attemptedSourceSHA": "727d91c6d9faacbf62ea787460ea52f50941b05e",
-  "attemptRunId": "40483308046"
+  "attemptRunId": "40535342973"
 }
