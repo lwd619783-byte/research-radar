@@ -48,7 +48,7 @@ def safe_url(value):
         return ''
     try:
         parts = urlsplit(value)
-        return value if parts.scheme in ('https', 'http') and parts.hostname and not parts.username and not parts.password else ''
+        return value if parts.scheme == 'https' and parts.hostname and not parts.username and not parts.password else ''
     except ValueError:
         return ''
 
@@ -167,14 +167,14 @@ def render_kpis(data):
 
 def render_pulse(data, today, operations=None):
     meta = data.get('meta') or {}
+    schedule = (operations or {}).get('schedule') or meta.get('schedule') or {}
     if (operations or {}).get('state') == 'failed':
         generated = short_time(meta.get('generatedAt'), today)
-        schedule = meta.get('schedule') or {}
         next_run = schedule.get('nextRunAt')
         if operations.get('attemptedAt') and schedule.get('cronUtc'):
             from release_schedule import schedule_metadata
             next_run = schedule_metadata({'cron_utc': schedule['cronUtc'],
-                'late_after_minutes': schedule.get('lateAfterMinutes', 90)}, operations['attemptedAt'])['nextRunAt']
+                'late_after_minutes': schedule.get('lateAfterMinutes')}, operations['attemptedAt'])['nextRunAt']
         following = f'<span class="sep">·</span><span>下次 <b class="num">{esc(short_time(next_run, today))}</b></span>' if next_run else ''
         return ('<span class="dot bad" aria-hidden="true"></span>'
                 f'<span class="msg-bad">本次更新未完成，显示 {esc(generated)} 的数据</span>' + following +
@@ -215,7 +215,7 @@ def render_pulse(data, today, operations=None):
     if problems:
         parts += [f'<span class="msg-warn">{esc(problem)}</span>' for problem in problems[:2]]
     else:
-        next_run = (meta.get('schedule') or {}).get('nextRunAt')
+        next_run = schedule.get('nextRunAt')
         if next_run:
             parts.append(f'<span>下次 <b class="num">{esc(short_time(next_run, today))}</b></span>')
         summary = (operations or {}).get('changes') or data.get('changes') or {}
@@ -241,7 +241,10 @@ def render_footer(data, today):
         if isinstance(requests, dict):
             requests = requests.get('total', 0)
         description = '研究数据：来自 Notion · 读取于 ' + short_time(notion.get('fetchedAt'), today) + f' · {requests} 次请求'
-    return f'<div id="dataNotes"><div class="bl">数据说明</div><p>{esc(description)}</p></div><p class="disclaimer" id="disclaimer">{DISCLAIMER}</p>'
+    warnings = (data.get('meta', {}).get('marketCalendar') or {}).get('warnings') or []
+    warnings = [value for value in warnings if isinstance(value, str) and value]
+    calendar_notes = '<ul>' + ''.join(f'<li>{esc(value)}</li>' for value in warnings) + '</ul>' if warnings else ''
+    return f'<div id="dataNotes"><div class="bl">数据说明</div><p>{esc(description)}</p>{calendar_notes}</div><p class="disclaimer" id="disclaimer">{DISCLAIMER}</p>'
 
 
 def render_fragments(data, operations=None):

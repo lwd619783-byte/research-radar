@@ -12,7 +12,7 @@ class V3WorkflowTests(unittest.TestCase):
 
     def test_production_secret_only_enters_collector_and_publish_guards_remain(self):
         w = self.load('radar-production.yml')
-        self.assertEqual(w['concurrency'], {'group': 'radar-production', 'cancel-in-progress': False})
+        self.assertEqual(w['concurrency'], {'group': 'radar-production', 'cancel-in-progress': False, 'queue': 'max'})
         job = w['jobs']['refresh']
         for guard in ("github.repository == 'lwd619783-byte/research-radar'",
                       "github.ref == 'refs/heads/fix/radar-truthfulness-2026-10-18'", 'github.run_attempt == 1'):

@@ -63,11 +63,17 @@ def equity_bar_final(day, timestamp, timezone, session, received_at):
         return False
 
 
-def completed_bars(record):
+def completed_bars(record, *, symbol=None, now=None):
+    from equity_close_proof import valid_proof, record_bar_final
+    proof_ok = (isinstance(record, dict) and 'independentCloseProof' in record
+                and now is not None and valid_proof(record, record['independentCloseProof'],
+                    symbol=symbol, day=record.get('asOf'), now=now))
+    if isinstance(record, dict) and 'independentCloseProof' in record and not proof_ok:
+        return []
     if (not isinstance(record, dict) or record.get('schemaVersion') != 2
             or record.get('priceBasis') != 'raw' or not valid_bars(record.get('bars'))
             or record.get('asOf') != record['bars'][-1][0]
-            or record.get('phase') not in ('closed', 'intraday', 'preopen')):
+            or (record.get('phase') not in ('closed', 'intraday', 'preopen') and not proof_ok)):
         return []
     if record['phase'] == 'preopen':
         timestamps = record.get('barTimestamps')
@@ -79,9 +85,7 @@ def completed_bars(record):
         timestamps = record.get('barTimestamps') or {}
         if not isinstance(timestamps, dict):
             return []
-        return [b for b in record['bars'] if equity_bar_final(
-            b[0], timestamps.get(b[0]), record.get('timezone'),
-            record.get('finality'), record.get('receivedAt'))]
+        return [b for b in record['bars'] if record_bar_final(record, b[0], symbol=symbol, now=now)]
     # Preserve already-recorded closed legacy series. A legacy intraday or
     # unknown marker is insufficient evidence to trim/relabel it as closed.
     return record['bars'] if record.get('phase') == 'closed' else []
@@ -96,7 +100,7 @@ def select_daily(companies, records, now):
             record = {}
         if record.get('asOf'):
             source_dates.setdefault(c['mkt'], set()).add(record['asOf'])
-        bars = completed_bars(record)
+        bars = completed_bars(record, symbol=c['sym'], now=now)
         if record.get('currency') not in (None, c['cur']):
             bars = []
         if 'finality' in record:

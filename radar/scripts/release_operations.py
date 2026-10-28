@@ -77,6 +77,9 @@ def verify_files(root, allow_dry_run=False):
     if m.get('purpose') in ('live-notion-dry-run', 'offline-rehearsal') and not diagnostic:
         raise ValueError('diagnostic_authorization_invalid')
     bundle.check_sensitive(m)
+    if 'scheduleAdmission' in m:
+        from schedule_admission import validate_published_slot
+        validate_published_slot(m['scheduleAdmission'], m)
     expected = {'index.html', 'robots.txt'} | ({'version.json'} if m['schemaVersion'] >= 2 else set())
     if set(m['files']) != expected or {p.name for p in (root/'public').iterdir()} != expected:
         raise ValueError('release_file_allowlist_mismatch')
@@ -85,6 +88,11 @@ def verify_files(root, allow_dry_run=False):
         if p.is_symlink() or not p.is_file() or bundle.digest(p.read_bytes()) != digest:
             raise ValueError('release_file_hash_mismatch')
     data = bundle.embedded_data((root/'public/index.html').read_bytes())
+    if 'independentCloseProofs' in m or any('independentCloseProof' in row.get('provenance', {}).get('daily', {})
+                                          for row in data.get('companies', [])):
+        bundle.validate_close_proofs(data, m.get('independentCloseProofs'),
+            {'GITHUB_SHA': m.get('sourceSHA'), 'GITHUB_RUN_ID': m.get('runId'), 'GITHUB_RUN_ATTEMPT': '1'},
+            dt.datetime.fromisoformat(m['fixedClock']))
     synthetic = any(data['meta'].get(k) for k in ('fixture', 'offline', 'reviewPreview'))
     if bundle.data_digest(data) != m['dataSHA256'] or (synthetic and not (diagnostic and m.get('purpose') == 'offline-rehearsal')):
         raise ValueError('release_data_invalid')
@@ -123,6 +131,15 @@ def verify_files(root, allow_dry_run=False):
         bundle.check_sensitive(version)
         if ops != version or ops.get('dataSHA256') != m['dataSHA256'] or ops.get('sourceSHA') != m['sourceSHA']:
             raise ValueError('release_status_binding_mismatch')
+        if 'scheduleAdmission' in m:
+            from schedule_admission import publication_schedule
+            expected_schedule = publication_schedule(m, data)
+            if expected_schedule is None and 'schedule' in version:
+                raise ValueError('publication_schedule_without_data_schedule')
+            if version.get('schedule') != expected_schedule:
+                raise ValueError('publication_schedule_mismatch')
+        elif 'schedule' in version:
+            raise ValueError('publication_schedule_without_ownership')
     return m, data
 
 
@@ -189,6 +206,18 @@ def _failure_materialize(baseline, destination, stage, run_id, source_sha, data)
                attemptedSourceSHA=source_sha, attemptRunId=run_id,
                runUrl=f'https://github.com/{REPO}/actions/runs/{run_id}')
     # generatedAt, dataSHA256, daily summary, research flags all stay unchanged.
+    write_operations(destination, data, ops)
+    refresh_hashes(destination)
+    _, result = verify_files(destination)
+    if result != data:
+        raise ValueError('failure_recovery_changed_data')
+
+
+def write_operations(destination, data, ops):
+    """Update the bounded operations slots without changing embedded DATA."""
+    destination = Path(destination)
+    page = destination/'public/index.html'
+    text = page.read_text('utf-8')
     encoded = json.dumps(ops, ensure_ascii=False, allow_nan=False, separators=(',', ':'))
     for char, escaped in (('<', '\\u003c'), ('>', '\\u003e'), ('&', '\\u0026'), ('\u2028', '\\u2028'), ('\u2029', '\\u2029')):
         encoded = encoded.replace(char, escaped)
@@ -200,17 +229,41 @@ def _failure_materialize(baseline, destination, stage, run_id, source_sha, data)
         fragment = render_pulse(data, date(data['meta'].get('today')), ops)
         pulse = re.compile(r'(<div\b(?=[^>]*\bid="pulse")[^>]*>)(.*?)(</div>)', re.S)
         def replace_pulse(match):
-            opening = re.sub(r'class="[^"]*"', 'class="pulse bad"', match[1])
+            state = ' bad' if ops.get('state') == 'failed' else ''
+            opening = re.sub(r'class="[^"]*"', 'class="pulse' + state + '"', match[1])
             return opening + fragment + match[3]
         text, count = pulse.subn(replace_pulse, text)
         if count != 1:
             raise ValueError('failure_pulse_slot_mismatch')
     page.write_text(text, encoding='utf-8', newline='\n')
     (destination/'public/version.json').write_bytes(bundle.encoded(ops))
-    refresh_hashes(destination)
-    _, result = verify_files(destination)
-    if result != data:
-        raise ValueError('failure_recovery_changed_data')
+    if bundle.embedded_data(page.read_bytes()) != data:
+        raise ValueError('operations_changed_data')
+
+
+def prevent_publication_regression(candidate, data, current, current_data):
+    """Compare verified bytes from the freshly fetched production HEAD.
+
+    Queue order is not dispatch order. A non-force push protects the remaining
+    fetch-to-push race; these comparisons protect against an already newer HEAD.
+    Legacy releases without fixedClock still have the hash-bound generatedAt.
+    """
+    from schedule_admission import aware, validate_published_slot
+    for manifest, payload in ((candidate, data), (current, current_data)):
+        aware(payload['meta']['generatedAt'])
+        aware(manifest.get('fixedClock', payload['meta']['generatedAt']))
+    new_clock = aware(candidate.get('fixedClock', data['meta']['generatedAt']))
+    old_clock = aware(current.get('fixedClock', current_data['meta']['generatedAt']))
+    if (new_clock < old_clock or
+            aware(data['meta']['generatedAt']) < aware(current_data['meta']['generatedAt'])):
+        raise ValueError('publication_older_than_production')
+    if new_clock == old_clock and candidate['dataSHA256'] != current['dataSHA256']:
+        raise ValueError('publication_same_clock_different_data')
+    if 'scheduleAdmission' in candidate and 'scheduleAdmission' in current:
+        incoming = validate_published_slot(candidate['scheduleAdmission'], candidate)
+        previous = validate_published_slot(current['scheduleAdmission'], current)
+        if aware(incoming['plannedAt']) < aware(previous['plannedAt']):
+            raise ValueError('publication_older_schedule_slot')
 
 
 def publish(root):
@@ -218,18 +271,43 @@ def publish(root):
             or os.environ.get('GITHUB_RUN_ATTEMPT') != '1'
             or os.environ.get('GITHUB_EVENT_NAME') not in ('push', 'schedule', 'workflow_dispatch')):
         raise ValueError('publication_execution_not_allowed')
-    manifest, _ = verify_files(root)
+    manifest, data = verify_files(root)
     source = sha(os.environ.get('GITHUB_SHA'))
     if command(['git', 'rev-parse', 'HEAD']).decode().strip() != source:
         raise ValueError('publication_source_mismatch')
     if api('git/ref/heads/' + BRANCH)['object']['sha'] != source:
         raise ValueError('source_advanced_skip_obsolete_release')
+    version = json.loads((Path(root)/'public/version.json').read_text('utf-8'))
+    recovery = version.get('state') == 'failed'
+    if not recovery:
+        if manifest['sourceSHA'] != source or manifest['runId'] != os.environ.get('GITHUB_RUN_ID'):
+            raise ValueError('publication_run_mismatch')
+        # Do not trust an admission clock supplied in env or in a candidate.
+        # GitHub provides the event file; API identity and created_at survive
+        # concurrency waits, unlike run_started_at or the collection clock.
+        from schedule_admission import publication_slot
+        event_path = Path(os.environ['GITHUB_EVENT_PATH'])
+        if event_path.stat().st_size > 1024 * 1024:
+            raise ValueError('schedule_event_too_large')
+        event = json.loads(event_path.read_text('utf-8'))
+        recorded = publication_slot(os.environ, api('actions/runs/' + os.environ['GITHUB_RUN_ID']),
+                                    event, manifest['fixedClock'])
+        if 'scheduleAdmission' in manifest and manifest['scheduleAdmission'] != recorded:
+            raise ValueError('publication_schedule_mismatch')
+        manifest = dict(manifest)
+        if recorded is not None:
+            manifest['scheduleAdmission'] = recorded
     command(['gh', 'auth', 'setup-git'])
     work = Path(os.environ['RUNNER_TEMP']) / ('publish-' + Path(root).name)
     command(['git', 'init', '-q', '-b', 'production', str(work)])
     command(['git', 'remote', 'add', 'origin', f'https://github.com/{REPO}.git'], work)
     command(['git', 'fetch', '-q', '--depth=1', 'origin', 'production'], work)
     command(['git', 'reset', '-q', '--hard', 'FETCH_HEAD'], work)
+    current, current_data = verify_files(work)
+    prevent_publication_regression(manifest, data, current, current_data)
+    if recovery and (manifest['dataSHA256'] != current['dataSHA256'] or
+                     manifest.get('fixedClock') != current.get('fixedClock')):
+        raise ValueError('recovery_baseline_is_no_longer_current')
     names = ['public/index.html', 'public/robots.txt', 'public/version.json', 'release.json',
              'history.json', 'vercel.json', 'verify-release.cjs']
     if manifest['schemaVersion'] == 3:
@@ -241,6 +319,15 @@ def publish(root):
         dest = work/name
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(Path(root)/name, dest)
+    (work/'release.json').write_bytes(bundle.encoded(manifest))
+    if 'scheduleAdmission' in manifest:
+        from schedule_admission import publication_schedule
+        schedule = publication_schedule(manifest, data)
+        if schedule is not None:
+            version['schedule'] = schedule
+            write_operations(work, data, version)
+            refresh_hashes(work)
+    verify_files(work)
     command(['git', 'config', 'user.name', 'github-actions[bot]'], work)
     command(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], work)
     command(['git', 'add', '--', *names], work)
@@ -290,6 +377,23 @@ def wait_deployment(commit, timeout=300):
 
 def finish(temp, outcomes, production_sha):
     temp = Path(temp)
+    admission = os.environ.get('SCHEDULE_ADMISSION', '')
+    if admission and admission != 'allowed':
+        # Always account for skipped/rejected ticks, but never deploy a failure
+        # notice for a slot that did not attempt collection or publication.
+        safe_skip = (admission == 'skipped' and outcomes.get('baseline') == 'success'
+                     and not production_sha and all(outcomes.get(k) == 'skipped'
+                         for k in ('preflight', 'collect', 'prepare', 'publish')))
+        result = {'runId': os.environ['GITHUB_RUN_ID'], 'sourceSHA': os.environ['GITHUB_SHA'],
+                  'stages': outcomes, 'state': 'skipped' if safe_skip else 'failed',
+                  'reason': 'slot_already_published' if safe_skip else 'schedule_admission_failed'}
+        bundle.check_sensitive(result)
+        (temp/'release-result.json').write_bytes(bundle.encoded(result))
+        with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as summary:
+            summary.write('## 投研雷达发布结果\n\n' +
+                          ('该时段已有同版本成功发布，本次跳过重复刷新。' if safe_skip else
+                           '调度准入未通过，本次没有采集或发布；检查时段与安全诊断。') + '\n')
+        return result
     failed = next((k for k in ('preflight', 'baseline', 'collect', 'prepare', 'publish')
                    if outcomes.get(k) != 'success'), None)
     result = {'runId': os.environ['GITHUB_RUN_ID'], 'sourceSHA': os.environ['GITHUB_SHA'],
@@ -298,17 +402,17 @@ def finish(temp, outcomes, production_sha):
         try:
             result['deployment'] = wait_deployment(production_sha)
             result['state'] = 'success'
-        except Exception as exc:
+        except Exception:
             failed = 'deployment'
-            result.update(state='failed', reason=type(exc).__name__ + ':' + str(exc)[:100])
+            result.update(state='failed', reason='deployment_failed')
     if failed:
         result['failedStage'] = failed
         try:
             recovery = temp/'radar-recovery'
             failure_release(temp/'radar-baseline', recovery, failed, os.environ['GITHUB_RUN_ID'], os.environ['GITHUB_SHA'])
             result['recovery'] = wait_deployment(publish(recovery), timeout=180)
-        except Exception as exc:
-            result['recovery'] = {'state': 'unavailable', 'reason': type(exc).__name__ + ':' + str(exc)[:100]}
+        except Exception:
+            result['recovery'] = {'state': 'unavailable', 'reason': 'recovery_failed'}
         print(f'::error title=投研雷达更新失败::{failed} 阶段未通过；保留已核实快照，详见运行摘要与诊断附件。')
     bundle.check_sensitive(result)
     (temp/'release-result.json').write_bytes(bundle.encoded(result))
@@ -342,4 +446,4 @@ if __name__ == '__main__':
                     {k: v['outcome'] for k, v in json.loads(os.environ['STAGE_OUTCOMES']).items()})
         result = finish(args.path, outcomes, args.sha)
         print(json.dumps(result))
-        raise SystemExit(0 if result['state'] == 'success' else 1)
+        raise SystemExit(0 if result['state'] in ('success', 'skipped') else 1)
