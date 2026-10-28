@@ -27135,14 +27135,14 @@
       ]
     },
     {
-      "generatedAt": "2026-10-28T12:49+08:00",
+      "generatedAt": "2026-10-28T14:23+08:00",
       "proof": {
         "state": "success",
-        "productionSHA": "db51ad3d483b12ca0d5947ddcc5736b4567a66fb",
-        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/AsbURRfbiMXCy6dJiMWBNhdovmij",
-        "reportedAt": "2026-10-28T04:50:01Z",
+        "productionSHA": "0d242a30e953b06b162458e421e3fe6117aa2d7a",
+        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/Dab7KZd3kPkkKa3dUvBniF6K5uEU",
+        "reportedAt": "2026-10-28T06:23:38Z",
         "sourceSHA": "68a4dd143f32a7b4d8b7754fe585965176d0f6d3",
-        "dataSHA256": "3cff064b4bf3d485fd3618b1163d8f7891ca4d4a802e779d87a13eedea4db3df"
+        "dataSHA256": "081f781ce48ccd4ab8599f35490c6dba2a1a4a66cb385b3e53be9b265b6ee101"
       },
       "companies": [
         {
@@ -27431,11 +27431,11 @@
             "timezone": "Asia/Seoul",
             "time_note": "10/28已披露Q3初步结果；下一期日期待官方确认"
           },
-          "close": 1341000,
-          "date": "2026-10-27",
+          "close": 1490000,
+          "date": "2026-10-28",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.05176,
+          "r1d": 0.11111,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -27978,11 +27978,11 @@
             "timezone": "Asia/Taipei",
             "time_note": "公司财务报告行事历确认2026-10-28公布第三季财务结果；发布时刻未披露。"
           },
-          "close": 4750,
-          "date": "2026-10-27",
+          "close": 5025,
+          "date": "2026-10-28",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.06312,
+          "r1d": 0.05789,
           "financial": {
             "status": null,
             "basis": "single_quarter",
