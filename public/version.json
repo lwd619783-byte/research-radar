@@ -1,21 +1,53 @@
 {
   "schemaVersion": 1,
-  "state": "failed",
-  "sourceSHA": "727d91c6d9faacbf62ea787460ea52f50941b05e",
-  "runId": "40456475763",
-  "dataSHA256": "fcd540082b1c7cc92d5382e36b0355db029919870bfd0888d1749bd8e6b2229a",
-  "generatedAt": "2026-10-27T13:42+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/40535342973",
+  "state": "current",
+  "sourceSHA": "68a4dd143f32a7b4d8b7754fe585965176d0f6d3",
+  "runId": "40634188775",
+  "dataSHA256": "3cff064b4bf3d485fd3618b1163d8f7891ca4d4a802e779d87a13eedea4db3df",
+  "generatedAt": "2026-10-28T12:49+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/40634188775",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-10-27T13:42+08:00",
-    "baselineAt": "2026-10-26T18:09+08:00",
+    "generatedAt": "2026-10-28T12:49+08:00",
+    "baselineAt": "2026-10-27T13:42+08:00",
     "reports": [
       {
-        "id": "YWK",
-        "name": "英维克",
+        "id": "ASMPT",
+        "name": "ASMPT",
+        "before": "2026Q2（持续经营收入/毛利；含终止经营归母净利）",
+        "after": "2026Q3单季（持续经营收入/毛利；归母扭亏）",
+        "status": "source",
+        "label": "财报期别变更"
+      },
+      {
+        "id": "SKH",
+        "name": "SK海力士",
         "before": "2026Q2",
+        "after": "2026Q3单季（初步，集团净利）",
+        "status": "partial",
+        "label": "财报期别变更"
+      },
+      {
+        "id": "DCKJ",
+        "name": "东材科技",
+        "before": "2026Q2 derived from H1-Q1",
+        "after": "2026Q3单季",
+        "status": "source",
+        "label": "财报期别变更"
+      },
+      {
+        "id": "DTGK",
+        "name": "鼎泰高科",
+        "before": "2026Q2 derived from H1-Q1",
+        "after": "2026Q3单季",
+        "status": "source",
+        "label": "财报期别变更"
+      },
+      {
+        "id": "HDGF",
+        "name": "沪电股份",
+        "before": "2026Q2 derived from H1-Q1",
         "after": "2026Q3单季",
         "status": "source",
         "label": "财报期别变更"
@@ -23,86 +55,37 @@
     ],
     "calendar": [
       {
-        "id": "AMEC",
-        "name": "中微公司",
-        "before": "2026-10-31",
-        "after": "2026-10-31",
-        "status": "confirmed"
+        "id": "ASMPT",
+        "name": "ASMPT",
+        "before": "2026-10-28",
+        "after": null,
+        "status": "unverified"
       },
       {
-        "id": "CXMT",
-        "name": "长鑫科技",
-        "before": "2026-10-31",
-        "after": "2026-10-31",
-        "status": "confirmed"
-      },
-      {
-        "id": "NAURA",
-        "name": "北方华创",
-        "before": "2026-10-30",
-        "after": "2026-10-30",
-        "status": "confirmed"
+        "id": "SKH",
+        "name": "SK海力士",
+        "before": "2026-10-28",
+        "after": null,
+        "status": "unverified"
       },
       {
         "id": "DCKJ",
         "name": "东材科技",
         "before": "2026-10-28",
-        "after": "2026-10-28",
-        "status": "confirmed"
+        "after": null,
+        "status": "unverified"
       },
       {
         "id": "DTGK",
         "name": "鼎泰高科",
         "before": "2026-10-28",
-        "after": "2026-10-28",
-        "status": "confirmed"
-      },
-      {
-        "id": "EMC",
-        "name": "台光电子",
-        "before": "2026-10-28",
-        "after": "2026-10-28",
-        "status": "confirmed"
+        "after": null,
+        "status": "unverified"
       },
       {
         "id": "HDGF",
         "name": "沪电股份",
         "before": "2026-10-28",
-        "after": "2026-10-28",
-        "status": "confirmed"
-      },
-      {
-        "id": "SHKJ",
-        "name": "胜宏科技",
-        "before": "2026-10-30",
-        "after": "2026-10-30",
-        "status": "confirmed"
-      },
-      {
-        "id": "DFDQ",
-        "name": "东方电气",
-        "before": "2026-10-30",
-        "after": "2026-10-30",
-        "status": "confirmed"
-      },
-      {
-        "id": "KHSJ",
-        "name": "科华数据",
-        "before": "2026-10-29",
-        "after": "2026-10-29",
-        "status": "confirmed"
-      },
-      {
-        "id": "MOD",
-        "name": "Modine",
-        "before": "2026-10-27",
-        "after": "2026-11-03",
-        "status": "confirmed"
-      },
-      {
-        "id": "YWK",
-        "name": "英维克",
-        "before": "2026-10-27",
         "after": null,
         "status": "unverified"
       }
@@ -110,203 +93,454 @@
     "restored": [
       {
         "kind": "company",
-        "symbol": "ENR.DE",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "SU.PA",
-        "metric": "marketCapUSD",
+        "symbol": "688825.SS",
+        "metric": "r60",
         "status": "complete"
       }
     ],
     "lost": [
       {
         "kind": "company",
-        "symbol": "2383.TW",
-        "metric": "marketCapUSD",
+        "symbol": "000660.KS",
+        "metric": "financial",
         "status": "partial"
       }
     ],
     "prices": [
       {
-        "id": "LITE",
-        "name": "Lumentum",
-        "beforeDate": "2026-10-23",
-        "afterDate": "2026-10-26",
-        "before": 756.2,
-        "after": 818.1,
-        "currency": "USD",
-        "change": 0.0819
-      },
-      {
-        "id": "EMC",
-        "name": "台光电子",
-        "beforeDate": "2026-10-22",
+        "id": "SHKJ",
+        "name": "胜宏科技",
+        "beforeDate": "2026-10-26",
         "afterDate": "2026-10-27",
-        "before": 5070,
-        "after": 4755,
-        "currency": "TWD",
-        "change": -0.06213
+        "before": 188.0,
+        "after": 174.1,
+        "currency": "CNY",
+        "change": -0.07404
       },
       {
         "id": "COHR",
         "name": "Coherent",
-        "beforeDate": "2026-10-23",
-        "afterDate": "2026-10-26",
-        "before": 209.3,
-        "after": 221.5,
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 221.5,
+        "after": 235.8,
         "currency": "USD",
-        "change": 0.05834
+        "change": 0.06451
       },
       {
-        "id": "GEV",
-        "name": "GE Vernova",
-        "beforeDate": "2026-10-23",
-        "afterDate": "2026-10-26",
-        "before": 815.0,
-        "after": 855.1,
-        "currency": "USD",
-        "change": 0.04923
+        "id": "DTGK",
+        "name": "鼎泰高科",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 224.9,
+        "after": 210.9,
+        "currency": "CNY",
+        "change": -0.0619
       },
       {
-        "id": "MU",
-        "name": "美光 Micron",
-        "beforeDate": "2026-10-23",
-        "afterDate": "2026-10-26",
-        "before": 877.5,
-        "after": 903.7,
+        "id": "LITE",
+        "name": "Lumentum",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 818.1,
+        "after": 866.2,
         "currency": "USD",
-        "change": 0.0298
+        "change": 0.05877
+      },
+      {
+        "id": "XYS",
+        "name": "新易盛",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 251.7,
+        "after": 237.6,
+        "currency": "CNY",
+        "change": -0.05602
+      },
+      {
+        "id": "NAURA",
+        "name": "北方华创",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 517.0,
+        "after": 488.5,
+        "currency": "CNY",
+        "change": -0.05513
       },
       {
         "id": "ANET",
         "name": "Arista",
-        "beforeDate": "2026-10-23",
-        "afterDate": "2026-10-26",
-        "before": 172.4,
-        "after": 177.2,
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 177.2,
+        "after": 187.0,
         "currency": "USD",
-        "change": 0.02825
+        "change": 0.05507
       },
       {
-        "id": "VRT",
-        "name": "维谛 Vertiv",
-        "beforeDate": "2026-10-23",
-        "afterDate": "2026-10-26",
-        "before": 194.3,
-        "after": 199.8,
-        "currency": "USD",
-        "change": 0.0281
+        "id": "NTB",
+        "name": "日东纺 Nittobo",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 2794,
+        "after": 2942,
+        "currency": "JPY",
+        "change": 0.05297
       },
       {
-        "id": "NVDA",
-        "name": "英伟达 NVIDIA",
-        "beforeDate": "2026-10-23",
-        "afterDate": "2026-10-26",
-        "before": 211.0,
-        "after": 216.0,
-        "currency": "USD",
-        "change": 0.02389
+        "id": "AMEC",
+        "name": "中微公司",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 251.6,
+        "after": 238.2,
+        "currency": "CNY",
+        "change": -0.05295
       },
       {
-        "id": "AVGO",
-        "name": "博通 Broadcom",
-        "beforeDate": "2026-10-23",
-        "afterDate": "2026-10-26",
-        "before": 321.7,
-        "after": 329.2,
-        "currency": "USD",
-        "change": 0.02328
-      },
-      {
-        "id": "MRVL",
-        "name": "迈威尔 Marvell",
-        "beforeDate": "2026-10-23",
-        "afterDate": "2026-10-26",
-        "before": 228.5,
-        "after": 233.8,
-        "currency": "USD",
-        "change": 0.02306
+        "id": "SKH",
+        "name": "SK海力士",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 1275000,
+        "after": 1341000,
+        "currency": "KRW",
+        "change": 0.05176
       },
       {
         "id": "MOD",
         "name": "Modine",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 130.3,
+        "after": 136.5,
+        "currency": "USD",
+        "change": 0.0479
+      },
+      {
+        "id": "YJKJ",
+        "name": "源杰科技",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 875.0,
+        "after": 833.6,
+        "currency": "CNY",
+        "change": -0.04734
+      },
+      {
+        "id": "GEV",
+        "name": "GE Vernova",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 855.1,
+        "after": 895.1,
+        "currency": "USD",
+        "change": 0.04734
+      },
+      {
+        "id": "KHSJ",
+        "name": "科华数据",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 25.77,
+        "after": 24.6,
+        "currency": "CNY",
+        "change": -0.0454
+      },
+      {
+        "id": "VRT",
+        "name": "维谛 Vertiv",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 199.8,
+        "after": 208.6,
+        "currency": "USD",
+        "change": 0.04395
+      },
+      {
+        "id": "TFTX",
+        "name": "天孚通信",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 197.0,
+        "after": 188.6,
+        "currency": "CNY",
+        "change": -0.04244
+      },
+      {
+        "id": "MRVL",
+        "name": "迈威尔 Marvell",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 233.8,
+        "after": 243.6,
+        "currency": "USD",
+        "change": 0.04188
+      },
+      {
+        "id": "DZSK",
+        "name": "大族数控",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 157.2,
+        "after": 150.7,
+        "currency": "CNY",
+        "change": -0.04122
+      },
+      {
+        "id": "AVGO",
+        "name": "博通 Broadcom",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 329.2,
+        "after": 342.3,
+        "currency": "USD",
+        "change": 0.03998
+      },
+      {
+        "id": "ENR",
+        "name": "西门子能源",
         "beforeDate": "2026-10-23",
         "afterDate": "2026-10-26",
-        "before": 133.3,
-        "after": 130.3,
-        "currency": "USD",
-        "change": -0.02302
+        "before": 118.7,
+        "after": 123.2,
+        "currency": "EUR",
+        "change": 0.03775
+      },
+      {
+        "id": "YWK",
+        "name": "英维克",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 42.97,
+        "after": 41.39,
+        "currency": "CNY",
+        "change": -0.03677
+      },
+      {
+        "id": "DCKJ",
+        "name": "东材科技",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 36.0,
+        "after": 34.71,
+        "currency": "CNY",
+        "change": -0.03583
+      },
+      {
+        "id": "KBL",
+        "name": "建滔积层板",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 35.98,
+        "after": 37.22,
+        "currency": "HKD",
+        "change": 0.03446
       },
       {
         "id": "ETN",
         "name": "伊顿 Eaton",
-        "beforeDate": "2026-10-23",
-        "afterDate": "2026-10-26",
-        "before": 366.1,
-        "after": 371.9,
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 371.9,
+        "after": 384.2,
         "currency": "USD",
-        "change": 0.01587
+        "change": 0.03302
+      },
+      {
+        "id": "HHKJ",
+        "name": "宏和科技",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 87.7,
+        "after": 84.95,
+        "currency": "CNY",
+        "change": -0.03136
+      },
+      {
+        "id": "DFDQ",
+        "name": "东方电气",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 21.96,
+        "after": 22.63,
+        "currency": "CNY",
+        "change": 0.03051
       },
       {
         "id": "TSM",
         "name": "台积电",
-        "beforeDate": "2026-10-23",
-        "afterDate": "2026-10-26",
-        "before": 418.5,
-        "after": 424.4,
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 424.4,
+        "after": 436.9,
         "currency": "USD",
-        "change": 0.014
+        "change": 0.02946
+      },
+      {
+        "id": "ZWGX",
+        "name": "中钨高新",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 40.07,
+        "after": 38.89,
+        "currency": "CNY",
+        "change": -0.02945
       },
       {
         "id": "ASML",
         "name": "阿斯麦 ASML",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 1591,
+        "after": 1636,
+        "currency": "USD",
+        "change": 0.02944
+      },
+      {
+        "id": "ZJXC",
+        "name": "中际旭创",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 594.5,
+        "after": 577.0,
+        "currency": "CNY",
+        "change": -0.02944
+      },
+      {
+        "id": "ASMPT",
+        "name": "ASMPT",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 117.8,
+        "after": 121.2,
+        "currency": "HKD",
+        "change": 0.02886
+      },
+      {
+        "id": "JPKJ",
+        "name": "金盘科技",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 50.16,
+        "after": 48.75,
+        "currency": "CNY",
+        "change": -0.02811
+      },
+      {
+        "id": "SNDL",
+        "name": "深南电路",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 267.5,
+        "after": 260.0,
+        "currency": "CNY",
+        "change": -0.02804
+      },
+      {
+        "id": "MU",
+        "name": "美光 Micron",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 903.7,
+        "after": 928.8,
+        "currency": "USD",
+        "change": 0.02773
+      },
+      {
+        "id": "ZGXD",
+        "name": "中国西电",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 11.08,
+        "after": 10.78,
+        "currency": "CNY",
+        "change": -0.02708
+      },
+      {
+        "id": "SYST",
+        "name": "生益科技",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 100.3,
+        "after": 97.61,
+        "currency": "CNY",
+        "change": -0.02643
+      },
+      {
+        "id": "SU",
+        "name": "施耐德电气",
         "beforeDate": "2026-10-23",
         "afterDate": "2026-10-26",
-        "before": 1572,
-        "after": 1591,
+        "before": 231.4,
+        "after": 235.7,
+        "currency": "EUR",
+        "change": 0.01858
+      },
+      {
+        "id": "SYDQ",
+        "name": "思源电气",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 106.8,
+        "after": 105.4,
+        "currency": "CNY",
+        "change": -0.01301
+      },
+      {
+        "id": "NVDA",
+        "name": "英伟达 NVIDIA",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 216.0,
+        "after": 217.9,
         "currency": "USD",
-        "change": 0.01215
+        "change": 0.00898
+      },
+      {
+        "id": "CXMT",
+        "name": "长鑫科技",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 42.66,
+        "after": 43.0,
+        "currency": "CNY",
+        "change": 0.00797
+      },
+      {
+        "id": "HDGF",
+        "name": "沪电股份",
+        "beforeDate": "2026-10-26",
+        "afterDate": "2026-10-27",
+        "before": 98.9,
+        "after": 99.2,
+        "currency": "CNY",
+        "change": 0.00303
       }
     ],
     "scores": [],
     "today": {
-      "date": "2026-10-27",
+      "date": "2026-10-28",
       "reports": [
-        "YWK"
-      ],
-      "confirmed": [
-        "AMEC",
-        "CXMT",
+        "ASMPT",
         "DCKJ",
-        "DFDQ",
         "DTGK",
-        "EMC",
         "HDGF",
-        "KHSJ",
-        "MOD",
-        "NAURA",
-        "SHKJ",
-        "YWK"
+        "SKH"
       ],
+      "confirmed": [],
       "scores": []
     },
     "excludedPrices": 0,
-    "sameDatePrices": 28,
+    "sameDatePrices": 1,
     "pendingResearch": 8,
     "baselineProof": {
       "state": "success",
-      "productionSHA": "64f2ae294554ad2002bd7b2115cbfeb70dc3de3c",
-      "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/DeiTxFJGhj9exJy8FDC4XjDcDgr7",
-      "reportedAt": "2026-10-26T10:09:16Z",
+      "productionSHA": "d849fe44c2a01a7fc1388c7057b86cf0ebb35e8f",
+      "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/GQeGUTJGikGKyus8j9LVrFjEdG8U",
+      "reportedAt": "2026-10-27T15:56:00Z",
       "sourceSHA": "727d91c6d9faacbf62ea787460ea52f50941b05e",
-      "dataSHA256": "355bf2730d8ce63f85dd88c6a2a6ea1561354b187a6247e53bef3f5e2364206e"
+      "dataSHA256": "fcd540082b1c7cc92d5382e36b0355db029919870bfd0888d1749bd8e6b2229a"
     }
-  },
-  "failedStage": "collect",
-  "attemptedAt": "2026-10-27T15:55:47.679832+00:00",
-  "attemptedSourceSHA": "727d91c6d9faacbf62ea787460ea52f50941b05e",
-  "attemptRunId": "40535342973"
+  }
 }
