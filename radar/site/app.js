@@ -174,8 +174,8 @@ function setSeg(el,v){el.dataset.cur=v;$$('button',el).forEach(x=>x.classList.to
 
 /* ---------- count up ---------- */
 const RM=()=>!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches),SB=()=>RM()?'auto':'smooth';
-function countUp(el){const to=parseFloat(el.dataset.count),dp=+(el.dataset.dp||0),pre=el.dataset.pre||'',suf=el.dataset.suf||'',t0=performance.now(),dur=1200;if(RM()){el.textContent=pre+to.toFixed(dp)+suf;return}
-  const f=now=>{const p=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3);el.textContent=pre+(to*e).toFixed(dp)+suf;if(p<1)requestAnimationFrame(f)};requestAnimationFrame(f)}
+function countUp(el){const to=parseFloat(el.dataset.count),dp=+(el.dataset.dp||0),pre=el.dataset.pre||'',suf=el.dataset.suf||'',t0=performance.now(),dur=1200;if(!Number.isFinite(to))return;if(RM()){el.textContent=pre+to.toFixed(dp)+suf;return}
+  const f=now=>{const p=RM()?1:Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3);el.textContent=pre+(to*e).toFixed(dp)+suf;if(p<1)requestAnimationFrame(f)};requestAnimationFrame(f)}
 
 const phaseText=p=>p==='closed'?'收盘':p==='intraday'?'盘中':'状态未知';
 const quoteLabel=c=>`${c.priceAsOf||c.ld||'日期未知'} ${phaseText(c.pricePhase||c.provenance?.daily?.phase)} · ${c.priceSource||c.provenance?.daily?.src||'来源未知'}`;
@@ -184,7 +184,7 @@ const timeDetail=c=>{const v=c.provenance?.valuation||{},f=v.fx;return `行情 $
 /* ---------- ticker ---------- */
 function renderTicker(){const status=indexAvailability(D.indices,D.meta.issues),notice=status.missing.length?`<div class="tk idx-gap">指数缺项：${esc(status.missing.join('、'))}</div>`:'';const idx=D.indices.map(x=>`<div class="tk idx"><b data-tip="${esc((x.asOf||'日期未知')+' · '+phaseText(x.phase)+' · '+(x.source||'未知来源')+' · '+(x.providerLocalTime||''))}">${esc(x.name)} <small>${esc(x.asOf||'未知')} ${phaseText(x.phase)}</small></b><span class="px num">${fmtNum(x.price)}</span><span class="num ${ud(x.chg)}">${pct(x.chg,2)}</span></div>`).join('');
   const cos=CO.map(c=>`<div class="tk" data-co="${c.id}" data-tip="${esc(timeDetail(c))}"><b>${esc(c.short)} <small>${esc(c.priceAsOf||c.ld||'未知')} ${phaseText(c.pricePhase||c.provenance?.daily?.phase)}</small></b><span class="px num">${fmtPrice(c)}</span><span class="num ${ud(c.r1d)}">日线 ${pct(c.r1d,2)}</span></div>`).join('');
-  const one=notice+idx+'<span class="tk-sep"></span>'+cos+'<span class="tk-sep"></span>';$('#tickerTrack').innerHTML=one+one;$('#tickerLabel').textContent=ASOFL+' · '+status.label;$('#tickerLabel').dataset.tip=status.missing.length?'指数缺项：'+status.missing.join('、'):status.label}
+  const one=notice+idx+'<span class="tk-sep"></span>'+cos+'<span class="tk-sep"></span>';$('#tickerTrack').innerHTML=one+one;$('#tickerLabel').textContent=ASOFL+' · '+status.label;$('#tickerLabel').dataset.tip=ASOFL+' · '+status.label+(status.missing.length?' · 指数缺项：'+status.missing.join('、'):'')}
 
 /* ---------- hero ---------- */
 function renderHero(){
@@ -275,7 +275,17 @@ function radarSVG(){const{cx,cy,R}=RG;let rings='';for(let k=1;k<=5;k++){rings+=
   const lab=[[cx,cy-R-12,'middle'],[cx+R+10,cy+4,'start'],[cx,cy+R+22,'middle'],[cx-R-10,cy+4,'end']];
   return`<svg class="radar-svg" viewBox="0 0 300 220" width="100%" style="max-width:300px">${rings}${axes}<polygon class="poly" id="rpoly" points="${cx},${cy}"/>${DIMS.map((d,i)=>`<circle class="pt" id="rp${i}" cx="${cx}" cy="${cy}" r="4" style="stroke:${d.c}"/>`).join('')}${DIMS.map((d,i)=>`<text x="${lab[i][0]}" y="${lab[i][1]}" text-anchor="${lab[i][2]}">${d.n} <tspan class="v" id="rv${i}">0</tspan></text>`).join('')}</svg>`}
 function drawRadar(v){const{cx,cy,R}=RG,poly=$('#rpoly');if(!poly)return;const p=v.map((s,i)=>[cx+R*s/5*Math.cos(ANG[i]),cy+R*s/5*Math.sin(ANG[i])]);poly.setAttribute('points',p.map(q=>q[0].toFixed(1)+','+q[1].toFixed(1)).join(' '));p.forEach((q,i)=>{const c=$('#rp'+i);c.setAttribute('cx',q[0].toFixed(1));c.setAttribute('cy',q[1].toFixed(1));$('#rv'+i).textContent=Math.round(v[i])})}
-function animateRadar(tg){RC=tg.slice();drawRadar(RC)}
+let radarFrame=0;
+function animateRadar(tg){
+  cancelAnimationFrame(radarFrame);
+  const from=RC.slice(),target=tg.slice(),started=performance.now();
+  const finish=()=>{RC=target.slice();drawRadar(RC);radarFrame=0};
+  if(RM()){finish();return}
+  const frame=now=>{const p=Math.min(1,(now-started)/700);if(RM()||p>=1){finish();return}
+    const ease=1-Math.pow(1-p,3);RC=from.map((v,i)=>v+(target[i]-v)*ease);drawRadar(RC);
+    radarFrame=requestAnimationFrame(frame)};
+  radarFrame=requestAnimationFrame(frame)
+}
 function findCo(token){token=token.trim();return CO.find(c=>c.short===token||c.name===token||c.name.indexOf(token)===0||c.name.indexOf(' '+token)>0)}
 function renderIndDetail(){
   const d=IND.find(x=>x.name===S.sel),cos=byInd[d.name]||[],cps=cpsOf(d.name),i=IND.indexOf(d),lv=levelOf(d.total);
@@ -435,6 +445,7 @@ function drawChart(c){const box=$('#dwChart');if(!box)return;const W=Math.max(28
   const xi=[0,Math.round((V.length-1)/2),V.length-1],xl=xi.map((i,j)=>`<text class="ax" x="${X(i).toFixed(1)}" y="${H-7}" text-anchor="${j===0?'start':j===2?'end':'middle'}">${fmtDay(T[i],long)}</text>`).join('');
   const hi=showHi?`<line class="hi" x1="${pl}" x2="${W-pr}" y1="${Y(c.hi52).toFixed(1)}" y2="${Y(c.hi52).toFixed(1)}"/><text class="ax hi-t" x="${pl+4}" y="${(Y(c.hi52)-5).toFixed(1)}">52周高点 ${fmtAx(c.hi52)}</text>`:'';
   box.innerHTML=`<div class="ch-h"><span class="muted">${rangeComplete(c,range)?'收盘折线 · 区间涨跌':`收盘折线 · ${esc(historyGap(c))}`}</span><b class="num ${ud(chg)}">${pct(chg)}</b><span class="muted">· ${new Date(T[0]).toISOString().slice(0,10)} – ${new Date(T[T.length-1]).toISOString().slice(0,10)}</span></div><svg class="chart ${k}" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${g}${hi}<path d="${d}L${X(V.length-1).toFixed(1)},${H-pb}L${X(0)},${H-pb}Z" fill="url(#g-${k})"/><path class="line" d="${d}"/>${xl}<circle class="lastdot" cx="${X(V.length-1).toFixed(1)}" cy="${Y(V[V.length-1]).toFixed(1)}" r="3" style="fill:var(--${k})"/><g class="cross" style="opacity:0"><line class="cx" y1="${pt}" y2="${H-pb}"/><circle class="cd" r="4.5"/></g><rect class="hit" x="${pl}" y="0" width="${W-pl-pr}" height="${H}" fill="transparent"/></svg><div class="ch-tip"></div>`;
+  if(!RM()){const line=$('.line',box);try{const length=line.getTotalLength();line.style.strokeDasharray=length;line.style.strokeDashoffset=length;line.getBoundingClientRect();line.style.transition='stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1)';line.style.strokeDashoffset='0'}catch(e){}}
   const svg=$('svg',box),cr=$('.cross',svg),cx=$('.cx',svg),cd=$('.cd',svg),tp=$('.ch-tip',box),hit=$('.hit',svg);
   const mv=e=>{const r=svg.getBoundingClientRect(),x=(e.clientX-r.left)*(W/r.width);let i=Math.round((x-pl)/(W-pl-pr)*(V.length-1));i=Math.max(0,Math.min(V.length-1,i));const px=X(i),py=Y(V[i]);cx.setAttribute('x1',px);cx.setAttribute('x2',px);cd.setAttribute('cx',px);cd.setAttribute('cy',py);cr.style.opacity=1;const ch=V[i]/V[0]-1;tp.innerHTML=`<b>${new Date(T[i]).toISOString().slice(0,10)}</b>&nbsp; ${fmtAx(V[i])} &nbsp;<span class="${ud(ch)}">${pct(ch)}</span>`;tp.style.left=Math.max(70,Math.min(W-90,px*(r.width/W)))+'px';tp.classList.add('on')};
   hit.addEventListener('pointermove',mv);hit.addEventListener('pointerdown',mv);hit.addEventListener('pointerleave',()=>{cr.style.opacity=0;tp.classList.remove('on')})}
@@ -533,7 +544,7 @@ function renderFoot(){
 }
 
 /* ---------- reveal / scrollspy ---------- */
-function onReveal(el){$$('#kpis [data-count]',el).forEach(countUp);$$('.ring .bar',el).forEach(b=>{b.style.strokeDashoffset=b.dataset.to});$$('.needle',el).forEach(n=>{n.style.transform=`rotate(${n.dataset.deg}deg)`})}
+function onReveal(el){$$('[data-count]',el).forEach(countUp);$$('.ring .bar',el).forEach(b=>{b.style.strokeDashoffset=b.dataset.to});$$('.needle',el).forEach(n=>{n.style.transform=`rotate(${n.dataset.deg}deg)`})}
 function initObservers(){
   if(!('IntersectionObserver' in window)){$$('.reveal').forEach(el=>{el.classList.add('in');onReveal(el)});return}
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');onReveal(e.target);io.unobserve(e.target)}}),{threshold:.06,rootMargin:'0px 0px -4% 0px'});
