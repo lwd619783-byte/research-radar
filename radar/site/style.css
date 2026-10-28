@@ -76,7 +76,8 @@ kbd{font-family:var(--font-mono);font-size:10.5px;padding:2px 6px;border-radius:
 .ticker-label{flex:none;display:flex;align-items:center;gap:7px;height:100%;padding:0 14px 0 28px;color:var(--text-3);font-family:var(--font-mono);font-size:11px;border-right:1px solid var(--border)}
 .ticker-vp{flex:1;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent);mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent)}
 .ticker-track{display:flex;width:max-content;animation:marquee 140s linear infinite}
-.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker:hover .ticker-track,.ticker:focus-within .ticker-track{animation-play-state:paused}
+.ticker-vp:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 @keyframes marquee{to{transform:translateX(-50%)}}
 .tk{display:flex;align-items:center;gap:7px;padding:0 16px;white-space:nowrap;cursor:pointer;line-height:34px;transition:background .2s}
 .tk:hover{background:var(--surface-2)}
@@ -667,9 +668,8 @@ kbd{font-family:var(--font-mono);font-size:10.5px;padding:2px 6px;border-radius:
 }
 @media (prefers-reduced-motion:reduce){.chip,.st{transition:none}}
 /* v3 behavior and accessible states; existing tokens only. */
-.bg-aurora i,.brand-mark .sweep,.ticker-track,.grad,.live,.tb.t1 i,.th-line .halo,.fade-swap,.cp-card.t1 .accent::after,.cp-card.flash,.pbox{animation:none}
-.ring .bar,.pip::after,.rk .fill,.ir-bar .fill,.gauge .needle,.tile,.glabel,.slabel,.drawer,.mask,.chart .line{transition:none}
-.pip::after,.rk .fill,.ir-bar .fill{transform:scaleX(1)}
+/* Keep final values visible without JavaScript; normal motion uses the original reveal states. */
+.no-js .pip.on::after,.no-js .rk .fill,.no-js .ir-bar .fill{transform:scaleX(1)}
 .no-js .reveal{opacity:1;transform:none}.no-js .js-only{display:none}
 .hero-main,.today,.today-row,.today-meta{min-width:0}
 .reason-link{display:inline;padding:0;color:var(--text-2);font:inherit;text-decoration:underline;text-decoration-color:var(--border-2);text-underline-offset:3px;white-space:nowrap}
