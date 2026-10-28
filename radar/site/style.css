@@ -41,10 +41,11 @@ svg{display:block}
 
 /* ---------- background ---------- */
 .bg-aurora{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
-.bg-aurora i{position:absolute;border-radius:50%;filter:blur(100px);opacity:.2;animation:float 28s ease-in-out infinite alternate}
-.bg-aurora i:nth-child(1){width:56vw;height:56vw;background:#5b3cff;top:-34vw;left:-12vw}
-.bg-aurora i:nth-child(2){width:48vw;height:48vw;background:#0095ff;top:-26vw;right:-18vw;opacity:.14;animation-duration:34s}
-.bg-aurora i:nth-child(3){width:36vw;height:36vw;background:#ff2f7a;top:55vh;left:35vw;opacity:.06;animation-duration:40s}
+/* Soft radial textures keep the full drifting glow without re-rasterizing a large blur every frame. */
+.bg-aurora i{position:absolute;border-radius:50%;background:radial-gradient(closest-side,var(--glow) 45%,transparent 100%);opacity:.2;animation:float 28s ease-in-out infinite alternate}
+.bg-aurora i:nth-child(1){width:calc(56vw + 200px);height:calc(56vw + 200px);--glow:#5b3cff;top:calc(-34vw - 100px);left:calc(-12vw - 100px)}
+.bg-aurora i:nth-child(2){width:calc(48vw + 200px);height:calc(48vw + 200px);--glow:#0095ff;top:calc(-26vw - 100px);right:calc(-18vw - 100px);opacity:.14;animation-duration:34s}
+.bg-aurora i:nth-child(3){width:calc(36vw + 200px);height:calc(36vw + 200px);--glow:#ff2f7a;top:calc(55vh - 100px);left:calc(35vw - 100px);opacity:.06;animation-duration:40s}
 [data-theme=light] .bg-aurora i{opacity:.09}
 @keyframes float{to{transform:translate3d(7vw,5vw,0) scale(1.12)}}
 .bg-grid{position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 85% 55% at 50% 0%,#000 25%,transparent 75%);mask-image:radial-gradient(ellipse 85% 55% at 50% 0%,#000 25%,transparent 75%)}
