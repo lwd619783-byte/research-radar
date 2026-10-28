@@ -184,7 +184,7 @@ const timeDetail=c=>{const v=c.provenance?.valuation||{},f=v.fx;return `行情 $
 /* ---------- ticker ---------- */
 function renderTicker(){const status=indexAvailability(D.indices,D.meta.issues),notice=status.missing.length?`<div class="tk idx-gap">指数缺项：${esc(status.missing.join('、'))}</div>`:'';const idx=D.indices.map(x=>`<div class="tk idx"><b data-tip="${esc((x.asOf||'日期未知')+' · '+phaseText(x.phase)+' · '+(x.source||'未知来源')+' · '+(x.providerLocalTime||''))}">${esc(x.name)} <small>${esc(x.asOf||'未知')} ${phaseText(x.phase)}</small></b><span class="px num">${fmtNum(x.price)}</span><span class="num ${ud(x.chg)}">${pct(x.chg,2)}</span></div>`).join('');
   const cos=CO.map(c=>`<div class="tk" data-co="${c.id}" data-tip="${esc(timeDetail(c))}"><b>${esc(c.short)} <small>${esc(c.priceAsOf||c.ld||'未知')} ${phaseText(c.pricePhase||c.provenance?.daily?.phase)}</small></b><span class="px num">${fmtPrice(c)}</span><span class="num ${ud(c.r1d)}">日线 ${pct(c.r1d,2)}</span></div>`).join('');
-  const one=notice+idx+'<span class="tk-sep"></span>'+cos+'<span class="tk-sep"></span>';$('#tickerTrack').innerHTML=one+one;$('#tickerLabel').textContent=ASOFL+' · '+status.label;$('#tickerLabel').dataset.tip=status.missing.length?'指数缺项：'+status.missing.join('、'):status.label}
+  const one=notice+idx+'<span class="tk-sep"></span>'+cos+'<span class="tk-sep"></span>';$('#tickerTrack').innerHTML=one+one;$('#tickerLabel').textContent=ASOFL+' · '+status.label;$('#tickerLabel').dataset.tip=ASOFL+' · '+status.label+(status.missing.length?' · 指数缺项：'+status.missing.join('、'):'')}
 
 /* ---------- hero ---------- */
 function renderHero(){

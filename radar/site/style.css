@@ -508,7 +508,8 @@ kbd{font-family:var(--font-mono);font-size:10.5px;padding:2px 6px;border-radius:
 }
 @media (max-width:760px){
   .wrap{padding:0 16px}
-  .ticker-label{padding-left:16px}
+  .ticker-label{padding-left:16px;max-width:46%;min-width:0}
+  #tickerLabel{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .search-trigger{min-width:0;width:36px;padding:0;justify-content:center}
   .search-trigger .txt,.search-trigger kbd,.brand-tag,#convLabel{display:none}
   .top-strip{grid-template-columns:auto 1fr}
