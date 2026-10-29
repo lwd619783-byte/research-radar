@@ -2,16 +2,48 @@
   "schemaVersion": 1,
   "state": "current",
   "sourceSHA": "68a4dd143f32a7b4d8b7754fe585965176d0f6d3",
-  "runId": "40727789148",
-  "dataSHA256": "42a1141bdc9571e7acecc6a5c530f4119ebb6e17f6724d8a62caf3c7834cc8f6",
-  "generatedAt": "2026-10-29T00:40+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/40727789148",
+  "runId": "40818933767",
+  "dataSHA256": "55484cb6874424d989c10eacba26c410b6dacb1dd10c772dd8eca599ec65563f",
+  "generatedAt": "2026-10-29T12:42+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/40818933767",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-10-29T00:40+08:00",
+    "generatedAt": "2026-10-29T12:42+08:00",
     "baselineAt": "2026-10-28T18:34+08:00",
     "reports": [
+      {
+        "id": "TFTX",
+        "name": "天孚通信",
+        "before": "2026Q2单季（H1−Q1）",
+        "after": "2026Q3单季",
+        "status": "source",
+        "label": "财报期别变更"
+      },
+      {
+        "id": "EMC",
+        "name": "台光电子",
+        "before": "2026Q2",
+        "after": "2026Q3累计（官方公告摘要）",
+        "status": "partial",
+        "label": "财报期别变更"
+      },
+      {
+        "id": "GEV",
+        "name": "GE Vernova",
+        "before": "2026Q2",
+        "after": "2026Q3单季（GAAP归母净利）",
+        "status": "source",
+        "label": "财报期别变更"
+      },
+      {
+        "id": "KHSJ",
+        "name": "科华数据",
+        "before": "2026Q2",
+        "after": "2026Q3单季",
+        "status": "source",
+        "label": "财报期别变更"
+      },
       {
         "id": "VRT",
         "name": "维谛 Vertiv",
@@ -23,6 +55,34 @@
     ],
     "calendar": [
       {
+        "id": "TFTX",
+        "name": "天孚通信",
+        "before": "2026-10-29",
+        "after": null,
+        "status": "unverified"
+      },
+      {
+        "id": "EMC",
+        "name": "台光电子",
+        "before": "2026-10-28",
+        "after": null,
+        "status": "unverified"
+      },
+      {
+        "id": "GEV",
+        "name": "GE Vernova",
+        "before": "2026-10-28",
+        "after": null,
+        "status": "unverified"
+      },
+      {
+        "id": "KHSJ",
+        "name": "科华数据",
+        "before": "2026-10-29",
+        "after": null,
+        "status": "unverified"
+      },
+      {
         "id": "VRT",
         "name": "维谛 Vertiv",
         "before": "2026-10-28",
@@ -30,54 +90,175 @@
         "status": "unverified"
       }
     ],
-    "restored": [],
-    "lost": [
+    "restored": [
       {
-        "kind": "index",
-        "symbol": "000001.SS",
-        "metric": null,
-        "status": "partial"
+        "kind": "company",
+        "symbol": "ENR.DE",
+        "metric": "marketCapUSD",
+        "status": "complete"
       },
       {
-        "kind": "index",
-        "symbol": "^HSI",
-        "metric": null,
+        "kind": "company",
+        "symbol": "SU.PA",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      }
+    ],
+    "lost": [
+      {
+        "kind": "company",
+        "symbol": "2383.TW",
+        "metric": "financial",
         "status": "partial"
       }
     ],
     "prices": [
       {
-        "id": "ENR",
-        "name": "西门子能源",
+        "id": "VRT",
+        "name": "维谛 Vertiv",
         "beforeDate": "2026-10-27",
         "afterDate": "2026-10-28",
-        "before": 128.6,
-        "after": 133.1,
-        "currency": "EUR",
-        "change": 0.03484
+        "before": 208.6,
+        "after": 242.9,
+        "currency": "USD",
+        "change": 0.16484
       },
       {
-        "id": "SU",
-        "name": "施耐德电气",
+        "id": "MU",
+        "name": "美光 Micron",
         "beforeDate": "2026-10-27",
         "afterDate": "2026-10-28",
-        "before": 242.7,
-        "after": 245.8,
-        "currency": "EUR",
-        "change": 0.01277
+        "before": 928.8,
+        "after": 983.2,
+        "currency": "USD",
+        "change": 0.05865
+      },
+      {
+        "id": "LITE",
+        "name": "Lumentum",
+        "beforeDate": "2026-10-27",
+        "afterDate": "2026-10-28",
+        "before": 866.2,
+        "after": 914.0,
+        "currency": "USD",
+        "change": 0.05515
+      },
+      {
+        "id": "MOD",
+        "name": "Modine",
+        "beforeDate": "2026-10-27",
+        "afterDate": "2026-10-28",
+        "before": 136.5,
+        "after": 143.5,
+        "currency": "USD",
+        "change": 0.0515
+      },
+      {
+        "id": "MRVL",
+        "name": "迈威尔 Marvell",
+        "beforeDate": "2026-10-27",
+        "afterDate": "2026-10-28",
+        "before": 243.6,
+        "after": 251.6,
+        "currency": "USD",
+        "change": 0.03317
+      },
+      {
+        "id": "AVGO",
+        "name": "博通 Broadcom",
+        "beforeDate": "2026-10-27",
+        "afterDate": "2026-10-28",
+        "before": 342.3,
+        "after": 351.8,
+        "currency": "USD",
+        "change": 0.02769
+      },
+      {
+        "id": "ETN",
+        "name": "伊顿 Eaton",
+        "beforeDate": "2026-10-27",
+        "afterDate": "2026-10-28",
+        "before": 384.2,
+        "after": 392.9,
+        "currency": "USD",
+        "change": 0.02259
+      },
+      {
+        "id": "GEV",
+        "name": "GE Vernova",
+        "beforeDate": "2026-10-27",
+        "afterDate": "2026-10-28",
+        "before": 895.1,
+        "after": 878.0,
+        "currency": "USD",
+        "change": -0.01905
+      },
+      {
+        "id": "ASML",
+        "name": "阿斯麦 ASML",
+        "beforeDate": "2026-10-27",
+        "afterDate": "2026-10-28",
+        "before": 1636,
+        "after": 1663,
+        "currency": "USD",
+        "change": 0.01668
+      },
+      {
+        "id": "COHR",
+        "name": "Coherent",
+        "beforeDate": "2026-10-27",
+        "afterDate": "2026-10-28",
+        "before": 235.8,
+        "after": 239.6,
+        "currency": "USD",
+        "change": 0.01612
+      },
+      {
+        "id": "NVDA",
+        "name": "英伟达 NVIDIA",
+        "beforeDate": "2026-10-27",
+        "afterDate": "2026-10-28",
+        "before": 217.9,
+        "after": 215.4,
+        "currency": "USD",
+        "change": -0.01175
+      },
+      {
+        "id": "TSM",
+        "name": "台积电",
+        "beforeDate": "2026-10-27",
+        "afterDate": "2026-10-28",
+        "before": 436.9,
+        "after": 439.5,
+        "currency": "USD",
+        "change": 0.00604
+      },
+      {
+        "id": "ANET",
+        "name": "Arista",
+        "beforeDate": "2026-10-27",
+        "afterDate": "2026-10-28",
+        "before": 187.0,
+        "after": 186.7,
+        "currency": "USD",
+        "change": -0.0015
       }
     ],
     "scores": [],
     "today": {
       "date": "2026-10-29",
       "reports": [
+        "EMC",
+        "GEV",
+        "KHSJ",
+        "TFTX",
         "VRT"
       ],
       "confirmed": [],
       "scores": []
     },
-    "excludedPrices": 27,
-    "sameDatePrices": 13,
+    "excludedPrices": 0,
+    "sameDatePrices": 29,
     "pendingResearch": 8,
     "baselineProof": {
       "state": "success",
