@@ -31791,14 +31791,14 @@
       ]
     },
     {
-      "generatedAt": "2026-10-29T12:42+08:00",
+      "generatedAt": "2026-10-29T14:33+08:00",
       "proof": {
         "state": "success",
-        "productionSHA": "bcbe72483649bec6855c273799034f8c048fe722",
-        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/CBc5JqoHErsRKqVCK7tybLG4vsr2",
-        "reportedAt": "2026-10-29T04:42:58Z",
+        "productionSHA": "88364e074c3e0f450e58595df39a382b5407418c",
+        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/HaTzzu5LjbJuYuoe5YGAPFE6QiHV",
+        "reportedAt": "2026-10-29T06:34:03Z",
         "sourceSHA": "68a4dd143f32a7b4d8b7754fe585965176d0f6d3",
-        "dataSHA256": "55484cb6874424d989c10eacba26c410b6dacb1dd10c772dd8eca599ec65563f"
+        "dataSHA256": "9edcaae0bf316be57a1859a41d821c0d07a536370b71990d4d4284f23544c780"
       },
       "companies": [
         {
@@ -32087,11 +32087,11 @@
             "timezone": "Asia/Seoul",
             "time_note": "10/28已披露Q3初步结果；下一期日期待官方确认"
           },
-          "close": 1487000,
-          "date": "2026-10-28",
+          "close": 1521000,
+          "date": "2026-10-29",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.10887,
+          "r1d": 0.02286,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -32633,11 +32633,11 @@
             "timezone": "Asia/Taipei",
             "time_note": "10/28已公告Q3财务摘要；下期日期待官方确认"
           },
-          "close": 5025,
-          "date": "2026-10-28",
+          "close": 5010,
+          "date": "2026-10-29",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.05789,
+          "r1d": -0.00299,
           "financial": {
             "status": null,
             "basis": "cumulative",
@@ -32791,11 +32791,11 @@
             "timezone": "Asia/Tokyo",
             "time_note": "FY2026第二季度业绩"
           },
-          "close": 3025,
-          "date": "2026-10-28",
+          "close": 3050,
+          "date": "2026-10-29",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.02821,
+          "r1d": 0.00826,
           "financial": {
             "status": null,
             "basis": "single_quarter",
