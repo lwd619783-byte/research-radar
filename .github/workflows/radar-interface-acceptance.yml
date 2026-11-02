@@ -154,7 +154,7 @@
       ]
     },
     "live_notion": {
-      "if": "github.event_name == 'workflow_dispatch' && inputs.live_notion == true && github.repository == 'lwd619783-byte/research-radar' && github.ref == 'refs/heads/v3/pr4-production' && github.run_attempt == 1",
+      "if": "github.event_name == 'workflow_dispatch' && inputs.live_notion == true && github.repository == 'lwd619783-byte/research-radar' && (github.ref == 'refs/heads/v3/pr4-production' || github.ref == 'refs/heads/fix/radar-truthfulness-2026-10-18' || github.ref == 'refs/heads/v3/pr5-stable-operations') && github.run_attempt == 1",
       "runs-on": "ubuntu-24.04",
       "timeout-minutes": 40,
       "permissions": {
@@ -173,7 +173,7 @@
         },
         {
           "name": "Validate dry-run identity",
-          "run": "set -euo pipefail\ntest \"$GITHUB_REPOSITORY\" = lwd619783-byte/research-radar\ntest \"$GITHUB_REF\" = refs/heads/v3/pr4-production\ntest \"$GITHUB_EVENT_NAME\" = workflow_dispatch\ntest \"$GITHUB_RUN_ATTEMPT\" = 1\ntest \"$(git rev-parse HEAD)\" = \"$GITHUB_SHA\""
+          "run": "set -euo pipefail\ntest \"$GITHUB_REPOSITORY\" = lwd619783-byte/research-radar\ncase \"$GITHUB_REF\" in\n  refs/heads/v3/pr4-production) ;;\n  refs/heads/fix/radar-truthfulness-2026-10-18|refs/heads/v3/pr5-stable-operations)\n    test \"$GITHUB_WORKFLOW_REF\" = \"$GITHUB_REPOSITORY/.github/workflows/radar-interface-acceptance.yml@$GITHUB_REF\"\n    test \"$GITHUB_WORKFLOW_SHA\" = \"$GITHUB_SHA\" ;;\n  *) exit 1 ;;\nesac\ntest \"$GITHUB_EVENT_NAME\" = workflow_dispatch\ntest \"$GITHUB_RUN_ATTEMPT\" = 1\ntest \"$(git rev-parse HEAD)\" = \"$GITHUB_SHA\""
         },
         {
           "name": "Python 3.12",

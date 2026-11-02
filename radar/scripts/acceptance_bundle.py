@@ -129,6 +129,53 @@ def validate_binding(D, receipt, clock):
             D['meta']['generatedAt'] != clock.isoformat(timespec='minutes') or
             D['meta']['today'] != clock.date().isoformat()):
         raise BundleError('same_snapshot_binding_mismatch')
+    validate_close_proofs(D, receipt.get('independentCloseProofs'), execution, clock)
+
+
+def validate_close_proofs(D, proofs, execution, clock):
+    """Bind the independently checked terminal close to this exact output/run.
+
+    No new field is required for the existing provider-only path. The official
+    proof is never accepted as a standalone boolean or used for other symbols.
+    """
+    rows = D.get('companies', [])
+    selected = [(row, (row.get('provenance') or {}).get('daily') or {})
+                for row in rows if isinstance(row, dict)
+                and 'independentCloseProof' in ((row.get('provenance') or {}).get('daily') or {})]
+    if proofs is None and not selected:
+        return
+    try:
+        from decimal import Decimal
+        from equity_close_proof import valid_summary
+        if (not isinstance(proofs, dict) or set(proofs) != {'2383.TW'}
+                or len(selected) != 1 or sum(row.get('sym') == '2383.TW' for row in rows) != 1):
+            raise ValueError
+        row, daily = selected[0]
+        proof = proofs['2383.TW']
+        if (row.get('sym') != '2383.TW' or row.get('cur') != 'TWD'
+                or daily.get('independentCloseProof') != proof
+                or not valid_summary(proof, now=clock, execution=execution)):
+            raise ValueError
+        day = proof['day']
+        selection = daily.get('snapshotSelection') or {}
+        calendar = row.get('marketCalendar') or {}
+        if (any(row.get(key) != day for key in ('ld', 'metricAsOf', 'priceAsOf'))
+                or daily.get('asOf') != day or daily.get('src') != 'yahoo'
+                or daily.get('phase') != 'closed' or daily.get('returnBasis') != 'yahoo-adjclose'
+                or daily.get('timezone') != 'Asia/Taipei'
+                or daily.get('receivedAt') != proof['parserReceivedAt']
+                or selection.get('sourcePhase') != 'unknown'
+                or selection.get('sourceAsOf') != day or selection.get('selectedDate') != day
+                or row.get('pricePhase') != 'closed' or row.get('priceSource') != 'yahoo'
+                or row.get('priceObservedAt') is not None
+                or (row.get('priceSelection') or {}).get('useQuote') is not False
+                or not isinstance(row.get('price'), (int, float)) or isinstance(row.get('price'), bool)
+                or Decimal(str(row.get('price'))) != Decimal(proof['close'])
+                or calendar.get('exchange') != 'XTAI' or calendar.get('confidence') != 'official'
+                or calendar.get('expectedCompletedDate') != day or calendar.get('quoteDate') != day):
+            raise ValueError
+    except (KeyError, TypeError, ValueError, ArithmeticError):
+        raise BundleError('independent_close_proof_binding_mismatch') from None
 
 
 def validate_research_snapshot(snapshot, D, fixed_clock):

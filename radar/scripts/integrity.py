@@ -55,7 +55,7 @@ def observation_time(kind, record):
         return None
 
 
-def fresh_record(record, now, date=None, market='A股'):
+def fresh_record(record, now, date=None, market='A股', *, symbol=None, allow_intraday=False, phase='closed'):
     if not isinstance(record, dict) or record.get('schemaVersion') != 2:
         return False
     try:
@@ -63,6 +63,9 @@ def fresh_record(record, now, date=None, market='A股'):
         if received.tzinfo is None or not 0 <= (now - received).total_seconds() <= 36 * 3600:
             return False
         if date is not None:
+            if symbol is not None:
+                from market_calendar import date_is_fresh
+                return date_is_fresh(symbol, date, now, allow_intraday=allow_intraday, phase=phase)
             age = (now.astimezone(ZoneInfo(ZONES[market])).date() - dt.date.fromisoformat(date)).days
             from reviewed_closures import expected_close
             expected = expected_close(market, now)

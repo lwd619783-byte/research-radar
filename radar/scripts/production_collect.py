@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 import platform
 import re
+import stat
 import time
 
 import acceptance_bundle as bundle
@@ -23,6 +24,7 @@ from notion_normalize import normalize, simplify_page
 from notion_source import TABLE_ORDER, fetch_all
 from research_snapshot import ResearchAbort, canonical_json, load_last_good, snapshot_sha256
 from research_view import CODE_TEXT
+from execution_policy import dry_run_ref_allowed
 
 REPOSITORY = 'lwd619783-byte/research-radar'
 SOURCE_BRANCH = 'fix/radar-truthfulness-2026-10-18'
@@ -32,17 +34,182 @@ TABLE_NAMES = dict(industries='行业', chokepoints='卡点', companies='公司'
 EXECUTION_KEYS = ('GITHUB_SHA', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT', 'RUNNER_OS',
                   'RUNNER_ARCH', 'ImageOS', 'ImageVersion')
 NOTION_CODES = frozenset(CODE_TEXT) | {'notion_bad_json', 'notion_http_error'}
+# Enumerated from build.py / integrity.py. These are codes, never error text.
+RELEASE_BLOCKER_CODES = frozenset({
+    'stale_quotes_not_safe_in_all_frozen_views',
+    'unconfirmed_close_or_intraday_needs_label_approval',
+    'financial_evidence_incomplete', 'mixed_or_missing_market_dates_need_label_approval',
+    'index_date_or_phase_needs_label_approval', 'index_observation_missing_or_stale',
+    'ratio_extreme_conflicts_with_frozen_sentence', 'quotes_coverage_low',
+    'synthetic_fixture_not_publishable', 'local_review_not_publishable', 'offline_not_publishable',
+})
+DIAGNOSTIC_CODES = NOTION_CODES | RELEASE_BLOCKER_CODES | {
+    'contract_invalid', 'collection_failed', 'collection_execution_not_allowed', 'sensitive_notion_input',
+    'invalid_baseline_snapshot', 'collection_destination_exists', 'notion_handoff_exists'}
+DIAGNOSTIC_STAGES = frozenset({
+    'admission', 'destination', 'clock', 'research_config', 'notion_contract', 'baseline_snapshot',
+    'notion_fetch', 'notion_sanitize', 'notion_handoff', 'notion_normalize', 'market_config',
+    'market_collect', 'research_finalize', 'research_apply', 'release_gates', 'summary', 'bundle_write'})
+# Only repository-approved tickers enter failure diagnostics. A newly admitted
+# Notion ticker may still be collected; it is omitted here until reviewed.
+DIAGNOSTIC_SYMBOLS = frozenset({
+    '000001.SS', '000657.SZ', '000660.KS', '000922.SS', '002028.SZ', '002335.SZ', '002371.SZ',
+    '002463.SZ', '002837.SZ', '002916.SZ', '0522.HK', '1888.HK', '2383.TW', '300308.SZ',
+    '300394.SZ', '300476.SZ', '300502.SZ', '301200.SZ', '301377.SZ', '3110.T', '399006.SZ',
+    '600183.SS', '600875.SS', '601179.SS', '601208.SS', '603256.SS', '688012.SS', '688498.SS',
+    '688676.SS', '688825.SS', 'ANET', 'ASML', 'AVGO', 'COHR', 'ENR.DE', 'ETN', 'GEV',
+    'HSTECH.HK', 'LITE', 'MOD', 'MRVL', 'MU', 'NVDA', 'SU.PA', 'TSM', 'VRT',
+    '^GSPC', '^HSI', '^IXIC', '^SOX'})
+MAX_DIAGNOSTIC_INPUT = 65536
+MARKET_ISSUE_STATUSES = {
+    'daily': frozenset({'no_common_completed_observation', 'stale'}),
+    'index': frozenset({'missing_or_unconfirmed_snapshot'}),
+    'history': frozenset({'short_history'}),
+    'ratio': frozenset({'frozen_text_or_range_incompatible', 'unavailable_or_short_history'}),
+    'valuation': frozenset({'quote_date_mismatch_or_missing', 'quote_stale_or_invalid_receipt',
+        'quote_observation_after_receipt', 'quote_currency_mismatch', 'market_cap_unavailable',
+        'pe_missing', 'pe_nonpositive', 'pe_invalid', 'pe_not_meaningful'}),
+}
+
+
+def safe_market_issues(issues):
+    """Only bounded codes, ticker characters and real ISO dates may leave collect."""
+    if not isinstance(issues, list):
+        return []
+    result = []
+    for item in issues[:100]:
+        if not isinstance(item, dict):
+            continue
+        kind, status = item.get('kind'), item.get('status')
+        if not isinstance(kind, str) or not isinstance(status, str) or status not in MARKET_ISSUE_STATUSES.get(kind, ()):
+            continue
+        row = {'kind': kind, 'status': status}
+        symbol = item.get('symbol')
+        if isinstance(symbol, str) and symbol in DIAGNOSTIC_SYMBOLS:
+            row['symbol'] = symbol
+        for key in ('sourceDate', 'observedDate', 'requiredDate', 'expectedCompletedDate'):
+            value = item.get(key)
+            try:
+                if isinstance(value, str) and dt.date.fromisoformat(value).isoformat() == value:
+                    row[key] = value
+            except ValueError:
+                pass
+        result.append(row)
+    return result
+
+
+def market_diagnostic_issues(data):
+    """Attach dates already present in assembled metadata, without response data."""
+    import market_calendar
+    companies = {row.get('sym'): row for row in data.get('companies', [])}
+    calendars = data.get('meta', {}).get('marketCalendar', {}).get('exchanges', {})
+    enriched = []
+    for issue in data.get('meta', {}).get('issues', []):
+        if not isinstance(issue, dict):
+            continue
+        row = dict(issue)
+        symbol = row.get('symbol')
+        if row.get('kind') == 'daily':
+            info = companies.get(symbol, {}).get('marketCalendar', {})
+            row.update(sourceDate=info.get('quoteDate'), expectedCompletedDate=info.get('expectedCompletedDate'))
+        elif row.get('kind') == 'index':
+            info = calendars.get(market_calendar.exchange_for(symbol), {})
+            row['expectedCompletedDate'] = info.get('expectedCompletedDate')
+        enriched.append(row)
+    return safe_market_issues(enriched)
+
+
+def safe_collection_diagnostic(code, *, blockers=(), market_issues=(), notion_errors=(),
+                               stage=None, table=None, counts=None, calendar_policy=None):
+    code = code if isinstance(code, str) and code in DIAGNOSTIC_CODES else 'collection_failed'
+    result = {'code': code, 'notionErrors': []}
+    if isinstance(stage, str) and stage in DIAGNOSTIC_STAGES:
+        result['stage'] = stage
+    if isinstance(table, str) and table in TABLE_ORDER:
+        result['table'] = table
+    if type(calendar_policy) is bool:
+        result['calendarPolicy'] = calendar_policy
+    if isinstance(counts, dict):
+        accepted_counts = {key: counts[key] for key in ('notionRequests', 'notionRetries', 'marketRequests')
+                           if type(counts.get(key)) is int and 0 <= counts[key] <= 10000}
+        if accepted_counts:
+            result['counts'] = accepted_counts
+    blockers = blockers if isinstance(blockers, (list, tuple)) else ()
+    accepted = sorted({value for value in blockers if isinstance(value, str) and value in DIAGNOSTIC_CODES})
+    if accepted:
+        result['blockers'] = accepted
+    issues = safe_market_issues(market_issues)
+    if issues:
+        result['marketIssues'] = issues
+    notion_errors = notion_errors if isinstance(notion_errors, (list, tuple)) else ()
+    for note in notion_errors[:20]:
+        if not isinstance(note, dict):
+            continue
+        # Existing source errors are reduced again; no arbitrary detail strings.
+        fields = {key: note[key] for key in ('code', 'http_status', 'notion_code') if key in note}
+        if not isinstance(fields.get('code'), str):
+            fields['code'] = None
+        item = safe_error(fields,
+                          note.get('table') if note.get('table') in TABLE_ORDER else None)
+        result['notionErrors'].append(item)
+    return result
+
+
+def sanitize_diagnostic(value):
+    value = value if isinstance(value, dict) else {}
+    return safe_collection_diagnostic(value.get('code'), blockers=value.get('blockers'),
+        market_issues=value.get('marketIssues'), notion_errors=value.get('notionErrors'),
+        stage=value.get('stage'), table=value.get('table'), counts=value.get('counts'),
+        calendar_policy=value.get('calendarPolicy'))
+
+
+def read_bounded_json(path):
+    """Read a small regular JSON file without following a symbolic link."""
+    path = Path(path)
+    try:
+        if any(part.is_symlink() for part in (path, *path.parents)) or not path.is_file():
+            return None
+        # NONBLOCK also prevents a swapped FIFO from blocking before fstat;
+        # NOFOLLOW closes the final-component link race on supported hosts.
+        flags = os.O_RDONLY | getattr(os, 'O_NONBLOCK', 0) | getattr(os, 'O_NOFOLLOW', 0)
+        with os.fdopen(os.open(path, flags), 'rb') as source:
+            if not stat.S_ISREG(os.fstat(source.fileno()).st_mode):
+                return None
+            content = source.read(MAX_DIAGNOSTIC_INPUT + 1)
+        if len(content) > MAX_DIAGNOSTIC_INPUT:
+            return None
+        return json.loads(content)
+    except (OSError, ValueError, TypeError, RecursionError):
+        return None
+
+
+def read_diagnostic(path):
+    """Bounded untrusted JSON input; no exception text or arbitrary fields escape."""
+    return sanitize_diagnostic(read_bounded_json(path))
+
+
+def diagnostic_notion_errors(fetched):
+    """A malformed handoff must not prevent writing the minimal safe failure."""
+    tables = fetched.get('tables', {}) if isinstance(fetched, dict) else {}
+    if not isinstance(tables, dict):
+        return []
+    return [dict(table['error'], table=name) for name in TABLE_ORDER
+            if isinstance(table := tables.get(name), dict) and isinstance(table.get('error'), dict)]
 
 
 class CollectError(ValueError):
     """Only fixed codes leave this module; rejected inputs never enter messages."""
 
+    def __init__(self, code):
+        self.code = code if isinstance(code, str) and code in DIAGNOSTIC_CODES else 'collection_failed'
+        super().__init__(self.code)
+
 
 def admit(env, live_dry_run=False):
-    branch = LIVE_BRANCH if live_dry_run else SOURCE_BRANCH
+    ref_allowed = dry_run_ref_allowed(env) if live_dry_run else env.get('GITHUB_REF') == 'refs/heads/' + SOURCE_BRANCH
     events = ('workflow_dispatch',) if live_dry_run else ('schedule', 'push', 'workflow_dispatch')
     if (env.get('GITHUB_ACTIONS') != 'true' or env.get('GITHUB_REPOSITORY') != REPOSITORY or
-            env.get('GITHUB_REF') != 'refs/heads/' + branch or
+            not ref_allowed or
             env.get('GITHUB_EVENT_NAME') not in events or env.get('GITHUB_RUN_ATTEMPT') != '1' or
             not re.fullmatch(r'[0-9a-f]{40}', env.get('GITHUB_SHA', '')) or
             not re.fullmatch(r'[0-9]+', env.get('GITHUB_RUN_ID', ''))):
@@ -152,8 +319,7 @@ def diagnostic_text(note):
 def step_summary(data=None, *, error=None, fetched=None):
     """Chinese §8.6 summary, limited to 20 safe diagnostic rows."""
     if data is None:
-        code = error if error in NOTION_CODES | {'contract_invalid', 'sensitive_notion_input',
-                  'collection_failed', 'collection_execution_not_allowed', 'quotes_coverage_low'} else 'collection_failed'
+        code = error if error in DIAGNOSTIC_CODES else 'collection_failed'
         lines = ['### 投研雷达 · 本次更新未完成', '- 线上保持上一次成功版本。',
                  '- 原因：' + diagnostic_text({'code': code})]
         notes = [table.get('error') for table in (fetched or {}).get('tables', {}).values() if table.get('error')]
@@ -220,36 +386,57 @@ def baseline_snapshot(path, contract):
 
 
 def collect(*, out, work, baseline=None, token='', transport=None, market_collect=None,
-            clock=None, env=None, live_dry_run=False, sleep=None, pace=None, last_good=None):
+            clock=None, env=None, live_dry_run=False, sleep=None, pace=None, last_good=None,
+            progress=None):
     """Dependency injection is test-only; the CLI exposes no fixture or clock options."""
+    progress = progress if progress is not None else {}
+    def stage(value):
+        progress['stage'] = value
+    stage('admission')
     env = dict(env if env is not None else os.environ)
     env.pop('NOTION_TOKEN', None)
     admit(env, live_dry_run)
+    stage('destination')
     out, work = Path(out), Path(work)
     if out.name != 'receipt.json' or out.parent.exists() or out.parent.is_symlink():
         raise CollectError('collection_destination_exists')
     if (work / 'notion-fetch.json').exists():
         raise CollectError('notion_handoff_exists')
     synthetic = transport is not None or market_collect is not None or clock is not None or last_good is not None
+    stage('clock')
     now = clock or (lambda: dt.datetime.now(build.BJ))
     initial = now()
+    stage('research_config')
     config = build.research_config()
+    stage('notion_contract')
     contract = build.load_notion_contract(config)
+    stage('baseline_snapshot')
     previous = last_good if last_good is not None else baseline_snapshot(baseline, contract)
     delays = []
     def retry_sleep(seconds):
         delays.append(seconds)
         (sleep or time.sleep)(seconds)
+    stage('notion_fetch')
     raw = fetch_all(contract, config.get('notion', {}), token=token, transport=transport,
                     sleep=retry_sleep, pace=pace, fixed_clock=initial)
-    fetched = sanitize_fetch(raw, contract, fetched_at=initial.isoformat(), sleeps=delays, token=token)
+    stats = raw.get('request_stats', {}) if isinstance(raw, dict) else {}
+    progress['counts'] = {'notionRequests': stats.get('total'), 'notionRetries': stats.get('retries')}
+    stage('notion_sanitize')
+    try:
+        fetched = sanitize_fetch(raw, contract, fetched_at=initial.isoformat(), sleeps=delays, token=token)
+    finally:
+        progress['notionErrors'] = safe_collection_diagnostic('collection_failed',
+            notion_errors=diagnostic_notion_errors(raw))['notionErrors']
     token = None
     del raw
+    stage('notion_handoff')
     save_json(work / 'notion-fetch.json', fetched)
     # Re-read the credential-free handoff exactly as later steps can. No Notion
     # transport, token, or environment access is available to normalization.
     fetched = json.loads((work / 'notion-fetch.json').read_text('utf-8'))
+    stage('notion_normalize')
     research = normalize(fetched, contract, initial, last_good=previous, config=config)
+    stage('market_config')
     cfg_data, validation = build.load_and_validate(build.RADAR, build.REPO, initial.date())
     if validation.errors:
         raise ResearchAbort('contract_invalid')
@@ -258,11 +445,20 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
     selected = {}
     market = {}
     kwargs = {'snapshot_sink': selected, 'market_sink': market}
+    if market_collect is None:
+        kwargs['calendar_policy'] = True
+    progress['calendarPolicy'] = kwargs.get('calendar_policy', False)
     if clock is not None:
         kwargs['snapshot_clock'] = now()
-    rows, summary, session, gates = (market_collect or probe.collect)(cfg_data, budget, **kwargs)
+    stage('market_collect')
+    try:
+        rows, summary, session, gates = (market_collect or probe.collect)(cfg_data, budget, **kwargs)
+    finally:
+        progress['counts']['marketRequests'] = budget.count
     final_clock = selected['clock']
+    stage('research_finalize')
     research = normalize(fetched, contract, final_clock, last_good=previous, config=config)
+    stage('research_apply')
     data = build.apply_research(selected['data'], research, final_clock, config)
     if synthetic:
         data['meta']['reviewPreview'] = True
@@ -271,7 +467,12 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
     if not data['companies'] or available / len(data['companies']) < .70:
         data['meta'].setdefault('blockers', []).append('quotes_coverage_low')
     snapshot = research['snapshot']
+    stage('release_gates')
     blockers = build.release_blockers(data)
+    real_blockers = [code for code in blockers if code not in
+                     ('synthetic_fixture_not_publishable', 'local_review_not_publishable', 'offline_not_publishable')]
+    progress['blockers'] = real_blockers
+    progress['marketIssues'] = market_diagnostic_issues(data)
     gates.update(blockers=blockers, dataSHA256=bundle.data_digest(data),
                  asOf=data['meta']['asOf'], snapshot=data['meta']['snapshot'],
                  asOfByMarket=data['meta']['asOfByMarket'], coverage=data['meta'].get('coverage', []),
@@ -290,15 +491,22 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
         'requestsMade': budget.count, 'deniedPaths': sorted(budget.denied),
         'finishedAt': final_clock.isoformat(), 'fixedClock': final_clock.isoformat(),
         'notion': {'requests': fetched['requests'], 'fetchSHA256': bundle.digest((work / 'notion-fetch.json').read_bytes())}}
-    text = step_summary(data)
-    write_summary(work, text, env)
-    real_blockers = [code for code in blockers if code not in
-                     ('synthetic_fixture_not_publishable', 'local_review_not_publishable', 'offline_not_publishable')]
+    close_proofs = {row['sym']: row['provenance']['daily']['independentCloseProof']
+                    for row in data['companies'] if row.get('provenance', {}).get('daily', {}).get('independentCloseProof') is not None}
+    if close_proofs:
+        receipt['independentCloseProofs'] = close_proofs
     if real_blockers:
-        save_json(work / 'diagnostic.json', {'code': real_blockers[0], 'blockers': real_blockers,
-                  'notionErrors': [table['error'] for table in fetched['tables'].values() if table.get('error')]})
+        save_json(work / 'diagnostic.json', safe_collection_diagnostic(real_blockers[0], blockers=real_blockers,
+                  market_issues=market_diagnostic_issues(data),
+                  notion_errors=diagnostic_notion_errors(fetched), stage=progress['stage'], counts=progress['counts'],
+                  calendar_policy=progress['calendarPolicy']))
         raise ResearchAbort(real_blockers[0], codes=real_blockers)
+    stage('summary')
+    text = step_summary(data)
+    stage('bundle_write')
     saved = bundle.write_bundle(out.parent, data, receipt, final_clock, research_snapshot=snapshot)
+    stage('summary')
+    write_summary(work, text, env)
     return {'archive': saved, 'data': data, 'receipt': receipt, 'snapshot': snapshot,
             'summary': text, 'blocked': bool(blockers), 'purpose': purpose}
 
@@ -312,30 +520,45 @@ def main(argv=None):
     args = parser.parse_args(argv)
     # Remove the secret before any subprocess or downstream phase can inherit it.
     token = os.environ.pop('NOTION_TOKEN', '')
+    progress = {}
     try:
         result = collect(out=args.out, work=args.work, baseline=args.baseline, token=token,
-                         live_dry_run=args.live_dry_run)
+                         live_dry_run=args.live_dry_run, progress=progress)
         print(json.dumps({'collected': True, 'publicationAuthorized': False,
                           'blocked': result['blocked'], 'purpose': result['purpose']}))
         return 2 if result['blocked'] else 0
     except Exception as error:
-        code = error.code if isinstance(error, ResearchAbort) else (
-            str(error) if isinstance(error, CollectError) else 'collection_failed')
-        if code not in NOTION_CODES | {'contract_invalid', 'collection_failed',
-                    'collection_execution_not_allowed', 'sensitive_notion_input', 'quotes_coverage_low'}:
+        code = error.code if isinstance(error, (ResearchAbort, CollectError)) else 'collection_failed'
+        if not isinstance(code, str) or code not in DIAGNOSTIC_CODES:
             code = 'collection_failed'
-        fetched = None
         try:
-            path = args.work / 'notion-fetch.json'
-            if path.is_file():
-                fetched = json.loads(path.read_text('utf-8'))
-            text = step_summary(error=code, fetched=fetched)
+            previous = {}
+            diagnostic_path = args.work / 'diagnostic.json'
+            if isinstance(error, ResearchAbort) and code != 'collection_failed' and diagnostic_path.is_file():
+                # Only the current controlled failure can preserve earlier codes.
+                candidate = read_diagnostic(diagnostic_path)
+                if candidate.get('code') == code:
+                    previous = candidate
+            blockers = error.codes if isinstance(error, ResearchAbort) else []
+            detail = error.detail if isinstance(error, ResearchAbort) and isinstance(error.detail, dict) else {}
+            diagnostic = safe_collection_diagnostic(code,
+                blockers=[*blockers, *progress.get('blockers', []), *previous.get('blockers', [])],
+                market_issues=progress.get('marketIssues', previous.get('marketIssues', [])),
+                notion_errors=progress.get('notionErrors', previous.get('notionErrors') or
+                    diagnostic_notion_errors(read_bounded_json(args.work / 'notion-fetch.json'))),
+                stage=progress.get('stage', previous.get('stage')), table=detail.get('table'),
+                counts=progress.get('counts', previous.get('counts')),
+                calendar_policy=progress.get('calendarPolicy', previous.get('calendarPolicy')))
+            save_json(diagnostic_path, diagnostic)
+            text = step_summary(error=diagnostic['code'], fetched={'tables': {
+                str(i): {'error': note} for i, note in enumerate(diagnostic['notionErrors'])}})
             write_summary(args.work, text, os.environ)
-            save_json(args.work / 'diagnostic.json', {'code': code, 'notionErrors': [
-                table['error'] for table in (fetched or {}).get('tables', {}).values() if table.get('error')]})
         except Exception:
             pass
-        print(json.dumps({'collected': False, 'code': code, 'publicationAuthorized': False}))
+        result = {'collected': False, 'code': code, 'publicationAuthorized': False}
+        if isinstance(progress.get('stage'), str) and progress['stage'] in DIAGNOSTIC_STAGES:
+            result['stage'] = progress['stage']
+        print(json.dumps(result))
         return 2 if isinstance(error, (ResearchAbort, CollectError)) else 1
 
 

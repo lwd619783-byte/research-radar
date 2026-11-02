@@ -29,7 +29,7 @@ def expected_close(market, now):
     return '2026-10-22' if local < reopening_close else '2026-10-27'
 
 
-def completed_bars(record, bars, market, now):
+def completed_bars(record, bars, market, now, *, symbol=None):
     """Discard proven false dates, requiring observed and provider-proven real bars.
 
 Do not substitute 10/21 when 10/22 is absent, skip a normal trading-day tail,
@@ -37,7 +37,7 @@ or let a legacy closed marker replace the original provider session evidence.
 Known false dates are also removed from later history, so they never enter
 return calculations after the market reopens. The original record stays intact.
 """
-    from snapshot import equity_bar_final
+    from equity_close_proof import record_bar_final
     expected = expected_close(market, now)
     false_dates = [bar for bar in bars if known_closed(market, bar[0])]
     if expected is None and not false_dates:
@@ -53,9 +53,7 @@ return calculations after the market reopens. The original record stays intact.
     if false_dates or expected:
         timestamps = record.get('barTimestamps')
         day = selected[-1][0]
-        if not isinstance(timestamps, dict) or not equity_bar_final(
-                day, timestamps.get(day), record.get('timezone'),
-                record.get('finality'), record.get('receivedAt')):
+        if not isinstance(timestamps, dict) or not record_bar_final(record, day, symbol=symbol, now=now):
             return []
         if expected:
             # Advancing now cannot upgrade a payload received before the real

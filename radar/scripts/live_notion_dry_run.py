@@ -5,6 +5,7 @@ import argparse
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import tempfile
@@ -19,6 +20,70 @@ class DryRunError(ValueError):
     pass
 
 
+NOTION_FAILURES = {
+    'notion_timeout': '读取超时或连接失败，检查连接后重新演练',
+    'notion_rate_limited': '限流重试后仍失败，稍后新建一次演练',
+    'notion_server_error': '服务端重试后仍失败，稍后新建一次演练',
+    'notion_schema_changed': '表结构与契约不一致，按安全诊断恢复约定列名和类型后重新演练',
+    'table_quality_low': '异常行超过门槛，按隔离记录修复原行后重新演练',
+    'notion_bad_json': '返回内容无法解析，检查安全诊断后重新演练',
+    'notion_http_error': '请求失败，检查安全诊断中的状态码后重新演练',
+    'notion_cursor_loop': '分页游标重复，检查数据源分页后重新演练',
+    'notion_too_many_pages': '分页超过读取上限，检查数据源规模后重新演练',
+    'notion_body_too_large': '响应超过读取上限，检查数据源响应后重新演练',
+}
+WEEKLY_FAILURES = {
+    'no_weekly_row': '没有可用的本周主线记录',
+    'not_current_week': '当前显示的记录不是本周周次',
+    'expired': '研判已过有效期，需实质复评后更新研判日期和有效至',
+    'missing_reason': '缺研判理由',
+    'missing_source': '缺有效来源链接',
+    'missing_dates': '缺研判日期或有效至',
+    'future_judgment_date': '研判日期晚于演练日期',
+    'validity_too_long': '有效期超过 14 天',
+    'banned_words': '内容含禁用词',
+    'prediction_words': '内容含预测性用词',
+    'row_quarantined': '原行被隔离，需按隔离记录修复',
+    'missing_required': '缺必填项，需按隔离记录补齐',
+    'regex_mismatch': '字段格式不符合契约',
+    'relation_missing': '关联行业不存在或不可用',
+    'relation_multiple': '关联行业数量不符合契约',
+    'duplicate_key': '存在重复周次，需按隔离记录修复',
+    'url_invalid': '来源链接不是有效 https 链接',
+}
+
+
+def _notion_actions(notes):
+    """Only fixed table names and messages enter operator-facing diagnostics."""
+    actions = []
+    for note in notes:
+        table = collector.TABLE_NAMES.get(note.get('table'), '研究数据')
+        action = NOTION_FAILURES.get(note.get('code'), '读取或校验失败，检查安全诊断后重新演练')
+        text = f'{table}：{action}'
+        if text not in actions:
+            actions.append(text)
+    return '；'.join(actions)
+
+
+def _weekly_action(meta):
+    weekly = meta.get('weekly', {})
+    week = weekly.get('week', '')
+    # Never echo arbitrary Notion text, raw error details or unknown codes.
+    week = week if isinstance(week, str) and re.fullmatch(r'[0-9]{4}-W[0-9]{2}', week) else ''
+    reasons = list(weekly.get('judgment', {}).get('reasons', []))
+    notion = meta.get('notion', {})
+    for note in [*notion.get('warnings', []), *notion.get('quarantined', [])]:
+        if week and note.get('table') == 'weekly' and note.get('key') == week:
+            reasons.append(note.get('code'))
+    messages = list(dict.fromkeys(WEEKLY_FAILURES[code] for code in reasons if code in WEEKLY_FAILURES))
+    if not messages:
+        messages = [{'auto': '当前主线为自动生成内容', 'none': '没有可用的本周主线记录',
+                     'stale': '当前主线待更新'}.get(weekly.get('mode'), '本周主线未达到 AI 研判条件')]
+    target = f'（{week}）' if week else ''
+    return ('；'.join(messages) + f'。请按《维护规则》的周度复评要求，在每周主线表新增或修复本周{target}记录，'
+            '核实研判理由、来源、研判日期和有效至后重新演练；不要只延长日期。')
+
+
 def classify(data=None, diagnostics=None):
     codes = [(diagnostics or {}).get('code')]
     codes += [note.get('code') for note in (diagnostics or {}).get('notionErrors', [])]
@@ -31,12 +96,15 @@ def classify(data=None, diagnostics=None):
         if code in codes:
             return {'ready': False, 'code': code, 'action': step}
     if data is None:
-        return {'ready': False, 'code': 'live_collection_failed', 'action': '检查安全诊断与行情来源状态'}
+        notes = (diagnostics or {}).get('notionErrors', [])
+        return {'ready': False, 'code': 'live_collection_failed',
+                'action': _notion_actions(notes) if notes else '检查安全诊断与行情来源状态'}
     if fallback:
-        return {'ready': False, 'code': 'live_notion_fallback', 'action': '修复表读取后重新演练'}
+        return {'ready': False, 'code': 'live_notion_fallback',
+                'action': '本次有表沿用上次版本。' + _notion_actions(fallback)}
     if data['meta'].get('weekly', {}).get('mode') != 'ai':
         return {'ready': False, 'code': 'weekly_refresh_required',
-                'action': '请让 ChatGPT 按《维护规则》第五节做第一次完整刷新'}
+                'action': _weekly_action(data['meta'])}
     return {'ready': True, 'code': 'live_notion_ready', 'action': '无'}
 
 
@@ -47,6 +115,13 @@ def export_artifact(destination, *, data=None, snapshot=None, summary, result, d
         raise DryRunError('artifact_destination_exists')
     values = {'result.json': result}
     if data is not None:
+        close_proofs = {row['sym']: row['provenance']['daily']['independentCloseProof']
+                        for row in data.get('companies', [])
+                        if row.get('provenance', {}).get('daily', {}).get('independentCloseProof') is not None}
+        if close_proofs:
+            # The caller already validated the DATA/receipt binding. Retain only
+            # the same safe proof summary, never the original source response.
+            values['result.json'] = {**result, 'independentCloseProofs': close_proofs}
         for key in ('notion', 'weekly', 'daily'):
             values[f'meta.{key}.json'] = data['meta'].get(key, {})
     if snapshot is not None:
@@ -77,8 +152,7 @@ def verify(*, source, destination, artifact, baseline=None, work=None, env=None,
     source, destination, artifact = Path(source), Path(destination), Path(artifact)
     diagnostics = {}
     if work and (Path(work) / 'diagnostic.json').is_file():
-        diagnostics = json.loads((Path(work) / 'diagnostic.json').read_text('utf-8'))
-        bundle.check_sensitive(diagnostics)
+        diagnostics = collector.read_diagnostic(Path(work) / 'diagnostic.json')
     data, snapshot = None, None
     if (source / 'DATA.json').is_file():
         # verify_bundle checks the complete allowlist and byte bindings before

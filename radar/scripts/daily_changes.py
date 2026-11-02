@@ -70,6 +70,12 @@ def score_changes(current, previous):
             and len(row['s']) == 4 and row['s'] != old[row['name']]]
 
 
+def has_report_evidence(financial):
+    financial = financial or {}
+    return (financial.get('evidence') in ('source', 'partial')
+            or financial.get('status') in ('verified', 'verified_partial'))
+
+
 def changes_today(current, previous):
     """Accumulate observed transitions since Beijing midnight, by stable key.
 
@@ -90,7 +96,8 @@ def changes_today(current, previous):
         prior = old.get(row['id'])
         if prior is None:
             continue
-        if row.get('period') != prior.get('period'):
+        if (row.get('period') and row.get('period') != prior.get('period')
+                and has_report_evidence(row.get('financial'))):
             sets['reports'].add(row['id'])
         if ((row.get('earnings') or {}).get('status') == 'confirmed'
                 and (prior.get('earnings') or {}).get('status') != 'confirmed'):
@@ -127,7 +134,7 @@ def summarize(data, history):
             result['excludedPrices'] += 1
             continue
         f, pf = c['financial'], p['financial']
-        if (f.get('evidence') in ('source', 'partial') or f.get('status') in ('verified', 'verified_partial')) and (
+        if has_report_evidence(f) and (
                 c['period'] != p['period'] or f != pf):
             result['reports'].append({'id': c['id'], 'name': c['name'], 'before': p['period'],
                                       'after': c['period'], 'status': f.get('evidence') or f.get('status'),
