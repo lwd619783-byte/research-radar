@@ -8,6 +8,7 @@ that last-good contents are revalidated against every new build clock.
 from __future__ import annotations
 
 import copy
+import ipaddress
 import math
 import re
 import unicodedata
@@ -19,7 +20,7 @@ from research_snapshot import (
     TABLES, SUBSTITUTABLE, ResearchAbort, load_last_good, make_snapshot,
     schema_hash, snapshot_sha256,
 )
-from research_view import public_first_sources, urls
+from research_view import is_notion_url, public_first_sources, urls
 
 
 TOKEN = re.compile(r"\{\{earnings:([^{}]+)\}\}")
@@ -85,6 +86,95 @@ def _https(value):
         return False
 
 
+_NOTION_ID = r"(?:[0-9a-fA-F]{32}|[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12})"
+
+
+def _source_mention_url(part):
+    """Preserve an explicit page/database target, never infer it from a label."""
+    mention = part.get("mention")
+    if part.get("type") != "mention" or not isinstance(mention, dict):
+        return None
+    kind = mention.get("type")
+    target = mention.get(kind) if kind in ("page", "database") else None
+    ident = target.get("id") if isinstance(target, dict) else None
+    if not isinstance(ident, str) or not re.fullmatch(_NOTION_ID, ident):
+        return None
+    ident = ident.replace("-", "").lower()
+    if ident == "0" * 32:
+        return None
+    href = part.get("href")
+    if href is not None:
+        # A conflicting or unsafe href must not be silently repaired. Only the
+        # explicit mention ID is used when Notion omits the optional href.
+        if (not _https(href) or not is_notion_url(href)
+                or re.search(r"[\\<>\"'\x00-\x20\x7f]", href)):
+            return None
+        try:
+            parsed = urlsplit(href)
+            if (parsed.username is not None or parsed.password is not None
+                    or parsed.port not in (None, 443)):
+                return None
+        except ValueError:
+            return None
+        page_path = parsed.path.rstrip("/").rsplit("/", 1)[-1]
+        match = re.search(r"(?:^|-)(" + _NOTION_ID + r")$", page_path)
+        if not match or match[1].replace("-", "").lower() != ident:
+            return None
+    return "https://app.notion.com/p/" + ident
+
+
+def _supplementary_sources(parts, plain):
+    """Recover native mentions only beside an existing public HTTPS source.
+
+    This is a representation fix, not new evidence admission. Mention-only
+    legacy rows retain their missing-source status, including glass and W42.
+    """
+    spans = [(part, str(part.get("plain_text", "")))
+             for part in parts if isinstance(part, dict)]
+    original = "".join(text for _, text in spans)
+    # Mention titles are labels, not public evidence. Mask them without creating
+    # new token boundaries or joining partial URLs across non-text spans.
+    ordinary = "".join(text if part.get("type") == "text" else "\0" * len(text)
+                       for part, text in spans)
+    public = False
+    for link in ordinary.split():
+        if not _https(link) or re.search(r"[\\<>\"'\x00-\x20\x7f]", link):
+            continue
+        parsed = urlsplit(link)
+        try:
+            parsed.port  # Reject malformed/out-of-range ports, too.
+        except ValueError:
+            continue
+        host = parsed.hostname.rstrip(".")
+        if not host or host == "localhost" or host.endswith(".localhost"):
+            continue
+        try:
+            if not ipaddress.ip_address(host).is_global:
+                continue
+        except ValueError:
+            if "." not in host or any(not re.fullmatch(
+                    r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?", label)
+                    for label in host.split(".")):
+                continue
+        if (parsed.username is None and parsed.password is None
+                and not is_notion_url("https://" + host + "/")):
+            public = True
+            break
+    if not public:
+        return plain
+    result, offset = [], 0
+    for part, text in spans:
+        end = offset + len(text)
+        isolated = ((offset == 0 or original[offset - 1].isspace())
+                    and (end == len(original) or original[end].isspace()))
+        # Only the exact missing-title placeholder may be replaced. Meaningful
+        # labels, URLs and sensitive-looking text must reach the original checks.
+        replacement = _source_mention_url(part) if text == "Untitled" and isolated else None
+        result.append(replacement or text)
+        offset = end
+    return "".join(result).strip()
+
+
 def simplify_page(page, table_contract):
     """Strip Notion metadata and flatten only contract properties."""
     props = {}
@@ -95,7 +185,11 @@ def simplify_page(page, table_contract):
             continue
         value = raw.get(name, {})
         if kind in ("title", "rich_text"):
-            props[name] = "".join(str(part.get("plain_text", "")) for part in value.get(kind, []) if isinstance(part, dict)).strip()
+            parts = value.get(kind, [])
+            props[name] = "".join(str(part.get("plain_text", "")) for part in parts if isinstance(part, dict)).strip()
+            if (kind == "rich_text" and name == "来源" and table_contract.get("judgment")
+                    and spec.get("data") == "judgment.sources"):
+                props[name] = _supplementary_sources(parts, props[name])
         elif kind == "select":
             selection = value.get(kind)
             props[name] = selection.get("name") if isinstance(selection, dict) else None
