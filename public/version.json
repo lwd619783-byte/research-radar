@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "state": "current",
   "sourceSHA": "68a4dd143f32a7b4d8b7754fe585965176d0f6d3",
-  "runId": "41374887222",
-  "dataSHA256": "f21510f92c770dfe21de05a4f755ef63ed06f5485c5b85f84d00629432bb5caf",
-  "generatedAt": "2026-11-02T09:58+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/41374887222",
+  "runId": "41402773620",
+  "dataSHA256": "acd3da0fcceae00c0c6e63b02bcb440f35e3e36a273bf7a7751702505fee4cc5",
+  "generatedAt": "2026-11-02T14:55+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/41402773620",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-11-02T09:58+08:00",
+    "generatedAt": "2026-11-02T14:55+08:00",
     "baselineAt": "2026-10-31T09:59+08:00",
     "reports": [],
     "calendar": [],
@@ -198,6 +198,36 @@
         "after": 237.5,
         "currency": "EUR",
         "change": -0.04079
+      },
+      {
+        "id": "SKH",
+        "name": "SK海力士",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 1418000,
+        "after": 1472000,
+        "currency": "KRW",
+        "change": 0.03808
+      },
+      {
+        "id": "EMC",
+        "name": "台光电子",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 4675,
+        "after": 4705,
+        "currency": "TWD",
+        "change": 0.00642
+      },
+      {
+        "id": "NTB",
+        "name": "日东纺 Nittobo",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 2814,
+        "after": 2826,
+        "currency": "JPY",
+        "change": 0.00391
       }
     ],
     "scores": [
@@ -226,7 +256,7 @@
       ]
     },
     "excludedPrices": 0,
-    "sameDatePrices": 40,
+    "sameDatePrices": 37,
     "pendingResearch": 5,
     "baselineProof": {
       "state": "success",
