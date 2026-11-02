@@ -32632,14 +32632,14 @@
       ]
     },
     {
-      "generatedAt": "2026-11-02T09:58+08:00",
+      "generatedAt": "2026-11-02T14:55+08:00",
       "proof": {
         "state": "success",
-        "productionSHA": "6fdcf6eb62704a4bf08ce88623f8dc50d3acf913",
-        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/9R4yAK12sKHeba8xAiAqaSZT7ggc",
-        "reportedAt": "2026-11-02T01:58:23Z",
+        "productionSHA": "b62f87d2b554fac3e10a630a0bbc9c1ec11963e5",
+        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/BZ4kK87xDyhfnfMPVzLJDSEq4NfB",
+        "reportedAt": "2026-11-02T06:56:01Z",
         "sourceSHA": "68a4dd143f32a7b4d8b7754fe585965176d0f6d3",
-        "dataSHA256": "f21510f92c770dfe21de05a4f755ef63ed06f5485c5b85f84d00629432bb5caf"
+        "dataSHA256": "acd3da0fcceae00c0c6e63b02bcb440f35e3e36a273bf7a7751702505fee4cc5"
       },
       "companies": [
         {
@@ -32928,11 +32928,11 @@
             "timezone": "Asia/Seoul",
             "time_note": "10/28已披露Q3初步结果；下一期日期待官方确认"
           },
-          "close": 1418000,
-          "date": "2026-10-30",
+          "close": 1472000,
+          "date": "2026-11-02",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.07077,
+          "r1d": 0.03808,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33127,11 +33127,11 @@
             "timezone": "Asia/Taipei",
             "time_note": "10/28已披露完整Q3；下期日期待官方确认"
           },
-          "close": 4675,
-          "date": "2026-10-30",
+          "close": 4705,
+          "date": "2026-11-02",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.06687,
+          "r1d": 0.00642,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33286,11 +33286,11 @@
             "timezone": "Asia/Tokyo",
             "time_note": "FY2026第二季度业绩"
           },
-          "close": 2814,
-          "date": "2026-10-30",
+          "close": 2826,
+          "date": "2026-11-02",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.07721,
+          "r1d": 0.00391,
           "financial": {
             "status": null,
             "basis": "single_quarter",

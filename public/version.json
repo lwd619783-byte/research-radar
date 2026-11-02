@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "state": "current",
   "sourceSHA": "68a4dd143f32a7b4d8b7754fe585965176d0f6d3",
-  "runId": "41402773620",
-  "dataSHA256": "acd3da0fcceae00c0c6e63b02bcb440f35e3e36a273bf7a7751702505fee4cc5",
-  "generatedAt": "2026-11-02T14:55+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/41402773620",
+  "runId": "41443507525",
+  "dataSHA256": "55af79ec6cdf8c8c8bf2f6f96d543746c8bfb221e282b4de8f897c6177b761c2",
+  "generatedAt": "2026-11-02T20:20+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/41443507525",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-11-02T14:55+08:00",
+    "generatedAt": "2026-11-02T20:20+08:00",
     "baselineAt": "2026-10-31T09:59+08:00",
     "reports": [],
     "calendar": [],
@@ -149,6 +149,12 @@
       },
       {
         "kind": "company",
+        "symbol": "ENR.DE",
+        "metric": "marketCapUSD",
+        "status": "partial"
+      },
+      {
+        "kind": "company",
         "symbol": "688676.SS",
         "metric": "marketCapUSD",
         "status": "partial"
@@ -156,6 +162,12 @@
       {
         "kind": "company",
         "symbol": "002335.SZ",
+        "metric": "marketCapUSD",
+        "status": "partial"
+      },
+      {
+        "kind": "company",
+        "symbol": "SU.PA",
         "metric": "marketCapUSD",
         "status": "partial"
       },
@@ -190,6 +202,66 @@
         "change": -0.06868
       },
       {
+        "id": "SYST",
+        "name": "生益科技",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 87.0,
+        "after": 82.08,
+        "currency": "CNY",
+        "change": -0.05655
+      },
+      {
+        "id": "NAURA",
+        "name": "北方华创",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 478.7,
+        "after": 504.0,
+        "currency": "CNY",
+        "change": 0.05276
+      },
+      {
+        "id": "KBL",
+        "name": "建滔积层板",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 34.68,
+        "after": 36.28,
+        "currency": "HKD",
+        "change": 0.04614
+      },
+      {
+        "id": "DTGK",
+        "name": "鼎泰高科",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 189.8,
+        "after": 198.0,
+        "currency": "CNY",
+        "change": 0.04315
+      },
+      {
+        "id": "JPKJ",
+        "name": "金盘科技",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 46.23,
+        "after": 48.22,
+        "currency": "CNY",
+        "change": 0.04305
+      },
+      {
+        "id": "TFTX",
+        "name": "天孚通信",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 148.0,
+        "after": 141.8,
+        "currency": "CNY",
+        "change": -0.04223
+      },
+      {
         "id": "SU",
         "name": "施耐德电气",
         "beforeDate": "2026-10-29",
@@ -210,6 +282,166 @@
         "change": 0.03808
       },
       {
+        "id": "SYDQ",
+        "name": "思源电气",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 102.0,
+        "after": 105.7,
+        "currency": "CNY",
+        "change": 0.03629
+      },
+      {
+        "id": "KHSJ",
+        "name": "科华数据",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 22.8,
+        "after": 23.56,
+        "currency": "CNY",
+        "change": 0.03333
+      },
+      {
+        "id": "ZGXD",
+        "name": "中国西电",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 10.33,
+        "after": 10.63,
+        "currency": "CNY",
+        "change": 0.02904
+      },
+      {
+        "id": "SHKJ",
+        "name": "胜宏科技",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 139.0,
+        "after": 135.0,
+        "currency": "CNY",
+        "change": -0.02891
+      },
+      {
+        "id": "DZSK",
+        "name": "大族数控",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 136.2,
+        "after": 140.0,
+        "currency": "CNY",
+        "change": 0.02767
+      },
+      {
+        "id": "ZWGX",
+        "name": "中钨高新",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 35.81,
+        "after": 36.78,
+        "currency": "CNY",
+        "change": 0.02709
+      },
+      {
+        "id": "ASMPT",
+        "name": "ASMPT",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 105.0,
+        "after": 107.7,
+        "currency": "HKD",
+        "change": 0.02571
+      },
+      {
+        "id": "DFDQ",
+        "name": "东方电气",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 21.56,
+        "after": 22.07,
+        "currency": "CNY",
+        "change": 0.02365
+      },
+      {
+        "id": "XYS",
+        "name": "新易盛",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 196.0,
+        "after": 191.5,
+        "currency": "CNY",
+        "change": -0.02306
+      },
+      {
+        "id": "SNDL",
+        "name": "深南电路",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 233.0,
+        "after": 227.9,
+        "currency": "CNY",
+        "change": -0.02197
+      },
+      {
+        "id": "YJKJ",
+        "name": "源杰科技",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 689.0,
+        "after": 678.0,
+        "currency": "CNY",
+        "change": -0.01595
+      },
+      {
+        "id": "YWK",
+        "name": "英维克",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 37.8,
+        "after": 38.39,
+        "currency": "CNY",
+        "change": 0.01561
+      },
+      {
+        "id": "HDGF",
+        "name": "沪电股份",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 87.34,
+        "after": 86.05,
+        "currency": "CNY",
+        "change": -0.01477
+      },
+      {
+        "id": "AMEC",
+        "name": "中微公司",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 213.7,
+        "after": 216.6,
+        "currency": "CNY",
+        "change": 0.01357
+      },
+      {
+        "id": "DCKJ",
+        "name": "东材科技",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 32.91,
+        "after": 33.33,
+        "currency": "CNY",
+        "change": 0.01276
+      },
+      {
+        "id": "HHKJ",
+        "name": "宏和科技",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 76.0,
+        "after": 76.94,
+        "currency": "CNY",
+        "change": 0.01237
+      },
+      {
         "id": "EMC",
         "name": "台光电子",
         "beforeDate": "2026-10-30",
@@ -220,6 +452,16 @@
         "change": 0.00642
       },
       {
+        "id": "ZJXC",
+        "name": "中际旭创",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 553.0,
+        "after": 550.0,
+        "currency": "CNY",
+        "change": -0.00542
+      },
+      {
         "id": "NTB",
         "name": "日东纺 Nittobo",
         "beforeDate": "2026-10-30",
@@ -228,6 +470,16 @@
         "after": 2826,
         "currency": "JPY",
         "change": 0.00391
+      },
+      {
+        "id": "CXMT",
+        "name": "长鑫科技",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 41.8,
+        "after": 41.72,
+        "currency": "CNY",
+        "change": -0.00191
       }
     ],
     "scores": [
@@ -256,7 +508,7 @@
       ]
     },
     "excludedPrices": 0,
-    "sameDatePrices": 37,
+    "sameDatePrices": 13,
     "pendingResearch": 5,
     "baselineProof": {
       "state": "success",
