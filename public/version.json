@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "state": "current",
   "sourceSHA": "68a4dd143f32a7b4d8b7754fe585965176d0f6d3",
-  "runId": "41595229612",
-  "dataSHA256": "e51d065d809bbea988fccb6e6c7b4032e382ff380a4a840f5ca628fb904f3f18",
-  "generatedAt": "2026-11-03T15:20+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/41595229612",
+  "runId": "41631026282",
+  "dataSHA256": "012a3daeff5983a25aaa68824d8dfcab87a4c18115aa841f72e4025664c74751",
+  "generatedAt": "2026-11-03T19:55+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/41631026282",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-11-03T15:20+08:00",
+    "generatedAt": "2026-11-03T19:55+08:00",
     "baselineAt": "2026-11-02T20:20+08:00",
     "reports": [
       {
@@ -34,18 +34,6 @@
       {
         "kind": "company",
         "symbol": "3110.T",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "ENR.DE",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "SU.PA",
         "metric": "marketCapUSD",
         "status": "complete"
       }
@@ -108,6 +96,16 @@
         "after": 604.9,
         "currency": "CNY",
         "change": -0.10782
+      },
+      {
+        "id": "KBL",
+        "name": "建滔积层板",
+        "beforeDate": "2026-11-02",
+        "afterDate": "2026-11-03",
+        "before": 36.28,
+        "after": 32.58,
+        "currency": "HKD",
+        "change": -0.10198
       },
       {
         "id": "SYST",
@@ -240,6 +238,16 @@
         "change": -0.05781
       },
       {
+        "id": "ASMPT",
+        "name": "ASMPT",
+        "beforeDate": "2026-11-02",
+        "afterDate": "2026-11-03",
+        "before": 107.7,
+        "after": 101.7,
+        "currency": "HKD",
+        "change": -0.05571
+      },
+      {
         "id": "SKH",
         "name": "SK海力士",
         "beforeDate": "2026-11-02",
@@ -340,6 +348,16 @@
         "change": -0.02539
       },
       {
+        "id": "ENR",
+        "name": "西门子能源",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 126.9,
+        "after": 130.0,
+        "currency": "EUR",
+        "change": 0.02427
+      },
+      {
         "id": "TSM",
         "name": "台积电",
         "beforeDate": "2026-10-30",
@@ -378,6 +396,16 @@
         "after": 202.1,
         "currency": "USD",
         "change": -0.01261
+      },
+      {
+        "id": "SU",
+        "name": "施耐德电气",
+        "beforeDate": "2026-10-30",
+        "afterDate": "2026-11-02",
+        "before": 237.5,
+        "after": 240.4,
+        "currency": "EUR",
+        "change": 0.01242
       },
       {
         "id": "AVGO",
@@ -441,7 +469,7 @@
       "scores": []
     },
     "excludedPrices": 0,
-    "sameDatePrices": 5,
+    "sameDatePrices": 1,
     "pendingResearch": 11,
     "baselineProof": {
       "state": "success",
