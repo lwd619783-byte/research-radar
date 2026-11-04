@@ -32623,14 +32623,14 @@
       ]
     },
     {
-      "generatedAt": "2026-11-04T20:05+08:00",
+      "generatedAt": "2026-11-04T23:07+08:00",
       "proof": {
         "state": "success",
-        "productionSHA": "8d767eccea576f31d87979558704ea99e4eaa14d",
-        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/GkWAXFiGxQALwNazkMWbAVYkWPMM",
-        "reportedAt": "2026-11-04T12:06:14Z",
-        "sourceSHA": "68a4dd143f32a7b4d8b7754fe585965176d0f6d3",
-        "dataSHA256": "1d9ee94190e9102cd0f58c19d50cc98f7b4df0dbeb2bbf4a6b6ed6e6ac949d70"
+        "productionSHA": "08105ca64e4f8b69c1d4177740b606c88eb67396",
+        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/8BYum8YbAkBHbkCFd4SCjDP3SNbd",
+        "reportedAt": "2026-11-04T15:07:45Z",
+        "sourceSHA": "cebb468a1c8a94664f6130fe983cb86758789d1c",
+        "dataSHA256": "39013c6ecc4e95d2bbc9975c3cc78a8b825f7c12fbb03d379c42dcd4887e888a"
       },
       "companies": [
         {
@@ -32919,11 +32919,11 @@
             "timezone": "Asia/Seoul",
             "time_note": "10/28已披露Q3初步结果；下一期日期待官方确认"
           },
-          "close": 1396000,
-          "date": "2026-11-04",
+          "close": 1398000,
+          "date": "2026-11-03",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.00143,
+          "r1d": -0.05027,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33277,11 +33277,11 @@
             "timezone": "Asia/Tokyo",
             "time_note": "FY2026第二季度业绩"
           },
-          "close": 2659,
-          "date": "2026-11-04",
+          "close": 2826,
+          "date": "2026-11-02",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.05893,
+          "r1d": 0.00391,
           "financial": {
             "status": null,
             "basis": "single_quarter",
