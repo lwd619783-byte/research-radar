@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "state": "current",
-  "sourceSHA": "68a4dd143f32a7b4d8b7754fe585965176d0f6d3",
-  "runId": "41825841410",
-  "dataSHA256": "1d9ee94190e9102cd0f58c19d50cc98f7b4df0dbeb2bbf4a6b6ed6e6ac949d70",
-  "generatedAt": "2026-11-04T20:05+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/41825841410",
+  "sourceSHA": "cebb468a1c8a94664f6130fe983cb86758789d1c",
+  "runId": "41853940711",
+  "dataSHA256": "39013c6ecc4e95d2bbc9975c3cc78a8b825f7c12fbb03d379c42dcd4887e888a",
+  "generatedAt": "2026-11-04T23:07+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/41853940711",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-11-04T20:05+08:00",
+    "generatedAt": "2026-11-04T23:07+08:00",
     "baselineAt": "2026-11-03T19:55+08:00",
     "reports": [
       {
@@ -291,16 +291,6 @@
         "change": 0.06489
       },
       {
-        "id": "NTB",
-        "name": "日东纺 Nittobo",
-        "beforeDate": "2026-11-02",
-        "afterDate": "2026-11-04",
-        "before": 2826,
-        "after": 2659,
-        "currency": "JPY",
-        "change": -0.05893
-      },
-      {
         "id": "VRT",
         "name": "维谛 Vertiv",
         "beforeDate": "2026-11-02",
@@ -479,16 +469,6 @@
         "after": 129.8,
         "currency": "EUR",
         "change": -0.00169
-      },
-      {
-        "id": "SKH",
-        "name": "SK海力士",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 1398000,
-        "after": 1396000,
-        "currency": "KRW",
-        "change": -0.00143
       }
     ],
     "scores": [
@@ -521,7 +501,7 @@
       ]
     },
     "excludedPrices": 0,
-    "sameDatePrices": 0,
+    "sameDatePrices": 2,
     "pendingResearch": 11,
     "baselineProof": {
       "state": "success",
