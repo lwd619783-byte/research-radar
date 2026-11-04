@@ -19,7 +19,7 @@ ROOT = build.REPO
 OUT = ROOT / 'audit' / 'visual'
 OUT.mkdir(parents=True, exist_ok=True)
 now = dt.datetime(2026, 10, 17, 12, tzinfo=build.BJ)
-data, report = build.load_and_validate(build.RADAR, ROOT, now.date())
+data, report = build.load_and_validate(build.RADAR, ROOT, now.date(), fixed_clock=now)
 assert not report.errors
 mk = {k: {} for k in ('daily', 'quote', 'index', 'fx', 'ratio')}
 start = dt.date(2024, 10, 1)
