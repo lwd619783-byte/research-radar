@@ -250,7 +250,7 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
     # transport, token, or environment access is available to normalization.
     fetched = json.loads((work / 'notion-fetch.json').read_text('utf-8'))
     research = normalize(fetched, contract, initial, last_good=previous, config=config)
-    cfg_data, validation = build.load_and_validate(build.RADAR, build.REPO, initial.date())
+    cfg_data, validation = build.load_and_validate(build.RADAR, build.REPO, initial.date(), fixed_clock=initial)
     if validation.errors:
         raise ResearchAbort('contract_invalid')
     cfg_data.update(industries=research['industries'], chokepoints=research['chokepoints'], companies=research['companies'])
