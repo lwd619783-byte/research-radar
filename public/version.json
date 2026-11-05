@@ -2,63 +2,212 @@
   "schemaVersion": 1,
   "state": "current",
   "sourceSHA": "cebb468a1c8a94664f6130fe983cb86758789d1c",
-  "runId": "41882365092",
-  "dataSHA256": "db5c9ec2348e3323869c07917643bcd8f556e491eb7d669f1e7be0eff9d61f9b",
-  "generatedAt": "2026-11-05T02:02+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/41882365092",
+  "runId": "41964020285",
+  "dataSHA256": "1d1681346d5d13a9b9482a48081317df9df1f21e39bc8865a390a774204e8d4d",
+  "generatedAt": "2026-11-05T11:52+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/41964020285",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-11-05T02:02+08:00",
+    "generatedAt": "2026-11-05T11:52+08:00",
     "baselineAt": "2026-11-04T23:07+08:00",
-    "reports": [],
-    "calendar": [],
-    "restored": [],
-    "lost": [
+    "reports": [
       {
-        "kind": "index",
-        "symbol": "000001.SS",
-        "metric": null,
-        "status": "partial"
-      },
-      {
-        "kind": "index",
-        "symbol": "^HSI",
-        "metric": null,
-        "status": "partial"
+        "id": "COHR",
+        "name": "Coherent",
+        "before": "FY2026Q4（截至2026-06-30）",
+        "after": "FY2027Q1（截至2026-09-30）",
+        "status": "source",
+        "label": "财报期别变更"
       }
     ],
-    "prices": [
+    "calendar": [
       {
-        "id": "ENR",
-        "name": "西门子能源",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 129.8,
-        "after": 119.5,
-        "currency": "EUR",
-        "change": -0.07952
+        "id": "COHR",
+        "name": "Coherent",
+        "before": "2026-11-04",
+        "after": null,
+        "status": "unverified"
+      }
+    ],
+    "restored": [
+      {
+        "kind": "company",
+        "symbol": "ENR.DE",
+        "metric": "marketCapUSD",
+        "status": "complete"
       },
       {
-        "id": "SU",
-        "name": "施耐德电气",
+        "kind": "company",
+        "symbol": "SU.PA",
+        "metric": "marketCapUSD",
+        "status": "complete"
+      }
+    ],
+    "lost": [],
+    "prices": [
+      {
+        "id": "MOD",
+        "name": "Modine",
         "beforeDate": "2026-11-03",
         "afterDate": "2026-11-04",
-        "before": 239.8,
-        "after": 231.6,
-        "currency": "EUR",
-        "change": -0.0342
+        "before": 125.4,
+        "after": 98.56,
+        "currency": "USD",
+        "change": -0.21435
+      },
+      {
+        "id": "VRT",
+        "name": "维谛 Vertiv",
+        "beforeDate": "2026-11-03",
+        "afterDate": "2026-11-04",
+        "before": 236.0,
+        "after": 205.6,
+        "currency": "USD",
+        "change": -0.12891
+      },
+      {
+        "id": "ETN",
+        "name": "伊顿 Eaton",
+        "beforeDate": "2026-11-03",
+        "afterDate": "2026-11-04",
+        "before": 391.7,
+        "after": 353.1,
+        "currency": "USD",
+        "change": -0.0986
+      },
+      {
+        "id": "GEV",
+        "name": "GE Vernova",
+        "beforeDate": "2026-11-03",
+        "afterDate": "2026-11-04",
+        "before": 918.2,
+        "after": 832.8,
+        "currency": "USD",
+        "change": -0.09298
+      },
+      {
+        "id": "LITE",
+        "name": "Lumentum",
+        "beforeDate": "2026-11-03",
+        "afterDate": "2026-11-04",
+        "before": 680.2,
+        "after": 626.8,
+        "currency": "USD",
+        "change": -0.07853
+      },
+      {
+        "id": "MRVL",
+        "name": "迈威尔 Marvell",
+        "beforeDate": "2026-11-03",
+        "afterDate": "2026-11-04",
+        "before": 172.0,
+        "after": 159.8,
+        "currency": "USD",
+        "change": -0.07077
+      },
+      {
+        "id": "MU",
+        "name": "美光 Micron",
+        "beforeDate": "2026-11-03",
+        "afterDate": "2026-11-04",
+        "before": 855.1,
+        "after": 795.2,
+        "currency": "USD",
+        "change": -0.07002
+      },
+      {
+        "id": "COHR",
+        "name": "Coherent",
+        "beforeDate": "2026-11-03",
+        "afterDate": "2026-11-04",
+        "before": 207.5,
+        "after": 195.1,
+        "currency": "USD",
+        "change": -0.05976
+      },
+      {
+        "id": "NTB",
+        "name": "日东纺 Nittobo",
+        "beforeDate": "2026-11-02",
+        "afterDate": "2026-11-04",
+        "before": 2826,
+        "after": 2659,
+        "currency": "JPY",
+        "change": -0.05893
+      },
+      {
+        "id": "ANET",
+        "name": "Arista",
+        "beforeDate": "2026-11-03",
+        "afterDate": "2026-11-04",
+        "before": 169.9,
+        "after": 178.5,
+        "currency": "USD",
+        "change": 0.05044
+      },
+      {
+        "id": "ASML",
+        "name": "阿斯麦 ASML",
+        "beforeDate": "2026-11-03",
+        "afterDate": "2026-11-04",
+        "before": 1552,
+        "after": 1496,
+        "currency": "USD",
+        "change": -0.03598
+      },
+      {
+        "id": "NVDA",
+        "name": "英伟达 NVIDIA",
+        "beforeDate": "2026-11-03",
+        "afterDate": "2026-11-04",
+        "before": 206.7,
+        "after": 200.1,
+        "currency": "USD",
+        "change": -0.03174
+      },
+      {
+        "id": "TSM",
+        "name": "台积电",
+        "beforeDate": "2026-11-03",
+        "afterDate": "2026-11-04",
+        "before": 404.8,
+        "after": 395.8,
+        "currency": "USD",
+        "change": -0.02236
+      },
+      {
+        "id": "AVGO",
+        "name": "博通 Broadcom",
+        "beforeDate": "2026-11-03",
+        "afterDate": "2026-11-04",
+        "before": 332.1,
+        "after": 325.5,
+        "currency": "USD",
+        "change": -0.02002
+      },
+      {
+        "id": "SKH",
+        "name": "SK海力士",
+        "beforeDate": "2026-11-03",
+        "afterDate": "2026-11-04",
+        "before": 1398000,
+        "after": 1396000,
+        "currency": "KRW",
+        "change": -0.00143
       }
     ],
     "scores": [],
     "today": {
       "date": "2026-11-05",
-      "reports": [],
+      "reports": [
+        "COHR"
+      ],
       "confirmed": [],
       "scores": []
     },
-    "excludedPrices": 25,
-    "sameDatePrices": 15,
+    "excludedPrices": 0,
+    "sameDatePrices": 27,
     "pendingResearch": 11,
     "baselineProof": {
       "state": "success",
