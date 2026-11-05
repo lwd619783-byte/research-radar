@@ -1,21 +1,21 @@
 {
   "schemaVersion": 3,
   "sourceSHA": "cebb468a1c8a94664f6130fe983cb86758789d1c",
-  "runId": "42080047176",
-  "fixedClock": "2026-11-06T02:03:39.630621+08:00",
+  "runId": "42025500672",
+  "fixedClock": "2026-11-05T20:17:54.964523+08:00",
   "priceDateRange": [
     "2026-11-04",
     "2026-11-05"
   ],
-  "dataSHA256": "48e07b1050a4abad21e23bb51c0fd37149d31bdf95d381ca168158597a677058",
+  "dataSHA256": "200f91cfd9d8eac80edecaa4c52daea97fb126d3a80cc1e1cff1a9436a3b884c",
   "blockers": [],
-  "historySHA256": "66f0ab80ca7f90cf95a3a7f4120839f393aaa42102dffe49731d5f539ed1753b",
+  "historySHA256": "48ad36e20a2934c7bb7a72e58db46a073b2b17123cf7f23b0d410ba33c5d95ad",
   "files": {
     "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
-    "index.html": "fcfc86268570d90f52e95fa31388624d79dc1e37da79960cdee5b621991adb3c",
-    "version.json": "7950dc9ef93d6ec92de6d19730ae7671cd8f359a74b565b5a8dd59c755f22733"
+    "index.html": "6416803198186bca6b61d494203e3149f16aaf53be17925aff01c4b9fc6e6d8c",
+    "version.json": "7631fe745d066809ecf2798b303f619df76919eb541bf281c3fd5e5e0b6b3dc2"
   },
-  "researchSnapshotSHA256": "439396b9603b22f34e0e4386b624f794e0533f5fc97f2c1aabd19d8904297790",
+  "researchSnapshotSHA256": "b8cc6c9099f2eb6c22fb4652695de91ca6262b4144c777242fde062c7f7f7291",
   "notion": {
     "source": "notion",
     "requests": {
@@ -69,7 +69,7 @@
       }
     },
     "fallbackTables": [],
-    "warningCount": 2,
+    "warningCount": 0,
     "quarantinedCount": 0
   }
 }
