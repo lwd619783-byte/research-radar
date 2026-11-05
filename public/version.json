@@ -2,477 +2,71 @@
   "schemaVersion": 1,
   "state": "current",
   "sourceSHA": "cebb468a1c8a94664f6130fe983cb86758789d1c",
-  "runId": "42025500672",
-  "dataSHA256": "200f91cfd9d8eac80edecaa4c52daea97fb126d3a80cc1e1cff1a9436a3b884c",
-  "generatedAt": "2026-11-05T20:17+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/42025500672",
+  "runId": "42080047176",
+  "dataSHA256": "48e07b1050a4abad21e23bb51c0fd37149d31bdf95d381ca168158597a677058",
+  "generatedAt": "2026-11-06T02:03+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/42080047176",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-11-05T20:17+08:00",
-    "baselineAt": "2026-11-04T23:07+08:00",
-    "reports": [
-      {
-        "id": "COHR",
-        "name": "Coherent",
-        "before": "FY2026Q4（截至2026-06-30）",
-        "after": "FY2027Q1（截至2026-09-30）",
-        "status": "source",
-        "label": "财报期别变更"
-      }
-    ],
-    "calendar": [
-      {
-        "id": "COHR",
-        "name": "Coherent",
-        "before": "2026-11-04",
-        "after": null,
-        "status": "unverified"
-      }
-    ],
+    "generatedAt": "2026-11-06T02:03+08:00",
+    "baselineAt": "2026-11-05T20:17+08:00",
+    "reports": [],
+    "calendar": [],
     "restored": [],
-    "lost": [],
+    "lost": [
+      {
+        "kind": "index",
+        "symbol": "000001.SS",
+        "metric": null,
+        "status": "partial"
+      },
+      {
+        "kind": "index",
+        "symbol": "^HSI",
+        "metric": null,
+        "status": "partial"
+      }
+    ],
     "prices": [
-      {
-        "id": "MOD",
-        "name": "Modine",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 125.4,
-        "after": 98.56,
-        "currency": "USD",
-        "change": -0.21435
-      },
-      {
-        "id": "VRT",
-        "name": "维谛 Vertiv",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 236.0,
-        "after": 205.6,
-        "currency": "USD",
-        "change": -0.12891
-      },
-      {
-        "id": "NTB",
-        "name": "日东纺 Nittobo",
-        "beforeDate": "2026-11-02",
-        "afterDate": "2026-11-05",
-        "before": 2826,
-        "after": 2321,
-        "currency": "JPY",
-        "change": -0.12712
-      },
-      {
-        "id": "KBL",
-        "name": "建滔积层板",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 37.32,
-        "after": 32.68,
-        "currency": "HKD",
-        "change": -0.12433
-      },
-      {
-        "id": "ASMPT",
-        "name": "ASMPT",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 112.6,
-        "after": 101.0,
-        "currency": "HKD",
-        "change": -0.10302
-      },
-      {
-        "id": "EMC",
-        "name": "台光电子",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 4555,
-        "after": 4100,
-        "currency": "TWD",
-        "change": -0.09989
-      },
-      {
-        "id": "ETN",
-        "name": "伊顿 Eaton",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 391.7,
-        "after": 353.1,
-        "currency": "USD",
-        "change": -0.0986
-      },
-      {
-        "id": "SKH",
-        "name": "SK海力士",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-05",
-        "before": 1398000,
-        "after": 1264000,
-        "currency": "KRW",
-        "change": -0.09456
-      },
-      {
-        "id": "GEV",
-        "name": "GE Vernova",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 918.2,
-        "after": 832.8,
-        "currency": "USD",
-        "change": -0.09298
-      },
       {
         "id": "ENR",
         "name": "西门子能源",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 129.8,
-        "after": 119.5,
+        "beforeDate": "2026-11-04",
+        "afterDate": "2026-11-05",
+        "before": 119.5,
+        "after": 113.8,
         "currency": "EUR",
-        "change": -0.07952
-      },
-      {
-        "id": "LITE",
-        "name": "Lumentum",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 680.2,
-        "after": 626.8,
-        "currency": "USD",
-        "change": -0.07853
-      },
-      {
-        "id": "ZJXC",
-        "name": "中际旭创",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 533.4,
-        "after": 493.3,
-        "currency": "CNY",
-        "change": -0.07509
-      },
-      {
-        "id": "MRVL",
-        "name": "迈威尔 Marvell",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 172.0,
-        "after": 159.8,
-        "currency": "USD",
-        "change": -0.07077
-      },
-      {
-        "id": "MU",
-        "name": "美光 Micron",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 855.1,
-        "after": 795.2,
-        "currency": "USD",
-        "change": -0.07002
-      },
-      {
-        "id": "JPKJ",
-        "name": "金盘科技",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 53.17,
-        "after": 56.55,
-        "currency": "CNY",
-        "change": 0.06357
-      },
-      {
-        "id": "COHR",
-        "name": "Coherent",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 207.5,
-        "after": 195.1,
-        "currency": "USD",
-        "change": -0.05976
-      },
-      {
-        "id": "AMEC",
-        "name": "中微公司",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 240.0,
-        "after": 254.0,
-        "currency": "CNY",
-        "change": 0.05829
-      },
-      {
-        "id": "HDGF",
-        "name": "沪电股份",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 85.95,
-        "after": 81.0,
-        "currency": "CNY",
-        "change": -0.05759
-      },
-      {
-        "id": "SYDQ",
-        "name": "思源电气",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 114.4,
-        "after": 120.8,
-        "currency": "CNY",
-        "change": 0.05548
-      },
-      {
-        "id": "XYS",
-        "name": "新易盛",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 196.5,
-        "after": 185.6,
-        "currency": "CNY",
-        "change": -0.05542
-      },
-      {
-        "id": "ANET",
-        "name": "Arista",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 169.9,
-        "after": 178.5,
-        "currency": "USD",
-        "change": 0.05044
-      },
-      {
-        "id": "KHSJ",
-        "name": "科华数据",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 24.37,
-        "after": 25.59,
-        "currency": "CNY",
-        "change": 0.05006
-      },
-      {
-        "id": "TFTX",
-        "name": "天孚通信",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 136.0,
-        "after": 129.5,
-        "currency": "CNY",
-        "change": -0.04779
-      },
-      {
-        "id": "NAURA",
-        "name": "北方华创",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 535.5,
-        "after": 561.0,
-        "currency": "CNY",
-        "change": 0.04764
-      },
-      {
-        "id": "DCKJ",
-        "name": "东材科技",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 33.31,
-        "after": 34.89,
-        "currency": "CNY",
-        "change": 0.04743
-      },
-      {
-        "id": "SNDL",
-        "name": "深南电路",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 225.6,
-        "after": 216.0,
-        "currency": "CNY",
-        "change": -0.04255
-      },
-      {
-        "id": "SYST",
-        "name": "生益科技",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 80.88,
-        "after": 77.78,
-        "currency": "CNY",
-        "change": -0.03833
-      },
-      {
-        "id": "ZWGX",
-        "name": "中钨高新",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 39.23,
-        "after": 40.69,
-        "currency": "CNY",
-        "change": 0.03722
-      },
-      {
-        "id": "ASML",
-        "name": "阿斯麦 ASML",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 1552,
-        "after": 1496,
-        "currency": "USD",
-        "change": -0.03598
-      },
-      {
-        "id": "CXMT",
-        "name": "长鑫科技",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 44.09,
-        "after": 42.53,
-        "currency": "CNY",
-        "change": -0.03538
+        "change": -0.04705
       },
       {
         "id": "SU",
         "name": "施耐德电气",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 239.8,
-        "after": 231.6,
+        "beforeDate": "2026-11-04",
+        "afterDate": "2026-11-05",
+        "before": 231.6,
+        "after": 227.9,
         "currency": "EUR",
-        "change": -0.0342
-      },
-      {
-        "id": "NVDA",
-        "name": "英伟达 NVIDIA",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 206.7,
-        "after": 200.1,
-        "currency": "USD",
-        "change": -0.03174
-      },
-      {
-        "id": "TSM",
-        "name": "台积电",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 404.8,
-        "after": 395.8,
-        "currency": "USD",
-        "change": -0.02236
-      },
-      {
-        "id": "AVGO",
-        "name": "博通 Broadcom",
-        "beforeDate": "2026-11-03",
-        "afterDate": "2026-11-04",
-        "before": 332.1,
-        "after": 325.5,
-        "currency": "USD",
-        "change": -0.02002
-      },
-      {
-        "id": "YWK",
-        "name": "英维克",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 38.82,
-        "after": 39.58,
-        "currency": "CNY",
-        "change": 0.01958
-      },
-      {
-        "id": "HHKJ",
-        "name": "宏和科技",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 77.94,
-        "after": 79.12,
-        "currency": "CNY",
-        "change": 0.01514
-      },
-      {
-        "id": "ZGXD",
-        "name": "中国西电",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 11.07,
-        "after": 11.22,
-        "currency": "CNY",
-        "change": 0.01355
-      },
-      {
-        "id": "YJKJ",
-        "name": "源杰科技",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 661.0,
-        "after": 654.0,
-        "currency": "CNY",
-        "change": -0.01059
-      },
-      {
-        "id": "DZSK",
-        "name": "大族数控",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 142.3,
-        "after": 143.7,
-        "currency": "CNY",
-        "change": 0.00963
-      },
-      {
-        "id": "DTGK",
-        "name": "鼎泰高科",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 200.5,
-        "after": 202.0,
-        "currency": "CNY",
-        "change": 0.00748
-      },
-      {
-        "id": "DFDQ",
-        "name": "东方电气",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 23.18,
-        "after": 23.09,
-        "currency": "CNY",
-        "change": -0.00388
-      },
-      {
-        "id": "SHKJ",
-        "name": "胜宏科技",
-        "beforeDate": "2026-11-04",
-        "afterDate": "2026-11-05",
-        "before": 135.2,
-        "after": 135.0,
-        "currency": "CNY",
-        "change": -0.00177
+        "change": -0.01598
       }
     ],
     "scores": [],
     "today": {
-      "date": "2026-11-05",
-      "reports": [
-        "COHR"
-      ],
+      "date": "2026-11-06",
+      "reports": [],
       "confirmed": [],
       "scores": []
     },
-    "excludedPrices": 0,
-    "sameDatePrices": 0,
+    "excludedPrices": 27,
+    "sameDatePrices": 13,
     "pendingResearch": 11,
     "baselineProof": {
       "state": "success",
-      "productionSHA": "08105ca64e4f8b69c1d4177740b606c88eb67396",
-      "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/8BYum8YbAkBHbkCFd4SCjDP3SNbd",
-      "reportedAt": "2026-11-04T15:07:45Z",
+      "productionSHA": "c5dcde39688bc5766e631d178b09321292901362",
+      "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/nJvbfmBgCpzSQaayS1ypD5fqGCrg",
+      "reportedAt": "2026-11-05T12:18:11Z",
       "sourceSHA": "cebb468a1c8a94664f6130fe983cb86758789d1c",
-      "dataSHA256": "39013c6ecc4e95d2bbc9975c3cc78a8b825f7c12fbb03d379c42dcd4887e888a"
+      "dataSHA256": "200f91cfd9d8eac80edecaa4c52daea97fb126d3a80cc1e1cff1a9436a3b884c"
     }
   }
 }
