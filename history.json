@@ -32637,14 +32637,14 @@
       ]
     },
     {
-      "generatedAt": "2026-11-06T18:17+08:00",
+      "generatedAt": "2026-11-06T20:04+08:00",
       "proof": {
         "state": "success",
-        "productionSHA": "6e1f2ac0c64e00619f786d4aacc210bc51f69c00",
-        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/3CGi35zfiZbMo7F1Mg87mGjuwoax",
-        "reportedAt": "2026-11-06T10:17:41Z",
+        "productionSHA": "072c6442f4730fe6db9ad3af5d355a1a03373994",
+        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/9mNU3JkkVDF3W5AWX7wvBCmHWTkB",
+        "reportedAt": "2026-11-06T12:05:06Z",
         "sourceSHA": "cebb468a1c8a94664f6130fe983cb86758789d1c",
-        "dataSHA256": "1b0eeefc13e5e8070ed89de6a405376980f03bd5d34e52c490a887832437379b"
+        "dataSHA256": "77252caadb04750929a9a6e0832c2f8cdae4b1faac2e441a2bf646d6cf96323a"
       },
       "companies": [
         {
@@ -33600,15 +33600,15 @@
           "sym": "LITE",
           "name": "Lumentum",
           "cur": "USD",
-          "next": "2026-11-05",
+          "next": null,
           "period": "FY2027Q1（截至2026-09-26）",
           "earnings": {
-            "status": "confirmed",
-            "source_url": "https://investor.lumentum.com/financial-news-releases/news-details/2026/Lumentum-Announces-Reporting-Date-for-Fiscal-First-Quarter-2027-Financial-Results/default.aspx",
+            "status": "unverified",
+            "source_url": "",
             "published_at": "",
             "verified_at": "",
             "timezone": "America/Los_Angeles",
-            "time_note": "盘后发布；电话会14:00太平洋时间"
+            "time_note": "FY27Q1已于11/2披露；旧11/5安排差异待核，下一期日期待定。"
           },
           "close": 509.7,
           "date": "2026-11-05",
