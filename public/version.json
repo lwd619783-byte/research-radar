@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "state": "current",
   "sourceSHA": "cebb468a1c8a94664f6130fe983cb86758789d1c",
-  "runId": "42180815702",
-  "dataSHA256": "e60f8a06bfeb108946d7873213a63800e74dc51cd124df5452a89ea42a0938ab",
-  "generatedAt": "2026-11-06T15:28+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/42180815702",
+  "runId": "42201051403",
+  "dataSHA256": "1b0eeefc13e5e8070ed89de6a405376980f03bd5d34e52c490a887832437379b",
+  "generatedAt": "2026-11-06T18:17+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/42201051403",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-11-06T15:28+08:00",
+    "generatedAt": "2026-11-06T18:17+08:00",
     "baselineAt": "2026-11-05T20:17+08:00",
     "reports": [
       {
@@ -30,20 +30,7 @@
         "status": "unverified"
       }
     ],
-    "restored": [
-      {
-        "kind": "company",
-        "symbol": "ENR.DE",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "SU.PA",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      }
-    ],
+    "restored": [],
     "lost": [],
     "prices": [
       {
@@ -257,6 +244,26 @@
         "change": -0.07275
       },
       {
+        "id": "ASMPT",
+        "name": "ASMPT",
+        "beforeDate": "2026-11-05",
+        "afterDate": "2026-11-06",
+        "before": 101.0,
+        "after": 93.9,
+        "currency": "HKD",
+        "change": -0.0703
+      },
+      {
+        "id": "KBL",
+        "name": "建滔积层板",
+        "beforeDate": "2026-11-05",
+        "afterDate": "2026-11-06",
+        "before": 32.68,
+        "after": 30.4,
+        "currency": "HKD",
+        "change": -0.06977
+      },
+      {
         "id": "EMC",
         "name": "台光电子",
         "beforeDate": "2026-11-05",
@@ -337,6 +344,16 @@
         "change": -0.04985
       },
       {
+        "id": "ENR",
+        "name": "西门子能源",
+        "beforeDate": "2026-11-04",
+        "afterDate": "2026-11-05",
+        "before": 119.5,
+        "after": 113.8,
+        "currency": "EUR",
+        "change": -0.04705
+      },
+      {
         "id": "DZSK",
         "name": "大族数控",
         "beforeDate": "2026-11-05",
@@ -397,6 +414,16 @@
         "change": -0.01732
       },
       {
+        "id": "SU",
+        "name": "施耐德电气",
+        "beforeDate": "2026-11-04",
+        "afterDate": "2026-11-05",
+        "before": 231.6,
+        "after": 227.9,
+        "currency": "EUR",
+        "change": -0.01598
+      },
+      {
         "id": "ZGXD",
         "name": "中国西电",
         "beforeDate": "2026-11-05",
@@ -437,7 +464,7 @@
       "scores": []
     },
     "excludedPrices": 0,
-    "sameDatePrices": 4,
+    "sameDatePrices": 0,
     "pendingResearch": 11,
     "baselineProof": {
       "state": "success",
