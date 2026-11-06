@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "state": "current",
   "sourceSHA": "cebb468a1c8a94664f6130fe983cb86758789d1c",
-  "runId": "42201051403",
-  "dataSHA256": "1b0eeefc13e5e8070ed89de6a405376980f03bd5d34e52c490a887832437379b",
-  "generatedAt": "2026-11-06T18:17+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/42201051403",
+  "runId": "42214548016",
+  "dataSHA256": "77252caadb04750929a9a6e0832c2f8cdae4b1faac2e441a2bf646d6cf96323a",
+  "generatedAt": "2026-11-06T20:04+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/42214548016",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-11-06T18:17+08:00",
+    "generatedAt": "2026-11-06T20:04+08:00",
     "baselineAt": "2026-11-05T20:17+08:00",
     "reports": [
       {
@@ -25,6 +25,13 @@
       {
         "id": "NTB",
         "name": "日东纺 Nittobo",
+        "before": "2026-11-05",
+        "after": null,
+        "status": "unverified"
+      },
+      {
+        "id": "LITE",
+        "name": "Lumentum",
         "before": "2026-11-05",
         "after": null,
         "status": "unverified"
