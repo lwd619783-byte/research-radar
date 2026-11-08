@@ -473,7 +473,8 @@ def offline_failure_summary(output, count, allowed_ids):
 
 
 def preflight():
-    data,report=build.load_and_validate(build.RADAR,ROOT,dt.datetime.now(build.BJ).date())
+    clock = dt.datetime.now(build.BJ)
+    data,report=build.load_and_validate(build.RADAR,ROOT,clock.date(), fixed_clock=clock)
     if report.errors: raise StopProbe('schema_errors')
     proc=subprocess.run([sys.executable,'-B','-m','unittest','discover','-s','radar/tests','-v'],cwd=ROOT,capture_output=True)
     output=(proc.stdout+proc.stderr).decode('utf-8','replace')
@@ -501,7 +502,8 @@ def main():
     if args.out.name != 'receipt.json': ap.error('--out must name receipt.json')
     if os.environ.get('GITHUB_ACTIONS')!='true' or os.environ.get('GITHUB_RUN_ATTEMPT')!='1':
         raise StopProbe('github_first_attempt_only')
-    data,rep=build.load_and_validate(build.RADAR,ROOT,dt.datetime.now(build.BJ).date())
+    clock = dt.datetime.now(build.BJ)
+    data,rep=build.load_and_validate(build.RADAR,ROOT,clock.date(), fixed_clock=clock)
     if rep.errors: raise StopProbe('schema_errors')
     receipt={'schemaVersion':1,'purpose':'interface-acceptance-not-publication','startedAt':utc(),
              'execution':{k:os.environ.get(k) for k in ('GITHUB_SHA','GITHUB_RUN_ID','GITHUB_RUN_ATTEMPT','RUNNER_OS','RUNNER_ARCH','ImageOS','ImageVersion')},

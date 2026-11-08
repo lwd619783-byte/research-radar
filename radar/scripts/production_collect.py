@@ -437,7 +437,7 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
     stage('notion_normalize')
     research = normalize(fetched, contract, initial, last_good=previous, config=config)
     stage('market_config')
-    cfg_data, validation = build.load_and_validate(build.RADAR, build.REPO, initial.date())
+    cfg_data, validation = build.load_and_validate(build.RADAR, build.REPO, initial.date(), fixed_clock=initial)
     if validation.errors:
         raise ResearchAbort('contract_invalid')
     cfg_data.update(industries=research['industries'], chokepoints=research['chokepoints'], companies=research['companies'])

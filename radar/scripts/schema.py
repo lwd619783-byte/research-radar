@@ -9,6 +9,7 @@ import math
 import re
 import tomllib
 from pathlib import Path
+from earnings_dates import issuer_today
 
 MARKETS = {"A股", "港股", "美股", "台股", "韩股", "日股", "欧股"}
 TIGHTNESS = {"极紧": "🔴极紧", "偏紧": "🟠偏紧", "缓解中": "🟢缓解中"}
@@ -122,7 +123,7 @@ def _earnings(rep: Report, where: str, obj: dict, day: str, today: dt.date) -> d
     return out
 
 
-def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = None):
+def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = None, *, fixed_clock=None):
     """返回 (data, report)。data = {config, industries, chokepoints, companies}，均已规范化。"""
     rep = Report()
     today = today or dt.date.today()
@@ -267,7 +268,10 @@ def load_and_validate(radar_dir: Path, repo_root: Path, today: dt.date | None = 
         used_cp.add(cp)
         nxt = _str(rep, w, x, "next_earnings", False)
         nd = _date(rep, w, nxt, "next_earnings")
-        if nd and nd < today:
+        raw_earnings = x.get('earnings') or {}
+        earnings_today = (issuer_today(fixed_clock, mkt, raw_earnings.get('timezone') if isinstance(raw_earnings, dict) else None)
+                          if fixed_clock is not None else today)
+        if nd and earnings_today and nd < earnings_today:
             rep.warn(w, f"next_earnings {nxt} 已过去：更新 fin / flash，并改成下一次财报日（未知就留空）")
         fin = x.get("fin", {})
         for k in fin:

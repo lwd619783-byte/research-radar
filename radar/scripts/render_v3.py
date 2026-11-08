@@ -8,6 +8,7 @@ import math
 from urllib.parse import urlsplit
 
 from research_view import CODE_TEXT
+from earnings_dates import within_earnings_window
 
 DISCLAIMER = '研究内容由 AI 依据公开资料撰写，程序自动检查格式、日期与来源，未经人工审核；行情由定时任务更新。仅供研究参考，不构成投资建议。'
 
@@ -131,10 +132,11 @@ def kpi_values(data):
     industries = data.get('industries') or []
     points = data.get('chokepoints') or []
     companies = data.get('companies') or []
-    today = date(data.get('meta', {}).get('today'))
+    meta = data.get('meta') or {}
     focused = [row for row in industries if number(row.get('total')) and row['total'] >= 17]
     stale = sum((row.get('judgment') or {}).get('label', 'stale') != 'ai' for row in focused)
-    events = [row for row in companies if today and date(row.get('next')) and today <= date(row['next']) <= today + dt.timedelta(days=14)]
+    events = [row for row in companies if within_earnings_window(
+        row, meta.get('generatedAt'), legacy_today=meta.get('today'))]
     confirmed = sum((row.get('earnings') or {}).get('status') == 'confirmed'
                     and safe_url((row.get('earnings') or {}).get('source_url', '')).startswith('https://') for row in events)
     high_growth = sum(not row.get('financialPartial') and bool(row.get('financialSignalEligible'))

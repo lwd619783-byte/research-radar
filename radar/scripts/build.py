@@ -620,7 +620,7 @@ def notion_main(args, config):
         fetch = json.loads(Path(args.notion_fetch).read_text(encoding='utf-8')) if args.notion_fetch else None
         research, fetch = load_research(transport=None, token=None if fetch or args.offline else os.environ.get('NOTION_TOKEN'),
                                        fixed_clock=now, last_good=previous, config=config, fetch=fetch)
-        cfg_data, report = load_and_validate(RADAR, REPO, now.date())
+        cfg_data, report = load_and_validate(RADAR, REPO, now.date(), fixed_clock=now)
         if report.errors:
             raise ResearchAbort('contract_invalid')
         cfg_data['companies'] = research['companies']
@@ -678,7 +678,7 @@ def main() -> int:
         return notion_main(a, config)
 
     now = dt.datetime.now(BJ)
-    data, rep = load_and_validate(RADAR, REPO, now.date())
+    data, rep = load_and_validate(RADAR, REPO, now.date(), fixed_clock=now)
     for w in rep.warnings:
         log(w)
     if rep.errors:

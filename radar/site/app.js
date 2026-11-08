@@ -121,8 +121,25 @@ function eventCountdown(day,today=TODAY){const n=Math.round((Date.parse(day+'T00
 function earningsText(text,companies=byId,today=TODAY){return String(text||'').replace(/\{\{earnings:([^}]+)\}\}/g,(_,id)=>{const c=companies[id];return c?`${c.next?md(c.next)+' · ':''}${eventLabel(c,today)}`:'日期待定'})}
 const TIMEZONES={'Asia/Shanghai':'北京时间','America/New_York':'美东时间','Asia/Hong_Kong':'香港时间','Asia/Taipei':'台北时间','Asia/Seoul':'韩国时间','Asia/Tokyo':'日本时间','Europe/Paris':'欧洲中部时间'};
 const MARKET_TZ={'A股':'Asia/Shanghai','美股':'America/New_York','港股':'Asia/Hong_Kong','台股':'Asia/Taipei','韩股':'Asia/Seoul','日股':'Asia/Tokyo','欧股':'Europe/Paris'};
-function eventTip(c){const tz=c.earnings?.timezone||MARKET_TZ[c.mkt];return`${c.name} · ${c.next?hasConfirmedEvent(c)?'官方确认':'预估':'日期待定'} · ${TIMEZONES[tz]||tz||'时区未注明'}${c.earnings?.time_note?' '+c.earnings.time_note:''}${c.next&&c.next<TODAY?' · '+eventCountdown(c.next):''}`}
-function eventPill(c,withDate=false){const cls=!c.next?' tbd':hasConfirmedEvent(c)?'':' est';return`<button type="button" class="pill${cls}" data-co="${esc(c.id)}" style="--ic:${IC(c.ind)}" data-tip="${esc(eventTip(c))}" aria-label="${esc(eventTip(c))}"><i></i><span>${esc(withDate?(c.next?md(c.next)+' · '+(hasConfirmedEvent(c)?'官方确认':'预估'):'日期待定'):c.short||c.name)}</span></button>`}
+// The date-only helpers above remain usable with an explicitly resolved local day.
+// Every rendered earnings surface below uses the same frozen DATA clock instead.
+function earningsDay(value){if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(value)||Number(value.slice(0,4))<1)return null;const d=new Date(value+'T00:00:00Z');return Number.isFinite(d.getTime())&&d.toISOString().slice(0,10)===value?value:null}
+function earningsZone(c){for(const zone of [c.earnings?.timezone,MARKET_TZ[c.mkt]]){if(typeof zone!=='string'||!zone||/^[+-]/.test(zone))continue;try{new Intl.DateTimeFormat('en-US',{timeZone:zone});return zone}catch(e){}}return null}
+function issuerToday(c,clock=D.meta.generatedAt,legacyToday=TODAY){
+  if(clock==null)return earningsDay(legacyToday);
+  const m=typeof clock==='string'&&clock.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?(?:Z|[+-](\d{2}):(\d{2}))$/);
+  if(!m||!earningsDay(m[1])||+m[2]>23||+m[3]>59||+m[4]>59||+m[5]>23||+m[6]>59)return null;
+  const instant=new Date(clock),zone=earningsZone(c);if(!zone||!Number.isFinite(instant.getTime()))return null;
+  try{const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US-u-ca-gregory-nu-latn',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(instant).map(p=>[p.type,p.value]));return earningsDay(`${parts.year.padStart(4,'0')}-${parts.month}-${parts.day}`)}catch(e){return null}
+}
+function issuerEventState(c){if(!c.next)return'undated';const day=issuerToday(c);return day&&earningsDay(c.next)?eventState(c,day):'unknown'}
+function issuerEventLabel(c){return EVENT_LABEL[issuerEventState(c)]||'日期状态未确认'}
+function issuerEventCountdown(c){if(!c.next)return'日期待定';const day=issuerToday(c);return day&&earningsDay(c.next)?eventCountdown(c.next,day):'日期状态未确认'}
+function issuerEventSummary(rows){const n={confirmed:0,unverified:0,overdue:0,undated:0,unknown:0};rows.forEach(c=>n[issuerEventState(c)]++);return`官方确认 ${n.confirmed} · 预估 ${n.unverified}${n.overdue?' · 待更新 '+n.overdue:''}${n.undated?' · 待定 '+n.undated:''}${n.unknown?' · 日期状态未确认 '+n.unknown:''}`}
+function upcomingEarnings(c,days=Infinity){const day=issuerToday(c);if(!day||!earningsDay(c.next))return false;const distance=(Date.parse(c.next+'T00:00:00Z')-Date.parse(day+'T00:00:00Z'))/864e5;return distance>=0&&distance<=days}
+function groupedEarningsCountdown(rows){const labels=[...new Set(rows.map(issuerEventCountdown))];return labels.length===1?labels[0]:'按公司所在地'}
+function eventTip(c){const tz=earningsZone(c);return`${c.name} · ${c.next?hasConfirmedEvent(c)?'官方确认':'预估':'日期待定'} · ${TIMEZONES[tz]||tz||'时区未注明'}${c.earnings?.time_note?' '+c.earnings.time_note:''}${c.next?' · '+issuerEventCountdown(c):''}`}
+function eventPill(c,withDate=false){const cls=!c.next?' tbd':hasConfirmedEvent(c)?'':' est';return`<button type="button" class="pill${cls}" data-co="${esc(c.id)}" style="--ic:${IC(c.ind)}" data-tip="${esc(eventTip(c))}" aria-label="${esc(eventTip(c))}"><i></i><span>${esc(withDate?(c.next?md(c.next)+' · '+issuerEventLabel(c):'日期待定'):c.short||c.name)}</span></button>`}
 function earningsHTML(text){return String(text||'').split(/(\{\{earnings:[^}]+\}\})/g).map(part=>{const m=part.match(/^\{\{earnings:([^}]+)\}\}$/);return m?(byId[m[1]]?eventPill(byId[m[1]],true):'<span class="pill tbd"><i></i><span>日期待定</span></span>'):esc(part)}).join('')}
 function calendarLegend(){return'<span class="cf-legend"><span><i></i>官方确认</span><span class="est"><i></i>预估</span><span class="tbd"><i></i>待定</span></span>'}
 
@@ -197,13 +214,13 @@ function renderHero(){
   $('#heroTitle').innerHTML=mode==='none'?'本周主线待更新':`本周主线：<span class="grad">${esc(WK.focus||TOP.name)}</span>`;
   $('#heroProv').innerHTML=provenanceLine(judgmentOf(WK),'weekly',WK.focus||TOP.name,mode);$('#heroProv').hidden=mode==='none';
   $('#heroLead').textContent=mode==='none'?'行业研判均待更新，下方数据照常显示。':WK.lead||TOP.logic||'';
-  const end=addDays(TODAY,14),focus=IND.filter(i=>i.total>=17),stale=focus.filter(i=>judgmentOf(i).label!=='ai').length,soon=CO.filter(c=>c.next&&c.next>=TODAY&&c.next<=end);
+  const focus=IND.filter(i=>i.total>=17),stale=focus.filter(i=>judgmentOf(i).label!=='ai').length,soon=CO.filter(c=>upcomingEarnings(c,14));
   const kp=[
     {v:focus.length,l:'重点追踪行业',s:'总分 ≥ 17'+(stale?` · ${stale} 个待更新`:''),c:'var(--gold)',ic:ICON.hot},
     {v:CP.filter(c=>TIGHT[c.tight]&&TIGHT[c.tight].k==='t1').length,l:'极紧卡点',s:`共 ${CP.length} 个`,c:'var(--tight)',ic:ICON.alert},
     {v:CO.filter(c=>c.perf.k==='p1').length,l:'业绩高增龙头',s:`同比 ≥ 50% · 共 ${CO.length} 家`,c:'var(--up)',ic:ICON.up},
     {v:CO.filter(deepDrawdown).length,l:'深度回调龙头',s:'距52周高点 ≤ −40%',c:'var(--down)',ic:ICON.down},
-    {v:soon.length,l:'两周内财报',s:eventSummary(soon),c:'var(--accent-2)',ic:ICON.cal}];
+    {v:soon.length,l:'两周内财报',s:issuerEventSummary(soon),c:'var(--accent-2)',ic:ICON.cal}];
   $('#kpis').innerHTML=kp.map(k=>`<div class="kpi" style="--c:${k.c}"><span class="ic">${k.ic}</span><span class="v num" data-count="${k.v}">${k.v}</span><span class="l">${k.l}<small>${k.s}</small></span></div>`).join('');
   renderToday();
 }
@@ -212,7 +229,7 @@ function renderToday(){
   $('#today').innerHTML=`<div class="today-h"><span class="today-t">今日要点</span>${allAI?statusTag('ai','AI 摘要','AI 根据当日收盘复盘写的一句话，只陈述已发生的事实，不做预测。'):''}<span class="hint">每个交易日收盘后更新</span></div><div class="today-rows">${markets.map(m=>{const row=daily[m]||{},auto=row.source==='auto',date=row.date;return`<div class="today-row${auto?' is-auto':''}"><div class="today-meta"><span class="today-mk">${m}</span><span class="num">${date?`${md(date)} ${wd(date)} · 收盘`:'日期未提供'}</span>${auto?statusTag('auto','自动生成','复盘未更新，按已完成交易日的指数生成'):''}${!auto&&safeResearchUrl(row.reviewUrl)?`<a class="today-go" href="${esc(safeResearchUrl(row.reviewUrl))}" target="_blank" rel="noopener noreferrer">看复盘 ↗</a>`:''}${auto?'<span class="today-go muted">复盘未更新</span>':''}</div><p class="today-line${row.line?'':' muted'}">${esc(row.line||'今日要点待更新')}</p><div class="today-ix num">${(row.chips||[]).map(c=>`<span>${esc(c.label)}<b class="${ud(c.chg)}">${pct(c.chg,2)}</b></span>`).join('')}</div></div>`}).join('')}</div>`;
 }
 
-function nextEvents(cos,n){const m={};cos.filter(c=>c.next&&c.next>=TODAY).forEach(c=>{(m[c.next]=m[c.next]||[]).push(c)});return Object.keys(m).sort().slice(0,n).map(d=>({d,cs:m[d]}))}
+function nextEvents(cos,n){const m={};cos.filter(c=>upcomingEarnings(c)).forEach(c=>{(m[c.next]=m[c.next]||[]).push(c)});return Object.keys(m).sort().slice(0,n).map(d=>({d,cs:m[d]}))}
 function renderTop(){
   const d=TOP,cps=cpsOf(d.name),cos=byInd[d.name]||[];
   const r20=mean(cos.map(c=>c.r20)),dd=mean(cos.map(c=>c.dd52)),rev=median(cos.filter(c=>c.financialRevenueComparable).map(c=>c.revg));const C=2*Math.PI*48;
@@ -261,10 +278,10 @@ function renderThermo(){
   </div>${rng}`}
 
 function renderSoon(){
-  const end=addDays(TODAY,14),list=CO.filter(c=>c.next&&c.next>=TODAY&&c.next<=end).sort((a,b)=>a.next.localeCompare(b.next)),dates=Array.from(new Set(list.map(c=>c.next)));
-  $('#soonCard').innerHTML=`<div class="card-h"><div class="card-t">${ICON.cal}两周内财报</div><span class="hint">${md(TODAY)} – ${md(end)} · ${list.length} 家</span></div>
+  const list=CO.filter(c=>upcomingEarnings(c,14)).sort((a,b)=>a.next.localeCompare(b.next)),dates=Array.from(new Set(list.map(c=>c.next)));
+  $('#soonCard').innerHTML=`<div class="card-h"><div class="card-t">${ICON.cal}两周内财报</div><span class="hint">当地今天起14天 · ${list.length} 家</span></div>
   <div class="soon-legend">${calendarLegend()}<span class="hint">日期按公司所在地时区</span></div>
-  <div class="soon-list">${dates.map(d=>{const cs=list.filter(c=>c.next===d);return`<div class="sr"><div class="sd"><b class="num">${md(d)}</b><span>${wd(d)}</span></div><div class="scd">${eventCountdown(d)}</div><div class="sp">${cs.map(c=>eventPill(c)).join('')}</div></div>`}).join('')}</div>
+  <div class="soon-list">${dates.map(d=>{const cs=list.filter(c=>c.next===d);return`<div class="sr"><div class="sd"><b class="num">${md(d)}</b><span>${wd(d)}</span></div><div class="scd">${groupedEarningsCountdown(cs)}</div><div class="sp">${cs.map(c=>eventPill(c)).join('')}</div></div>`}).join('')}</div>
   <div class="legend-dims" style="padding-top:0">${KEY_IND.map(n=>`<span><i style="background:${IC(n)};border-radius:50%"></i>${esc(n)}</span>`).join('')}</div>`}
 
 /* ---------- radar section ---------- */
@@ -384,10 +401,10 @@ function renderLeaders(){if(S.view==='map'){$('#mapCard').hidden=false;$('#table
 
 /* ---------- calendar ---------- */
 function renderCal(){const list=CO.filter(c=>c.next).sort((a,b)=>a.next.localeCompare(b.next)||(b.mcapUSD||0)-(a.mcapUSD||0)),dates=Array.from(new Set(list.map(c=>c.next)));
-  $('#calSub').textContent=`今天 ${md(TODAY)} ${wd(TODAY)} · ${eventSummary(CO)} · 日期按公司所在地时区`;
-  let h=`<div class="cal-col is-today"><div class="cal-top"><div class="cal-d num">${md(TODAY)}</div><div class="cal-cd">今天</div></div><div class="cal-w">${wd(TODAY)}</div><div class="hint">行情截至 ${ASOFL}${WK.calHint?'<br>'+esc(WK.calHint):''}</div></div>`,prev=TODAY;
+  $('#calSub').textContent=`北京时间 ${md(TODAY)} ${wd(TODAY)} · ${issuerEventSummary(CO)} · 日期按公司所在地时区`;
+  let h=`<div class="cal-col is-today"><div class="cal-top"><div class="cal-d num">${md(TODAY)}</div><div class="cal-cd">北京今天</div></div><div class="cal-w">${wd(TODAY)}</div><div class="hint">行情截至 ${ASOFL}${WK.calHint?'<br>'+esc(WK.calHint):''}</div></div>`,prev=TODAY;
   dates.forEach(d=>{const gap=daysTo(d)-daysTo(prev);if(gap>4)h+=`<div class="cal-gap mono">··· ${gap} 天 ···</div>`;const cs=list.filter(c=>c.next===d);
-    h+=`<div class="cal-col ${cs.length>=4?'busy':''}"><div class="cal-top"><div class="cal-d num">${md(d)}</div><div class="cal-cd">${eventCountdown(d)}</div></div><div class="cal-w">${wd(d)} · ${cs.length} 家</div>${cs.map(c=>eventPill(c)).join('')}</div>`;prev=d});
+    h+=`<div class="cal-col ${cs.length>=4?'busy':''}"><div class="cal-top"><div class="cal-d num">${md(d)}</div><div class="cal-cd">${groupedEarningsCountdown(cs)}</div></div><div class="cal-w">${wd(d)} · ${cs.length} 家</div>${cs.map(c=>eventPill(c)).join('')}</div>`;prev=d});
   $('#cal').innerHTML=h;$('#calLegend').innerHTML=KEY_IND.map(n=>`<span><i style="background:${IC(n)}"></i>${esc(n)}</span>`).join('')+calendarLegend()}
 
 /* ---------- drawer ---------- */
@@ -430,7 +447,7 @@ function openDrawer(id,trigger){const c=byId[id];if(!c)return;if(!S.drawer)drawe
   ${financialEvidence(c)}${marketEvidence(c)}
   ${flashHTML(c)}
   ${c.view?`<div class="view-box" data-src="notion"><div class="t">一句话看点</div><p>${esc(c.view)}</p></div>`:''}
-  <div class="dw-next">${ICON.cal}财报日期 ${eventPill(c,true)}${c.next?`<span class="cd">${eventCountdown(c.next)}</span>`:''}</div>
+  <div class="dw-next">${ICON.cal}财报日期 ${eventPill(c,true)}${c.next?`<span class="cd">${issuerEventCountdown(c)}</span>`:''}</div>
   <div class="earnings-evidence">${esc(eventTip(c))}${hasConfirmedEvent(c)?` · ${sourceAnchor(c.earnings.source_url,'日期来源')}`:''}</div>
   <div class="dw-actions">${c.url?researchAnchor(c.url,'知识库笔记'):'<span class="hint">研究笔记来源未接通</span>'}<button class="btn${c.url?'':' primary'}" data-gocp="${esc(c.ind)}" data-cpname="${esc(c.cp)}">查看所在卡点 ${ICON.arrow}</button></div></div>`;
   seg($('#rangeSeg'),[{v:'1m',l:'1月'},{v:'3m',l:'3月'},{v:'6m',l:'6月'},{v:'ytd',l:'年初至今'},{v:'1y',l:'1年'},{v:'2y',l:'2年'}].map(o=>({...o,l:rangeComplete(c,o.v)?o.l:o.l+'·不足'})),S.range,v=>{S.range=v;drawChart(c)});

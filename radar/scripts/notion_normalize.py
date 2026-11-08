@@ -15,6 +15,7 @@ import unicodedata
 from datetime import date, datetime, timezone, timedelta
 from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+from earnings_dates import issuer_today
 
 from research_snapshot import (
     TABLES, SUBSTITUTABLE, ResearchAbort, load_last_good, make_snapshot,
@@ -237,7 +238,7 @@ class _ExcludedRow(Exception):
     pass
 
 
-def _clean_row(table, row, contract, today, resolved, excluded):
+def _clean_row(table, row, contract, today, resolved, excluded, fixed_clock):
     original = row["props"]
     props, warnings = {}, []
     banned = False
@@ -384,7 +385,9 @@ def _clean_row(table, row, contract, today, resolved, excluded):
             if choke["行业"] != props["行业"]:
                 props["卡点"] = []
                 warn("cp_industry_mismatch", "卡点")
-        if props.get("下次财报日") and props["下次财报日"] < today.isoformat():
+        earnings_today = issuer_today(fixed_clock, props.get("市场"), props.get("财报日时区"),
+                                      market_timezones=contract["market_timezones"])
+        if props.get("下次财报日") and earnings_today and props["下次财报日"] < earnings_today.isoformat():
             warn("earnings_date_past", "下次财报日")
         if props.get("下次财报日") and props.get("财报日状态") == "官方确认" and not props.get("财报日来源"):
             props["财报日状态"] = "预估"
@@ -422,11 +425,11 @@ def _deduplicate(table, rows):
     return kept, duplicates, warnings
 
 
-def _validate_table(table, rows, contract, today, resolved, excluded):
+def _validate_table(table, rows, contract, today, resolved, excluded, fixed_clock):
     eligible, bad, warnings, excluded_ids = [], [], [], set()
     for row in sorted(rows, key=lambda item: item["id"]):
         try:
-            clean, notes = _clean_row(table, row, contract, today, resolved, excluded)
+            clean, notes = _clean_row(table, row, contract, today, resolved, excluded, fixed_clock)
         except _ExcludedRow:
             excluded_ids.add(row["id"])
         except _InvalidRow as error:
@@ -559,7 +562,7 @@ def normalize(fetch, contract, fixed_clock, last_good=None, config=None):
         fetched_count = (len(fetched["rows"]) if "rows" in fetched else
                          sum(page.get("object") == "page" for page in fetched.get("pages", [])))
         excluded[table].update(excluded_now)
-        good, bad, warnings, clean_excluded = _validate_table(table, rows, contract, today, resolved, excluded)
+        good, bad, warnings, clean_excluded = _validate_table(table, rows, contract, today, resolved, excluded, fixed_clock)
         eligible_count = len(rows) - len(clean_excluded)
         quality_low = (eligible_count >= settings.get("quality_min_rows", 5)
                        and len(bad) > eligible_count * settings.get("quality_threshold", 0.20))
@@ -567,7 +570,7 @@ def normalize(fetch, contract, fixed_clock, last_good=None, config=None):
         if source == "notion" and quality_low:
             rows, entry = fallback(table, {"code": "table_quality_low", "detail": {"bad": len(bad), "total": eligible_count}})
             source = "last_good"
-            good, bad, warnings, clean_excluded = _validate_table(table, rows, contract, today, resolved, excluded)
+            good, bad, warnings, clean_excluded = _validate_table(table, rows, contract, today, resolved, excluded, fixed_clock)
             # Report rejected source rows even though the whole replacement
             # table is used; none of its rows is a row-level substitution.
             for row, error in original_bad:
@@ -582,7 +585,7 @@ def normalize(fetch, contract, fixed_clock, last_good=None, config=None):
             used = False
             if table in SUBSTITUTABLE and row["id"] in old_by_id and source == "notion":
                 try:
-                    old_clean, old_warnings = _clean_row(table, old_by_id[row["id"]], contract, today, resolved, excluded)
+                    old_clean, old_warnings = _clean_row(table, old_by_id[row["id"]], contract, today, resolved, excluded, fixed_clock)
                 except (_InvalidRow, _ExcludedRow):
                     pass
                 else:
