@@ -9,11 +9,13 @@ from unittest.mock import patch
 from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
+from acceptance_bundle import validate_provider_close_conflicts
 import build
 import latest
 import market_calendar
 import quotes
 from integrity import release_blockers
+from production_collect import step_summary
 from test_integrity import dataset
 from test_pr5_calendar_release import synthetic_market
 from test_twse_close_integration import EXECUTION, NOW as TWSE_NOW, enriched
@@ -110,10 +112,44 @@ class PrematureCloseTests(unittest.TestCase):
                 if previous is None:
                     self.assertNotIn(FRIDAY, record['barTimestamps'])
                     self.assertIsNone(company['ld'])
+                    self.assertNotIn('providerCloseConflict', company)
                     self.assertIn('mixed_or_missing_market_dates_need_label_approval', blockers)
                 else:
                     self.assertEqual(company['ld'], FRIDAY)
+                    self.assertEqual(company['providerCloseConflict'], {
+                        'date': DAY, 'sessionEnd': record['finality']['end'],
+                        'receivedAt': record['receivedAt']})
                     self.assertEqual(blockers, ['synthetic_fixture_not_publishable'])
+
+    def test_taiwan_premature_closes_are_visible_in_data_and_summary(self):
+        data, _ = dataset()
+        stock = next(c for c in data['companies'] if c['sym'] == '2383.TW')
+        for day, previous, time in (('2026-10-22', '2026-10-21', '12:00'),
+                                    ('2026-10-27', '2026-10-22', '12:15')):
+            with self.subTest(day=day):
+                clock = local_time(day, time, 'Asia/Taipei')
+                market = synthetic_market(data, clock)
+                record = yahoo_record(stock, (previous, day), clock, '11:00')
+                self.assertEqual(record['phase'], 'closed')
+                market['daily'][stock['sym']] = record
+                result, _, _ = build.assemble(data, market, market, clock, calendar_policy=True)
+                result['meta']['fixture'] = True
+                company = next(c for c in result['companies'] if c['sym'] == stock['sym'])
+                self.assertEqual(company['ld'], previous)
+                self.assertEqual(company['providerCloseConflict'], {
+                    'date': day, 'sessionEnd': record['finality']['end'],
+                    'receivedAt': clock.isoformat()})
+                validate_provider_close_conflicts(result)
+                self.assertEqual(release_blockers(result), ['synthetic_fixture_not_publishable'])
+                self.assertIn(f'{company["name"]}（台股）按日历沿用 {previous} 收盘，已排除 {day} 提前报收盘日线',
+                              step_summary(result))
+
+                market['daily'][stock['sym']] = yahoo_record(stock, (previous, day), clock, '13:30')
+                normal, _, _ = build.assemble(data, market, market, clock, calendar_policy=True)
+                ordinary = next(c for c in normal['companies'] if c['sym'] == stock['sym'])
+                self.assertEqual(ordinary['ld'], previous)
+                self.assertNotIn('providerCloseConflict', ordinary)
+                self.assertNotIn('提前报收盘日线', step_summary(normal))
 
     def test_korea_close_boundary_needs_a_new_post_close_receipt(self):
         early = yahoo_record(KOREA, (FRIDAY, DAY), KOREA_CLOCK, '15:00')

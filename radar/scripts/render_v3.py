@@ -142,11 +142,14 @@ def kpi_values(data):
     high_growth = sum(not row.get('financialPartial') and bool(row.get('financialSignalEligible'))
                       and number(row.get('earng') if number(row.get('earng')) else row.get('revg'))
                       and (row['earng'] if number(row.get('earng')) else row['revg']) >= .5 for row in companies)
+    drawdown = [row for row in companies if number(row.get('dd52'))]
+    drawdown_carry = any(row.get('providerCloseConflict') and date(row.get('ld')) for row in drawdown)
     return [
         (len(focused), '重点追踪行业', '总分 ≥ 17' + (f' · {stale} 个待更新' if stale else ''), 'gold'),
         (sum(row.get('tight') in ('🔴极紧', '极紧') for row in points), '极紧卡点', f'共 {len(points)} 个', 'tight'),
         (high_growth, '业绩高增龙头', f'同比 ≥ 50% · 共 {len(companies)} 家', 'up'),
-        (sum(number(row.get('dd52')) and row['dd52'] <= -.4 for row in companies), '深度回调龙头', '距52周高点 ≤ −40%', 'down'),
+        (sum(row['dd52'] <= -.4 for row in drawdown), '深度回调龙头',
+         '距52周高点 ≤ −40%' + (' · 部分沿用' if drawdown_carry else ''), 'down'),
         (len(events), '两周内财报', f'官方确认 {confirmed} · 预估 {len(events) - confirmed}', 'accent-2'),
     ]
 

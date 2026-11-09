@@ -22,7 +22,9 @@ VIEWPORTS = [('desk', 1440, 900), ('tab', 1180, 900), ('mobile', 390, 844)]
 REQUIRED_SCREENSHOTS = {f'ov_{size}_{theme}_{part}.png'
                         for size, _, _ in VIEWPORTS for theme in ('dark', 'light')
                         for part in ('top', 'full')} | {
-                        f'state_{name}.png' for name in ('W03', 'W06', 'D01', 'T01', 'R12')}
+                        f'state_{name}.png' for name in ('W03', 'W06', 'D01', 'T01', 'R12')} | {
+                        'provider-close-conflict-industry.png', 'provider-close-conflict-table.png',
+                        'provider-close-conflict-drawer.png'}
 POSITIONS = {
     1440: {'#heroTitle': (225, 276), '#today': (200, 442), '#kpis': (464, 516),
            '#pulse': (532, 552), '#topCard': (578, None)},
@@ -254,11 +256,11 @@ def run(pages: Path, out: Path):
 
             def visit(name, width=1440, height=900, theme='dark', js=True, legacy=False,
                       metadata=None, operations=None, version=None, company_patch=None,
-                      data_patch=None):
+                      data_patch=None, fixture_name=None):
                 result = {'name': name, 'checks': 0, 'errors': [], 'consoleErrors': [],
                           'pageErrors': [], 'dialogs': []}
                 report['results'].append(result)
-                fixture = name if name in manifest['pages'] else 'baseline'
+                fixture = fixture_name or (name if name in manifest['pages'] else 'baseline')
                 context = browser.new_context(viewport={'width': width, 'height': height},
                     device_scale_factor=1, locale='zh-CN', timezone_id='Asia/Shanghai',
                     color_scheme=theme, reduced_motion='reduce', java_script_enabled=js)
@@ -349,6 +351,76 @@ def run(pages: Path, out: Path):
                     result['errors'].append(f'{type(error).__name__}: {error}')
                 finally:
                     context.close()
+            fixture = 'provider-close-conflict'
+            conflict_text = '数据源提前报收盘 · 按日历沿用 10/20 收盘'
+            carry = '部分沿用'
+            context, page, result = visit(f'{fixture}-ssr', js=False, fixture_name=fixture)
+            try:
+                kpi = page.locator('#kpis .kpi').filter(has_text='深度回调龙头')
+                check(result, carry in kpi.inner_text(), 'SSR must identify the affected drawdown aggregate')
+            except Exception as error:
+                result['errors'].append(f'{type(error).__name__}: {error}')
+            finally:
+                context.close()
+            context, page, result = visit(f'{fixture}-desk', fixture_name=fixture)
+            try:
+                check(result, carry in page.locator('#kpis .kpi').filter(has_text='深度回调龙头').inner_text(),
+                      'Drawdown KPI must identify the affected aggregate')
+                check(result, carry not in page.locator('#topCard .tstats').inner_text(),
+                      'An unaffected industry summary must not show the carry label')
+                check(result, conflict_text in page.locator('#tickerTrack [data-co="ENR"] small').first.inner_text(),
+                      'Ticker must use the shared market-date label for the affected company')
+                page.locator('#indList [data-pick="电力与数据中心"]').click()
+                check(result, carry in page.locator('#indDetail .rstats').inner_text(),
+                      'The affected industry return summary must identify the carry')
+                scan_dom(page, result, banned)
+                page.locator('#indDetail').screenshot(
+                    path=str(out / f'{fixture}-industry.png'), animations='disabled')
+            except Exception as error:
+                result['errors'].append(f'{type(error).__name__}: {error}')
+            finally:
+                context.close()
+            context, page, result = visit(f'{fixture}-mobile', 390, 844, 'light', fixture_name=fixture)
+            try:
+                check(result, carry in page.locator('#leadSub').inner_text(),
+                      'Treemap summary must identify the carry before filtering')
+                check(result, '电力与数据中心 · 部分沿用' in page.locator('#mapLegend').inner_text(),
+                      'Treemap legend must identify the affected group without covering its tiles')
+                page.locator('#mktSeg button[data-v="A股"]').click()
+                check(result, carry not in page.locator('#leadSub').inner_text(),
+                      'A market filter excluding the affected company must remove the aggregate label')
+                page.locator('#mktSeg button[data-v="其他"]').click()
+                page.locator('#indSeg button[data-v="电力与数据中心"]').click()
+                page.locator('#viewSeg button[data-v="table"]').click()
+                check(result, carry in page.locator('#leadSub').inner_text(),
+                      'Company table summary must identify the carry for affected results')
+                row = page.locator('#tbl tr[data-co="ENR"]')
+                label = row.locator('.provider-close-note')
+                label.scroll_into_view_if_needed()
+                check(result, label.inner_text() == conflict_text,
+                      'Company column must display the complete conflict text')
+                check(result, label.evaluate('''node => {
+                    const range = document.createRange();
+                    range.selectNodeContents(node);
+                    const box = node.getBoundingClientRect();
+                    return [...range.getClientRects()].every(r => r.left >= box.left - 1 &&
+                        r.right <= Math.min(box.right + 1, innerWidth) && r.left >= 0) &&
+                        document.documentElement.scrollWidth === innerWidth;
+                }'''), 'Mobile conflict text must wrap within its column and the viewport')
+                check(result, page.locator('#tbl tr[data-co="SU"] .provider-close-note').count() == 0,
+                      'A nearby company without a conflict must have no label')
+                page.locator('#tableCard').screenshot(
+                    path=str(out / f'{fixture}-table.png'), animations='disabled')
+                row.locator('.tc-n').click()
+                price = page.locator('#drawer.on .dw-price')
+                check(result, conflict_text == price.locator('.provider-close-note').inner_text(),
+                      'Company drawer must identify the carried close next to price details')
+                price.screenshot(path=str(out / f'{fixture}-drawer.png'), animations='disabled')
+                scan_dom(page, result, banned)
+            except Exception as error:
+                result['errors'].append(f'{type(error).__name__}: {error}')
+            finally:
+                context.close()
             schedule = {'nextRunAt': '2026-10-22T08:45:00+08:00', 'lateAfterMinutes': 60,
                         'cronUtc': ['45 0 * * 1-5', '15 4 * * 1-5', '15 10 * * 1-5']}
             clean = {'notion': {'fallbackTables': [], 'quarantined': []},

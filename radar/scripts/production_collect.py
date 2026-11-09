@@ -393,6 +393,11 @@ def step_summary(data=None, *, error=None, fetched=None):
                  f'- 本周主线：{_cell(weekly.get("week"))} · {modes.get(weekly.get("mode"), "待更新")} · {_cell(weekly.get("focus"))}',
                  f'- 今日要点：{daily or "待更新"}',
                  f'- 行情：{quotes}/{len(companies)} 家 · 汇率 {"✅" if fx_ok else "缺失"} · 温度计 {"✅" if data.get("ratio") else "缺失"} · 下次 {next_text}']
+        for company in companies:
+            conflict = company.get('providerCloseConflict')
+            if conflict:
+                lines.append(f'- {_cell(company["name"])}（{_cell(company["mkt"])}）按日历沿用 {company["ld"]} 收盘，'
+                             f'已排除 {conflict["date"]} 提前报收盘日线')
         notes = [*fallbacks, *quarantined, *warnings]
     if notes:
         lines += ['', '| 表 | 行 | 问题 | 处理 |', '|---|---|---|---|']
