@@ -17,6 +17,7 @@ import acceptance_bundle as bundle
 import build
 import daily_changes
 import release_operations as operations
+from execution_policy import dry_run_ref_allowed
 
 SOURCE_BRANCH = 'fix/radar-truthfulness-2026-10-18'
 REPOSITORY = 'lwd619783-byte/research-radar'
@@ -48,7 +49,7 @@ def validate_release(D, receipt, now, env):
 
 def validate_dry_run(D, receipt, now, env, *, rehearsal=False):
     if (env.get('GITHUB_REPOSITORY') != REPOSITORY or
-            env.get('GITHUB_REF') != 'refs/heads/v3/pr4-production' or
+            not dry_run_ref_allowed(env) or
             env.get('GITHUB_RUN_ATTEMPT') != '1' or env.get('GITHUB_EVENT_NAME') != 'workflow_dispatch'):
         raise ValueError('dry_run_execution_not_allowed')
     for key in ('GITHUB_SHA', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT'):
@@ -151,6 +152,8 @@ def _materialize(source, destination, D, receipt, info, history, purpose):
     if purpose is not None:
         manifest.update(purpose=purpose, publicationAuthorized=False,
                         diagnosticBlockers=receipt['publication']['blockers'])
+    if 'independentCloseProofs' in receipt:
+        manifest['independentCloseProofs'] = receipt['independentCloseProofs']
     bundle.check_sensitive(manifest)
     (destination/'release.json').write_bytes(bundle.encoded(manifest))
     return manifest
