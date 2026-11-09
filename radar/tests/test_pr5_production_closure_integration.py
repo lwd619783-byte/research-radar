@@ -130,12 +130,12 @@ class ProductionClosureIntegrationTests(unittest.TestCase):
                 self.assertEqual(chosen['finality'], before['finality'])
                 self.assertEqual(value, before)
 
-    def test_calendar_path_cannot_skip_early_closed_real_reopening_day(self):
+    def test_premature_reopening_close_preserves_reviewed_previous_session(self):
         now = dt.datetime.fromisoformat('2026-10-27T12:15:00+08:00')
         value = record(('2026-10-22', '2026-10-27'), now=now, session_day='2026-10-27')
         value['finality']['end'] = epoch('2026-10-27', 'Asia/Taipei', 11)
         value['phase'] = 'closed'
-        self.assertEqual(choose(value, now), {})
+        self.assertEqual(choose(value, now)['2383.TW']['asOf'], '2026-10-22')
 
 
 class ProductionClosurePublicationTests(unittest.TestCase):

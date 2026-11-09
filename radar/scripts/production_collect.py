@@ -61,6 +61,7 @@ DIAGNOSTIC_SYMBOLS = frozenset({
     'HSTECH.HK', 'LITE', 'MOD', 'MRVL', 'MU', 'NVDA', 'SU.PA', 'TSM', 'VRT',
     '^GSPC', '^HSI', '^IXIC', '^SOX'})
 MAX_DIAGNOSTIC_INPUT = 65536
+MAX_DIAGNOSTIC_TIMESTAMP = 253402300799  # Last UTC second representable by datetime.
 MARKET_ISSUE_STATUSES = {
     'daily': frozenset({'no_common_completed_observation', 'stale'}),
     'index': frozenset({'missing_or_unconfirmed_snapshot'}),
@@ -72,11 +73,42 @@ MARKET_ISSUE_STATUSES = {
 }
 
 
+def diagnostic_timestamp(value):
+    return type(value) in (int, float) and 0 < value <= MAX_DIAGNOSTIC_TIMESTAMP
+
+
+def safe_daily_timing(issue):
+    """Keep only enumerated phases and bounded, machine-readable timestamps."""
+    result = {}
+    phase = issue.get('phase')
+    if isinstance(phase, str) and phase in ('closed', 'intraday', 'preopen', 'unknown'):
+        result['phase'] = phase
+    received_at = issue.get('receivedAt')
+    if isinstance(received_at, str) and len(received_at) <= 32:
+        try:
+            clock = dt.datetime.fromisoformat(received_at)
+            if clock.tzinfo is not None:
+                result['receivedAt'] = clock.astimezone(dt.UTC).isoformat()
+        except (ValueError, OverflowError):
+            pass
+    last_bar = issue.get('lastBarTimestamp')
+    if diagnostic_timestamp(last_bar):
+        result['lastBarTimestamp'] = last_bar
+    finality = issue.get('finality')
+    if isinstance(finality, dict):
+        bounds = {key: finality[key] for key in ('start', 'end') if diagnostic_timestamp(finality.get(key))}
+        if bounds:
+            result['finality'] = bounds
+    return result
+
+
 def safe_market_issues(issues):
-    """Only bounded codes, ticker characters and real ISO dates may leave collect."""
+    """Keep bounded codes, approved tickers, and validated dates and timestamps."""
     if not isinstance(issues, list):
         return []
     result = []
+    # One timing block per symbol preserves the export size bound on repeated issues.
+    timed_symbols = set()
     for item in issues[:100]:
         if not isinstance(item, dict):
             continue
@@ -94,13 +126,20 @@ def safe_market_issues(issues):
                     row[key] = value
             except ValueError:
                 pass
+        if ('symbol' in row and kind == 'daily' and status == 'no_common_completed_observation'
+                and symbol not in timed_symbols):
+            timing = safe_daily_timing(item)
+            if timing:
+                row.update(timing)
+                timed_symbols.add(symbol)
         result.append(row)
     return result
 
 
-def market_diagnostic_issues(data):
-    """Attach dates already present in assembled metadata, without response data."""
+def market_diagnostic_issues(data, daily_records=None):
+    """Attach calendar dates and parsed timing for failed daily observations."""
     import market_calendar
+    daily_records = daily_records or {}
     companies = {row.get('sym'): row for row in data.get('companies', [])}
     calendars = data.get('meta', {}).get('marketCalendar', {}).get('exchanges', {})
     enriched = []
@@ -112,6 +151,12 @@ def market_diagnostic_issues(data):
         if row.get('kind') == 'daily':
             info = companies.get(symbol, {}).get('marketCalendar', {})
             row.update(sourceDate=info.get('quoteDate'), expectedCompletedDate=info.get('expectedCompletedDate'))
+            record = daily_records.get(symbol)
+            if row.get('status') == 'no_common_completed_observation' and isinstance(record, dict):
+                timestamps, day = record.get('barTimestamps'), record.get('asOf')
+                row.update(phase=record.get('phase'), receivedAt=record.get('receivedAt'),
+                           finality=record.get('finality'), lastBarTimestamp=(
+                               timestamps.get(day) if isinstance(timestamps, dict) and isinstance(day, str) else None))
         elif row.get('kind') == 'index':
             info = calendars.get(market_calendar.exchange_for(symbol), {})
             row['expectedCompletedDate'] = info.get('expectedCompletedDate')
@@ -472,7 +517,7 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
     real_blockers = [code for code in blockers if code not in
                      ('synthetic_fixture_not_publishable', 'local_review_not_publishable', 'offline_not_publishable')]
     progress['blockers'] = real_blockers
-    progress['marketIssues'] = market_diagnostic_issues(data)
+    progress['marketIssues'] = market_diagnostic_issues(data, market.get('daily'))
     gates.update(blockers=blockers, dataSHA256=bundle.data_digest(data),
                  asOf=data['meta']['asOf'], snapshot=data['meta']['snapshot'],
                  asOfByMarket=data['meta']['asOfByMarket'], coverage=data['meta'].get('coverage', []),
@@ -497,7 +542,7 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
         receipt['independentCloseProofs'] = close_proofs
     if real_blockers:
         save_json(work / 'diagnostic.json', safe_collection_diagnostic(real_blockers[0], blockers=real_blockers,
-                  market_issues=market_diagnostic_issues(data),
+                  market_issues=progress['marketIssues'],
                   notion_errors=diagnostic_notion_errors(fetched), stage=progress['stage'], counts=progress['counts'],
                   calendar_policy=progress['calendarPolicy']))
         raise ResearchAbort(real_blockers[0], codes=real_blockers)

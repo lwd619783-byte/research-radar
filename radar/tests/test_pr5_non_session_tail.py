@@ -147,16 +147,16 @@ class NonSessionTailTests(unittest.TestCase):
         value = record(zone='Asia/Tokyo')
         self.assertEqual(select(value)[0], {})
 
-    def test_completed_normal_trading_day_after_expected_cannot_be_skipped(self):
+    def test_premature_provider_close_preserves_previous_completed_session(self):
         now = dt.datetime.fromisoformat('2026-10-22T12:00:00+08:00')
-        # The provider claims an early completed session on an actual trading
-        # day. It must not make the selector silently fall back to 10/21.
+        # The trading day is still in progress despite the provider's early
+        # close. Its bar cannot replace the observed 10/21 close.
         for volume in (0, 123456):
             value = record(days=('2026-10-21','2026-10-22'), now=now,
                            session_day='2026-10-22', close_time='11:00', last_volume=volume)
             self.assertEqual(snapshot.completed_bars(value)[-1][0], '2026-10-22')
             self.assertEqual(market_calendar.context('2383.TW',now)['expectedCompletedDate'], '2026-10-21')
-            self.assertEqual(select(value,now=now)[0], {})
+            self.assertEqual(select(value,now=now)[0]['2383.TW']['asOf'], '2026-10-21')
 
     def test_unfinished_normal_trading_day_preserves_existing_prior_close_selection(self):
         now = dt.datetime.fromisoformat('2026-10-22T12:00:00+08:00')

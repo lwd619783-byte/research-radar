@@ -7,21 +7,31 @@ import reviewed_closures
 
 
 def calendar_completed_bars(record, bars, symbol, now, *, require_reviewed_close=False):
-    """Exclude only confirmed non-session tails from provider-completed bars.
+    """Keep only provider-backed closes allowed by the exchange calendar.
 
     Provider-backed completed bars are checked again before removing a tail;
     legacy closed markers alone do not authorize reselection. Do not skip an
-    actual trading day, an estimated holiday or any future provider date. The
-    exact expected close must still exist and pass the unchanged receipt gate.
+    expected close, an estimated holiday or any future provider date. A
+    current-session bar received before the confirmed close remains intraday.
+    The exact expected close must still exist and pass the unchanged receipt gate.
     Earlier history is retained, except the independently disproven Taiwan
     dates already excluded by the production correction. Calendar-free callers
     retain that correction; this path uses the full calendar for freshness.
     """
-    from market_calendar import context, known_non_session
+    from market_calendar import calendar_data, context, is_session, known_non_session, session_close
     calendar = context(symbol, now)
     expected, today = calendar['expectedCompletedDate'], calendar['localDate']
     if not expected or not today or record['asOf'] > today:
         return []
+    # A later build clock cannot turn a pre-close receipt into a completed bar.
+    if (bars and calendar['confidence'] in ('official', 'rule_based')
+            and record.get('phase') == 'closed' and 'finality' in record
+            and 'independentCloseProof' not in record and bars[-1][0] in (today, expected)):
+        day = dt.date.fromisoformat(bars[-1][0])
+        spec = calendar_data()['exchanges'][calendar['exchange']]
+        if (spec['confidenceByYear'].get(str(day.year)) in ('official', 'rule_based') and is_session(spec, day)
+                and min(now, dt.datetime.fromisoformat(record['receivedAt'])) < session_close(spec, day)):
+            bars = bars[:-1]
     tail = [bar for bar in bars if bar[0] > expected]
     if any(bar[0] > today or not known_non_session(symbol, bar[0]) for bar in tail):
         return []
