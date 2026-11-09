@@ -1,21 +1,21 @@
 {
   "schemaVersion": 3,
   "sourceSHA": "aa600e167ab73aa4183b5682f20e591c231a952d",
-  "runId": "42577994777",
-  "fixedClock": "2026-11-09T15:17:29.738112+08:00",
+  "runId": "42619765974",
+  "fixedClock": "2026-11-09T20:50:07.010640+08:00",
   "priceDateRange": [
     "2026-11-06",
     "2026-11-09"
   ],
-  "dataSHA256": "99c079d7d584c869ef607a6fd9ce1ff5fe88166e663fe6b8904898860630c4f0",
+  "dataSHA256": "5c86e47c3df40d64273abf2d2d290234fd25f0cf2542351dade039feda5fc2bf",
   "blockers": [],
-  "historySHA256": "dc0c6046fcd9942509c203b426c58935a1ea2e345badfd369254395672f42e9a",
+  "historySHA256": "d0b76f8024f2cd328bf969813200676f9abf1fb79f539ef559f70ebaf64fd035",
   "files": {
     "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
-    "index.html": "0dbc23433b84928058cb20ef376c136e8bd52bfea51b0c149fb8dd3030e9da61",
-    "version.json": "7ecc4aee09a257ca42093afa8b81699e3a9fe0dbca26d2eae42ddac33cdf77f4"
+    "index.html": "9dc63fd84bb718710274070e200d92ec25f1a5e7b87d1f6b87b3157f14d36341",
+    "version.json": "3d7fa4ab7af57dbad97b1413d5cff5efd951fdba59222f9d684805175b2de942"
   },
-  "researchSnapshotSHA256": "e2159438669402ce45b2469f268deff05664fd8fe95dc8fcea5197d65e2fc78d",
+  "researchSnapshotSHA256": "dad8f439f06976ae7d8d64dabc0ce166f89279abdc6e1907b1b13ab48866b489",
   "notion": {
     "source": "notion",
     "requests": {
@@ -54,8 +54,8 @@
         "substituted": 0
       },
       "daily": {
-        "fetched": 24,
-        "used": 24,
+        "fetched": 25,
+        "used": 25,
         "excluded": 0,
         "quarantined": 0,
         "substituted": 0
@@ -74,11 +74,11 @@
   },
   "scheduleAdmission": {
     "kind": "schedule",
-    "slot": "weekday-0845",
-    "plannedAt": "2026-11-09T08:45:00+08:00",
+    "slot": "weekday-1215",
+    "plannedAt": "2026-11-09T12:15:00+08:00",
     "schemaVersion": 1,
     "sourceSHA": "aa600e167ab73aa4183b5682f20e591c231a952d",
-    "runId": "42577994777",
-    "createdAt": "2026-11-09T15:13:56+08:00"
+    "runId": "42619765974",
+    "createdAt": "2026-11-09T20:46:13+08:00"
   }
 }

@@ -2,30 +2,18 @@
   "schemaVersion": 1,
   "state": "current",
   "sourceSHA": "aa600e167ab73aa4183b5682f20e591c231a952d",
-  "runId": "42577994777",
-  "dataSHA256": "99c079d7d584c869ef607a6fd9ce1ff5fe88166e663fe6b8904898860630c4f0",
-  "generatedAt": "2026-11-09T15:17+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/42577994777",
+  "runId": "42619765974",
+  "dataSHA256": "5c86e47c3df40d64273abf2d2d290234fd25f0cf2542351dade039feda5fc2bf",
+  "generatedAt": "2026-11-09T20:50+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/42619765974",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-11-09T15:17+08:00",
+    "generatedAt": "2026-11-09T20:50+08:00",
     "baselineAt": "2026-11-07T01:32+08:00",
     "reports": [],
     "calendar": [],
     "restored": [
-      {
-        "kind": "company",
-        "symbol": "ENR.DE",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "SU.PA",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
       {
         "kind": "index",
         "symbol": "000001.SS",
@@ -52,6 +40,16 @@
         "change": 0.13578
       },
       {
+        "id": "KBL",
+        "name": "建滔积层板",
+        "beforeDate": "2026-11-05",
+        "afterDate": "2026-11-09",
+        "before": 32.68,
+        "after": 27.6,
+        "currency": "HKD",
+        "change": -0.09211
+      },
+      {
         "id": "YJKJ",
         "name": "源杰科技",
         "beforeDate": "2026-11-05",
@@ -70,26 +68,6 @@
         "after": 170.8,
         "currency": "USD",
         "change": 0.07313
-      },
-      {
-        "id": "ASMPT",
-        "name": "ASMPT",
-        "beforeDate": "2026-11-05",
-        "afterDate": "2026-11-06",
-        "before": 101.0,
-        "after": 93.9,
-        "currency": "HKD",
-        "change": -0.0703
-      },
-      {
-        "id": "KBL",
-        "name": "建滔积层板",
-        "beforeDate": "2026-11-05",
-        "afterDate": "2026-11-06",
-        "before": 32.68,
-        "after": 30.4,
-        "currency": "HKD",
-        "change": -0.06977
       },
       {
         "id": "EMC",
@@ -282,6 +260,16 @@
         "change": 0.01659
       },
       {
+        "id": "ASMPT",
+        "name": "ASMPT",
+        "beforeDate": "2026-11-05",
+        "afterDate": "2026-11-09",
+        "before": 101.0,
+        "after": 92.6,
+        "currency": "HKD",
+        "change": -0.01384
+      },
+      {
         "id": "CXMT",
         "name": "长鑫科技",
         "beforeDate": "2026-11-05",
@@ -468,7 +456,7 @@
       "15 10 * * 1-5",
       "50 22 * * 0"
     ],
-    "nextRunAt": "2026-11-09T12:15:00+08:00",
+    "nextRunAt": "2026-11-09T18:15:00+08:00",
     "lateAfterMinutes": 180
   }
 }
