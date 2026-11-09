@@ -21,6 +21,7 @@ def function_block(first, following):
 
 
 RENDERERS = '\n'.join((
+    function_block('const closeConflictLabel=', 'const calendarLabel='),
     function_block('function renderHero()', 'function renderToday()'),
     SOURCE[SOURCE.index('function nextEvents('):].splitlines()[0],
     function_block('function renderSoon()', '/* ---------- radar section ---------- */'),
