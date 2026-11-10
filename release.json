@@ -12,8 +12,8 @@
   "historySHA256": "d0b76f8024f2cd328bf969813200676f9abf1fb79f539ef559f70ebaf64fd035",
   "files": {
     "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
-    "index.html": "cfddac0feb20f7b050aefd8050f99cb016d4a3abe747880cc7eeae680d5ee0e6",
-    "version.json": "3b4854914638340b39eac116e1f1bf089c5aaefd178d50b436f9b588dce29b6b"
+    "index.html": "25d59e7c32999d994db0f1ab1d4886dbdf553b480392cd1eb3669b738aa470df",
+    "version.json": "e3043d48fddc13cb395549c319e4b157bf32d815a60a02a649476bc2062f9591"
   },
   "researchSnapshotSHA256": "dad8f439f06976ae7d8d64dabc0ce166f89279abdc6e1907b1b13ab48866b489",
   "notion": {
