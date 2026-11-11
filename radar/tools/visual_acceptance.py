@@ -24,7 +24,7 @@ REQUIRED_SCREENSHOTS = {f'ov_{size}_{theme}_{part}.png'
                         for part in ('top', 'full')} | {
                         f'state_{name}.png' for name in ('W03', 'W06', 'D01', 'T01', 'R12')} | {
                         'provider-close-conflict-industry.png', 'provider-close-conflict-table.png',
-                        'provider-close-conflict-drawer.png'}
+                        'provider-close-conflict-drawer.png', 'yahoo-meta-close-mobile.png'}
 POSITIONS = {
     1440: {'#heroTitle': (225, 276), '#today': (200, 442), '#kpis': (464, 516),
            '#pulse': (532, 552), '#topCard': (578, None)},
@@ -416,6 +416,40 @@ def run(pages: Path, out: Path):
                 check(result, conflict_text == price.locator('.provider-close-note').inner_text(),
                       'Company drawer must identify the carried close next to price details')
                 price.screenshot(path=str(out / f'{fixture}-drawer.png'), animations='disabled')
+                scan_dom(page, result, banned)
+            except Exception as error:
+                result['errors'].append(f'{type(error).__name__}: {error}')
+            finally:
+                context.close()
+
+            def mark_snapshot_close(value):
+                company = next(row for row in value['companies'] if row['id'] == 'YJKJ')
+                company['provenance']['daily']['src'] = company['priceSource'] = 'yahoo-meta-close'
+
+            context, page, result = visit('yahoo-meta-close-mobile', 390, 844, 'light',
+                                          data_patch=mark_snapshot_close)
+            try:
+                page.locator('#viewSeg button[data-v="table"]').click()
+                page.locator('#tbl tr[data-co="YJKJ"] .tc-n').click()
+                evidence = page.locator('#drawer.on .market-evidence')
+                evidence.locator('summary').click()
+                snapshot = evidence.get_by_role('link', name='收盘价来自行情快照 ↗', exact=True)
+                quote = evidence.get_by_role('link', name='报价来源 ↗', exact=True)
+                expected_url = 'https://finance.yahoo.com/quote/688498.SS/'
+                check(result, snapshot.is_visible() and snapshot.get_attribute('href') == expected_url,
+                      'A snapshot close must be labeled and link to the Yahoo Finance quote page')
+                check(result, quote.get_attribute('href') == expected_url,
+                      'The displayed snapshot price must retain a quote source link')
+                check(result, 'yahoo-meta-close' not in evidence.inner_text(),
+                      'The source area must show readable text instead of the snapshot source identifier')
+                evidence.screenshot(path=str(out / 'yahoo-meta-close-mobile.png'), animations='disabled')
+                page.keyboard.press('Escape')
+                page.locator('#tbl tr[data-co="TFTX"] .tc-n').click()
+                evidence.locator('summary').click()
+                regular = evidence.get_by_role('link', name='日线来源 ↗', exact=True)
+                check(result, snapshot.count() == 0 and regular.get_attribute('href') ==
+                      'https://finance.yahoo.com/quote/300394.SZ/history/',
+                      'An ordinary Yahoo daily close must retain its history link and label')
                 scan_dom(page, result, banned)
             except Exception as error:
                 result['errors'].append(f'{type(error).__name__}: {error}')

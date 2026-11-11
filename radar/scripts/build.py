@@ -271,6 +271,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
         row['financialPartial'] = status == 'verified_partial'
         if (d or {}).get('independentCloseProof') is not None:
             row['provenance']['daily']['independentCloseProof'] = d['independentCloseProof']
+        if (d or {}).get('yahooMetaClose') is not None:
+            row['provenance']['daily']['yahooMetaClose'] = d['yahooMetaClose']
         if (d or {}).get('snapshotSelection', {}).get('method') == latest.PROVIDER_CLOSE_CONFLICT_METHOD:
             row['providerCloseConflict'] = d['providerCloseConflict']
         if status not in ('verified', 'verified_partial'):

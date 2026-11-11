@@ -18,6 +18,7 @@ import urllib.parse
 import urllib.request
 
 import acceptance_bundle as bundle
+from yahoo_meta_close import SOURCE as YAHOO_META_CLOSE_SOURCE
 
 REPO = 'lwd619783-byte/research-radar'
 BRANCH = 'fix/radar-truthfulness-2026-10-18'
@@ -89,6 +90,15 @@ def verify_files(root, allow_dry_run=False):
             raise ValueError('release_file_hash_mismatch')
     data = bundle.embedded_data((root/'public/index.html').read_bytes())
     bundle.validate_provider_close_conflicts(data)
+    for row in data.get('companies', []):
+        daily = (row.get('provenance') or {}).get('daily') or {}
+        if 'yahooMetaClose' in daily or YAHOO_META_CLOSE_SOURCE in (daily.get('src'), row.get('priceSource')):
+            try:
+                clock = dt.datetime.fromisoformat(m['fixedClock'])
+            except (KeyError, TypeError, ValueError):
+                raise bundle.BundleError('yahoo_meta_close_binding_mismatch') from None
+            bundle.validate_yahoo_meta_closes(data, clock)
+            break
     if 'independentCloseProofs' in m or any('independentCloseProof' in row.get('provenance', {}).get('daily', {})
                                           for row in data.get('companies', [])):
         bundle.validate_close_proofs(data, m.get('independentCloseProofs'),
