@@ -109,6 +109,7 @@ let embedded=null;
 if(matches.length===1){try{embedded=JSON.parse(matches[0][1]);}catch{if(needsV3Scan(html,null,m))throw Error('invalid_embedded_data');}}
 if(embedded)checkSensitive(embedded);
 checkIndependentCloseProofs(m,embedded);
+checkProviderCloseConflicts(embedded);
 const operationSlots=[...html.matchAll(/<script id="radar-operations">const OPERATIONS=(.*?);<\/script>/gs)];
 if(operationSlots.length!==1)throw Error('release_status_slot_mismatch');
 assert.deepEqual(JSON.parse(operationSlots[0][1]),version);
@@ -231,6 +232,42 @@ function checkIndependentCloseProofs(manifest,data) {
     ||selection.sourcePhase!=='unknown'||selection.sourceAsOf!==p.day||selection.selectedDate!==p.day
     ||row.pricePhase!=='closed'||row.priceSource!=='yahoo'||row.priceObservedAt!==null
     ||row.priceSelection?.useQuote!==false||typeof row.price!=='number'||String(row.price)!==p.close)fail();
+}
+function checkProviderCloseConflicts(data) {
+  const method = 'latest-completed-per-market-provider-close-conflict';
+  const validDay = day => typeof day === 'string' && /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(day)
+    && !day.startsWith('0000-') && Number.isFinite(Date.parse(day + 'T00:00:00Z'))
+    && new Date(day + 'T00:00:00Z').toISOString().slice(0, 10) === day;
+  function receiptSeconds(value) {
+    const match = typeof value === 'string'
+      && /^(([0-9]{4}-[0-9]{2}-[0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2}))(?:\.([0-9]{1,6}))?(Z|[+-][0-9]{2}:[0-9]{2})$/.exec(value);
+    if (!match || match[0] !== value || !validDay(match[2])
+        || Number(match[3]) > 23 || Number(match[4]) > 59 || Number(match[5]) > 59) return NaN;
+    const zone = match[7];
+    if (zone !== 'Z' && (Number(zone.slice(1, 3)) > 23 || Number(zone.slice(4, 6)) > 59)) return NaN;
+    return Date.parse(match[1] + zone) / 1000 + (match[6] ? Number('0.' + match[6]) : 0);
+  }
+  for (const row of Array.isArray(data?.companies) ? data.companies : []) {
+    const daily = row?.provenance?.daily, selection = daily?.snapshotSelection;
+    const marked = row != null && Object.hasOwn(row, 'providerCloseConflict');
+    const fallback = selection?.method === method;
+    if (!marked && !fallback) continue;
+    const marker = row.providerCloseConflict, calendar = row.marketCalendar;
+    if (!marked || !fallback || !marker || typeof marker !== 'object' || Array.isArray(marker)
+        || Object.keys(marker).length !== 3 || !['date', 'sessionEnd', 'receivedAt'].every(key => Object.hasOwn(marker, key))) {
+      throw Error('provider_close_conflict_binding_mismatch');
+    }
+    const selected = row.ld, conflict = marker.date;
+    if (!validDay(selected) || !validDay(conflict) || conflict <= selected
+        || selection.sourceAsOf !== conflict || selection.sourcePhase !== 'closed' || daily.phase !== 'closed'
+        || [selection.selectedDate, row.metricAsOf, daily.asOf, calendar?.quoteDate,
+            calendar?.expectedCompletedDate].some(value => value !== selected)
+        || !['official', 'rule_based'].includes(calendar?.confidence) || daily.receivedAt !== marker.receivedAt
+        || !Number.isFinite(marker.sessionEnd) || marker.sessionEnd <= 0 || marker.sessionEnd > Number.MAX_SAFE_INTEGER
+        || !(marker.sessionEnd <= receiptSeconds(marker.receivedAt))) {
+      throw Error('provider_close_conflict_binding_mismatch');
+    }
+  }
 }
 function checkSnapshot(snapshot,clock) {
   const tables=['industries','chokepoints','companies','financials','daily','weekly'];
