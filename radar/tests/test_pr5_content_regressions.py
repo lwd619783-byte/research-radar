@@ -243,10 +243,12 @@ class FrontendSafetyTests(unittest.TestCase):
             judgmentOf=()=>({}),provenanceLine=()=>'',animateRadar=()=>{},researchAnchor=()=>'',
             findCo=()=>company,spark=()=>'',finLine=()=>'',ud=()=>'',pct=()=>'',
             timeDetail=()=>'',fmtPrice=()=>'',fmtNum=()=>'',phaseText=()=>'',
-            calendarLabel=()=>'',calendarSuffix=()=>'',indexAvailability=()=>({missing:[],label:''});
+            indexAvailability=()=>({missing:[],label:''});
           const COLS=[{k:'name',f:()=>''}],filtered=()=>[company],compareRows=()=>0;
         '''
-        code = setup + self.line('const leadRow=') + '\n'
+        code = setup + self.line('const fin=') + '\n'
+        code += self.section('const closeConflictLabel=', 'const quoteLabel=')
+        code += self.line('const leadRow=') + '\n'
         code += self.section('function renderTicker(', '/* ---------- hero ---------- */')
         code += self.section('function renderIndDetail(', 'function selectInd(')
         code += self.section('function renderTable(', 'function renderLeaders(')

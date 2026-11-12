@@ -2,16 +2,41 @@
 from __future__ import annotations
 
 import argparse
+import copy
+import datetime as dt
 import hashlib
 import json
 from pathlib import Path
 import sys
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'radar/tests'))
 from test_notion_v3 import CASES, FIXTURES, read_json, run_fixture
+import build
+from acceptance_bundle import validate_provider_close_conflicts
 
 STATES = ('W03', 'W06', 'D01', 'T01', 'R12')
+
+
+def provider_close_conflict_fixture(data):
+    """Render an invented early-close marker on the already selected prior close."""
+    value = copy.deepcopy(data)
+    company = next(row for row in value['companies'] if row['sym'] == 'ENR.DE')
+    daily = company['provenance']['daily']
+    selection = daily['snapshotSelection']
+    received = dt.datetime.fromisoformat(daily['receivedAt'])
+    now = dt.datetime.fromisoformat(value['meta']['generatedAt'])
+    company['providerCloseConflict'] = {'date': selection['sourceAsOf'],
+        'sessionEnd': int(received.timestamp()) - 120, 'receivedAt': daily['receivedAt']}
+    company['marketCalendar'] = build.market_calendar.annotate(
+        company['sym'], daily['asOf'], now, completed=True)
+    selection.update(method=build.latest.PROVIDER_CLOSE_CONFLICT_METHOD, sourcePhase='closed')
+    validate_provider_close_conflicts(value)
+    with tempfile.TemporaryDirectory(prefix='radar-visual-conflict-') as directory:
+        html = build.render(value, Path(directory)).read_bytes()
+    return {'DATA': value, 'data': json.dumps(value, ensure_ascii=False, allow_nan=False),
+            'html': html, 'exit': 0}
 
 
 def build_pages(destination: Path) -> dict:
@@ -22,6 +47,7 @@ def build_pages(destination: Path) -> dict:
     results = {'baseline': baseline}
     for name in STATES:
         results[name] = run_fixture(cases[name]['mutations'], baseline['snapshot_object'])
+    results['provider-close-conflict'] = provider_close_conflict_fixture(baseline['DATA'])
     manifest = {'kind': 'offline-review-only', 'publishable': False,
                 'fixedClock': CASES['as_of'], 'pages': {}}
     for name, result in results.items():

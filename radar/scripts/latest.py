@@ -5,33 +5,48 @@ from integrity import ZONES, fresh_record, number, observation_time, dated_fx
 from snapshot import completed_bars, equity_bar_final, CLOSED_QUOTE_STATES
 import reviewed_closures
 
+PROVIDER_CLOSE_CONFLICT_METHOD = 'latest-completed-per-market-provider-close-conflict'
+
 
 def calendar_completed_bars(record, bars, symbol, now, *, require_reviewed_close=False):
-    """Exclude only confirmed non-session tails from provider-completed bars.
+    """Return permitted closes and any premature tail that was removed.
 
     Provider-backed completed bars are checked again before removing a tail;
     legacy closed markers alone do not authorize reselection. Do not skip an
-    actual trading day, an estimated holiday or any future provider date. The
-    exact expected close must still exist and pass the unchanged receipt gate.
+    expected close, an estimated holiday or any future provider date. A
+    current-session bar received before the confirmed close remains intraday.
+    The exact expected close must still exist and pass the unchanged receipt gate.
     Earlier history is retained, except the independently disproven Taiwan
     dates already excluded by the production correction. Calendar-free callers
     retain that correction; this path uses the full calendar for freshness.
     """
-    from market_calendar import context, known_non_session
+    from market_calendar import calendar_data, context, is_session, known_non_session, session_close
     calendar = context(symbol, now)
     expected, today = calendar['expectedCompletedDate'], calendar['localDate']
     if not expected or not today or record['asOf'] > today:
-        return []
+        return [], None
+    conflict = None
+    # A later build clock cannot turn a pre-close receipt into a completed bar.
+    if (bars and calendar['confidence'] in ('official', 'rule_based')
+            and record.get('phase') == 'closed' and 'finality' in record
+            and 'independentCloseProof' not in record and bars[-1][0] in (today, expected)):
+        day = dt.date.fromisoformat(bars[-1][0])
+        spec = calendar_data()['exchanges'][calendar['exchange']]
+        if (spec['confidenceByYear'].get(str(day.year)) in ('official', 'rule_based') and is_session(spec, day)
+                and min(now, dt.datetime.fromisoformat(record['receivedAt'])) < session_close(spec, day)):
+            conflict = {'date': bars[-1][0], 'sessionEnd': record['finality']['end'],
+                        'receivedAt': record['receivedAt']}
+            bars = bars[:-1]
     tail = [bar for bar in bars if bar[0] > expected]
     if any(bar[0] > today or not known_non_session(symbol, bar[0]) for bar in tail):
-        return []
+        return [], None
     if tail:
         # The legacy closed marker may preserve a series, but cannot authorize
         # this new removal/reselection path without original provider proof.
         timestamps = record.get('barTimestamps')
         from equity_close_proof import record_bar_final
         if not isinstance(timestamps, dict) or not record_bar_final(record, expected, symbol=symbol, now=now):
-            return []
+            return [], None
     if calendar['exchange'] == 'XTAI':
         reviewed_expected = reviewed_closures.expected_close('台股', now)
         extended_carry = (dt.date.fromisoformat(today) - dt.date.fromisoformat(expected)).days > 4
@@ -45,13 +60,14 @@ def calendar_completed_bars(record, bars, symbol, now, *, require_reviewed_close
         if false_history or reviewed_expected and (require_reviewed_close or extended_carry
                 or expected == today or 'finality' in record):
             bars = reviewed_closures.completed_bars(record, bars, '台股', now, symbol=symbol)
-    return [bar for bar in bars if bar[0] <= expected]
+    return [bar for bar in bars if bar[0] <= expected], conflict
 
 
 def select_daily(companies, records, now, *, calendar_policy=False, require_reviewed_close=False):
     selected, sources, dates = {}, {}, {}
     for c in companies:
         r = records.get(c['sym']) or {}
+        conflict = None
         if r.get('asOf'): sources.setdefault(c['mkt'], set()).add(r['asOf'])
         bars = completed_bars(r, symbol=c['sym'], now=now)
         if r.get('currency') not in (None, c['cur']): bars = []
@@ -60,8 +76,8 @@ def select_daily(companies, records, now, *, calendar_policy=False, require_revi
                 if any(dt.datetime.fromisoformat(b[0]).replace(tzinfo=ZoneInfo(r['timezone'])).utcoffset() != dt.datetime.fromisoformat(b[0]).replace(tzinfo=ZoneInfo(ZONES[c['mkt']])).utcoffset() for b in bars): bars=[]
             except (ValueError, TypeError, KeyError): bars=[]
         if calendar_policy and bars:
-            bars = calendar_completed_bars(r, bars, c['sym'], now,
-                                           require_reviewed_close=require_reviewed_close)
+            bars, conflict = calendar_completed_bars(r, bars, c['sym'], now,
+                                                     require_reviewed_close=require_reviewed_close)
         elif not calendar_policy:
             bars = reviewed_closures.completed_bars(r, bars, c['mkt'], now, symbol=c['sym'])
         local = now.astimezone(ZoneInfo(ZONES[c['mkt']])).date()
@@ -69,8 +85,12 @@ def select_daily(companies, records, now, *, calendar_policy=False, require_revi
                      else fresh_record(r, now, bars[-1][0], c['mkt']) if reviewed_closures.expected_close(c['mkt'], now)
                      else 0 <= (local-dt.date.fromisoformat(bars[-1][0])).days <= 4):
             day=bars[-1][0]
-            selected[c['sym']]={**r,'bars':bars,'asOf':day,'phase':'closed',
+            daily = {**r,'bars':bars,'asOf':day,'phase':'closed',
                 'snapshotSelection':{'method':'latest-completed-per-market','selectedDate':day,'sourceAsOf':r.get('asOf'),'sourcePhase':r.get('phase')}}
+            if conflict:
+                daily['providerCloseConflict'] = conflict
+                daily['snapshotSelection']['method'] = PROVIDER_CLOSE_CONFLICT_METHOD
+            selected[c['sym']] = daily
             dates.setdefault(c['mkt'],set()).add(day)
     all_dates=sorted({d for ds in dates.values() for d in ds})
     return selected, {'policy':'latest-quote-and-market-completed-daily','selectedDate':max(all_dates) if all_dates else None,

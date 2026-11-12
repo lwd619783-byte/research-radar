@@ -88,6 +88,7 @@ def verify_files(root, allow_dry_run=False):
         if p.is_symlink() or not p.is_file() or bundle.digest(p.read_bytes()) != digest:
             raise ValueError('release_file_hash_mismatch')
     data = bundle.embedded_data((root/'public/index.html').read_bytes())
+    bundle.validate_provider_close_conflicts(data)
     if 'independentCloseProofs' in m or any('independentCloseProof' in row.get('provenance', {}).get('daily', {})
                                           for row in data.get('companies', [])):
         bundle.validate_close_proofs(data, m.get('independentCloseProofs'),

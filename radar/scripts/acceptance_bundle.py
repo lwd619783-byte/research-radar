@@ -11,6 +11,7 @@ import tempfile
 import time
 
 import build
+from latest import PROVIDER_CLOSE_CONFLICT_METHOD
 import research_snapshot as snapshots
 
 MAX_BUNDLE = 10_000_000  # Decimal 10 MB, including manifest; never truncate.
@@ -18,6 +19,8 @@ MAX_RECEIPT = 512 * 1024
 PAYLOADS = ('DATA.json', 'index.html', 'receipt.json')
 FILES = (*PAYLOADS, 'manifest.json')
 SNAPSHOT = 'research-snapshot.json'
+CONFLICT_RECEIPT = re.compile(r'([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2})'
+                              r'(?:\.([0-9]{1,6}))?(Z|[+-][0-9]{2}:[0-9]{2})')
 FORBIDDEN_KEYS = {
     'cookie', 'cookies', 'cookiejar', 'setcookie', 'headers', 'requestheaders',
     'responseheaders', 'authorization', 'password', 'passwd', 'credential',
@@ -130,6 +133,60 @@ def validate_binding(D, receipt, clock):
             D['meta']['today'] != clock.date().isoformat()):
         raise BundleError('same_snapshot_binding_mismatch')
     validate_close_proofs(D, receipt.get('independentCloseProofs'), execution, clock)
+    validate_provider_close_conflicts(D)
+
+
+def _valid_close_conflict_day(value):
+    try:
+        return isinstance(value, str) and dt.date.fromisoformat(value).isoformat() == value
+    except ValueError:
+        return False
+
+
+def _close_conflict_receipt_seconds(value):
+    match = CONFLICT_RECEIPT.fullmatch(value) if isinstance(value, str) else None
+    if not match:
+        return None
+    whole, fraction, zone = match.groups()
+    if zone != 'Z' and (int(zone[1:3]) > 23 or int(zone[4:6]) > 59):
+        return None
+    try:
+        base = dt.datetime.fromisoformat(whole + zone).timestamp()
+    except (ValueError, OverflowError, OSError):
+        return None
+    return base + (float('0.' + fraction) if fraction else 0)
+
+
+def validate_provider_close_conflicts(data):
+    """Bind optional conflict markers to the selected, calendar-expected close."""
+    def fields(value):
+        return value if isinstance(value, dict) else {}
+
+    rows = fields(data).get('companies')
+    for row in rows if isinstance(rows, list) else ():
+        row = fields(row)
+        daily = fields(fields(row.get('provenance')).get('daily'))
+        selection = fields(daily.get('snapshotSelection'))
+        marked = 'providerCloseConflict' in row
+        fallback = selection.get('method') == PROVIDER_CLOSE_CONFLICT_METHOD
+        if not marked and not fallback:
+            continue
+        marker = fields(row.get('providerCloseConflict'))
+        calendar = fields(row.get('marketCalendar'))
+        selected, conflict = row.get('ld'), marker.get('date')
+        end = marker.get('sessionEnd')
+        received = _close_conflict_receipt_seconds(marker.get('receivedAt'))
+        if (not marked or not fallback or set(marker) != {'date', 'sessionEnd', 'receivedAt'}
+                or not _valid_close_conflict_day(selected) or not _valid_close_conflict_day(conflict)
+                or conflict <= selected or selection.get('sourceAsOf') != conflict
+                or selection.get('sourcePhase') != 'closed' or daily.get('phase') != 'closed'
+                or any(value != selected for value in (selection.get('selectedDate'), row.get('metricAsOf'),
+                    daily.get('asOf'), calendar.get('quoteDate'), calendar.get('expectedCompletedDate')))
+                or calendar.get('confidence') not in ('official', 'rule_based')
+                or daily.get('receivedAt') != marker.get('receivedAt')
+                or type(end) not in (int, float) or not 0 < end <= (1 << 53) - 1
+                or received is None or end > received):
+            raise BundleError('provider_close_conflict_binding_mismatch')
 
 
 def validate_close_proofs(D, proofs, execution, clock):
