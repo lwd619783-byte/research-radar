@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "state": "current",
-  "sourceSHA": "8203cd59d5e87d3650b1fe04d2c936d06b4e6916",
-  "runId": "43375806384",
-  "dataSHA256": "9bb3548bbd6064d7a0cbec3984d1c519b0fdf90538c6ab5ee2cfb67b283f7436",
-  "generatedAt": "2026-11-13T14:07+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/43375806384",
+  "sourceSHA": "ef223eeb0d63b1db951264c15bad55398cee5876",
+  "runId": "43380147121",
+  "dataSHA256": "04ae1978739a9eb62fe6c36e4d42447682d07b0caf291a818a924efae83ab4ea",
+  "generatedAt": "2026-11-13T14:44+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/43380147121",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-11-13T14:07+08:00",
+    "generatedAt": "2026-11-13T14:44+08:00",
     "baselineAt": "2026-11-12T20:38+08:00",
     "reports": [],
     "calendar": [],
@@ -28,12 +28,6 @@
       }
     ],
     "lost": [
-      {
-        "kind": "company",
-        "symbol": "000660.KS",
-        "metric": "marketCap",
-        "status": "missing"
-      },
       {
         "kind": "company",
         "symbol": "ENR.DE",
@@ -137,6 +131,16 @@
         "change": -0.03612
       },
       {
+        "id": "SKH",
+        "name": "SK海力士",
+        "beforeDate": "2026-11-12",
+        "afterDate": "2026-11-13",
+        "before": 1254000,
+        "after": 1216000,
+        "currency": "KRW",
+        "change": -0.0303
+      },
+      {
         "id": "EMC",
         "name": "台光电子",
         "beforeDate": "2026-11-12",
@@ -145,6 +149,16 @@
         "after": 4215,
         "currency": "TWD",
         "change": 0.0268
+      },
+      {
+        "id": "NTB",
+        "name": "日东纺 Nittobo",
+        "beforeDate": "2026-11-12",
+        "afterDate": "2026-11-13",
+        "before": 2591,
+        "after": 2658,
+        "currency": "JPY",
+        "change": 0.02586
       },
       {
         "id": "MRVL",
@@ -245,7 +259,7 @@
       "scores": []
     },
     "excludedPrices": 2,
-    "sameDatePrices": 26,
+    "sameDatePrices": 24,
     "pendingResearch": 18,
     "baselineProof": {
       "state": "success",
