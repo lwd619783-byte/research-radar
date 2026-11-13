@@ -183,7 +183,7 @@ function spark(c,n,w,h){const v=c.sc.slice(-n);if(v.length<2)return'';const mn=M
   return`<svg class="spark ${k}" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="${d}L${w},${h}L0,${h}Z" fill="url(#g-${k})"/><path class="line" d="${d}"/><circle cx="${L[0].toFixed(1)}" cy="${L[1].toFixed(1)}" r="2.2"/></svg>`}
 const rankValue=(c,k)=>['revg','earng','gm'].includes(k)&&(c.financialPartial||c.provenance?.financial?.evidence==='missing'||k==='earng'&&['turnaround','one_off','not_disclosed'].includes(c.provenance?.financial?.profit_comparison))?null:c[k];
 const finLine=c=>`营收 ${financialCell(c,'revg',true)} · 净利 ${financialCell(c,'earng')}`;
-const leadRow=c=>`<div class="lr" data-co="${esc(c.id)}"><div class="lr-n"><b>${esc(c.short)}</b></div>${spark(c,60,58,20)}<div class="lr-f">${finLine(c)}</div><div class="lr-v num ${ud(c.r20)}">${pct(c.r20)}<small>近20日</small></div>${closeConflictNote(c)}</div>`;
+const leadRow=c=>`<div class="lr" data-co="${esc(c.id)}"><div class="lr-n"><b>${esc(c.short)}</b></div>${spark(c,60,58,20)}<div class="lr-f">${finLine(c)}</div><div class="lr-v num ${ud(c.r20)}">${pct(c.r20)}<small>近20日</small></div>${dailyCloseNote(c)}</div>`;
 
 /* ---------- segmented control ---------- */
 function moveThumb(el){const b=$('button.on',el),t=$('.thumb',el);if(!b||!t||!b.offsetWidth)return;t.style.left=b.offsetLeft+'px';t.style.width=b.offsetWidth+'px'}
@@ -199,12 +199,18 @@ function countUp(el){const to=parseFloat(el.dataset.count),dp=+(el.dataset.dp||0
 const phaseText=p=>p==='closed'?'收盘':p==='intraday'?'盘中':'状态未知';
 const closeConflictLabel=c=>c.providerCloseConflict&&typeof c.ld==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(c.ld)?
   `数据源提前报收盘 · 按日历沿用 ${c.ld.slice(5,7)}/${c.ld.slice(8,10)} 收盘`:'';
-const closeConflictNote=c=>{const label=closeConflictLabel(c);return label?`<small class="provider-close-note muted">${esc(label)}</small>`:''};
-const partialCarry=(rows,usesValue=()=>true)=>rows.some(c=>closeConflictLabel(c)&&usesValue(c))?' · 部分沿用':'';
+function carriedDailyLabel(c){
+  const date=c.carried?.carriedSince;
+  return typeof date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(date)?
+    `沿用 ${date.slice(5,7)}/${date.slice(8,10)} 收盘 · 本次未取得`:'';
+}
+const dailyCarryLabel=c=>carriedDailyLabel(c)||closeConflictLabel(c);
+const dailyCloseNote=c=>{const label=dailyCarryLabel(c);return label?`<small class="provider-close-note muted">${esc(label)}</small>`:''};
+const partialCarry=(rows,usesValue=()=>true)=>rows.some(c=>dailyCarryLabel(c)&&usesValue(c))?' · 部分沿用':'';
 const calendarLabel=c=>{const m=c.marketCalendar;if(m?.status!=='holiday_carry'||typeof m.label!=='string')return'';return['official','rule_based'].includes(m.confidence)||m.confidence==='provisional'&&m.label.includes('待官方确认')?m.label:''};
 const calendarSuffix=c=>{const label=calendarLabel(c);return label?' · 日线 '+label:''};
-const tickerDailySuffix=c=>{const label=closeConflictLabel(c);return label?' · 日线 '+label:calendarSuffix(c)};
-const quoteLabel=c=>{const source=c.priceSource||c.provenance?.daily?.src;return `${c.priceAsOf||c.ld||'日期未知'} ${phaseText(c.pricePhase||c.provenance?.daily?.phase)} · ${source==='yahoo-meta-close'?'yahoo':source||'来源未知'}${calendarSuffix(c)}`};
+const tickerDailySuffix=c=>{const label=dailyCarryLabel(c);return label?' · 日线 '+label:calendarSuffix(c)};
+const quoteLabel=c=>{const source=c.priceSource||c.provenance?.daily?.src;const label=source==='verified-release-carry'?'上次发布':source==='yahoo-meta-close'?'yahoo':source||'来源未知';return `${c.priceAsOf||c.ld||'日期未知'} ${phaseText(c.pricePhase||c.provenance?.daily?.phase)} · ${label}${calendarSuffix(c)}`};
 const timeDetail=c=>{const v=c.provenance?.valuation||{},f=v.fx;return `行情 ${quoteLabel(c)} · 报价时点 ${c.priceObservedAt||'未提供精确时刻'} · ${c.marketTimezone||'时区未注明'}；日线指标截至 ${c.metricAsOf||c.ld||'缺失'} 收盘；估值 ${v.asOf||'缺失'} ${phaseText(v.phase)} · ${v.source||'来源未知'}；本币市值 ${fin(c.mcapLocal)?c.mcapLocal.toLocaleString('en-US')+' '+c.cur:'—'}；美元折算${f?.estimated?'为估算':''}：${f?`${f.src} ${f.asOf} · 1 USD=${f.value} ${c.cur}`:'汇率缺失'}`};
 
 /* ---------- ticker ---------- */
@@ -376,11 +382,11 @@ function renderMap(){const box=$('#treemap');if(!box||!box.offsetWidth)return;co
         el.classList.remove('gone');el.style.left=x.toFixed(1)+'px';el.style.top=y.toFixed(1)+'px';el.style.width=w.toFixed(1)+'px';el.style.height=h.toFixed(1)+'px';el.style.backgroundColor=col.bg;el.classList.toggle('dark-t',col.P.L&&col.a<.45);el.innerHTML=tileInner(c,w,h,M)})})});
   Object.keys(tiles).forEach(id=>{if(!seen[id])tiles[id].classList.add('gone')});
   $('#mapLabels').innerHTML=labels||'<div class="muted" style="padding:24px">当前筛选无匹配公司，请调整行业或市场。</div>';
-  const carriedGroups=groups.filter(g=>g.kids.some(k=>k.kids.some(({c})=>closeConflictLabel(c)))).map(g=>g.name);
+  const carriedGroups=groups.filter(g=>g.kids.some(k=>k.kids.some(({c})=>dailyCarryLabel(c)))).map(g=>g.name);
   const P=pal(),ramp=M.neg?`linear-gradient(90deg,${P.down},${P.neu})`:`linear-gradient(90deg,${P.down},${P.neu},${P.up})`;
   $('#mapLegend').innerHTML=`<span>${M.l}</span>${M.neg?`<span class="num">${pct(-M.dom,0)}</span><span class="ramp" style="background:${ramp}"></span><span class="num">0%</span>`:`<span class="num">${pct(-M.dom,0)}</span><span class="ramp" style="background:${ramp}"></span><span class="num">${pct(M.dom,0)}</span>`}<span>· 灰色 = 暂无数据/不参排</span><span class="sp"></span><span>${list.length} 家 · 面积 ≈ 市值(美元)^0.4，小市值设最小面积；市值缺失用占位面积</span>${carriedGroups.length?`<span>${esc(carriedGroups.join('、'))} · 部分沿用</span>`:''}`}
 function tileTip(c){const M=METRICS.find(m=>m.k===S.metric);return`<div class="tt">${esc(c.name)}</div><div class="muted" style="font-size:11px">${esc(c.code)} · ${esc(c.mkt)} · ${esc(c.cp)}</div>
-  ${closeConflictNote(c)}
+  ${dailyCloseNote(c)}
   <div style="margin:6px 0 4px">${sgBadges(c)}</div>
   <div class="tr"><span>${M.l}</span><b class="num ${ud(rankValue(c,M.k))}">${['revg','earng'].includes(M.k)?financialNumber(c,M.k):pct(rankValue(c,M.k))}</b></div>${metricGap(c,M.k)?`<div class="muted">${esc(metricGap(c,M.k))}</div>`:''}
   ${M.k!=='r20'?`<div class="tr"><span>近20日</span><b class="num ${ud(c.r20)}">${pct(c.r20)}</b></div>`:''}
@@ -390,7 +396,7 @@ function tileTip(c){const M=METRICS.find(m=>m.k===S.metric);return`<div class="t
 /* ---------- table ---------- */
 const PL={r5:'近5日',r20:'近20日',r60:'近60日',ytd:'年初至今',dd52:'距高点',revg:'营收同比',earng:'净利同比'};
 const COLS=[
-  {k:'name',l:'公司',c:'l',v:c=>c.short,s:1,f:c=>`<div class="tc-n"><i style="background:${IC(c.ind)}"></i><div><b>${esc(c.short)}</b><span>${esc(c.code)} · ${esc(c.mkt)}</span>${closeConflictNote(c)}</div></div>`},
+  {k:'name',l:'公司',c:'l',v:c=>c.short,s:1,f:c=>`<div class="tc-n"><i style="background:${IC(c.ind)}"></i><div><b>${esc(c.short)}</b><span>${esc(c.code)} · ${esc(c.mkt)}</span>${dailyCloseNote(c)}</div></div>`},
   {k:'cp',l:'卡点',c:'l',v:c=>c.cp,s:1,f:c=>`<div class="cpc" title="${esc(c.cp)}">${esc(c.cp)}</div>`},
   {k:'sig',l:'信号',c:'l',v:c=>c.perf.r*10+c.px.r,f:sgBadges},
   {k:'spark',l:'走势（最多60日）',c:'l',ns:1,f:c=>spark(c,60,92,26)+`<div class="muted" style="font-size:10px">${sparkHistoryLabel(c)} · ${esc(c.metricAsOf||c.ld||'日期未知')} 收盘</div>`},
@@ -402,7 +408,12 @@ const COLS=[
   {k:'next',l:'财报日期',v:c=>c.next,s:1,f:c=>eventPill(c,true)}]);
 function renderTable(){const col=COLS.find(x=>x.k===S.sort.k)||COLS[6],dir=S.sort.d;
   const rows=filtered().slice().sort((a,b)=>compareRows(a,b,col,dir));
-  $('#tbl').innerHTML=`<thead><tr>${COLS.map(c=>`<th class="${c.c||''} ${c.k===S.sort.k?'sorted':''}" data-sort="${c.ns?'':c.k}">${c.l}${c.k===S.sort.k?`<span class="ar">${dir<0?'↓':'↑'}</span>`:''}${c.coverage?`<div class="muted" style="font-size:10px">有效 ${coverageText(rows,c.v)}</div>`:''}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr data-co="${esc(r.id)}">${COLS.map(c=>`<td class="${c.c||''}">${c.f(r)}</td>`).join('')}</tr>`).join(''):`<tr class="empty-state"><td colspan="${COLS.length}">当前筛选无匹配公司，请调整行业或市场。</td></tr>`}</tbody>`}
+  const carry=c=>{
+    if(c.k==='price')return partialCarry(rows,r=>fin(r.price)&&r.priceSource==='verified-release-carry');
+    if(c.k==='mcapUSD')return partialCarry(rows,r=>fin(r.mcapUSD)&&!!r.carried);
+    return ['r5','r20','r60','ytd','dd52'].includes(c.k)?partialCarry(rows,r=>fin(c.v(r))):'';
+  };
+  $('#tbl').innerHTML=`<thead><tr>${COLS.map(c=>`<th class="${c.c||''} ${c.k===S.sort.k?'sorted':''}" data-sort="${c.ns?'':c.k}">${c.l}${c.k===S.sort.k?`<span class="ar">${dir<0?'↓':'↑'}</span>`:''}${c.coverage?`<div class="muted" style="font-size:10px">有效 ${coverageText(rows,c.v)}${carry(c)}</div>`:''}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr data-co="${esc(r.id)}">${COLS.map(c=>`<td class="${c.c||''}">${c.f(r)}</td>`).join('')}</tr>`).join(''):`<tr class="empty-state"><td colspan="${COLS.length}">当前筛选无匹配公司，请调整行业或市场。</td></tr>`}</tbody>`}
 function renderLeaders(){if(S.view==='map'){$('#mapCard').hidden=false;$('#tableCard').hidden=true;renderMap()}else{$('#mapCard').hidden=true;$('#tableCard').hidden=false;renderTable()}
   const list=filtered(),metric=METRICS.find(x=>x.k===S.metric),coverage=` · 当前 ${list.length} 家 · ${metric.l}有效 ${coverageText(list,c=>rankValue(c,S.metric))} · 市值有效 ${coverageText(list,c=>c.mcapUSD)} · PE有效 ${coverageText(list,c=>c.pe)} · 有效样本不含缺值及不参排项 · 收盘折线；价格详情列时点/FX`;
   $('#leadSub').textContent=(S.view==='map'?'按行业 → 卡点分组 · 已知市值决定面积；缺失用占位面积 · 颜色=所选指标':'点击表头排序 · 点击行查看走势与财务 · 颜色：'+(S.conv==='cn'?'红涨绿跌':'绿涨红跌'))+coverage+partialCarry(list)}
@@ -431,8 +442,10 @@ function financialEvidence(c){if(!c.provenance?.financial)return'<div class="evi
  return`<details class="evidence-card financial-evidence" data-src="notion"><summary>财务来源 · ${esc(c.period||'期间缺失')} · ${esc(REPORT_STATUS[f.report_status]||f.report_status||'报告状态缺失')} ${financialTag(c)}</summary><dl>${fields.filter(x=>x[1]).map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl><div class="evidence-links">${urls.length?urls.map(u=>researchAnchor(u)).join(''):'原文链接缺失'}</div>${f.conditions?.length?`<ul>${f.conditions.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}</details>`;
 }
 function marketEvidence(c){const p=c.provenance||{},d=p.daily||{},v=p.valuation||{},f=v.fx||{};const fxSymbol=c.cur==='EUR'?'EURUSD=X':c.cur+'=X';
-  const dailySourceLabel=d.src==='yahoo-meta-close'?'收盘价来自行情快照':'日线来源';
-  return`<details class="evidence-card market-evidence"><summary>行情与估值来源 · ${esc(c.priceAsOf||'日期缺失')}</summary><dl><dt>展示报价</dt><dd>${esc(timeDetail(c))} · ${sourceAnchor(providerUrl(c.sym,c.priceSource),'报价来源')}</dd><dt>完成日线 / 收益口径</dt><dd>${esc(d.asOf||'日期缺失')} · ${esc(d.returnBasis||'口径未提供')} · ${sourceAnchor(providerUrl(c.sym,d.src,true),dailySourceLabel)}</dd><dt>估值</dt><dd>${esc(v.asOf||'日期缺失')} · ${esc(peLabel(c))} · ${sourceAnchor(providerUrl(c.sym,v.source),'估值来源')}</dd><dt>美元折算</dt><dd>${c.cur==='USD'?'原币为 USD，无需折算':`${esc(f.asOf||'日期缺失')} · ${!f.asOf?'汇率缺失':c.mcapEstimated?'跨日汇率估算':'同日汇率'} · ${sourceAnchor(providerUrl(fxSymbol,f.src,true),'汇率来源')}`}</dd></dl><p>行情链接打开供应商当前页面或接口，并非冻结历史快照。计算仍以本页标注日期为准；链接可打开不等于缺项已补齐。</p></details>`;
+  const dailySource=d.src==='verified-release-carry'?d.carriedSource:d.src;
+  const priceSource=c.priceSource==='verified-release-carry'?d.carriedSource:c.priceSource;
+  const dailySourceLabel=dailySource==='yahoo-meta-close'?'收盘价来自行情快照':'日线来源';
+  return`<details class="evidence-card market-evidence"><summary>行情与估值来源 · ${esc(c.priceAsOf||'日期缺失')}</summary><dl><dt>展示报价</dt><dd>${esc(timeDetail(c))} · ${sourceAnchor(providerUrl(c.sym,priceSource),'报价来源')}</dd><dt>完成日线 / 收益口径</dt><dd>${esc(d.asOf||'日期缺失')} · ${esc(d.returnBasis||'口径未提供')} · ${sourceAnchor(providerUrl(c.sym,dailySource,true),dailySourceLabel)}</dd><dt>估值</dt><dd>${esc(v.asOf||'日期缺失')} · ${esc(peLabel(c))} · ${sourceAnchor(providerUrl(c.sym,v.source),'估值来源')}</dd><dt>美元折算</dt><dd>${c.cur==='USD'?'原币为 USD，无需折算':`${esc(f.asOf||'日期缺失')} · ${!f.asOf?'汇率缺失':c.mcapEstimated?'跨日汇率估算':'同日汇率'} · ${sourceAnchor(providerUrl(fxSymbol,f.src,true),'汇率来源')}`}</dd></dl><p>行情链接打开供应商当前页面或接口，并非冻结历史快照。计算仍以本页标注日期为准；链接可打开不等于缺项已补齐。</p></details>`;
 }
 function rangeComplete(c,r){if(c.t.length<2)return false;const last=c.t[c.t.length-1],cut=r==='ytd'?Date.UTC(new Date(last).getUTCFullYear(),0,1):last-({'1m':31,'3m':92,'6m':183,'1y':366,'2y':731}[r]||0)*864e5;return c.t[0]<=cut}
 const ORDER=CO.map(c=>c.id);
@@ -447,7 +460,7 @@ function openDrawer(id,trigger){const c=byId[id];if(!c)return;if(!S.drawer)drawe
   const dr=$('#drawer');
   dr.innerHTML=`<div class="dw"><div class="dw-h"><div class="crumb"><i style="background:${IC(c.ind)}"></i>${esc(c.ind)}<span class="sep">›</span>${esc(c.cp)}${cp?tbBadge(cp.tight):''}</div><div class="dw-nav"><button class="icon-btn sq" data-step="-1" title="上一家（←）">${ICON.left}</button><button class="icon-btn sq" data-step="1" title="下一家（→）">${ICON.right}</button><button class="icon-btn sq" id="dwClose" title="关闭（Esc）">${ICON.x}</button></div></div>
   <div class="dw-title"><h3>${esc(c.name)}</h3><div class="dw-tags"><span class="tag mono">${esc(c.code)}</span><span class="tag">${esc(c.mkt)}</span>${c.role?`<span class="tag">${esc(c.role)}</span>`:''}${sgBadges(c)}</div></div>
-  <div class="dw-price"><span class="big num">${fmtPrice(c)}</span><span class="chg num ${ud(c.r1d)}">日线 ${pct(c.r1d,2)}</span>${closeConflictNote(c)}<span class="meta">${esc(timeDetail(c))}${c.stale?' · 日线暂未更新':''} · 市值 ${c.mcapEstimated&&fin(c.mcapUSD)?'≈ ':''}${mcapStr(c.mcapUSD)} · 第 ${k+1}/${ORDER.length} 家</span></div>
+  <div class="dw-price"><span class="big num">${fmtPrice(c)}</span><span class="chg num ${ud(c.r1d)}">日线 ${pct(c.r1d,2)}</span>${dailyCloseNote(c)}<span class="meta">${esc(timeDetail(c))}${c.stale?' · 日线暂未更新':''} · 市值 ${c.mcapEstimated&&fin(c.mcapUSD)?'≈ ':''}${mcapStr(c.mcapUSD)} · 第 ${k+1}/${ORDER.length} 家</span></div>
   <div class="dw-range"><div class="seg" id="rangeSeg"></div></div>
   <div class="dw-chart" id="dwChart"></div>
   <div class="mgrid">${[['近5日','r5'],['近20日','r20'],['近60日','r60'],['年初至今','ytd'],['距52周高点','dd52']].map(([label,key])=>`<div class="mt"><div class="l">${label}</div><div class="v num ${ud(c[key])}">${pct(c[key])}</div>${metricGap(c,key)?`<div class="muted" style="font-size:10px">${esc(metricGap(c,key))}</div>`:''}</div>`).join('')}</div>
@@ -568,7 +581,8 @@ function researchNotes(){const n=D.meta.notion,f=n?.fallbackTables||[],q=n?.quar
 function renderFoot(){
  const gaps=CO.flatMap(c=>['pe','r60','ytd','dd52'].filter(k=>metricGap(c,k)).map(k=>`${c.name} ${k==='pe'?'PE':PL[k]}：${metricGap(c,k)}`)),partial=CO.filter(c=>c.financialPartial).map(c=>c.name+' '+c.period+'：部分披露，不参排');
  const calendarWarnings=(D.meta.marketCalendar?.warnings||[]).filter(x=>typeof x==='string');
- const estimated=CO.filter(c=>c.mcapEstimated&&fin(c.mcapUSD)),fxDates=[...new Set(estimated.map(c=>c.provenance?.valuation?.fx?.asOf||'日期未知'))],detail=[...gaps,...partial,...calendarWarnings,estimated.length?`${estimated.length} 家美元市值使用跨日 FX 估算（FX 日期 ${fxDates.join('、')}），≈ 数值的原币市值见列表与详情`:''].filter(Boolean).map(x=>`<li>${esc(x)}</li>`).join('');
+ const carried=D.meta.carriedDaily,carrySummary=carried?.count>0?`日线部分沿用 · ${carried.count} 家（本次上限 ${carried.limit} 家）`:'';
+ const estimated=CO.filter(c=>c.mcapEstimated&&fin(c.mcapUSD)),fxDates=[...new Set(estimated.map(c=>c.provenance?.valuation?.fx?.asOf||'日期未知'))],detail=[carrySummary,...gaps,...partial,...calendarWarnings,estimated.length?`${estimated.length} 家美元市值使用跨日 FX 估算（FX 日期 ${fxDates.join('、')}），≈ 数值的原币市值见列表与详情`:''].filter(Boolean).map(x=>`<li>${esc(x)}</li>`).join('');
  $('#foot').innerHTML=`<div class="foot-grid"><div><div class="bl">${ICON.grid}数据口径</div><p>行情：Yahoo Finance（备用：腾讯财经），各市场最新完成日线；比值：腾讯财经指数月线。财务：按公司所列期别、币种与会计口径；单季中位数只计「有原文」的单季正式报告，半年累计、快报与扭亏不作普通增长信号。市值保留本币，美元折算用同日或最近汇率并标注“≈”。缺值留空，不填 0。</p></div><div><div class="bl">${ICON.target}信号规则</div><p>业绩（单季 · 有原文 · 利润可比）：高增 ≥ 50% · 增长 ≥ 10% · 平稳 &gt; −10% · 其余为下滑。<br>股价：走强 = 近20日 ≥ +5%；深度回调 = 距52周高点 ≤ −40%；回调 = 近20日 ≤ −10%；其余为震荡。缺值不参与均值与中位数。</p></div><div><div class="bl">${ICON.alert}说明</div><p>${statusTag('ai','AI 研判','AI 撰写，附理由、来源与有效期',true)} 主线、评分、卡点与快讯由 AI 撰写，附理由、来源与有效期；过期或缺项自动改标「待更新」。<br>${statusTag('auto','自动生成','按固定模板生成',true)} 由程序按固定模板，用行情、财报与评分数据生成。<br>${statusTag('conflict','数据冲突','AI 评分与数据档相差 ≥ 2 分',true)} AI 评分与数据档相差 ≥ 2 分时提示，不改分。<br>行情每个交易日 08:45 / 12:15 / 18:15（北京时间）自动更新；周一 06:50 切换周次。</p></div></div>
  ${sharedSources()}<details id="dataDetails"><summary>数据状态与缺项 · ${esc(dataStateLabel(D.meta.coverage))}</summary><p>缺值表示本次快照没有有效值；每项保留原始观察时间和来源。</p><ul>${detail}</ul></details>${researchNotes()}<div class="foot-b">投研雷达 · ALPHA RADAR · 行情更新于 ${esc(shortTime(D.meta.generatedAt))} · 快捷键：${isMac?'⌘K':'Ctrl K'} 搜索 · ←/→ 切换公司 · Esc 关闭</div>`;
  $('#sigLegend').innerHTML=`<span>业绩：<span class="sg p1">高增</span> ≥50% <span class="sg p2">增长</span> ≥10% <span class="sg p3">平稳</span> <span class="sg p4">下滑</span></span><span>股价：<span class="sg x1">走强</span> 近20日≥+5% <span class="sg x3">回调</span> ≤−10% <span class="sg x4">深度回调</span> 距高点≤−40% <span class="sg x2">震荡</span></span>`

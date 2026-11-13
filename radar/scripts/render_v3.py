@@ -143,7 +143,10 @@ def kpi_values(data):
                       and number(row.get('earng') if number(row.get('earng')) else row.get('revg'))
                       and (row['earng'] if number(row.get('earng')) else row['revg']) >= .5 for row in companies)
     drawdown = [row for row in companies if number(row.get('dd52'))]
-    drawdown_carry = any(row.get('providerCloseConflict') and date(row.get('ld')) for row in drawdown)
+    drawdown_carry = any(
+        date((row.get('carried') or {}).get('carriedSince'))
+        or (row.get('providerCloseConflict') and date(row.get('ld')))
+        for row in drawdown)
     return [
         (len(focused), '重点追踪行业', '总分 ≥ 17' + (f' · {stale} 个待更新' if stale else ''), 'gold'),
         (sum(row.get('tight') in ('🔴极紧', '极紧') for row in points), '极紧卡点', f'共 {len(points)} 个', 'tight'),

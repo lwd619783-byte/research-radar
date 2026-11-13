@@ -41,6 +41,7 @@ RELEASE_BLOCKER_CODES = frozenset({
     'financial_evidence_incomplete', 'mixed_or_missing_market_dates_need_label_approval',
     'index_date_or_phase_needs_label_approval', 'index_observation_missing_or_stale',
     'ratio_extreme_conflicts_with_frozen_sentence', 'quotes_coverage_low',
+    'carried_daily_exceeds_limit',
     'synthetic_fixture_not_publishable', 'local_review_not_publishable', 'offline_not_publishable',
 })
 DIAGNOSTIC_CODES = NOTION_CODES | RELEASE_BLOCKER_CODES | {
@@ -490,6 +491,9 @@ def step_summary(data=None, *, error=None, fetched=None):
                  f'- 今日要点：{daily or "待更新"}',
                  f'- 行情：{quotes}/{len(companies)} 家 · 汇率 {"✅" if fx_ok else "缺失"} · 温度计 {"✅" if data.get("ratio") else "缺失"} · 下次 {next_text}']
         for company in companies:
+            carried = company.get('carried')
+            if carried:
+                lines.append(f'- {_cell(company["name"])}（{_cell(company["mkt"])}）沿用 {carried["date"]} 收盘，本次未取得')
             conflict = company.get('providerCloseConflict')
             if conflict:
                 lines.append(f'- {_cell(company["name"])}（{_cell(company["mkt"])}）按日历沿用 {company["ld"]} 收盘，'
@@ -593,6 +597,12 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
     kwargs = {'snapshot_sink': selected, 'market_sink': market}
     if market_collect is None:
         kwargs['calendar_policy'] = True
+        if baseline is not None:
+            from release_operations import verified_baseline
+            try:
+                kwargs['daily_baseline'] = verified_baseline(baseline)
+            except (OSError, ValueError, KeyError, TypeError):
+                pass  # A failed market baseline cannot authorize any carry.
     progress['calendarPolicy'] = kwargs.get('calendar_policy', False)
     if clock is not None:
         kwargs['snapshot_clock'] = now()

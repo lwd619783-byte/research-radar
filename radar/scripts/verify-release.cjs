@@ -113,6 +113,7 @@ if(embedded)checkSensitive(embedded);
 checkIndependentCloseProofs(m,embedded);
 checkProviderCloseConflicts(embedded);
 checkYahooMetaClose(m, embedded);
+checkCarriedDaily(m, embedded);
 const operationSlots=[...html.matchAll(/<script id="radar-operations">const OPERATIONS=(.*?);<\/script>/gs)];
 if(operationSlots.length!==1)throw Error('release_status_slot_mismatch');
 assert.deepEqual(JSON.parse(operationSlots[0][1]),version);
@@ -298,7 +299,7 @@ function calendarExchange(calendar, symbol) {
   return dot >= 0 && Object.hasOwn(bySuffix, suffix) ? bySuffix[suffix] : null;
 }
 
-function calendarSessionBounds(spec, day, clock) {
+function reviewedSessions(spec, clock) {
   const confidence = date => spec.confidenceByYear[date.slice(0, 4)];
   const trusted = date => spec.validFrom <= date && date <= spec.validThrough
     && ['official', 'rule_based'].includes(confidence(date));
@@ -326,9 +327,8 @@ function calendarSessionBounds(spec, day, clock) {
   }
   const clockSeconds = Number(clock / 1000000n);
   const today = localDay(clockSeconds);
-  if (!trusted(today) || !trusted(day) || !session(day)) return null;
+  if (!trusted(today)) return null;
   const closingTime = date => sessionTime(date, spec.earlyCloses[date] || spec.close);
-  const sessionClose = closingTime(day);
   let expected = null;
   for (let offset = 0; offset < 32; offset++) {
     const candidate = shift(today, -offset);
@@ -338,12 +338,19 @@ function calendarSessionBounds(spec, day, clock) {
       break;
     }
   }
-  if (expected !== day) return null;
+  if (!expected) return null;
+  return {expected, confidence: confidence(today), closingTime, localDay, shift, trusted, session, sessionTime};
+}
+
+function calendarSessionBounds(spec, day, clock) {
+  const sessions = reviewedSessions(spec, clock);
+  if (!sessions || sessions.expected !== day) return null;
+  const {closingTime, localDay, shift, trusted, session, sessionTime, confidence} = sessions;
   for (let offset = 1; offset <= 32; offset++) {
     const next = shift(day, offset);
     if (!trusted(next)) return null;
-    if (session(next)) return {sessionClose, nextSessionOpen: sessionTime(next, spec.open),
-      confidence: confidence(today), localDay};
+    if (session(next)) return {sessionClose: closingTime(day), nextSessionOpen: sessionTime(next, spec.open),
+      confidence, localDay};
   }
   return null;
 }
@@ -408,6 +415,99 @@ function checkYahooMetaClose(manifest, data, calendar = REVIEWED_MARKET_CALENDAR
           || observed === null || observed <= boundary || observed > clock
           || row.priceAsOf !== bounds.localDay(Number(observed / 1000000n))) fail();
     }
+  }
+}
+function checkCarriedDaily(manifest, data, calendar = REVIEWED_MARKET_CALENDAR) {
+  const source = 'verified-release-carry';
+  const method = 'carried-from-verified-release';
+  const coverageReason = 'carried_from_verified_release';
+  const limitError = 'carried_daily_exceeds_limit';
+  const reasons = ['provider_daily_row_missing', 'provider_daily_close_null', 'provider_daily_request_failed'];
+  const markerKeys = ['date', 'carriedSince', 'baselineProductionSHA', 'baselineRunId', 'reason'];
+  const fail = () => { throw Error('carried_daily_binding_mismatch'); };
+  const has = (value, key) => value != null && Object.hasOwn(value, key);
+  const exact = (value, keys) => value && typeof value === 'object' && !Array.isArray(value)
+    && Object.keys(value).length === keys.length && keys.every(key => has(value, key));
+  const rows = Array.isArray(data?.companies) ? data.companies : [];
+  const meta = data?.meta;
+  const coverage = Array.isArray(meta?.coverage) ? meta.coverage : [];
+  const coveredMetrics = {price: 'price', daily: 'ld', r5: 'r5', r20: 'r20', r60: 'r60', ytd: 'ytd', high52: 'hi52'};
+  const selected = rows.filter(row => {
+    const daily = row?.provenance?.daily;
+    return has(row, 'carried') || daily?.src === source || row?.priceSource === source || has(daily, 'carriedSource')
+      || daily?.snapshotSelection?.method === method || row?.marketCalendar?.status === 'carried_daily';
+  });
+  const carryCoverage = coverage.filter(item => item?.reason === coverageReason || item?.source === source);
+  const limit = Math.floor(rows.length / 10);
+  if (selected.length > limit || (Array.isArray(meta?.blockers) && meta.blockers.includes(limitError))) throw Error(limitError);
+  if (!selected.length && !has(meta, 'carriedDaily') && !carryCoverage.length) return;
+  const summary = meta?.carriedDaily, snapshot = meta?.snapshot, clock = closeProofMicros(manifest.fixedClock);
+  if (!calendar || clock === null || !selected.length || !exact(summary, ['companies', 'count', 'limit'])
+      || summary.count !== selected.length || summary.limit !== limit || !Array.isArray(summary.companies)
+      || summary.companies.length !== selected.length || snapshot?.status !== 'complete'
+      || snapshot.requiredCompanies !== rows.length || snapshot.selectedCompanies !== rows.length) fail();
+
+  const carried = new Map();
+  let baseline = null;
+  for (const row of selected) {
+    const daily = row.provenance?.daily, marker = row.carried, annotation = row.marketCalendar;
+    const selection = daily?.snapshotSelection, quote = row.priceSelection;
+    if (typeof row.sym !== 'string' || !row.sym || rows.filter(item => item?.sym === row.sym).length !== 1
+        || !exact(marker, markerKeys) || !closeProofDay(marker.date) || marker.carriedSince !== marker.date
+        || typeof marker.baselineProductionSHA !== 'string' || !/^[0-9a-f]{40}(?![\s\S])/.test(marker.baselineProductionSHA)
+        || typeof marker.baselineRunId !== 'string' || !/^[1-9][0-9]*(?![\s\S])/.test(marker.baselineRunId)
+        || !reasons.includes(marker.reason) || daily?.src !== source || row.priceSource !== source
+        || typeof daily.carriedSource !== 'string' || !daily.carriedSource || daily.carriedSource === source
+        || daily.phase !== 'closed' || has(daily, 'independentCloseProof') || has(daily, 'yahooMetaClose')
+        || has(row, 'providerCloseConflict') || selection?.method !== method || selection.sourcePhase !== 'closed'
+        || row.stale === true || row.pricePhase !== 'closed' || row.priceObservedAt !== null
+        || !Number.isFinite(row.price) || row.price <= 0
+        || quote?.useQuote !== false || quote.reason !== 'carried_daily_quote_order_unproven'
+        || quote.completedBoundaryUTC !== null || quote.boundaryKind !== null
+        || annotation?.status !== 'carried_daily'
+        || [row.ld, row.metricAsOf, row.priceAsOf, daily.asOf, selection.selectedDate, selection.sourceAsOf,
+            annotation.quoteDate].some(value => value !== marker.date)) fail();
+    if (baseline && (baseline.baselineProductionSHA !== marker.baselineProductionSHA
+        || baseline.baselineRunId !== marker.baselineRunId)) fail();
+    baseline = marker;
+    const received = closeProofMicros(daily.receivedAt);
+    const exchange = calendarExchange(calendar, row.sym), spec = calendar.exchanges[exchange];
+    const sessions = spec && reviewedSessions(spec, clock);
+    if (!sessions || annotation.exchange !== exchange || annotation.timezone !== spec.timezone
+        || daily.timezone !== spec.timezone || annotation.confidence !== sessions.confidence
+        || annotation.expectedCompletedDate !== sessions.expected || received === null || received > clock) fail();
+    if (marker.date !== sessions.expected) {
+      let previous = null;
+      for (let offset = 1; offset <= 32; offset++) {
+        const candidate = sessions.shift(sessions.expected, -offset);
+        if (!sessions.trusted(candidate)) break;
+        if (sessions.session(candidate)) {
+          previous = candidate;
+          break;
+        }
+      }
+      if (marker.date !== previous) fail();
+    }
+    const close = sessions.closingTime(marker.date);
+    if (!Number.isSafeInteger(close) || received < BigInt(close) * 1000000n) fail();
+    for (const [metric, field] of Object.entries(coveredMetrics)) {
+      const entries = coverage.filter(item => item?.kind === 'company' && item.symbol === row.sym && item.metric === metric);
+      if (entries.length !== 1) fail();
+      const [entry] = entries;
+      const available = row[field] != null;
+      if (entry.source !== source || entry.date !== marker.date
+          || entry.status !== (available ? 'partial' : 'missing')
+          || entry.reason !== (available ? coverageReason : 'missing_or_incompatible')) fail();
+    }
+    carried.set(row.sym, marker);
+  }
+  for (const item of carryCoverage) {
+    if (item.kind !== 'company' || !has(coveredMetrics, item.metric) || !carried.has(item.symbol)) fail();
+  }
+  for (const item of summary.companies) {
+    if (!exact(item, ['symbol', ...markerKeys]) || !carried.has(item.symbol)
+        || markerKeys.some(key => item[key] !== carried.get(item.symbol)[key])) fail();
+    carried.delete(item.symbol);
   }
 }
 function checkSnapshot(snapshot,clock) {
@@ -483,4 +583,4 @@ function checkOperationalSchedule(manifest,data,version) {
     'publication_schedule_mismatch');
 }
 if(require.main===module)verifyRelease();
-module.exports={scanOutput,needsV3Scan,BANNED_WORDS,DISCLAIMER,checkIndependentCloseProofs,checkYahooMetaClose};
+module.exports={scanOutput,needsV3Scan,BANNED_WORDS,DISCLAIMER,checkIndependentCloseProofs,checkYahooMetaClose,checkCarriedDaily};
