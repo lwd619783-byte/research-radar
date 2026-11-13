@@ -2,6 +2,8 @@
 const fs = require('node:fs');
 const crypto = require('node:crypto');
 const assert = require('node:assert/strict');
+// production_release.py embeds the tracked calendar in the shipped verifier.
+const REVIEWED_MARKET_CALENDAR = {"exchanges":{"XETR":{"close":"17:30","confidenceByYear":{"2026":"official","2027":"official"},"earlyCloses":{},"holidays":["2026-01-01","2026-04-03","2026-04-06","2026-05-01","2026-12-24","2026-12-25","2026-12-31","2027-01-01","2027-03-26","2027-03-29","2027-12-24","2027-12-31"],"open":"09:00","sources":["https://www.cashmarket.deutsche-boerse.com/cash-en/trading/trading-calendar-and-trading-hours"],"timezone":"Europe/Berlin","validFrom":"2026-01-01","validThrough":"2027-12-31"},"XHKG":{"close":"16:10","confidenceByYear":{"2026":"official","2027":"official"},"earlyCloses":{"2026-02-16":"12:10","2026-12-24":"12:10","2026-12-31":"12:10","2027-02-05":"12:10","2027-12-24":"12:10","2027-12-31":"12:10"},"holidays":["2026-01-01","2026-02-17","2026-02-18","2026-02-19","2026-04-03","2026-04-06","2026-04-07","2026-05-01","2026-05-25","2026-06-19","2026-07-01","2026-10-01","2026-10-19","2026-12-25","2027-01-01","2027-02-08","2027-02-09","2027-03-26","2027-03-29","2027-04-05","2027-05-13","2027-06-09","2027-07-01","2027-09-16","2027-10-01","2027-10-08","2027-12-27"],"open":"09:30","sources":["https://www.hkex.com.hk/News/HKEX-Calendar?sc_lang=en","https://www.hkex.com.hk/Services/Trading-hours-and-Severe-Weather-Arrangements/Trading-Hours/Securities-Market"],"timezone":"Asia/Hong_Kong","validFrom":"2026-01-01","validThrough":"2027-12-31"},"XKRX":{"close":"15:30","confidenceByYear":{"2026":"official","2027":"official"},"earlyCloses":{},"holidays":["2026-01-01","2026-02-16","2026-02-17","2026-02-18","2026-03-02","2026-05-01","2026-05-05","2026-05-25","2026-06-03","2026-07-17","2026-08-17","2026-09-24","2026-09-25","2026-10-05","2026-10-09","2026-12-25","2026-12-31","2027-01-01","2027-02-08","2027-02-09","2027-03-01","2027-05-03","2027-05-05","2027-05-13","2027-07-19","2027-08-16","2027-09-14","2027-09-15","2027-09-16","2027-10-04","2027-10-11","2027-12-27","2027-12-31"],"open":"09:00","sources":["https://global.krx.co.kr/contents/GLB/06/0602/0602020204/GLB0602020204T1.jsp","https://www.kasi.re.kr/kor/post/newsMaterial/32031","https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431"],"timezone":"Asia/Seoul","validFrom":"2026-01-01","validThrough":"2027-12-31"},"XNAS":{"close":"16:00","confidenceByYear":{"2026":"official","2027":"rule_based"},"earlyCloses":{"2026-11-27":"13:00","2026-12-24":"13:00","2027-11-26":"13:00"},"holidays":["2026-01-01","2026-01-19","2026-02-16","2026-04-03","2026-05-25","2026-06-19","2026-07-03","2026-09-07","2026-11-26","2026-12-25","2027-01-01","2027-01-18","2027-02-15","2027-03-26","2027-05-31","2027-06-18","2027-07-05","2027-09-06","2027-11-25","2027-12-24"],"model":"exchange_calendars==4.13.2","open":"09:30","sources":["https://www.nasdaqtrader.com/Trader.aspx?id=Calendar","https://github.com/gerrymanoim/exchange_calendars/tree/4.13.2/exchange_calendars"],"timezone":"America/New_York","validFrom":"2026-01-01","validThrough":"2027-12-31"},"XNYS":{"close":"16:00","confidenceByYear":{"2026":"official","2027":"official"},"earlyCloses":{"2026-11-27":"13:00","2026-12-24":"13:00","2027-11-26":"13:00"},"holidays":["2026-01-01","2026-01-19","2026-02-16","2026-04-03","2026-05-25","2026-06-19","2026-07-03","2026-09-07","2026-11-26","2026-12-25","2027-01-01","2027-01-18","2027-02-15","2027-03-26","2027-05-31","2027-06-18","2027-07-05","2027-09-06","2027-11-25","2027-12-24"],"open":"09:30","sources":["https://www.nyse.com/trade/hours-calendars"],"timezone":"America/New_York","validFrom":"2026-01-01","validThrough":"2027-12-31"},"XPAR":{"close":"17:30","confidenceByYear":{"2026":"official","2027":"rule_based"},"earlyCloses":{"2026-12-24":"14:05","2026-12-31":"14:05","2027-12-24":"14:05","2027-12-31":"14:05"},"holidays":["2026-01-01","2026-04-03","2026-04-06","2026-05-01","2026-12-25","2027-01-01","2027-03-26","2027-03-29"],"model":"exchange_calendars==4.13.2","open":"09:00","sources":["https://www.euronext.com/en/trading/trading-hours-holidays","https://github.com/gerrymanoim/exchange_calendars/tree/4.13.2/exchange_calendars"],"timezone":"Europe/Paris","validFrom":"2026-01-01","validThrough":"2027-12-31"},"XSHE":{"close":"15:00","confidenceByYear":{"2026":"official","2027":"provisional"},"earlyCloses":{},"holidays":["2026-01-01","2026-01-02","2026-02-16","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-04-06","2026-05-01","2026-05-04","2026-05-05","2026-06-19","2026-09-25","2026-10-01","2026-10-02","2026-10-05","2026-10-06","2026-10-07"],"open":"09:30","provisionalHolidays":["2027-01-01","2027-02-05","2027-02-08","2027-02-09","2027-02-10","2027-02-11","2027-02-12","2027-04-05","2027-05-03","2027-06-09","2027-09-15","2027-10-01","2027-10-04","2027-10-05","2027-10-06","2027-10-07"],"provisionalMethod":"2027\u519c\u5386\u65e5\u671f\u53ca2026\u4ea4\u6613\u6240\u5047\u671f\u60ef\u4f8b\uff1b\u975e\u6b63\u5f0f\u5e74\u5ea6\u5b89\u6392\uff0c\u4e0d\u4fdd\u8bc1\u8c03\u4f11\u957f\u5ea6\u3002","provisionalNote":"2027\u6625\u828202/05\u201302/12\u6309\u9664\u5915\u8d778\u5929\u60ef\u4f8b\u4f30\u8ba1\uff0c\u5176\u4f59\u5047\u65e5\u540c\u4e3a\u4f30\u8ba1\uff1b\u8bf7\u4e8e2026-12-20\u524d\u590d\u6838\u4ea4\u6613\u6240\u516c\u544a\u3002","reviewBy":"2026-12-20","sources":["https://investor.szse.cn/English/services/trading/calendar/index.html","https://www.hko.gov.hk/en/gts/time/calendar/pdf/files/2027e.pdf"],"timezone":"Asia/Shanghai","validFrom":"2026-01-01","validThrough":"2027-12-31"},"XSHG":{"close":"15:00","confidenceByYear":{"2026":"official","2027":"provisional"},"earlyCloses":{},"holidays":["2026-01-01","2026-01-02","2026-02-16","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-04-06","2026-05-01","2026-05-04","2026-05-05","2026-06-19","2026-09-25","2026-10-01","2026-10-02","2026-10-05","2026-10-06","2026-10-07"],"open":"09:30","provisionalHolidays":["2027-01-01","2027-02-05","2027-02-08","2027-02-09","2027-02-10","2027-02-11","2027-02-12","2027-04-05","2027-05-03","2027-06-09","2027-09-15","2027-10-01","2027-10-04","2027-10-05","2027-10-06","2027-10-07"],"provisionalMethod":"2027\u519c\u5386\u65e5\u671f\u53ca2026\u4ea4\u6613\u6240\u5047\u671f\u60ef\u4f8b\uff1b\u975e\u6b63\u5f0f\u5e74\u5ea6\u5b89\u6392\uff0c\u4e0d\u4fdd\u8bc1\u8c03\u4f11\u957f\u5ea6\u3002","provisionalNote":"2027\u6625\u828202/05\u201302/12\u6309\u9664\u5915\u8d778\u5929\u60ef\u4f8b\u4f30\u8ba1\uff0c\u5176\u4f59\u5047\u65e5\u540c\u4e3a\u4f30\u8ba1\uff1b\u8bf7\u4e8e2026-12-20\u524d\u590d\u6838\u4ea4\u6613\u6240\u516c\u544a\u3002","reviewBy":"2026-12-20","sources":["https://www.sse.com.cn/disclosure/dealinstruc/closed/","https://www.hko.gov.hk/en/gts/time/calendar/pdf/files/2027e.pdf"],"timezone":"Asia/Shanghai","validFrom":"2026-01-01","validThrough":"2027-12-31"},"XTAI":{"close":"13:30","confidenceByYear":{"2026":"official","2027":"provisional"},"earlyCloses":{},"holidays":["2026-01-01","2026-02-12","2026-02-13","2026-02-16","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-27","2026-04-03","2026-04-06","2026-05-01","2026-06-19","2026-09-25","2026-09-28","2026-10-09","2026-10-23","2026-10-26","2026-12-25"],"open":"09:00","provisionalHolidays":["2027-01-01","2027-02-04","2027-02-05","2027-02-08","2027-02-09","2027-02-10","2027-03-01","2027-04-05","2027-04-30","2027-06-09","2027-09-15","2027-09-28","2027-10-11","2027-10-25","2027-12-31"],"provisionalMethod":"exchange_calendars==4.13.2 XTAI\u9759\u6001\u5bfc\u51fa\uff0c\u5e74\u5ea6\u7279\u6b8a\u4f11\u5e02\u53ef\u80fd\u672a\u6db5\u76d6\u3002","provisionalNote":"\u56fa\u5b9aexchange_calendars==4.13.2\u89c4\u5219\u4f30\u8ba1\uff0c\u6625\u8282\u989d\u5916\u7ed3\u7b97\u65e5\u5f85\u5b98\u65b9\u786e\u8ba4\uff1b\u8bf7\u4e8e2026-12-20\u524d\u590d\u6838TWSE\u516c\u544a\u3002","reviewBy":"2026-12-20","sources":["https://www.twse.com.tw/holidaySchedule/holidaySchedule?response=html","https://www.twse.com.tw/zh/about/news/news/content.html?8a8216d6a0fa351b01a1638507a10203","https://www.twse.com.tw/staticFiles/news/news/tsecnews/8a8216d6a0fa351b01a1638507940202.pdf","https://github.com/gerrymanoim/exchange_calendars/blob/4.13.2/exchange_calendars/exchange_calendar_xtai.py"],"timezone":"Asia/Taipei","validFrom":"2026-01-01","validThrough":"2027-12-31"},"XTKS":{"close":"15:30","confidenceByYear":{"2026":"official","2027":"official"},"earlyCloses":{},"holidays":["2026-01-01","2026-01-02","2026-01-12","2026-02-11","2026-02-23","2026-03-20","2026-04-29","2026-05-04","2026-05-05","2026-05-06","2026-07-20","2026-08-11","2026-09-21","2026-09-22","2026-09-23","2026-10-12","2026-11-03","2026-11-23","2026-12-31","2027-01-01","2027-01-11","2027-02-11","2027-02-23","2027-03-22","2027-04-29","2027-05-03","2027-05-04","2027-05-05","2027-07-19","2027-08-11","2027-09-20","2027-09-23","2027-10-11","2027-11-03","2027-11-23","2027-12-31"],"open":"09:00","sources":["https://www.jpx.co.jp/english/corporate/about-jpx/calendar/index.html","https://www.jpx.co.jp/equities/trading/domestic/01.html"],"timezone":"Asia/Tokyo","validFrom":"2026-01-01","validThrough":"2027-12-31"}},"modelExport":{"version":"4.13.2","wheelSHA256":"fc5a2ad0d61b5c3a6539a3061cd4cbb55c59f4a903455cec7926e4b798919996"},"reviewedAt":"2026-10-23","schemaVersion":1,"symbolExchanges":{"ANET":"XNYS","ASML":"XNAS","AVGO":"XNAS","COHR":"XNYS","ETN":"XNYS","GEV":"XNYS","LITE":"XNAS","MOD":"XNYS","MRVL":"XNAS","MU":"XNAS","NVDA":"XNAS","TSM":"XNYS","VRT":"XNYS","^GSPC":"XNYS","^HSI":"XHKG","^IXIC":"XNAS","^SOX":"XNAS"},"validThrough":"2027-12-31","warningDays":60};
 // Mirrored from notion_schema.json; the offline test enforces exact equality.
 const BANNED_WORDS = ['买入','卖出','加仓','减仓','抄底','逃顶','目标价','推荐','定投','止损','止盈','建仓','清仓','满仓','重仓','必涨','稳赚','翻倍','牛股','金股','已核实','已审核','人工确认','已验证'];
 const DISCLAIMER = '研究内容由 AI 依据公开资料撰写，程序自动检查格式、日期与来源，未经人工审核；行情由定时任务更新。仅供研究参考，不构成投资建议。';
@@ -110,6 +112,7 @@ if(matches.length===1){try{embedded=JSON.parse(matches[0][1]);}catch{if(needsV3S
 if(embedded)checkSensitive(embedded);
 checkIndependentCloseProofs(m,embedded);
 checkProviderCloseConflicts(embedded);
+checkYahooMetaClose(m, embedded);
 const operationSlots=[...html.matchAll(/<script id="radar-operations">const OPERATIONS=(.*?);<\/script>/gs)];
 if(operationSlots.length!==1)throw Error('release_status_slot_mismatch');
 assert.deepEqual(JSON.parse(operationSlots[0][1]),version);
@@ -269,6 +272,144 @@ function checkProviderCloseConflicts(data) {
     }
   }
 }
+function closeProofMicros(value) {
+  const match = typeof value === 'string'
+    && /^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,6}))?(Z|[+-]\d{2}:\d{2})$/.exec(value);
+  if (!match || match[0] !== value || !closeProofDay(match[1])
+      || Number(match[2]) > 23 || Number(match[3]) > 59 || Number(match[4]) > 59) return null;
+  const zone = match[6];
+  if (zone !== 'Z' && (Number(zone.slice(1, 3)) > 23 || Number(zone.slice(4, 6)) > 59)) return null;
+  const whole = Date.parse(`${match[1]}T${match[2]}:${match[3]}:${match[4]}${zone}`);
+  return BigInt(whole) * 1000n + BigInt((match[5] || '').padEnd(6, '0'));
+}
+
+function closeProofDay(day) {
+  if (typeof day !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(day) || day.startsWith('0000-')) return false;
+  const instant = Date.parse(day + 'T00:00:00Z');
+  return Number.isFinite(instant) && new Date(instant).toISOString().slice(0, 10) === day;
+}
+
+function calendarExchange(calendar, symbol) {
+  if (typeof symbol !== 'string') return null;
+  if (Object.hasOwn(calendar.symbolExchanges, symbol)) return calendar.symbolExchanges[symbol];
+  const bySuffix = {SS: 'XSHG', SZ: 'XSHE', HK: 'XHKG', TW: 'XTAI', KS: 'XKRX', T: 'XTKS', DE: 'XETR', PA: 'XPAR'};
+  const dot = symbol.lastIndexOf('.');
+  const suffix = symbol.slice(dot + 1);
+  return dot >= 0 && Object.hasOwn(bySuffix, suffix) ? bySuffix[suffix] : null;
+}
+
+function calendarSessionBounds(spec, day, clock) {
+  const confidence = date => spec.confidenceByYear[date.slice(0, 4)];
+  const trusted = date => spec.validFrom <= date && date <= spec.validThrough
+    && ['official', 'rule_based'].includes(confidence(date));
+  const midnight = date => Date.parse(date + 'T00:00:00Z');
+  const shift = (date, days) => new Date(midnight(date) + days * 86400000).toISOString().slice(0, 10);
+  const session = date => {
+    const weekday = new Date(midnight(date)).getUTCDay();
+    return weekday > 0 && weekday < 6 && !spec.holidays.includes(date);
+  };
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: spec.timezone, year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23',
+  });
+  const local = seconds => {
+    const parts = Object.fromEntries(formatter.formatToParts(seconds * 1000).map(({type, value}) => [type, value]));
+    return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}:${parts.second}`;
+  };
+  const localDay = seconds => local(seconds).slice(0, 10);
+  function sessionTime(date, time) {
+    const wanted = `${date}T${time}:00`;
+    const nominal = Date.parse(wanted + 'Z') / 1000;
+    const offset = Date.parse(local(nominal) + 'Z') / 1000 - nominal;
+    const instant = nominal - offset;
+    return local(instant) === wanted ? instant : NaN;
+  }
+  const clockSeconds = Number(clock / 1000000n);
+  const today = localDay(clockSeconds);
+  if (!trusted(today) || !trusted(day) || !session(day)) return null;
+  const closingTime = date => sessionTime(date, spec.earlyCloses[date] || spec.close);
+  const sessionClose = closingTime(day);
+  let expected = null;
+  for (let offset = 0; offset < 32; offset++) {
+    const candidate = shift(today, -offset);
+    if (!trusted(candidate)) return null;
+    if (session(candidate) && closingTime(candidate) <= clockSeconds) {
+      expected = candidate;
+      break;
+    }
+  }
+  if (expected !== day) return null;
+  for (let offset = 1; offset <= 32; offset++) {
+    const next = shift(day, offset);
+    if (!trusted(next)) return null;
+    if (session(next)) return {sessionClose, nextSessionOpen: sessionTime(next, spec.open),
+      confidence: confidence(today), localDay};
+  }
+  return null;
+}
+
+function roundedClosePrice(price) {
+  const digits = price < 10 ? 3 : 2;
+  const fixed = price.toFixed(digits);
+  // An exact halfway binary float has an odd numerator after scaling by
+  // 2^(digits+1). Since 5^digits is 1 mod 4, remainder 1 rounds down to even.
+  const numerator = price * 2 ** (digits + 1);
+  if (Number.isSafeInteger(numerator) && numerator % 4 === 1) {
+    return Number(`${BigInt(fixed.replace('.', '')) - 1n}e-${digits}`);
+  }
+  return Number(fixed);
+}
+
+function checkYahooMetaClose(manifest, data, calendar = REVIEWED_MARKET_CALENDAR) {
+  const source = 'yahoo-meta-close';
+  const proofKeys = ['date', 'price', 'marketTime', 'sessionClose', 'nextSessionOpen', 'receivedAt'];
+  const positive = value => Number.isFinite(value) && value > 0 && value <= Number.MAX_SAFE_INTEGER;
+  const maxReceiptAge = 36n * 3600n * 1000000n;
+  const fail = () => { throw Error('yahoo_meta_close_binding_mismatch'); };
+  for (const row of Array.isArray(data?.companies) ? data.companies : []) {
+    const daily = row?.provenance?.daily;
+    const marked = daily != null && Object.hasOwn(daily, 'yahooMetaClose');
+    if (!marked && daily?.src !== source && row?.priceSource !== source) continue;
+    const proof = daily?.yahooMetaClose;
+    if (daily?.src !== source || !proof || typeof proof !== 'object' || Array.isArray(proof)
+        || Object.keys(proof).length !== proofKeys.length || !proofKeys.every(key => Object.hasOwn(proof, key))
+        || !closeProofDay(proof.date) || !positive(proof.price)
+        || ['marketTime', 'sessionClose', 'nextSessionOpen'].some(key => !Number.isSafeInteger(proof[key]) || proof[key] <= 0)
+        || !calendar) fail();
+    const received = closeProofMicros(proof.receivedAt), clock = closeProofMicros(manifest.fixedClock);
+    if (received === null || clock === null || BigInt(proof.marketTime) * 1000000n > received
+        || received > clock || clock - received > maxReceiptAge
+        || proof.marketTime < proof.sessionClose || proof.marketTime >= proof.nextSessionOpen) fail();
+    const exchange = calendarExchange(calendar, row.sym), spec = calendar.exchanges[exchange];
+    if (!spec || exchange === 'XTAI') fail();
+    const bounds = calendarSessionBounds(spec, proof.date, clock);
+    if (!bounds || proof.sessionClose !== bounds.sessionClose || proof.nextSessionOpen !== bounds.nextSessionOpen) fail();
+    const annotation = row.marketCalendar, selection = daily.snapshotSelection;
+    if (annotation?.exchange !== exchange || annotation?.confidence !== bounds.confidence
+        || daily.timezone !== spec.timezone || annotation.timezone !== spec.timezone
+        || daily.phase !== 'closed' || daily.receivedAt !== proof.receivedAt || daily.returnBasis !== 'yahoo-adjclose'
+        || Object.hasOwn(daily, 'independentCloseProof') || Object.hasOwn(row, 'providerCloseConflict')
+        || selection?.method !== 'latest-completed-per-market' || selection.sourcePhase !== 'closed'
+        || ['r1d', 'r5', 'r20', 'r60', 'ytd', 'dd52', 'hi52'].some(key => row[key] != null)
+        || [row.ld, row.metricAsOf, daily.asOf, annotation.quoteDate, annotation.expectedCompletedDate,
+            selection.selectedDate, selection.sourceAsOf].some(value => value !== proof.date)) fail();
+    const priceSelection = row.priceSelection;
+    if (row.priceSource === source) {
+      if (row.priceAsOf !== proof.date || row.pricePhase !== 'closed' || row.priceObservedAt !== null
+          || priceSelection?.useQuote !== false || !positive(row.price)
+          || row.price !== roundedClosePrice(proof.price)) fail();
+    } else {
+      const boundary = BigInt(proof.nextSessionOpen) * 1000000n;
+      const observed = closeProofMicros(row.priceObservedAt);
+      if (typeof row.priceSource !== 'string' || !row.priceSource || !positive(row.price)
+          || row.pricePhase !== 'intraday' || priceSelection?.useQuote !== true
+          || priceSelection.boundaryKind !== 'later_session_start_upper_bound'
+          || closeProofMicros(priceSelection.completedBoundaryUTC) !== boundary
+          || observed === null || observed <= boundary || observed > clock
+          || row.priceAsOf !== bounds.localDay(Number(observed / 1000000n))) fail();
+    }
+  }
+}
 function checkSnapshot(snapshot,clock) {
   const tables=['industries','chokepoints','companies','financials','daily','weekly'];
   const exact=(object,keys)=>object&&typeof object==='object'&&!Array.isArray(object)&&Object.keys(object).sort().join('|')===[...keys].sort().join('|');
@@ -342,4 +483,4 @@ function checkOperationalSchedule(manifest,data,version) {
     'publication_schedule_mismatch');
 }
 if(require.main===module)verifyRelease();
-module.exports={scanOutput,needsV3Scan,BANNED_WORDS,DISCLAIMER,checkIndependentCloseProofs};
+module.exports={scanOutput,needsV3Scan,BANNED_WORDS,DISCLAIMER,checkIndependentCloseProofs,checkYahooMetaClose};
