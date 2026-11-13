@@ -413,7 +413,8 @@ def retry_missing_daily(companies, daily, evidence, rows, budget, snapshot_clock
                     daily[symbol] = supplemented
 
 
-def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_clock=None, calendar_policy=False):
+def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_clock=None, calendar_policy=False,
+            daily_baseline=None):
     companies, tencent, currencies = inventory(data)
     rows = []
     mk = {k: {} for k in ('daily', 'quote', 'index', 'fx', 'ratio')}
@@ -494,7 +495,12 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
     # future relative to this clock. Transport event times remain actual times.
     fixed_clock = snapshot_clock if snapshot_clock is not None else dt.datetime.now(build.BJ)
     if calendar_policy:
-        D,stale,missing=build.assemble(data,mk,mk,fixed_clock,calendar_policy=True)
+        carry = {}
+        if daily_baseline is not None:
+            transport = {row['code']: row for row in rows
+                         if row['category'] in ('company-yahoo-daily', 'company-yahoo-daily-retry')}
+            carry = {'daily_baseline': daily_baseline, 'daily_evidence': evidence, 'daily_transport': transport}
+        D,stale,missing=build.assemble(data,mk,mk,fixed_clock,calendar_policy=True,**carry)
     else:
         D,stale,missing=build.assemble(data,mk,mk,fixed_clock)
     # Expose transport denial separately from empty/partial observations.

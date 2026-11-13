@@ -42,20 +42,26 @@ def chart_evidence(payload, symbol, received_at):
         zone = ZoneInfo(meta.get('exchangeTimezoneName'))
     except (KeyError, TypeError, ValueError):
         return None
-    timestamps = item.get('timestamp') or []
+    timestamps = item.get('timestamp')
     indicators = item.get('indicators')
     quotes = indicators.get('quote') if isinstance(indicators, dict) else None
-    closes = quotes[0].get('close') if isinstance(quotes, list) and quotes and isinstance(quotes[0], dict) else []
+    quote = quotes[0] if isinstance(quotes, list) and quotes and isinstance(quotes[0], dict) else {}
+    closes = quote.get('close')
+    chart_shape_valid = ((timestamps is None or isinstance(timestamps, list))
+                         and (closes is None or isinstance(closes, list))
+                         and (not timestamps or bool(quote)))
     closes = closes if isinstance(closes, list) else []
     rows = []
     if isinstance(timestamps, list):
         for i in range(max(0, len(timestamps) - 3), len(timestamps)):
             stamp = timestamps[i]
             if not epoch(stamp):
+                chart_shape_valid = False
                 continue
             try:
                 day = dt.datetime.fromtimestamp(stamp, zone).date().isoformat()
             except (ValueError, OverflowError, OSError):
+                chart_shape_valid = False
                 continue
             value = closes[i] if i < len(closes) else None
             status = ('close_missing' if i >= len(closes) else 'null' if value is None
@@ -74,7 +80,9 @@ def chart_evidence(payload, symbol, received_at):
     market_time = meta.get('regularMarketTime')
     return {'lastThree': rows, 'regularMarketPrice': public_number(meta.get('regularMarketPrice')),
             'regularMarketTime': market_time if epoch(market_time) else None,
-            'currentTradingPeriod': periods, 'receivedAt': received_at}
+            'currentTradingPeriod': periods, 'receivedAt': received_at,
+            'currency': meta.get('currency'), 'timezone': meta.get('exchangeTimezoneName'),
+            'chartShapeValid': chart_shape_valid}
 
 
 def session_window(symbol, day, now):

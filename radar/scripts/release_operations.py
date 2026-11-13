@@ -65,6 +65,20 @@ def status(commit):
     return checked_status(api(f'commits/{sha(commit)}/status'), commit)
 
 
+def verified_baseline(root):
+    """Read the already checked deployment proof alongside its hash-bound data."""
+    manifest, data = verify_files(root)
+    path = Path(root) / 'proof.json'
+    if path.is_symlink() or not path.is_file():
+        raise ValueError('baseline_proof_mismatch')
+    proof = json.loads(path.read_bytes())
+    if (proof.get('state') != 'success' or proof.get('dataSHA256') != manifest['dataSHA256']
+            or proof.get('sourceSHA') != manifest['sourceSHA']):
+        raise ValueError('baseline_proof_mismatch')
+    sha(proof.get('productionSHA'))
+    return manifest, data, proof
+
+
 def verify_files(root, allow_dry_run=False):
     root = Path(root)
     if root.is_symlink() or (root/'public').is_symlink() or (root/'release.json').is_symlink():
@@ -90,6 +104,11 @@ def verify_files(root, allow_dry_run=False):
             raise ValueError('release_file_hash_mismatch')
     data = bundle.embedded_data((root/'public/index.html').read_bytes())
     bundle.validate_provider_close_conflicts(data)
+    try:
+        carried_clock = dt.datetime.fromisoformat(m['fixedClock'])
+    except (KeyError, TypeError, ValueError):
+        carried_clock = None
+    bundle.validate_carried_daily(data, carried_clock)
     for row in data.get('companies', []):
         daily = (row.get('provenance') or {}).get('daily') or {}
         if 'yahooMetaClose' in daily or YAHOO_META_CLOSE_SOURCE in (daily.get('src'), row.get('priceSource')):
@@ -319,6 +338,9 @@ def publish(root):
     if recovery and (manifest['dataSHA256'] != current['dataSHA256'] or
                      manifest.get('fixedClock') != current.get('fixedClock')):
         raise ValueError('recovery_baseline_is_no_longer_current')
+    if not recovery and 'carriedDaily' in data['meta']:
+        current_sha = sha(command(['git', 'rev-parse', 'HEAD'], work).decode().strip())
+        validate_current_carry_baseline(data, manifest, current, current_data, current_sha)
     names = ['public/index.html', 'public/robots.txt', 'public/version.json', 'release.json',
              'history.json', 'vercel.json', 'verify-release.cjs']
     if manifest['schemaVersion'] == 3:
@@ -346,6 +368,12 @@ def publish(root):
     commit = command(['git', 'rev-parse', 'HEAD'], work).decode().strip()
     command(['git', 'push', 'origin', 'HEAD:refs/heads/production'], work)
     return sha(commit)
+
+
+def validate_current_carry_baseline(data, manifest, current, current_data, current_sha):
+    """Prevent a fresh output clock from hiding an older carry baseline."""
+    bundle.validate_carried_daily_baseline(data, dt.datetime.fromisoformat(manifest['fixedClock']),
+                                          current, current_data, {'productionSHA': current_sha})
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):

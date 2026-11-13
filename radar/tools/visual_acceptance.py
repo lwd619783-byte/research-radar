@@ -24,7 +24,8 @@ REQUIRED_SCREENSHOTS = {f'ov_{size}_{theme}_{part}.png'
                         for part in ('top', 'full')} | {
                         f'state_{name}.png' for name in ('W03', 'W06', 'D01', 'T01', 'R12')} | {
                         'provider-close-conflict-industry.png', 'provider-close-conflict-table.png',
-                        'provider-close-conflict-drawer.png', 'yahoo-meta-close-mobile.png'}
+                        'provider-close-conflict-drawer.png', 'yahoo-meta-close-mobile.png',
+                        'carried-daily-one-mobile.png', 'carried-daily-at-limit.png'}
 POSITIONS = {
     1440: {'#heroTitle': (225, 276), '#today': (200, 442), '#kpis': (464, 516),
            '#pulse': (532, 552), '#topCard': (578, None)},
@@ -416,6 +417,93 @@ def run(pages: Path, out: Path):
                 check(result, conflict_text == price.locator('.provider-close-note').inner_text(),
                       'Company drawer must identify the carried close next to price details')
                 price.screenshot(path=str(out / f'{fixture}-drawer.png'), animations='disabled')
+                scan_dom(page, result, banned)
+            except Exception as error:
+                result['errors'].append(f'{type(error).__name__}: {error}')
+            finally:
+                context.close()
+
+            fixture = 'carried-daily-one'
+            context, page, result = visit(fixture, 390, 844, 'light')
+            try:
+                carry_label = '沿用 10/21 收盘 · 本次未取得'
+                check(result, '部分沿用' in page.locator('#topCard .tstats').inner_text(),
+                      'The main industry market summary must identify carried inputs')
+                check(result, '部分沿用' in page.locator('#indDetail .rstats').inner_text(),
+                      'The industry return summary must identify carried inputs')
+                check(result, 'AI网络与光互连 · 部分沿用' in page.locator('#mapLegend').inner_text(),
+                      'The treemap must identify the industry using carried inputs')
+                check(result, carry_label in page.locator('#tickerTrack [data-co="YJKJ"] small').first.inner_text(),
+                      'The ticker must display the original completed close date')
+                page.locator('#mktSeg button[data-v="美股"]').click()
+                check(result, '部分沿用' not in page.locator('#leadSub').inner_text(),
+                      'A market filter excluding all carry rows must clear the summary label')
+                page.locator('#mktSeg button[data-v="A股"]').click()
+                page.locator('#indSeg button[data-v="AI网络与光互连"]').click()
+                page.locator('#viewSeg button[data-v="table"]').click()
+                check(result, '部分沿用' in page.locator('#tbl th[data-sort="mcapUSD"]').inner_text(),
+                      'Market-cap coverage must identify the carried company')
+                check(result, '部分沿用' in page.locator('#tbl th[data-sort="r20"]').inner_text(),
+                      'Return coverage must identify the carried company')
+                row = page.locator('#tbl tr[data-co="YJKJ"]')
+                label = row.locator('.provider-close-note')
+                label.scroll_into_view_if_needed()
+                check(result, label.inner_text() == carry_label and label.evaluate('''node => {
+                    const range = document.createRange();
+                    range.selectNodeContents(node);
+                    const box = node.getBoundingClientRect();
+                    return [...range.getClientRects()].every(r => r.left >= box.left - 1 &&
+                        r.right <= Math.min(box.right + 1, innerWidth) && r.left >= 0) &&
+                        document.documentElement.scrollWidth === innerWidth;
+                }'''), 'The full carry label must fit the mobile company column')
+                page.locator('#tableCard').screenshot(
+                    path=str(out / 'carried-daily-one-mobile.png'), animations='disabled')
+                row.locator('.tc-n').click()
+                price = page.locator('#drawer.on .dw-price')
+                check(result, carry_label == price.locator('.provider-close-note').inner_text(),
+                      'The drawer must preserve the original completed close date')
+                evidence = page.locator('#drawer.on .market-evidence')
+                evidence.locator('summary').click()
+                regular = evidence.get_by_role('link', name='日线来源 ↗', exact=True)
+                check(result, regular.get_attribute('href') == 'https://finance.yahoo.com/quote/688498.SS/history/'
+                      and 'verified-release-carry' not in evidence.inner_text(),
+                      'The source link must use the original provider with readable provenance')
+                scan_dom(page, result, banned)
+            except Exception as error:
+                result['errors'].append(f'{type(error).__name__}: {error}')
+            finally:
+                context.close()
+
+            fixture = 'carried-daily-at-limit'
+            context, page, result = visit(f'{fixture}-ssr', js=False, fixture_name=fixture)
+            try:
+                kpi = page.locator('#kpis .kpi').filter(has_text='深度回调龙头')
+                check(result, '部分沿用' in kpi.inner_text(),
+                      'SSR must mark the drawdown summary when its inputs are carried')
+            except Exception as error:
+                result['errors'].append(f'{type(error).__name__}: {error}')
+            finally:
+                context.close()
+            context, page, result = visit(fixture)
+            try:
+                payload = json.loads((pages / fixture / 'DATA.json').read_text('utf-8'))
+                summary = payload['meta']['carriedDaily']
+                check(result, summary['count'] == summary['limit'] > 1,
+                      'The upper-bound fixture must match the calculated carry limit')
+                page.locator('#viewSeg button[data-v="table"]').click()
+                labels = page.locator('#tbl .provider-close-note')
+                check(result, labels.filter(has_text='本次未取得').count() == summary['limit'],
+                      'Every carried company at the limit must have a visible label')
+                check(result, labels.filter(has_text='数据源提前报收盘').count() == 1,
+                      'A separate provider close conflict must retain its own text')
+                check(result, '部分沿用' in page.locator('#leadSub').inner_text(),
+                      'The filtered company summary must identify the carry')
+                page.locator('#dataDetails summary').click()
+                check(result, f"日线部分沿用 · {summary['count']} 家（本次上限 {summary['limit']} 家）"
+                      in page.locator('#dataDetails').inner_text(),
+                      'Coverage details must show the carry count and limit')
+                page.locator('#dataDetails').screenshot(
+                    path=str(out / 'carried-daily-at-limit.png'), animations='disabled')
                 scan_dom(page, result, banned)
             except Exception as error:
                 result['errors'].append(f'{type(error).__name__}: {error}')

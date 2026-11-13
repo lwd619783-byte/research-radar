@@ -228,6 +228,8 @@ def coverage_matrix(D):
             if metric in ('price','marketCap','marketCapUSD','PE') and value is not None and (c.get('pricePhase') if metric=='price' else v.get('phase'))=='unknown':status='partial';reason='quote_phase_unknown'
             if metric=='marketCapUSD' and value is not None and (v.get('fx') or {}).get('estimated'):status='partial';reason='dated_fx_estimate'
             if c.get('stale') and value is not None and (metric in ('daily','r5','r20','r60','ytd','high52') or (metric=='price' and not c.get('priceObservedAt'))):status='partial';reason='cached_or_stale_daily'
+            if c.get('carried') and value is not None and metric in ('price','daily','r5','r20','r60','ytd','high52'):
+                status, reason = 'partial', 'carried_from_verified_release'
             rows.append({'kind':'company','symbol':c['sym'],'metric':metric,'status':status,'reason':reason,'date':c.get('priceAsOf') if metric=='price' else c['ld'] if metric in ('daily','r5','r20','r60','ytd','high52') else v.get('asOf'),'evidence':{'epsTrailingTwelveMonths':v.get('epsTrailingTwelveMonths')} if metric=='PE' else None,'source':c.get('priceSource') if metric=='price' else p['daily'].get('src') if metric in ('daily','r5','r20','r60','ytd','high52') else v.get('source')})
         rows.append({'kind':'company','symbol':c['sym'],'metric':'financial','status':'complete' if f['status']=='verified' else 'partial' if c['financialPartial'] else 'missing','reason':f['status'],'date':f.get('period_end'),'source':f.get('source_name')})
     for symbol in D['meta']['configuredIndices']:

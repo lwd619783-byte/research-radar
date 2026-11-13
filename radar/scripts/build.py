@@ -29,6 +29,7 @@ from zoneinfo import ZoneInfo
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import quotes  # noqa: E402
 import latest
+import daily_carry
 import market_calendar
 from schema import load_and_validate  # noqa: E402
 from integrity import ZONES, fresh_record, valid_bars, financial_status, release_blockers, number, observation_time, dated_fx, pe_status
@@ -170,7 +171,8 @@ def merge(fresh: dict, cache: dict) -> dict:
 
 
 # ---------------- 组装 DATA ----------------
-def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_policy='latest', calendar_policy=False) -> tuple[dict, list[str], list[str]]:
+def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_policy='latest', calendar_policy=False,
+             daily_baseline=None, daily_evidence=None, daily_transport=None) -> tuple[dict, list[str], list[str]]:
     cfg = data["config"]
     fx = {"USD": 1.0}
     fx_meta = {}
@@ -181,6 +183,23 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
     daily_snapshot, snapshot = (selectors.select_daily(data['companies'], mk['daily'], now,
                                 calendar_policy=calendar_policy, require_reviewed_close=calendar_policy)
                                 if selectors else select_daily(data['companies'], mk['daily'], now))
+    carry, carried_rows = {}, []
+    carry_limit = len(data['companies']) // 10
+    if selectors and calendar_policy and daily_baseline is not None:
+        manifest, baseline, proof = daily_baseline
+        baseline_rows = {row['sym']: row for row in baseline['companies']}
+        for company in data['companies']:
+            symbol = company['sym']
+            if symbol in daily_snapshot or symbol not in baseline_rows:
+                continue
+            reason = daily_carry.classify_missing(company, mk['daily'].get(symbol), (daily_evidence or {}).get(symbol),
+                                      (daily_transport or {}).get(symbol), now)
+            selected = daily_carry.select_carry(company, baseline_rows[symbol], proof['productionSHA'], manifest['runId'], reason, now)
+            if selected is not None:
+                carry[symbol] = selected
+        if len(carry) > carry_limit:
+            blockers.append('carried_daily_exceeds_limit')
+            carry.clear()
     for c in data["companies"]:
         s = c["sym"]
         original_daily = mk['daily'].get(s)
@@ -188,7 +207,12 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
         usable = (isinstance(d, dict) and d.get('schemaVersion') == 2 and d.get('priceBasis') == 'raw'
                   and valid_bars(d.get('bars')) and d.get('asOf') == d['bars'][-1][0])
         m = metrics(d['bars']) if usable else {}
-        if not usable:
+        carried = carry.get(s)
+        if carried:
+            m, d, marker = carried
+            market_dates.setdefault(c['mkt'], set()).add(m['ld'])
+            carried_rows.append({'symbol': s, **marker})
+        elif not usable:
             missing.append(c["name"])
             issues.append({'symbol': s, 'kind': 'daily', 'status': 'no_common_completed_observation'})
             if (isinstance(original_daily, dict) and observation_time('daily', original_daily) is not None
@@ -243,7 +267,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
             row['pricePhase'] = 'closed' if m else 'unknown'
             row['priceSource'] = (d or {}).get('src')
             row['marketTimezone'] = ZONES[c['mkt']]
-            row['priceSelection'] = latest.quote_after_completed_daily(q,d)
+            row['priceSelection'] = (dict(daily_carry.QUOTE_SELECTION) if carried
+                                     else latest.quote_after_completed_daily(q,d))
             if quotes.positive(q.get('regularMarketPrice')) and row['priceSelection']['useQuote']:
                 row.update(price=q['regularMarketPrice'], priceAsOf=quote_date,
                            priceObservedAt=dt.datetime.fromtimestamp(q['regularMarketTime'],dt.UTC).isoformat(),
@@ -253,6 +278,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
             if calendar_policy:
                 row['marketCalendar'] = market_calendar.annotate(s, m.get('ld') or (original_daily or {}).get('asOf'), now,
                     completed=bool(m and not m.get('stale')))
+                if carried:
+                    row['marketCalendar'].update(status='carried_daily', label=None)
         row["hi52"] = round(hi52, 3 if hi52 < 10 else 2) if hi52 else None
         status = financial_status(c.get('financial'), now.date(), c)
         row['provenance'] = {'daily': {k: (d or {}).get(k) for k in ('src', 'asOf', 'receivedAt', 'returnBasis', 'phase', 'timezone', 'snapshotSelection')},
@@ -269,6 +296,9 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
                                            'marketCapStatus': 'available' if mcap_usd is not None else 'missing_or_incompatible'},
                              'financial': {**c.get('financial', {}), 'status': status}}
         row['financialPartial'] = status == 'verified_partial'
+        if carried:
+            row['carried'] = marker
+            row['provenance']['daily']['carriedSource'] = d['carriedSource']
         if (d or {}).get('independentCloseProof') is not None:
             row['provenance']['daily']['independentCloseProof'] = d['independentCloseProof']
         if (d or {}).get('yahooMetaClose') is not None:
@@ -297,6 +327,11 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
         cos.append(row)
 
     all_dates = [c["ld"] for c in cos if c["ld"]]
+    if carried_rows:
+        dates = sorted(set(all_dates))
+        snapshot.update(selectedDate=dates[-1], dateRange=dates, selectedCompanies=len(all_dates),
+                        status='complete' if len(all_dates) == len(cos) else 'incomplete',
+                        metricAsOfByMarket={key: sorted(value) for key, value in market_dates.items()})
     asof = snapshot['selectedDate']
     for cur, record in mk['fx'].items():
         selected = dated_fx(record, cur, record.get('asOf') if selectors else asof, now)
@@ -371,6 +406,8 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
             requiredFX=sorted({c['cur'] for c in data['companies']}-{'USD'}))
         out['meta']['coverage']=latest.coverage_matrix(out)
         out['meta']['coverageComplete']=all(r['status'] in ('complete','not_applicable') for r in out['meta']['coverage'])
+        if carried_rows:
+            out['meta']['carriedDaily'] = {'companies': carried_rows, 'count': len(carried_rows), 'limit': carry_limit}
         if calendar_policy:
             out['meta']['marketCalendar'] = market_calendar.metadata([c['sym'] for c in data['companies']] + [x['symbol'] for x in cfg['indices']], now)
     from release_schedule import schedule_metadata

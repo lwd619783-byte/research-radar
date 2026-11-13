@@ -87,15 +87,14 @@ def _prepare(source, destination, now=None, env=None, baseline=None, *, purpose=
         raise ValueError('release_destination_exists')
     history = []
     if baseline is not None:
-        previous_manifest, previous_data = operations.verify_files(baseline)
-        proof = json.loads((Path(baseline)/'proof.json').read_text('utf-8'))
-        if (proof.get('state') != 'success' or proof.get('dataSHA256') != previous_manifest['dataSHA256']
-                or proof.get('sourceSHA') != previous_manifest['sourceSHA']):
-            raise ValueError('baseline_proof_mismatch')
-        operations.sha(proof.get('productionSHA'))
+        previous_manifest, previous_data, proof = operations.verified_baseline(baseline)
+        bundle.validate_carried_daily_baseline(D, dt.datetime.fromisoformat(receipt['fixedClock']),
+                                               previous_manifest, previous_data, proof)
         old_history = json.loads((Path(baseline)/'history.json').read_text('utf-8'))['days'] if previous_manifest['schemaVersion'] >= 2 else []
         previous_ops = json.loads((Path(baseline)/'public/version.json').read_text('utf-8')) if previous_manifest['schemaVersion'] >= 2 else {}
         history = daily_changes.history_with(daily_changes.project(previous_data, proof, previous_ops.get('changes', {}).get('today')), old_history)
+    elif 'carriedDaily' in D['meta']:
+        raise ValueError('carried_daily_baseline_mismatch')
     run_id = receipt['execution']['GITHUB_RUN_ID']
     info = {'schemaVersion': 1, 'state': 'current', 'sourceSHA': receipt['execution']['GITHUB_SHA'],
             'runId': run_id, 'dataSHA256': bundle.data_digest(D), 'generatedAt': D['meta']['generatedAt'],

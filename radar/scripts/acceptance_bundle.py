@@ -12,6 +12,7 @@ import time
 from zoneinfo import ZoneInfo
 
 import build
+import daily_carry
 from latest import PROVIDER_CLOSE_CONFLICT_METHOD
 import research_snapshot as snapshots
 import yahoo_meta_close
@@ -137,6 +138,7 @@ def validate_binding(D, receipt, clock):
     validate_close_proofs(D, receipt.get('independentCloseProofs'), execution, clock)
     validate_provider_close_conflicts(D)
     validate_yahoo_meta_closes(D, clock)
+    validate_carried_daily(D, clock)
 
 
 def _valid_close_conflict_day(value):
@@ -158,6 +160,143 @@ def _close_conflict_receipt_seconds(value):
     except (ValueError, OverflowError, OSError):
         return None
     return base + (float('0.' + fraction) if fraction else 0)
+
+
+def validate_carried_daily(data, clock):
+    """Bind carry markers, reviewed trading dates and coverage in published DATA."""
+    import market_calendar as calendar
+    from integrity import number
+
+    def fields(value):
+        return value if isinstance(value, dict) else {}
+
+    def fail():
+        raise BundleError('carried_daily_binding_mismatch')
+
+    def daily_for(row):
+        return fields(fields(row.get('provenance')).get('daily'))
+
+    source = daily_carry.SOURCE
+    method = daily_carry.CARRY_SELECTION_METHOD
+    reason = 'carried_from_verified_release'
+    marker_keys = {'date', 'carriedSince', 'baselineProductionSHA', 'baselineRunId', 'reason'}
+    rows = data.get('companies')
+    rows = [fields(row) for row in rows] if isinstance(rows, list) else []
+    meta = fields(data.get('meta'))
+    coverage = meta.get('coverage')
+    coverage = [fields(item) for item in coverage] if isinstance(coverage, list) else []
+    selected = []
+    for row in rows:
+        daily = daily_for(row)
+        if ('carried' in row or 'carriedSource' in daily or source in (row.get('priceSource'), daily.get('src'))
+                or fields(daily.get('snapshotSelection')).get('method') == method
+                or fields(row.get('marketCalendar')).get('status') == 'carried_daily'):
+            selected.append(row)
+    carry_coverage = [item for item in coverage if item.get('reason') == reason or item.get('source') == source]
+    covered_metrics = {'price': 'price', 'daily': 'ld', 'r5': 'r5', 'r20': 'r20', 'r60': 'r60', 'ytd': 'ytd', 'high52': 'hi52'}
+    limit = len(rows) // 10
+    if len(selected) > limit or isinstance(meta.get('blockers'), list) and 'carried_daily_exceeds_limit' in meta['blockers']:
+        raise BundleError('carried_daily_exceeds_limit')
+    if not selected and 'carriedDaily' not in meta and not carry_coverage:
+        return
+    summary = fields(meta.get('carriedDaily'))
+    snapshot = fields(meta.get('snapshot'))
+    if (not selected or not isinstance(clock, dt.datetime) or clock.utcoffset() is None
+            or set(summary) != {'companies', 'count', 'limit'} or type(summary['count']) is not int
+            or summary['count'] != len(selected) or type(summary['limit']) is not int or summary['limit'] != limit
+            or not isinstance(summary['companies'], list) or len(summary['companies']) != len(selected)
+            or snapshot.get('status') != 'complete'
+            or any(type(snapshot.get(key)) is not int or snapshot[key] != len(rows)
+                   for key in ('requiredCompanies', 'selectedCompanies'))):
+        fail()
+
+    markers = {}
+    carried_companies = {}
+    baseline = None
+    for row in selected:
+        symbol = row.get('sym')
+        daily = daily_for(row)
+        marker = fields(row.get('carried'))
+        annotation = fields(row.get('marketCalendar'))
+        selection = fields(daily.get('snapshotSelection'))
+        quote = fields(row.get('priceSelection'))
+        day, sha, run = (marker.get(key) for key in ('date', 'baselineProductionSHA', 'baselineRunId'))
+        if (not isinstance(symbol, str) or not symbol or sum(item.get('sym') == symbol for item in rows) != 1
+                or set(marker) != marker_keys or not _valid_close_conflict_day(day) or marker['carriedSince'] != day
+                or not isinstance(sha, str) or not re.fullmatch(r'[0-9a-f]{40}', sha)
+                or not isinstance(run, str) or not re.fullmatch(r'[1-9][0-9]*', run)
+                or marker['reason'] not in daily_carry.REASONS or daily.get('src') != source or row.get('priceSource') != source
+                or not isinstance(daily.get('carriedSource'), str) or not daily['carriedSource'] or daily['carriedSource'] == source
+                or daily.get('phase') != 'closed' or 'independentCloseProof' in daily or 'yahooMetaClose' in daily
+                or 'providerCloseConflict' in row or selection.get('method') != method or selection.get('sourcePhase') != 'closed'
+                or row.get('stale') is True or row.get('pricePhase') != 'closed'
+                or 'priceObservedAt' not in row or row['priceObservedAt'] is not None
+                or not number(row.get('price')) or row['price'] <= 0
+                or quote.get('useQuote') is not False or quote.get('reason') != 'carried_daily_quote_order_unproven'
+                or any(key not in quote or quote[key] is not None for key in ('completedBoundaryUTC', 'boundaryKind'))
+                or annotation.get('status') != 'carried_daily'
+                or any(value != day for value in (row.get('ld'), row.get('metricAsOf'), row.get('priceAsOf'), daily.get('asOf'),
+                    selection.get('selectedDate'), selection.get('sourceAsOf'), annotation.get('quoteDate')))):
+            fail()
+        if baseline is not None and baseline != (sha, run):
+            fail()
+        baseline = sha, run
+        reviewed = daily_carry.carry_calendar(symbol, clock)
+        if not reviewed:
+            fail()
+        context, spec = reviewed
+        expected = context['expectedCompletedDate']
+        received = _close_conflict_receipt_seconds(daily.get('receivedAt'))
+        if (not expected or context['confidence'] not in daily_carry.CONFIRMED_CALENDARS
+                or any(annotation.get(key) != context[key] for key in ('exchange', 'timezone', 'confidence', 'expectedCompletedDate'))
+                or daily.get('timezone') != context['timezone'] or received is None or received > clock.timestamp()
+                or day not in (expected, daily_carry.previous_completed_date(symbol, clock))):
+            fail()
+        close = calendar.session_close(spec, dt.date.fromisoformat(day))
+        if received < close.timestamp():
+            fail()
+        for metric in covered_metrics:
+            metric_coverage = [item for item in coverage if (item.get('kind'), item.get('symbol'), item.get('metric')) == ('company', symbol, metric)]
+            if len(metric_coverage) != 1 or metric_coverage[0] not in carry_coverage:
+                fail()
+        markers[symbol] = marker
+        carried_companies[symbol] = row
+    for item in carry_coverage:
+        symbol = item.get('symbol')
+        metric = item.get('metric')
+        if (item.get('kind') != 'company' or not isinstance(symbol, str) or symbol not in markers
+                or not isinstance(metric, str) or metric not in covered_metrics or item.get('source') != source
+                or item.get('date') != markers[symbol]['date']):
+            fail()
+        value = carried_companies[symbol].get(covered_metrics[metric])
+        expected_coverage = ('partial', reason) if value is not None else ('missing', 'missing_or_incompatible')
+        if (item.get('status'), item.get('reason')) != expected_coverage:
+            fail()
+    for item in summary['companies']:
+        item = fields(item)
+        symbol = item.get('symbol')
+        if (set(item) != marker_keys | {'symbol'} or not isinstance(symbol, str) or symbol not in markers
+                or any(item[key] != markers[symbol][key] for key in marker_keys)):
+            fail()
+        del markers[symbol]
+
+
+def validate_carried_daily_baseline(data, clock, manifest, baseline, proof):
+    if 'carriedDaily' not in data['meta']:
+        return
+    previous_rows = {row['sym']: row for row in baseline['companies']}
+    for row in data['companies']:
+        if 'carried' not in row:
+            continue
+        marker = row['carried']
+        verified = daily_carry.select_carry(row, previous_rows.get(row['sym']), proof['productionSHA'],
+                                           manifest['runId'], marker['reason'], clock)
+        if verified is None:
+            raise BundleError('carried_daily_baseline_mismatch')
+        metrics, provenance, expected_marker = verified
+        if (expected_marker != marker or provenance != row['provenance']['daily']
+                or any(row.get(key) != value for key, value in metrics.items())):
+            raise BundleError('carried_daily_baseline_mismatch')
 
 
 def validate_yahoo_meta_closes(data, clock):
