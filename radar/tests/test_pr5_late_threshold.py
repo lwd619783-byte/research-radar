@@ -3,10 +3,10 @@ import copy
 import datetime as dt
 import json
 from pathlib import Path
-import shutil
 import subprocess
 import sys
 import tempfile
+import tomllib
 import unittest
 from unittest.mock import patch
 
@@ -15,14 +15,14 @@ sys.path.insert(0, str(ROOT / 'radar/scripts'))
 import build
 import release_schedule as schedule
 import render_v3
-from schema import load_and_validate
+from market_config import validate_market_config
 
 
 class LateThresholdTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.clock = dt.datetime.fromisoformat('2026-10-23T18:15:00+08:00')
-        cls.loaded, report = load_and_validate(ROOT / 'radar', ROOT, cls.clock.date())
+        cls.loaded, report = validate_market_config(build.research_config(), cls.clock.date())
         assert not report.errors, report.errors
         cls.crons = cls.loaded['config']['schedule']['cron_utc']
 
@@ -118,8 +118,6 @@ class LateThresholdTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             radar = Path(directory) / 'radar'
             (radar / 'data').mkdir(parents=True)
-            for name in ('industries.toml', 'chokepoints.toml', 'companies.toml'):
-                shutil.copyfile(ROOT / 'radar/data' / name, radar / 'data' / name)
             for replacement in ('', 'late_after_minutes = 181', 'late_after_minutes = true',
                                 'late_after_minutes = "180"', 'late_after_minutes = -1',
                                 'late_after_minutes = 180.0'):
@@ -127,7 +125,8 @@ class LateThresholdTests(unittest.TestCase):
                     (radar / 'data/config.toml').write_text(
                         original.replace('late_after_minutes = 180', replacement), encoding='utf-8')
                     with patch.object(schedule, 'configured_late_after_minutes', side_effect=AssertionError('unexpected fallback')):
-                        _, report = load_and_validate(radar, ROOT, self.clock.date())
+                        _, report = validate_market_config(tomllib.loads((radar / 'data/config.toml').read_text('utf-8')),
+                                                           self.clock.date())
                     self.assertTrue(any('config.toml [schedule]' in error for error in report.errors), report.errors)
 
 

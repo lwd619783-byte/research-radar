@@ -1,29 +1,27 @@
 # 投研雷达 · Alpha Radar
 
-一屏看清：最值得追踪的行业 → 关键卡点 → 细分龙头 → 近期走势与财务。单文件静态页面，部署在 Vercel。
+投研雷达把行业研判、产业卡点、公司行情和财报放在同一页。GitHub Actions 构建静态站点，Vercel 在登录保护下提供访问。
 
-```
-radar/
-├─ data/            ← 唯一需要日常维护的地方（TOML）
-│  ├─ config.toml       站点配置、本周结论、跑马灯指数
-│  ├─ industries.toml   行业雷达（四维评分）
-│  ├─ chokepoints.toml  关键卡点
-│  └─ companies.toml    细分龙头（财务、快讯、财报日）
-├─ site/            ← 前端模板（index.html / style.css / app.js），一般不改
-├─ scripts/         ← build.py（入口）、schema.py（校验）、quotes.py（行情）
-└─ docs/
-   ├─ HANDOFF.md        维护手册（给维护者 / ChatGPT）
-   └─ DEPLOY.md         首次部署步骤（给仓库所有者）
-```
+## 维护内容和配置
 
-常用命令（仓库根目录，Python ≥ 3.11，无需安装依赖）：
+- 行业、卡点、公司、财报记录、每日要点和每周主线在 Notion「投研雷达｜数据后台」维护。字段、格式和示例见 [Notion 数据契约](../docs/NOTION-CONTRACT.md)。
+- `data/config.toml` 管理站点、指数、比值、调度及 Notion 读取配置，`data/notion_schema.json` 定义六表契约，`data/market_calendar.json` 定义各交易所会期。
+- `scripts/` 包含采集、归一化、构建和发布校验，`site/` 是静态前端，`tests/` 是离线回归测试。
+
+## 离线检查
+
+在仓库根目录运行。生产 CI 使用 Python 3.12，部分回归测试需要 Node.js。
 
 ```bash
-python radar/scripts/build.py --check     # 只校验数据（改完 TOML 先跑）
-python radar/scripts/build.py             # 抓行情并生成 radar/dist/investment-radar/index.html
-python radar/scripts/build.py --offline   # 不联网，用上次缓存的行情
+python -B radar/scripts/build.py --check
+python -B radar/scripts/acceptance_probe.py --preflight
+python -B radar/tools/build_visual_fixtures.py --out work/radar-visual-pages
 ```
 
-自动化：`.github/workflows/radar-deploy.yml` 在交易日北京时间 07:05 / 11:40 / 16:20 刷新行情并发布；`radar-preview.yml` 为 PR 生成预览地址。
+`--check` 校验配置和契约，`--preflight` 还运行离线回归。视觉夹具通过 FakeTransport 生成，产物仅用于本地审阅。PR 的视觉 CI 生成 Chromium 截图和检查报告，真实 Notion 只读演练另用独立入口。入口和产物说明见 [生产运维手册](../docs/PRODUCTION.md)。
+
+## 生产更新
+
+北京时间工作日 08:45、12:15、18:15 和周一 06:50 触发生产流程。GitHub 内置计划与外部时钟共用时段准入和去重规则。计划、排队、发布和回滚的操作步骤见 [生产运维手册](../docs/PRODUCTION.md) 与 [外部时钟触发](docs/EXTERNAL-SCHEDULE.md)。
 
 本页仅用于研究跟踪，不构成投资建议。

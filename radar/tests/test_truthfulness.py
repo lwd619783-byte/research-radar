@@ -115,7 +115,8 @@ class ActualFinancialContractTests(unittest.TestCase):
         root=Path(__file__).resolve().parents[2]
         pack=json.loads((root/'audit/truthfulness-2026-10-18/financial-candidates-received.json').read_text())
         self.assertEqual(len({c['id'] for c in pack['candidates']}),40)
-        data,_=build.load_and_validate(build.RADAR,root,dt.date(2026,10,18))
+        from historical_research import historical_data
+        data,_=historical_data(dt.date(2026,10,18))
         companies={c['id']:c for c in data['companies']}
         for c in pack['candidates']:
             actual=companies[c['id']];f=actual['financial'];given=c['fin_schema_compatible_candidate']

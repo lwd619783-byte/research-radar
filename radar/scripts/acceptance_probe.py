@@ -563,8 +563,15 @@ def offline_failure_summary(output, count, allowed_ids):
 
 
 def preflight():
+    from research_snapshot import ResearchAbort
+
     clock = dt.datetime.now(build.BJ)
-    data,report=build.load_and_validate(build.RADAR,ROOT,clock.date(), fixed_clock=clock)
+    try:
+        config = build.research_config()
+        build.load_notion_contract(config)
+    except (OSError, ValueError, ResearchAbort) as error:
+        raise StopProbe('schema_errors') from error
+    _,report=build.validate_market_config(config, clock.date())
     if report.errors: raise StopProbe('schema_errors')
     proc=subprocess.run([sys.executable,'-B','-m','unittest','discover','-s','radar/tests','-v'],cwd=ROOT,capture_output=True)
     output=(proc.stdout+proc.stderr).decode('utf-8','replace')
@@ -574,6 +581,24 @@ def preflight():
         print(json.dumps(offline_failure_summary(output, count, offline_test_ids())), file=sys.stderr)
         raise StopProbe('offline_tests_failed')
     return {'tests':count,'schemaWarnings':len(report.warnings),'schemaErrors':len(report.errors)}
+
+
+def diagnostic_research(config):
+    """Use the checked-in Notion sample for a probe without Notion credentials."""
+    import tempfile
+
+    sys.path.append(str(ROOT / 'radar/tests'))
+    try:
+        from notion_fixtures import FakeTransport, FixtureSet
+
+        with tempfile.TemporaryDirectory(prefix='radar-interface-') as directory:
+            fixture = FixtureSet(Path(directory))
+            transport = FakeTransport(fixture)
+            return build.load_research(
+                transport=transport, token=fixture.env['NOTION_TOKEN'],
+                fixed_clock=fixture.clock, config=config, sleep=transport.sleep, pace=transport.pace)
+    finally:
+        sys.path.pop()
 
 
 def main():
@@ -593,20 +618,44 @@ def main():
     if os.environ.get('GITHUB_ACTIONS')!='true' or os.environ.get('GITHUB_RUN_ATTEMPT')!='1':
         raise StopProbe('github_first_attempt_only')
     clock = dt.datetime.now(build.BJ)
-    data,rep=build.load_and_validate(build.RADAR,ROOT,clock.date(), fixed_clock=clock)
+    config = build.research_config()
+    data,rep=build.validate_market_config(config, clock.date())
     if rep.errors: raise StopProbe('schema_errors')
+    research, fetched = diagnostic_research(config)
+    data.update(industries=research['industries'], chokepoints=research['chokepoints'], companies=research['companies'])
     receipt={'schemaVersion':1,'purpose':'interface-acceptance-not-publication','startedAt':utc(),
              'execution':{k:os.environ.get(k) for k in ('GITHUB_SHA','GITHUB_RUN_ID','GITHUB_RUN_ATTEMPT','RUNNER_OS','RUNNER_ARCH','ImageOS','ImageVersion')},
              'python':platform.python_version(),'kernel':platform.release(),
              'limits':{'requests':MAX_REQUESTS,'timeoutSeconds':TIMEOUT,'deadlineSeconds':DEADLINE,'attemptsPerGet':2,'retryOnly429':True,'maxRetryAfterSeconds':10},
-             'schemaWarnings':len(rep.warnings),'fallbackPolicy':'separate-source-only; query2 not attempted; access denials stop corresponding lane'}
+             'schemaWarnings':len(rep.warnings),'researchInput':'notion-fixture',
+             'fallbackPolicy':'separate-source-only; query2 not attempted; access denials stop corresponding lane'}
     budget=Budget()
     snapshot = {}
     rows,summary,session,gates=collect(data,budget,snapshot_sink=snapshot)
+    fixed_clock = snapshot['clock']
+    research, _ = build.load_research(transport=None, token=None, fixed_clock=fixed_clock,
+                                      config=config, fetch=fetched)
+    archived = snapshot['data']
+    access_blocked = {(item['kind'], item['symbol'], item.get('metric'))
+                      for item in archived['meta']['coverage'] if item['status'] == 'access_blocked'}
+    archived.update(build.apply_research(archived, research, fixed_clock, config))
+    meta = archived['meta']
+    # Diagnostic fixture research cannot provide a production last-good snapshot.
+    del meta['notion']
+    meta['diagnosticResearchSource'] = 'notion-fixture'
+    meta['reviewPreview'] = True
+    for item in meta['coverage']:
+        key = item['kind'], item['symbol'], item.get('metric')
+        if key in access_blocked and item['status'] == 'missing':
+            item.update(status='access_blocked', reason='explicit_source_access_refusal')
+    evidence = [(company['provenance'].get('financial') or {}).get('evidence') for company in archived['companies']]
+    gates.update(blockers=build.release_blockers(archived), dataSHA256=bundle.data_digest(archived),
+                 coverage=meta['coverage'], financialRequired=len(evidence),
+                 financialVerified=evidence.count('source'), financialPartial=evidence.count('partial'))
     receipt.update(results=rows,summary=summary,quoteSession=session,publication=gates,
                    requestsMade=budget.count,deniedPaths=sorted(budget.denied),finishedAt=utc(),
-                   fixedClock=snapshot['clock'].isoformat())
-    saved = bundle.write_bundle(args.out.parent, snapshot['data'], receipt, snapshot['clock'])
+                   fixedClock=fixed_clock.isoformat())
+    saved = bundle.write_bundle(args.out.parent, archived, receipt, fixed_clock)
     print(json.dumps({'archive':saved,'summary':summary,
                       'publicationBlocked':bool(gates['blockers']),'publicationAuthorized':False,
                       'requestsMade':budget.count}))

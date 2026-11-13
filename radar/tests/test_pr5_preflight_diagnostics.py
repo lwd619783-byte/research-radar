@@ -87,7 +87,7 @@ class PreflightDiagnosticsTests(unittest.TestCase):
             process = SimpleNamespace(returncode=code, stdout=b'', stderr=output)
             log = io.StringIO()
             with self.subTest(code=code, count=count), \
-                    patch.object(probe.build, 'load_and_validate', return_value=({}, report)), \
+                    patch.object(probe.build, 'validate_market_config', return_value=({}, report)), \
                     patch.object(probe.subprocess, 'run', return_value=process), \
                     patch.object(probe, 'offline_test_ids', return_value={identifier}) as discover, \
                     contextlib.redirect_stderr(log):
@@ -101,7 +101,7 @@ class PreflightDiagnosticsTests(unittest.TestCase):
     def test_successful_preflight_never_discovers_diagnostics(self):
         report = SimpleNamespace(errors=[], warnings=[])
         process = SimpleNamespace(returncode=0, stdout=b'', stderr=b'Ran 60 tests\nOK\n')
-        with patch.object(probe.build, 'load_and_validate', return_value=({}, report)), \
+        with patch.object(probe.build, 'validate_market_config', return_value=({}, report)), \
                 patch.object(probe.subprocess, 'run', return_value=process), \
                 patch.object(probe, 'offline_test_ids', side_effect=AssertionError('unexpected discovery')) as discover:
             self.assertEqual(probe.preflight(), {'tests': 60, 'schemaWarnings': 0, 'schemaErrors': 0})
