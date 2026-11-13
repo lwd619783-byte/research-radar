@@ -338,6 +338,9 @@ def publish(root):
     if recovery and (manifest['dataSHA256'] != current['dataSHA256'] or
                      manifest.get('fixedClock') != current.get('fixedClock')):
         raise ValueError('recovery_baseline_is_no_longer_current')
+    if not recovery and 'carriedDaily' in data['meta']:
+        current_sha = sha(command(['git', 'rev-parse', 'HEAD'], work).decode().strip())
+        validate_current_carry_baseline(data, manifest, current, current_data, current_sha)
     names = ['public/index.html', 'public/robots.txt', 'public/version.json', 'release.json',
              'history.json', 'vercel.json', 'verify-release.cjs']
     if manifest['schemaVersion'] == 3:
@@ -365,6 +368,12 @@ def publish(root):
     commit = command(['git', 'rev-parse', 'HEAD'], work).decode().strip()
     command(['git', 'push', 'origin', 'HEAD:refs/heads/production'], work)
     return sha(commit)
+
+
+def validate_current_carry_baseline(data, manifest, current, current_data, current_sha):
+    """Prevent a fresh output clock from hiding an older carry baseline."""
+    bundle.validate_carried_daily_baseline(data, dt.datetime.fromisoformat(manifest['fixedClock']),
+                                          current, current_data, {'productionSHA': current_sha})
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):

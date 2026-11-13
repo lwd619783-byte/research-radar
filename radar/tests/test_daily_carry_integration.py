@@ -11,7 +11,7 @@ import build
 import daily_carry
 import market_calendar
 from production_collect import step_summary
-from release_operations import prevent_publication_regression
+from release_operations import prevent_publication_regression, validate_current_carry_baseline
 from test_daily_carry import KOREA, KOREA_CLOCK, PARIS, SHA, baseline, korea_chart, read_chart
 from test_integrity import dataset
 from test_pr5_calendar_release import synthetic_market
@@ -111,5 +111,8 @@ class DailyCarryIntegrationTests(unittest.TestCase):
         candidate = {'fixedClock': now.isoformat(), 'dataSHA256': bundle.data_digest(output)}
         current = {'fixedClock': previous.isoformat(), 'dataSHA256': bundle.data_digest(prior[1])}
         prevent_publication_regression(candidate, output, current, prior[1])
+        validate_current_carry_baseline(output, candidate, prior[0], prior[1], SHA)
+        with self.assertRaisesRegex(bundle.BundleError, 'carried_daily_baseline_mismatch'):
+            validate_current_carry_baseline(output, candidate, prior[0], prior[1], '2' * 40)
         with self.assertRaisesRegex(ValueError, 'publication_older_than_production'):
             prevent_publication_regression(current, prior[1], candidate, output)
