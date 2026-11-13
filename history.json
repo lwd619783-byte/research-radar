@@ -32700,14 +32700,14 @@
       ]
     },
     {
-      "generatedAt": "2026-11-13T14:07+08:00",
+      "generatedAt": "2026-11-13T14:44+08:00",
       "proof": {
         "state": "success",
-        "productionSHA": "f56f2d100449ef181a47ebc31174ec70089fc31e",
-        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/J3Nx2gUdrEoHdqiaxkoLCjQzimwZ",
-        "reportedAt": "2026-11-13T06:07:37Z",
-        "sourceSHA": "8203cd59d5e87d3650b1fe04d2c936d06b4e6916",
-        "dataSHA256": "9bb3548bbd6064d7a0cbec3984d1c519b0fdf90538c6ab5ee2cfb67b283f7436"
+        "productionSHA": "b5e33f55d4919849b4715a0c3f121dac742894c7",
+        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/2T73pi7BQg9nVRSq6vM1kGJp4psv",
+        "reportedAt": "2026-11-13T06:44:14Z",
+        "sourceSHA": "ef223eeb0d63b1db951264c15bad55398cee5876",
+        "dataSHA256": "04ae1978739a9eb62fe6c36e4d42447682d07b0caf291a818a924efae83ab4ea"
       },
       "companies": [
         {
@@ -32996,11 +32996,11 @@
             "timezone": "Asia/Seoul",
             "time_note": "10/28已披露Q3初步结果；下一期日期待官方确认"
           },
-          "close": 1254000,
-          "date": "2026-11-12",
+          "close": 1216000,
+          "date": "2026-11-13",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.01801,
+          "r1d": -0.0303,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33354,11 +33354,11 @@
             "timezone": "Asia/Tokyo",
             "time_note": "11/5已披露FY2027Q2；下一期发布日期待定。"
           },
-          "close": 2591,
-          "date": "2026-11-12",
+          "close": 2658,
+          "date": "2026-11-13",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.0753,
+          "r1d": 0.02586,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -35015,13 +35015,13 @@
           "kind": "company",
           "symbol": "000660.KS",
           "metric": "marketCap",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "000660.KS",
           "metric": "marketCapUSD",
-          "status": "missing"
+          "status": "partial"
         },
         {
           "kind": "company",
