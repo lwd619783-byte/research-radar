@@ -96,7 +96,7 @@
           "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
           "with": {
             "name": "radar-interface-acceptance-${{ github.run_id }}",
-            "path": "${{ runner.temp }}/radar-interface-acceptance/DATA.json\n${{ runner.temp }}/radar-interface-acceptance/index.html\n${{ runner.temp }}/radar-interface-acceptance/receipt.json\n${{ runner.temp }}/radar-interface-acceptance/manifest.json\n${{ runner.temp }}/radar-interface-acceptance/research-snapshot.json",
+            "path": "${{ runner.temp }}/radar-interface-acceptance/DATA.json\n${{ runner.temp }}/radar-interface-acceptance/index.html\n${{ runner.temp }}/radar-interface-acceptance/receipt.json\n${{ runner.temp }}/radar-interface-acceptance/manifest.json",
             "retention-days": 7,
             "if-no-files-found": "error",
             "compression-level": 9,

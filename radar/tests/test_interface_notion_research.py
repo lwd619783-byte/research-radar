@@ -47,19 +47,20 @@ class InterfaceNotionResearchTests(unittest.TestCase):
             verified = probe.bundle.verify_bundle(out)
             network.assert_not_called()
 
-            self.assertIn('research-snapshot.json', verified['files'])
+            self.assertEqual(set(verified['files']), set(probe.bundle.FILES))
             for path in out.iterdir():
                 self.assertNotIn(TEST_TOKEN.encode(), path.read_bytes())
             data = json.loads((out / 'DATA.json').read_bytes())
             receipt = json.loads((out / 'receipt.json').read_bytes())
             manifest = json.loads((out / 'manifest.json').read_bytes())
-            snapshot = json.loads((out / 'research-snapshot.json').read_bytes())
-            self.assertEqual(manifest['schemaVersion'], 2)
+            self.assertEqual(manifest['schemaVersion'], 1)
+            self.assertEqual(manifest['dataClassification'],
+                             'SAME-EXECUTION MARKET DIAGNOSTIC WITH FIXTURE RESEARCH — NOT PUBLICATION')
             self.assertFalse(manifest['publicationAuthorized'])
             self.assertTrue(data['meta']['reviewPreview'])
-            self.assertEqual(data['meta']['notion']['source'], 'notion')
+            self.assertNotIn('notion', data['meta'])
+            self.assertEqual(data['meta']['diagnosticResearchSource'], 'notion-fixture')
             self.assertEqual(receipt['researchInput'], 'notion-fixture')
-            self.assertEqual(snapshot['builtAt'], clock.isoformat())
             self.assertEqual(receipt['fixedClock'], clock.isoformat())
             self.assertEqual(receipt['requestsMade'], 0)
             gates = receipt['publication']

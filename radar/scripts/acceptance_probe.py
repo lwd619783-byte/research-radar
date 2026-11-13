@@ -640,6 +640,9 @@ def main():
                       for item in archived['meta']['coverage'] if item['status'] == 'access_blocked'}
     archived.update(build.apply_research(archived, research, fixed_clock, config))
     meta = archived['meta']
+    # Diagnostic fixture research cannot provide a production last-good snapshot.
+    del meta['notion']
+    meta['diagnosticResearchSource'] = 'notion-fixture'
     meta['reviewPreview'] = True
     for item in meta['coverage']:
         key = item['kind'], item['symbol'], item.get('metric')
@@ -648,12 +651,11 @@ def main():
     evidence = [(company['provenance'].get('financial') or {}).get('evidence') for company in archived['companies']]
     gates.update(blockers=build.release_blockers(archived), dataSHA256=bundle.data_digest(archived),
                  coverage=meta['coverage'], financialRequired=len(evidence),
-                 financialVerified=evidence.count('source'), financialPartial=evidence.count('partial'),
-                 researchSnapshotSHA256=meta['notion']['snapshotSHA256'])
+                 financialVerified=evidence.count('source'), financialPartial=evidence.count('partial'))
     receipt.update(results=rows,summary=summary,quoteSession=session,publication=gates,
                    requestsMade=budget.count,deniedPaths=sorted(budget.denied),finishedAt=utc(),
                    fixedClock=fixed_clock.isoformat())
-    saved = bundle.write_bundle(args.out.parent, archived, receipt, fixed_clock, research_snapshot=research['snapshot'])
+    saved = bundle.write_bundle(args.out.parent, archived, receipt, fixed_clock)
     print(json.dumps({'archive':saved,'summary':summary,
                       'publicationBlocked':bool(gates['blockers']),'publicationAuthorized':False,
                       'requestsMade':budget.count}))
