@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'radar' / 'scripts'))
 import build
 import quotes
+from historical_research import historical_data
 from integrity import fresh_record, financial_status, release_blockers
 
 NOW = dt.datetime(2026, 10, 18, 10, tzinfo=build.BJ)
@@ -57,7 +58,7 @@ def months(count=121, current=True):
 
 
 def dataset():
-    data, report = build.load_and_validate(build.RADAR, ROOT, NOW.date())
+    data, report = historical_data(NOW.date())
     assert not report.errors
     mk = {k: {} for k in ('daily', 'quote', 'index', 'fx', 'ratio')}
     return data, mk
@@ -305,7 +306,7 @@ class CacheAndContractTests(unittest.TestCase):
 
     def test_force_does_not_bypass_missing_data_gate(self):
         with tempfile.TemporaryDirectory() as td:
-            proc = subprocess.run([sys.executable, str(ROOT/'radar/scripts/build.py'), '--source', 'toml', '--offline', '--force',
+            proc = subprocess.run([sys.executable, str(ROOT/'radar/tests/historical_research.py'), '--source', 'toml', '--offline', '--force',
                                    '--cache', str(Path(td)/'none.json'), '--out', str(Path(td)/'out'),
                                    '--audit-json', str(Path(td)/'report.json')], capture_output=True)
             self.assertEqual(proc.returncode, 2)

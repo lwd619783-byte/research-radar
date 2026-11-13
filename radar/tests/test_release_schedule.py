@@ -10,7 +10,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'radar/scripts'))
 from release_schedule import schedule_metadata
-from schema import load_and_validate
+from market_config import validate_market_config
 
 
 class ScheduleTests(unittest.TestCase):
@@ -25,7 +25,7 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual(self.config['build']['source'], 'notion')
 
     def test_toml_loader_preserves_schedule_for_build(self):
-        data, report = load_and_validate(ROOT / 'radar', ROOT, dt.date(2026, 10, 21))
+        data, report = validate_market_config(self.config, dt.date(2026, 10, 21))
         self.assertEqual(report.errors, [])
         self.assertEqual(data['config']['schedule'], self.config['schedule'])
         self.assertEqual(schedule_metadata(data['config'], '2026-10-23T18:15:00+08:00'), {

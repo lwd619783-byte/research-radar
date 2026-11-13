@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""投研雷达构建脚本：读取 radar/data/*.toml → 抓行情 → 生成单文件 index.html。
+"""投研雷达构建脚本：读取 Notion 研究与行情，生成本地预览。
 
 用法（在仓库根目录运行）：
-  python radar/scripts/build.py --check      只校验数据，不联网（改完 toml 先跑这个）
+  python radar/scripts/build.py --check      校验运行配置和 Notion 契约，不联网
   python radar/scripts/build.py              抓行情并生成 radar/dist/investment-radar/
   python radar/scripts/build.py --offline    不联网，只用缓存行情（调样式时用）
-  python radar/scripts/build.py --force      即使行情没变也标记为需要部署
 
 退出码：0 成功；1 数据校验失败；2 行情缺失过多（为避免发布残缺页面而中止）。
 """
@@ -31,7 +30,7 @@ import quotes  # noqa: E402
 import latest
 import daily_carry
 import market_calendar
-from schema import load_and_validate  # noqa: E402
+from market_config import validate_market_config  # noqa: E402
 from integrity import ZONES, fresh_record, valid_bars, financial_status, release_blockers, number, observation_time, dated_fx, pe_status
 from snapshot import select_daily, select_quote, select_index
 
@@ -385,7 +384,7 @@ def assemble(data: dict, mk: dict, fresh: dict, now: dt.datetime, *, snapshot_po
     if ratio is None:
         issues.append({'kind': 'ratio', 'status': 'unavailable_or_short_history'})
 
-    wk = cfg["weekly"] or {}
+    wk = cfg.get("weekly") or {}
     meta = {
         "asOf": asof, "asOfLabel": asof_label(asof, now) if asof else None, "today": now.date().isoformat(),
         "generatedAt": now.isoformat(timespec="minutes"), "repoUrl": cfg["repo_url"], "title": cfg["title"],
@@ -465,21 +464,6 @@ def fingerprint(D: dict) -> str:
     for f in sorted((RADAR / "site").glob("*")) + [Path(__file__)]:
         blob += hashlib.sha256(f.read_bytes()).hexdigest()
     return hashlib.sha256(blob.encode()).hexdigest()[:16]
-
-
-def gh_out(**kv) -> None:
-    p = os.environ.get("GITHUB_OUTPUT")
-    if p:
-        with open(p, "a", encoding="utf-8") as f:
-            for k, v in kv.items():
-                f.write(f"{k}={v}\n")
-
-
-def gh_summary(text: str) -> None:
-    p = os.environ.get("GITHUB_STEP_SUMMARY")
-    if p:
-        with open(p, "a", encoding="utf-8") as f:
-            f.write(text + "\n")
 
 
 def research_config():
@@ -653,17 +637,17 @@ def notion_main(args, config):
     from research_snapshot import ResearchAbort, load_last_good
     from research_view import CODE_TEXT
     try:
+        now = dt.datetime.fromisoformat(args.fixed_clock) if args.fixed_clock else dt.datetime.now(BJ)
+        cfg_data, report = validate_market_config(config, now.date())
+        if report.errors:
+            raise ResearchAbort('contract_invalid')
         if args.check:
             load_notion_contract(config)
             return 0
-        now = dt.datetime.fromisoformat(args.fixed_clock) if args.fixed_clock else dt.datetime.now(BJ)
         previous = load_last_good(Path(args.research_snapshot)) if args.research_snapshot else None
         fetch = json.loads(Path(args.notion_fetch).read_text(encoding='utf-8')) if args.notion_fetch else None
         research, fetch = load_research(transport=None, token=None if fetch or args.offline else os.environ.get('NOTION_TOKEN'),
                                        fixed_clock=now, last_good=previous, config=config, fetch=fetch)
-        cfg_data, report = load_and_validate(RADAR, REPO, now.date(), fixed_clock=now)
-        if report.errors:
-            raise ResearchAbort('contract_invalid')
         cfg_data['companies'] = research['companies']
         cache_path = Path(args.cache)
         cache = json.loads(cache_path.read_text(encoding='utf-8')) if cache_path.exists() else {}
@@ -703,95 +687,15 @@ def notion_main(args, config):
 def main() -> int:
     config = research_config()
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('--source', choices=('notion', 'toml'), default=config.get('build', {}).get('source', 'notion'))
+    ap.add_argument('--source', choices=('notion',), default='notion')
     ap.add_argument('--fixed-clock', help='ISO timestamp for deterministic offline builds')
     ap.add_argument('--research-snapshot', help='Last successfully published research snapshot')
     ap.add_argument('--notion-fetch', help='Sanitized collected Notion input; no credential needed')
     ap.add_argument("--check", action="store_true", help="只校验数据，不联网")
     ap.add_argument("--offline", action="store_true", help="不联网，只用缓存")
-    ap.add_argument("--force", action="store_true", help="无论行情是否变化都标记 changed=true")
     ap.add_argument("--out", default=str(RADAR / "dist" / "investment-radar"))
     ap.add_argument("--cache", default=str(RADAR / ".cache" / "quotes.json"))
-    ap.add_argument('--audit-json', default=str(REPO / 'audit' / 'runtime' / 'build-report.json'))
-    a = ap.parse_args()
-
-    if a.source == 'notion':
-        return notion_main(a, config)
-
-    now = dt.datetime.now(BJ)
-    data, rep = load_and_validate(RADAR, REPO, now.date(), fixed_clock=now)
-    for w in rep.warnings:
-        log(w)
-    if rep.errors:
-        for e in rep.errors:
-            log(e)
-        log(f"\n校验失败：{len(rep.errors)} 个错误。请按提示修改 radar/data/*.toml。")
-        gh_summary("### ❌ 数据校验失败\n" + "\n".join(f"- {e}" for e in rep.errors))
-        return 1
-    log(f"校验通过：{len(data['industries'])} 个行业 · {len(data['chokepoints'])} 个卡点 · "
-        f"{len(data['companies'])} 家公司 · {len(rep.warnings)} 条提醒")
-    if a.check:
-        return 0
-
-    cache_p = Path(a.cache)
-    cache = json.loads(cache_p.read_text("utf-8")) if cache_p.exists() else {}
-    fresh, notes = fetch_all(data, cache, a.offline)
-    for n in notes:
-        log("·", n)
-    mk = merge(fresh, cache)
-    now = dt.datetime.now(BJ)  # receipts were collected after the initial validation time
-    D, stale, missing = assemble(data, mk, fresh, now)
-    blockers = release_blockers(D)
-    report_path = Path(a.audit_json)
-    report_path.parent.mkdir(parents=True, exist_ok=True)
-    report_path.write_text(json.dumps({'generatedAt': now.isoformat(), 'blockers': blockers,
-                                       'data': D, 'notes': notes}, ensure_ascii=False, allow_nan=False, indent=2), encoding='utf-8')
-    if not a.offline:
-        cache_p.parent.mkdir(parents=True, exist_ok=True)
-        tmp = cache_p.with_suffix('.tmp')
-        tmp.write_text(json.dumps({**mk, 'fingerprint': cache.get('fingerprint'), 'savedAt': now.isoformat()},
-                                  ensure_ascii=False, allow_nan=False), encoding='utf-8')
-        tmp.replace(cache_p)
-    n = len(data["companies"])
-    log(f"行情：新抓 {len(fresh['daily'])}/{n}，用缓存 {len(stale)}，缺失 {len(missing)}；截至 {D['meta']['asOfLabel']}")
-    if stale:
-        log("  用缓存：", "、".join(stale))
-    if missing:
-        log("  缺失：", "、".join(missing))
-    if len(missing) > n * MAX_MISSING:
-        log(f"缺失超过 {int(MAX_MISSING * 100)}%，中止构建，不发布。")
-        gh_summary(f"### ❌ 行情缺失过多（{len(missing)}/{n}），本次未发布\n" + "\n".join(f"- {x}" for x in notes))
-        gh_out(changed="false")
-        return 2
-
-    if blockers:
-        for reason in blockers:
-            log('BLOCKED:', reason)
-        gh_out(changed='false')
-        gh_summary('### 构建阻断：冻结前端无法安全表达当前数据\n' + '\n'.join('- ' + b for b in blockers))
-        return 3
-
-    from research_snapshot import ResearchAbort
-    from research_view import CODE_TEXT
-    try:
-        p = render(D, Path(a.out))
-    except ResearchAbort as error:
-        for code in error.codes:
-            log(code, CODE_TEXT.get(code, '产物检查未通过'))
-        gh_out(changed='false')
-        return 2
-    fp = fingerprint(D)
-    changed = a.force or fp != cache.get("fingerprint")
-    if not a.offline:
-        cache_p.parent.mkdir(parents=True, exist_ok=True)
-        cache_p.write_text(json.dumps({**mk, "fingerprint": fp, "savedAt": now.isoformat(timespec="minutes")},
-                                      ensure_ascii=False, separators=(",", ":")), "utf-8")
-    log(f"已生成 {p}（{p.stat().st_size // 1024} KB）· 指纹 {fp} · {'有变化，需要部署' if changed else '与上次相同，跳过部署'}")
-    gh_out(changed=str(bool(changed)).lower(), asof=D["meta"]["asOfLabel"], fingerprint=fp)
-    gh_summary(f"### {'✅ 已生成，将部署' if changed else '⏸️ 行情无变化，跳过部署'}\n"
-               f"- 行情截至：{D['meta']['asOfLabel']}\n- 新抓 {len(fresh['daily'])}/{n}，用缓存 {len(stale)}，缺失 {len(missing)}\n"
-               + "".join(f"- {x}\n" for x in notes + rep.warnings[:20]))
-    return 0
+    return notion_main(ap.parse_args(), config)
 
 
 if __name__ == "__main__":
