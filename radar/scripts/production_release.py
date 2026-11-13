@@ -9,13 +9,13 @@ import json
 import os
 from pathlib import Path
 import re
-import shutil
 import sys
 import tempfile
 
 import acceptance_bundle as bundle
 import build
 import daily_changes
+import market_calendar
 import release_operations as operations
 from execution_policy import dry_run_ref_allowed
 
@@ -136,7 +136,16 @@ def _materialize(source, destination, D, receipt, info, history, purpose):
     config.update(buildCommand='node verify-release.cjs', outputDirectory='public',
                   installCommand='echo No dependencies', framework=None)
     (destination/'vercel.json').write_bytes(bundle.encoded(config))
-    shutil.copyfile(Path(__file__).with_name('verify-release.cjs'), destination/'verify-release.cjs')
+    verifier = Path(__file__).with_name('verify-release.cjs').read_text('utf-8')
+    calendar_marker = 'const REVIEWED_MARKET_CALENDAR = null;'
+    if verifier.count(calendar_marker) != 1:
+        raise ValueError('reviewed_calendar_slot_mismatch')
+    calendar = market_calendar.calendar_data()
+    bundle.check_sensitive(calendar)
+    calendar_json = json.dumps(calendar, sort_keys=True, separators=(',', ':'), allow_nan=False)
+    (destination/'verify-release.cjs').write_text(
+        verifier.replace(calendar_marker, f'const REVIEWED_MARKET_CALENDAR = {calendar_json};'),
+        encoding='utf-8', newline='\n')
     manifest = {'schemaVersion': 2, 'sourceSHA': receipt['execution']['GITHUB_SHA'],
                 'runId': receipt['execution']['GITHUB_RUN_ID'], 'fixedClock': receipt['fixedClock'],
                 'priceDateRange': D['meta'].get('priceDateRange', []),

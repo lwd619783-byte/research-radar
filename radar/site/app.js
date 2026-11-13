@@ -151,7 +151,7 @@ function researchSources(values){return[...new Set(values.filter(safeResearchUrl
 function researchAnchor(url,label){const href=safeResearchUrl(url);return href?`<a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(isNotionUrl(href)?'知识库':label||new URL(href).hostname)} ↗</a>`:'<span class="muted">缺来源</span>'}
 function sourceAnchor(url,label){const href=safeSourceUrl(url);return href?`<a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(label)} ↗</a>`:'<span class="muted">缺来源</span>'}
 function providerUrl(symbol,source,history=false){
-  if(source==='yahoo'&&symbol)return`https://finance.yahoo.com/quote/${encodeURIComponent(symbol)}/${history?'history/':''}`;
+  if(symbol&&(source==='yahoo'||source==='yahoo-meta-close'))return`https://finance.yahoo.com/quote/${encodeURIComponent(symbol)}/${history&&source==='yahoo'?'history/':''}`;
   if(source==='tencent'&&symbol){const s=symbol.toUpperCase();let code=s.endsWith('.SS')?'sh'+s.slice(0,-3):s.endsWith('.SZ')?'sz'+s.slice(0,-3):s.endsWith('.HK')?'hk'+(s.slice(0,-3).match(/^\d+$/)?s.slice(0,-3).padStart(5,'0'):s.slice(0,-3)):s==='^HSI'?'hkHSI':null;return code?`https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=${encodeURIComponent(code)},day,,,10,`:''}return'';
 }
 function nextScheduledRun(crons,now=Date.now()){
@@ -204,7 +204,7 @@ const partialCarry=(rows,usesValue=()=>true)=>rows.some(c=>closeConflictLabel(c)
 const calendarLabel=c=>{const m=c.marketCalendar;if(m?.status!=='holiday_carry'||typeof m.label!=='string')return'';return['official','rule_based'].includes(m.confidence)||m.confidence==='provisional'&&m.label.includes('待官方确认')?m.label:''};
 const calendarSuffix=c=>{const label=calendarLabel(c);return label?' · 日线 '+label:''};
 const tickerDailySuffix=c=>{const label=closeConflictLabel(c);return label?' · 日线 '+label:calendarSuffix(c)};
-const quoteLabel=c=>`${c.priceAsOf||c.ld||'日期未知'} ${phaseText(c.pricePhase||c.provenance?.daily?.phase)} · ${c.priceSource||c.provenance?.daily?.src||'来源未知'}${calendarSuffix(c)}`;
+const quoteLabel=c=>{const source=c.priceSource||c.provenance?.daily?.src;return `${c.priceAsOf||c.ld||'日期未知'} ${phaseText(c.pricePhase||c.provenance?.daily?.phase)} · ${source==='yahoo-meta-close'?'yahoo':source||'来源未知'}${calendarSuffix(c)}`};
 const timeDetail=c=>{const v=c.provenance?.valuation||{},f=v.fx;return `行情 ${quoteLabel(c)} · 报价时点 ${c.priceObservedAt||'未提供精确时刻'} · ${c.marketTimezone||'时区未注明'}；日线指标截至 ${c.metricAsOf||c.ld||'缺失'} 收盘；估值 ${v.asOf||'缺失'} ${phaseText(v.phase)} · ${v.source||'来源未知'}；本币市值 ${fin(c.mcapLocal)?c.mcapLocal.toLocaleString('en-US')+' '+c.cur:'—'}；美元折算${f?.estimated?'为估算':''}：${f?`${f.src} ${f.asOf} · 1 USD=${f.value} ${c.cur}`:'汇率缺失'}`};
 
 /* ---------- ticker ---------- */
@@ -431,7 +431,8 @@ function financialEvidence(c){if(!c.provenance?.financial)return'<div class="evi
  return`<details class="evidence-card financial-evidence" data-src="notion"><summary>财务来源 · ${esc(c.period||'期间缺失')} · ${esc(REPORT_STATUS[f.report_status]||f.report_status||'报告状态缺失')} ${financialTag(c)}</summary><dl>${fields.filter(x=>x[1]).map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl><div class="evidence-links">${urls.length?urls.map(u=>researchAnchor(u)).join(''):'原文链接缺失'}</div>${f.conditions?.length?`<ul>${f.conditions.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}</details>`;
 }
 function marketEvidence(c){const p=c.provenance||{},d=p.daily||{},v=p.valuation||{},f=v.fx||{};const fxSymbol=c.cur==='EUR'?'EURUSD=X':c.cur+'=X';
-  return`<details class="evidence-card market-evidence"><summary>行情与估值来源 · ${esc(c.priceAsOf||'日期缺失')}</summary><dl><dt>展示报价</dt><dd>${esc(timeDetail(c))} · ${sourceAnchor(providerUrl(c.sym,c.priceSource),'报价来源')}</dd><dt>完成日线 / 收益口径</dt><dd>${esc(d.asOf||'日期缺失')} · ${esc(d.returnBasis||'口径未提供')} · ${sourceAnchor(providerUrl(c.sym,d.src,true),'日线来源')}</dd><dt>估值</dt><dd>${esc(v.asOf||'日期缺失')} · ${esc(peLabel(c))} · ${sourceAnchor(providerUrl(c.sym,v.source),'估值来源')}</dd><dt>美元折算</dt><dd>${c.cur==='USD'?'原币为 USD，无需折算':`${esc(f.asOf||'日期缺失')} · ${!f.asOf?'汇率缺失':c.mcapEstimated?'跨日汇率估算':'同日汇率'} · ${sourceAnchor(providerUrl(fxSymbol,f.src,true),'汇率来源')}`}</dd></dl><p>行情链接打开供应商当前页面或接口，并非冻结历史快照。计算仍以本页标注日期为准；链接可打开不等于缺项已补齐。</p></details>`;
+  const dailySourceLabel=d.src==='yahoo-meta-close'?'收盘价来自行情快照':'日线来源';
+  return`<details class="evidence-card market-evidence"><summary>行情与估值来源 · ${esc(c.priceAsOf||'日期缺失')}</summary><dl><dt>展示报价</dt><dd>${esc(timeDetail(c))} · ${sourceAnchor(providerUrl(c.sym,c.priceSource),'报价来源')}</dd><dt>完成日线 / 收益口径</dt><dd>${esc(d.asOf||'日期缺失')} · ${esc(d.returnBasis||'口径未提供')} · ${sourceAnchor(providerUrl(c.sym,d.src,true),dailySourceLabel)}</dd><dt>估值</dt><dd>${esc(v.asOf||'日期缺失')} · ${esc(peLabel(c))} · ${sourceAnchor(providerUrl(c.sym,v.source),'估值来源')}</dd><dt>美元折算</dt><dd>${c.cur==='USD'?'原币为 USD，无需折算':`${esc(f.asOf||'日期缺失')} · ${!f.asOf?'汇率缺失':c.mcapEstimated?'跨日汇率估算':'同日汇率'} · ${sourceAnchor(providerUrl(fxSymbol,f.src,true),'汇率来源')}`}</dd></dl><p>行情链接打开供应商当前页面或接口，并非冻结历史快照。计算仍以本页标注日期为准；链接可打开不等于缺项已补齐。</p></details>`;
 }
 function rangeComplete(c,r){if(c.t.length<2)return false;const last=c.t[c.t.length-1],cut=r==='ytd'?Date.UTC(new Date(last).getUTCFullYear(),0,1):last-({'1m':31,'3m':92,'6m':183,'1y':366,'2y':731}[r]||0)*864e5;return c.t[0]<=cut}
 const ORDER=CO.map(c=>c.id);

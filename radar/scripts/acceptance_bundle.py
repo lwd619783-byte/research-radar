@@ -9,10 +9,12 @@ from pathlib import Path
 import re
 import tempfile
 import time
+from zoneinfo import ZoneInfo
 
 import build
 from latest import PROVIDER_CLOSE_CONFLICT_METHOD
 import research_snapshot as snapshots
+import yahoo_meta_close
 
 MAX_BUNDLE = 10_000_000  # Decimal 10 MB, including manifest; never truncate.
 MAX_RECEIPT = 512 * 1024
@@ -134,6 +136,7 @@ def validate_binding(D, receipt, clock):
         raise BundleError('same_snapshot_binding_mismatch')
     validate_close_proofs(D, receipt.get('independentCloseProofs'), execution, clock)
     validate_provider_close_conflicts(D)
+    validate_yahoo_meta_closes(D, clock)
 
 
 def _valid_close_conflict_day(value):
@@ -155,6 +158,63 @@ def _close_conflict_receipt_seconds(value):
     except (ValueError, OverflowError, OSError):
         return None
     return base + (float('0.' + fraction) if fraction else 0)
+
+
+def validate_yahoo_meta_closes(data, clock):
+    from market_calendar import context
+
+    def fields(value):
+        return value if isinstance(value, dict) else {}
+
+    rows = fields(data).get('companies')
+    for row in rows if isinstance(rows, list) else ():
+        row = fields(row)
+        daily = fields(fields(row.get('provenance')).get('daily'))
+        source = daily.get('src') == yahoo_meta_close.SOURCE
+        marked = 'yahooMetaClose' in daily
+        fallback_price = row.get('priceSource') == yahoo_meta_close.SOURCE
+        if not (source or marked or fallback_price):
+            continue
+        proof = daily.get('yahooMetaClose')
+        symbol = row.get('sym')
+        if not source or not yahoo_meta_close.valid_proof(proof, symbol, clock):
+            raise BundleError('yahoo_meta_close_binding_mismatch')
+        calendar = fields(row.get('marketCalendar'))
+        exchange = context(symbol, clock)
+        selection = fields(daily.get('snapshotSelection'))
+        day = proof['date']
+        received = _close_conflict_receipt_seconds(proof['receivedAt'])
+        if (daily.get('phase') != 'closed' or daily.get('returnBasis') != 'yahoo-adjclose'
+                or 'independentCloseProof' in daily or 'providerCloseConflict' in row
+                or daily.get('receivedAt') != proof['receivedAt'] or received is None
+                or not 0 <= clock.timestamp() - received <= 36 * 3600
+                or daily.get('timezone') != exchange['timezone'] or calendar.get('exchange') != exchange['exchange']
+                or calendar.get('timezone') != exchange['timezone'] or calendar.get('confidence') != exchange['confidence']
+                or selection.get('method') != 'latest-completed-per-market' or selection.get('sourcePhase') != 'closed'
+                or any(row.get(key) is not None for key in ('r1d', 'r5', 'r20', 'r60', 'ytd', 'dd52', 'hi52'))
+                or any(value != day for value in (row.get('ld'), row.get('metricAsOf'), daily.get('asOf'),
+                    calendar.get('quoteDate'), calendar.get('expectedCompletedDate'), selection.get('selectedDate'),
+                    selection.get('sourceAsOf')))):
+            raise BundleError('yahoo_meta_close_binding_mismatch')
+        if fallback_price:
+            expected_price = round(proof['price'], 3 if proof['price'] < 10 else 2)
+            if (not yahoo_meta_close.positive_price(row.get('price')) or row['price'] != expected_price
+                    or row.get('priceAsOf') != day or row.get('pricePhase') != 'closed'
+                    or 'priceObservedAt' not in row or row['priceObservedAt'] is not None
+                    or fields(row.get('priceSelection')).get('useQuote') is not False):
+                raise BundleError('yahoo_meta_close_binding_mismatch')
+        else:
+            observed = _close_conflict_receipt_seconds(row.get('priceObservedAt'))
+            price_selection = fields(row.get('priceSelection'))
+            if (not yahoo_meta_close.positive_price(row.get('price')) or not isinstance(row.get('priceSource'), str)
+                    or not row['priceSource'] or observed is None or row.get('pricePhase') != 'intraday'
+                    or not proof['nextSessionOpen'] < observed <= clock.timestamp()
+                    or price_selection.get('useQuote') is not True
+                    or price_selection.get('boundaryKind') != 'later_session_start_upper_bound'
+                    or _close_conflict_receipt_seconds(price_selection.get('completedBoundaryUTC')) != proof['nextSessionOpen']
+                    or row.get('priceAsOf') != dt.datetime.fromtimestamp(observed, dt.UTC)
+                        .astimezone(ZoneInfo(exchange['timezone'])).date().isoformat()):
+                raise BundleError('yahoo_meta_close_binding_mismatch')
 
 
 def validate_provider_close_conflicts(data):

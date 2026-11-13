@@ -2,6 +2,8 @@
 const fs = require('node:fs');
 const crypto = require('node:crypto');
 const assert = require('node:assert/strict');
+// production_release.py embeds the tracked calendar in the shipped verifier.
+const REVIEWED_MARKET_CALENDAR = null;
 // Mirrored from notion_schema.json; the offline test enforces exact equality.
 const BANNED_WORDS = ['买入','卖出','加仓','减仓','抄底','逃顶','目标价','推荐','定投','止损','止盈','建仓','清仓','满仓','重仓','必涨','稳赚','翻倍','牛股','金股','已核实','已审核','人工确认','已验证'];
 const DISCLAIMER = '研究内容由 AI 依据公开资料撰写，程序自动检查格式、日期与来源，未经人工审核；行情由定时任务更新。仅供研究参考，不构成投资建议。';
@@ -110,6 +112,7 @@ if(matches.length===1){try{embedded=JSON.parse(matches[0][1]);}catch{if(needsV3S
 if(embedded)checkSensitive(embedded);
 checkIndependentCloseProofs(m,embedded);
 checkProviderCloseConflicts(embedded);
+checkYahooMetaClose(m, embedded);
 const operationSlots=[...html.matchAll(/<script id="radar-operations">const OPERATIONS=(.*?);<\/script>/gs)];
 if(operationSlots.length!==1)throw Error('release_status_slot_mismatch');
 assert.deepEqual(JSON.parse(operationSlots[0][1]),version);
@@ -269,6 +272,144 @@ function checkProviderCloseConflicts(data) {
     }
   }
 }
+function closeProofMicros(value) {
+  const match = typeof value === 'string'
+    && /^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,6}))?(Z|[+-]\d{2}:\d{2})$/.exec(value);
+  if (!match || match[0] !== value || !closeProofDay(match[1])
+      || Number(match[2]) > 23 || Number(match[3]) > 59 || Number(match[4]) > 59) return null;
+  const zone = match[6];
+  if (zone !== 'Z' && (Number(zone.slice(1, 3)) > 23 || Number(zone.slice(4, 6)) > 59)) return null;
+  const whole = Date.parse(`${match[1]}T${match[2]}:${match[3]}:${match[4]}${zone}`);
+  return BigInt(whole) * 1000n + BigInt((match[5] || '').padEnd(6, '0'));
+}
+
+function closeProofDay(day) {
+  if (typeof day !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(day) || day.startsWith('0000-')) return false;
+  const instant = Date.parse(day + 'T00:00:00Z');
+  return Number.isFinite(instant) && new Date(instant).toISOString().slice(0, 10) === day;
+}
+
+function calendarExchange(calendar, symbol) {
+  if (typeof symbol !== 'string') return null;
+  if (Object.hasOwn(calendar.symbolExchanges, symbol)) return calendar.symbolExchanges[symbol];
+  const bySuffix = {SS: 'XSHG', SZ: 'XSHE', HK: 'XHKG', TW: 'XTAI', KS: 'XKRX', T: 'XTKS', DE: 'XETR', PA: 'XPAR'};
+  const dot = symbol.lastIndexOf('.');
+  const suffix = symbol.slice(dot + 1);
+  return dot >= 0 && Object.hasOwn(bySuffix, suffix) ? bySuffix[suffix] : null;
+}
+
+function calendarSessionBounds(spec, day, clock) {
+  const confidence = date => spec.confidenceByYear[date.slice(0, 4)];
+  const trusted = date => spec.validFrom <= date && date <= spec.validThrough
+    && ['official', 'rule_based'].includes(confidence(date));
+  const midnight = date => Date.parse(date + 'T00:00:00Z');
+  const shift = (date, days) => new Date(midnight(date) + days * 86400000).toISOString().slice(0, 10);
+  const session = date => {
+    const weekday = new Date(midnight(date)).getUTCDay();
+    return weekday > 0 && weekday < 6 && !spec.holidays.includes(date);
+  };
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: spec.timezone, year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23',
+  });
+  const local = seconds => {
+    const parts = Object.fromEntries(formatter.formatToParts(seconds * 1000).map(({type, value}) => [type, value]));
+    return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}:${parts.second}`;
+  };
+  const localDay = seconds => local(seconds).slice(0, 10);
+  function sessionTime(date, time) {
+    const wanted = `${date}T${time}:00`;
+    const nominal = Date.parse(wanted + 'Z') / 1000;
+    const offset = Date.parse(local(nominal) + 'Z') / 1000 - nominal;
+    const instant = nominal - offset;
+    return local(instant) === wanted ? instant : NaN;
+  }
+  const clockSeconds = Number(clock / 1000000n);
+  const today = localDay(clockSeconds);
+  if (!trusted(today) || !trusted(day) || !session(day)) return null;
+  const closingTime = date => sessionTime(date, spec.earlyCloses[date] || spec.close);
+  const sessionClose = closingTime(day);
+  let expected = null;
+  for (let offset = 0; offset < 32; offset++) {
+    const candidate = shift(today, -offset);
+    if (!trusted(candidate)) return null;
+    if (session(candidate) && closingTime(candidate) <= clockSeconds) {
+      expected = candidate;
+      break;
+    }
+  }
+  if (expected !== day) return null;
+  for (let offset = 1; offset <= 32; offset++) {
+    const next = shift(day, offset);
+    if (!trusted(next)) return null;
+    if (session(next)) return {sessionClose, nextSessionOpen: sessionTime(next, spec.open),
+      confidence: confidence(today), localDay};
+  }
+  return null;
+}
+
+function roundedClosePrice(price) {
+  const digits = price < 10 ? 3 : 2;
+  const fixed = price.toFixed(digits);
+  // An exact halfway binary float has an odd numerator after scaling by
+  // 2^(digits+1). Since 5^digits is 1 mod 4, remainder 1 rounds down to even.
+  const numerator = price * 2 ** (digits + 1);
+  if (Number.isSafeInteger(numerator) && numerator % 4 === 1) {
+    return Number(`${BigInt(fixed.replace('.', '')) - 1n}e-${digits}`);
+  }
+  return Number(fixed);
+}
+
+function checkYahooMetaClose(manifest, data, calendar = REVIEWED_MARKET_CALENDAR) {
+  const source = 'yahoo-meta-close';
+  const proofKeys = ['date', 'price', 'marketTime', 'sessionClose', 'nextSessionOpen', 'receivedAt'];
+  const positive = value => Number.isFinite(value) && value > 0 && value <= Number.MAX_SAFE_INTEGER;
+  const maxReceiptAge = 36n * 3600n * 1000000n;
+  const fail = () => { throw Error('yahoo_meta_close_binding_mismatch'); };
+  for (const row of Array.isArray(data?.companies) ? data.companies : []) {
+    const daily = row?.provenance?.daily;
+    const marked = daily != null && Object.hasOwn(daily, 'yahooMetaClose');
+    if (!marked && daily?.src !== source && row?.priceSource !== source) continue;
+    const proof = daily?.yahooMetaClose;
+    if (daily?.src !== source || !proof || typeof proof !== 'object' || Array.isArray(proof)
+        || Object.keys(proof).length !== proofKeys.length || !proofKeys.every(key => Object.hasOwn(proof, key))
+        || !closeProofDay(proof.date) || !positive(proof.price)
+        || ['marketTime', 'sessionClose', 'nextSessionOpen'].some(key => !Number.isSafeInteger(proof[key]) || proof[key] <= 0)
+        || !calendar) fail();
+    const received = closeProofMicros(proof.receivedAt), clock = closeProofMicros(manifest.fixedClock);
+    if (received === null || clock === null || BigInt(proof.marketTime) * 1000000n > received
+        || received > clock || clock - received > maxReceiptAge
+        || proof.marketTime < proof.sessionClose || proof.marketTime >= proof.nextSessionOpen) fail();
+    const exchange = calendarExchange(calendar, row.sym), spec = calendar.exchanges[exchange];
+    if (!spec || exchange === 'XTAI') fail();
+    const bounds = calendarSessionBounds(spec, proof.date, clock);
+    if (!bounds || proof.sessionClose !== bounds.sessionClose || proof.nextSessionOpen !== bounds.nextSessionOpen) fail();
+    const annotation = row.marketCalendar, selection = daily.snapshotSelection;
+    if (annotation?.exchange !== exchange || annotation?.confidence !== bounds.confidence
+        || daily.timezone !== spec.timezone || annotation.timezone !== spec.timezone
+        || daily.phase !== 'closed' || daily.receivedAt !== proof.receivedAt || daily.returnBasis !== 'yahoo-adjclose'
+        || Object.hasOwn(daily, 'independentCloseProof') || Object.hasOwn(row, 'providerCloseConflict')
+        || selection?.method !== 'latest-completed-per-market' || selection.sourcePhase !== 'closed'
+        || ['r1d', 'r5', 'r20', 'r60', 'ytd', 'dd52', 'hi52'].some(key => row[key] != null)
+        || [row.ld, row.metricAsOf, daily.asOf, annotation.quoteDate, annotation.expectedCompletedDate,
+            selection.selectedDate, selection.sourceAsOf].some(value => value !== proof.date)) fail();
+    const priceSelection = row.priceSelection;
+    if (row.priceSource === source) {
+      if (row.priceAsOf !== proof.date || row.pricePhase !== 'closed' || row.priceObservedAt !== null
+          || priceSelection?.useQuote !== false || !positive(row.price)
+          || row.price !== roundedClosePrice(proof.price)) fail();
+    } else {
+      const boundary = BigInt(proof.nextSessionOpen) * 1000000n;
+      const observed = closeProofMicros(row.priceObservedAt);
+      if (typeof row.priceSource !== 'string' || !row.priceSource || !positive(row.price)
+          || row.pricePhase !== 'intraday' || priceSelection?.useQuote !== true
+          || priceSelection.boundaryKind !== 'later_session_start_upper_bound'
+          || closeProofMicros(priceSelection.completedBoundaryUTC) !== boundary
+          || observed === null || observed <= boundary || observed > clock
+          || row.priceAsOf !== bounds.localDay(Number(observed / 1000000n))) fail();
+    }
+  }
+}
 function checkSnapshot(snapshot,clock) {
   const tables=['industries','chokepoints','companies','financials','daily','weekly'];
   const exact=(object,keys)=>object&&typeof object==='object'&&!Array.isArray(object)&&Object.keys(object).sort().join('|')===[...keys].sort().join('|');
@@ -342,4 +483,4 @@ function checkOperationalSchedule(manifest,data,version) {
     'publication_schedule_mismatch');
 }
 if(require.main===module)verifyRelease();
-module.exports={scanOutput,needsV3Scan,BANNED_WORDS,DISCLAIMER,checkIndependentCloseProofs};
+module.exports={scanOutput,needsV3Scan,BANNED_WORDS,DISCLAIMER,checkIndependentCloseProofs,checkYahooMetaClose};

@@ -25,15 +25,20 @@ from zoneinfo import ZoneInfo
 import build
 import acceptance_bundle as bundle
 import quotes
+import yahoo_meta_close
 from integrity import ZONES, financial_status, fresh_record, observation_time, valid_bars, pe_status, dated_fx, number
+from market_calendar import context as calendar_context
 from snapshot import CLOSED_QUOTE_STATES
 
 ROOT = Path(__file__).resolve().parents[2]
-MAX_REQUESTS = 240  # 119 planned GETs, at most one 429 retry each; 2 spare.
+MAX_REQUESTS = 240  # The 119 planned GETs and both retry paths share this budget.
 TIMEOUT = 8
 DEADLINE = 840  # 14 minutes; job 20 minutes, probe step 16 minutes.
 MAX_BODY = 8 * 1024 * 1024
 MAX_RECEIPT = 512 * 1024
+DAILY_CLOSE_RETRY_INTERVAL = 60
+DAILY_CLOSE_RETRY_LIMIT = 2
+DAILY_CLOSE_RETRY_SECONDS = 240
 HOSTS = {'query1.finance.yahoo.com', 'fc.yahoo.com', 'web.ifzq.gtimg.cn'}
 DENIALS = {401, 403, 451}
 SAFE_CODE = re.compile(r'^[A-Za-z0-9.^=_-]{1,40}$')
@@ -58,13 +63,15 @@ class Budget:
         self.end = time.monotonic() + seconds
         self.denied = set()
 
-    def take(self, lane):
+    def take(self, lane, *, deadline=None):
         if lane in self.denied:
             raise StopProbe('access_refused_stop_path')
-        if self.count >= self.limit or time.monotonic() >= self.end:
+        end = self.end if deadline is None else min(self.end, deadline)
+        remaining = end - time.monotonic()
+        if self.count >= self.limit or remaining <= 0:
             raise StopProbe('request_or_time_budget_exhausted')
         self.count += 1
-        return max(.1, min(TIMEOUT, self.end - time.monotonic()))
+        return min(TIMEOUT, remaining)
 
 
 def route(url):
@@ -95,8 +102,10 @@ def route(url):
 
 
 class ProbeHttp(quotes.Http):
-    def __init__(self, budget, source):
+    def __init__(self, budget, source, *, retry_429=True, deadline=None):
         self.budget, self.source = budget, source
+        self.retry_429 = retry_429
+        self.deadline = budget.end if deadline is None else min(budget.end, deadline)
         self.events, self.documents, self.batches = [], [], []
         self._crumb = None
         self.jar = http.cookiejar.CookieJar()
@@ -108,14 +117,16 @@ class ProbeHttp(quotes.Http):
         if not lane.startswith(self.source):
             raise StopProbe('separate_source_only')
         host = urllib.parse.urlsplit(url).hostname
-        for attempt in range(2):
-            timeout = self.budget.take(lane)
+        for attempt in range(2 if self.retry_429 else 1):
+            timeout = self.budget.take(lane, deadline=self.deadline)
             event = {'host': host, 'pathClass': path, 'attempt': attempt+1, 'startedAt': utc()}
             self.events.append(event)
             try:
                 with self.op.open(url, timeout=timeout) as response:
                     raw = response.read(MAX_BODY+1)
                     event.update(httpStatus=response.status, status='connected', bytes=len(raw), receivedAt=utc())
+                if time.monotonic() > self.deadline:
+                    raise StopProbe('request_or_time_budget_exhausted')
                 if len(raw) > MAX_BODY:
                     raise StopProbe('response_too_large')
                 if path not in ('crumb', 'cookie-seed'):
@@ -130,14 +141,14 @@ class ProbeHttp(quotes.Http):
                 if path == 'cookie-seed' and exc.code == 404:
                     event['status'] = 'cookie_seed_404'
                     return b''
-                if exc.code == 429 and attempt == 0:
+                if exc.code == 429 and attempt == 0 and self.retry_429:
                     retry = exc.headers.get('Retry-After', '5')
                     try:
                         delay = float(retry)
                     except (TypeError, ValueError):
                         # Do not shorten an HTTP-date or unknown server delay.
                         delay = 11
-                    if 0 <= delay <= 10 and time.monotonic()+delay < self.budget.end:
+                    if 0 <= delay <= 10 and time.monotonic()+delay < self.deadline:
                         event['retryAfterSeconds'] = delay
                         time.sleep(delay)
                         continue
@@ -256,9 +267,10 @@ def month_quality(value, h, *, symbol=None, clock=None):
                     'asOf': value.get('asOf'), 'currentDated': current is not None}, current is not None
 
 
-def inspect(category, code, source, budget, fetch, quality):
+def inspect(category, code, source, budget, fetch, quality, *, retry_deadline=None):
     if not SAFE_CODE.fullmatch(code): raise StopProbe('unexpected_config_code')
-    h = ProbeHttp(budget, source)
+    h = (ProbeHttp(budget, source) if retry_deadline is None
+         else ProbeHttp(budget, source, retry_429=False, deadline=retry_deadline))
     row = {'category': category, 'code': code, 'source': source, 'startedAt': utc(),
            'connection': False, 'parse': False, 'quality': False, 'publicationGate': False,
            'checks': {}, 'details': {}, 'failure': None}
@@ -291,63 +303,127 @@ def access_affects(item, access):
     if item['kind']=='company':
         metric=item.get('metric')
         if category=='quote-session':return metric in ('price','PE','marketCap','marketCapUSD')
-        return (access.get('symbol')==item.get('symbol') and category in ('company-yahoo-daily', 'company-twse-close-proof')
+        return (access.get('symbol')==item.get('symbol') and category in ('company-yahoo-daily', 'company-yahoo-daily-retry', 'company-twse-close-proof')
                 and metric in ('price','daily','r5','r20','r60','ytd','high52'))
     if item['kind']=='ratio':return category=='ratio-tencent'
     return (access.get('symbol')==item.get('symbol') and
             (category.startswith('index-') if item['kind']=='index' else category=='fx'))
 
 
+def company_yahoo_daily(h, symbol, budget, rows, evidence, snapshot_clock):
+    try:
+        value = quotes.yahoo_daily(h, symbol)
+    finally:
+        if evidence is not None and h.documents:
+            event = next((item for item in reversed(h.events) if item.get('httpStatus') == 200), None)
+            received = event.get('receivedAt') if event else None
+            chart = yahoo_meta_close.chart_evidence(h.documents[-1], symbol, received) if received else None
+            if chart is not None:
+                evidence[symbol] = chart
+    if evidence is None or symbol != '2383.TW' or value.get('phase') != 'unknown':
+        return value
+    if chart_meta(h).get('symbol') != '2383.TW':
+        return value
+    from equity_close_proof import make_proof
+    current = snapshot_clock or dt.datetime.now(dt.UTC)
+    expected = calendar_context(symbol, current)['expectedCompletedDate']
+    if not expected or value.get('asOf') != expected:
+        return value
+    closing = dt.datetime.fromisoformat(expected + 'T13:30:00+08:00')
+    if current < closing or value.get('currency') != 'TWD' or value.get('timezone') != 'Asia/Taipei':
+        return value
+    official = ProbeHttp(budget, 'twse') if h.retry_429 else ProbeHttp(budget, 'twse', deadline=h.deadline)
+    official_url = ('https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date='
+                    + expected.replace('-', '') + '&stockNo=2383&response=json')
+    extra = {'category': 'company-twse-close-proof', 'code': symbol, 'source': 'twse',
+             'connection': False, 'parse': False, 'quality': False, 'publicationGate': False,
+             'checks': {}, 'details': {}, 'failure': None, 'startedAt': utc()}
+    try:
+        document = official.json(official_url)
+        extra['parse'] = True
+        source_event = next(e for e in reversed(h.events) if e.get('httpStatus') == 200 and e.get('sha256'))
+        yahoo_url = ('https://query1.finance.yahoo.com/v8/finance/chart/2383.TW'
+                     '?range=5y&interval=1d&includeAdjustedClose=true')
+        proof = make_proof(value, document,
+            official_event={**official.events[-1], 'sourceUrl': official_url},
+            yahoo_event={**source_event, 'sourceUrl': yahoo_url}, expected_day=expected,
+            now=snapshot_clock or dt.datetime.now(dt.UTC),
+            execution={k: os.environ.get(k, '') for k in ('GITHUB_SHA', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT')})
+        extra.update(quality=proof is not None, publicationGate=proof is not None,
+                     checks={'independentCloseProof': proof is not None})
+        if proof is not None:
+            value = {**value, 'independentCloseProof': proof}
+    except Exception as exc:
+        extra['failure'] = str(exc) if isinstance(exc, StopProbe) else 'official_close_proof_failed'
+    extra.update(connection=any(e.get('httpStatus') == 200 for e in official.events),
+                 requests=official.events, finishedAt=utc())
+    rows.append(extra)
+    return value
+
+
+def retry_missing_daily(companies, daily, evidence, rows, budget, snapshot_clock):
+    """Re-read all affected stocks in bounded rounds before taking a snapshot close."""
+    def now():
+        return snapshot_clock or dt.datetime.now(dt.UTC)
+
+    pending = [company for company in companies if yahoo_meta_close.missing_close(
+        daily.get(company['sym']), evidence.get(company['sym']), company['sym'], now())]
+    deadline = min(budget.end, time.monotonic() + DAILY_CLOSE_RETRY_SECONDS)
+    reconfirmed = {}
+    lane = 'yahoo-chart'
+    for _ in range(DAILY_CLOSE_RETRY_LIMIT):
+        if (not pending or lane in budget.denied or budget.count >= budget.limit
+                or time.monotonic() + DAILY_CLOSE_RETRY_INTERVAL + TIMEOUT > deadline):
+            break
+        time.sleep(DAILY_CLOSE_RETRY_INTERVAL)
+        next_round = []
+        for company in pending:
+            if lane in budget.denied or budget.count >= budget.limit or time.monotonic() + TIMEOUT > deadline:
+                break
+            symbol = company['sym']
+            observed = {}
+            row, value = inspect('company-yahoo-daily-retry', symbol, 'yahoo', budget,
+                lambda h: company_yahoo_daily(h, symbol, budget, rows, observed, snapshot_clock),
+                lambda v, h: daily_quality(v, h, company, calendar_policy=True, clock=snapshot_clock),
+                retry_deadline=deadline)
+            rows.append(row)
+            reconfirmed.pop(symbol, None)
+            if symbol not in observed:
+                continue
+            evidence[symbol] = observed[symbol]
+            previous = daily.get(symbol)
+            checked_at = now()
+            still_missing = yahoo_meta_close.missing_close(value, observed[symbol], symbol, checked_at)
+            expected = calendar_context(symbol, checked_at)['expectedCompletedDate']
+            recovered = value and any(bar[0] == expected for bar in value['bars'])
+            if value and (not previous or value['asOf'] >= previous['asOf'] or recovered):
+                daily[symbol] = value
+            if row['failure'] in (None, 'yahoo_chart_empty_daily_bars') and still_missing:
+                next_round.append(company)
+                if value:
+                    reconfirmed[symbol] = value
+        pending = next_round
+    if lane not in budget.denied:
+        for company in companies:
+            symbol = company['sym']
+            if symbol in reconfirmed:
+                value = reconfirmed[symbol]
+                supplemented = yahoo_meta_close.supplement(value, evidence[symbol], company, now())
+                if supplemented is not value:
+                    daily[symbol] = supplemented
+
+
 def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_clock=None, calendar_policy=False):
     companies, tencent, currencies = inventory(data)
     rows = []
     mk = {k: {} for k in ('daily', 'quote', 'index', 'fx', 'ratio')}
+    evidence = {} if calendar_policy else None
     for source, group, category in (('yahoo', companies, 'company-yahoo-daily'), ('tencent', tencent, 'company-tencent-backup')):
         for c in group:
-            fn = quotes.yahoo_daily if source == 'yahoo' else quotes.tencent_daily
             def fetch_daily(h):
-                value = fn(h, c['sym'])
-                if not (calendar_policy and source == 'yahoo' and c['sym'] == '2383.TW'
-                        and value.get('phase') == 'unknown'):
-                    return value
-                if chart_meta(h).get('symbol') != '2383.TW':
-                    return value
-                from market_calendar import context
-                from equity_close_proof import make_proof
-                current = snapshot_clock or dt.datetime.now(dt.UTC)
-                expected = context(c['sym'], current)['expectedCompletedDate']
-                if not expected or value.get('asOf') != expected:
-                    return value
-                closing = dt.datetime.fromisoformat(expected + 'T13:30:00+08:00')
-                if current < closing or value.get('currency') != 'TWD' or value.get('timezone') != 'Asia/Taipei':
-                    return value
-                official = ProbeHttp(budget, 'twse')
-                official_url = ('https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date='
-                                + expected.replace('-', '') + '&stockNo=2383&response=json')
-                extra = {'category': 'company-twse-close-proof', 'code': c['sym'], 'source': 'twse',
-                         'connection': False, 'parse': False, 'quality': False, 'publicationGate': False,
-                         'checks': {}, 'details': {}, 'failure': None, 'startedAt': utc()}
-                try:
-                    document = official.json(official_url)
-                    extra['parse'] = True
-                    source_event = next(e for e in reversed(h.events) if e.get('httpStatus') == 200 and e.get('sha256'))
-                    yahoo_url = ('https://query1.finance.yahoo.com/v8/finance/chart/2383.TW'
-                                 '?range=5y&interval=1d&includeAdjustedClose=true')
-                    proof = make_proof(value, document,
-                        official_event={**official.events[-1], 'sourceUrl': official_url},
-                        yahoo_event={**source_event, 'sourceUrl': yahoo_url}, expected_day=expected,
-                        now=snapshot_clock or dt.datetime.now(dt.UTC),
-                        execution={k: os.environ.get(k, '') for k in ('GITHUB_SHA', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT')})
-                    extra.update(quality=proof is not None, publicationGate=proof is not None,
-                                 checks={'independentCloseProof': proof is not None})
-                    if proof is not None:
-                        value = {**value, 'independentCloseProof': proof}
-                except Exception as exc:
-                    extra['failure'] = str(exc) if isinstance(exc, StopProbe) else 'official_close_proof_failed'
-                extra.update(connection=any(e.get('httpStatus') == 200 for e in official.events),
-                             requests=official.events, finishedAt=utc())
-                rows.append(extra)
-                return value
+                if source == 'yahoo':
+                    return company_yahoo_daily(h, c['sym'], budget, rows, evidence, snapshot_clock)
+                return quotes.tencent_daily(h, c['sym'])
             row, value = inspect(category, c['sym'], source, budget, fetch_daily,
                 lambda v,h: daily_quality(v,h,c,calendar_policy=calendar_policy,clock=snapshot_clock))
             rows.append(row)
@@ -406,6 +482,14 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
                 lambda v,h:month_quality(v,h,symbol=cfg[prefix+'_yahoo'] if calendar_policy else None,clock=snapshot_clock))
             rows.append(row)
             if source=='tencent' and value: mk['ratio'][key]=value
+    if calendar_policy:
+        retry_missing_daily(companies, mk['daily'], evidence, rows, budget, snapshot_clock)
+        if market_sink is not None:
+            market_sink['dailyEvidence'] = evidence
+        for row in rows:
+            if row['category'] == 'company-yahoo-quote':
+                day = row['details']['asOf']
+                row['checks']['dateMatchesDaily'] = bool(day and day == mk['daily'].get(row['code'], {}).get('asOf'))
     # Freeze once AFTER the last source result: receivedAt must not be in the
     # future relative to this clock. Transport event times remain actual times.
     fixed_clock = snapshot_clock if snapshot_clock is not None else dt.datetime.now(build.BJ)

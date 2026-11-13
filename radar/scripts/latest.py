@@ -130,6 +130,12 @@ def quote_after_completed_daily(quote, daily):
         return {**result,'reason':'quote_price_missing_or_invalid'}
     if not daily:return {**result,'useQuote':True,'reason':'no_completed_daily_price'}
     result['reason']='completed_close_order_unproven'
+    if 'yahooMetaClose' in daily:
+        boundary = daily['yahooMetaClose']['nextSessionOpen']
+        later = quote_phase(quote) == 'intraday' and observed.timestamp() > boundary
+        return {'useQuote': later, 'reason': 'quote_proven_later' if later else 'quote_not_proven_later',
+                'completedBoundaryUTC': dt.datetime.fromtimestamp(boundary, dt.UTC).isoformat(),
+                'boundaryKind': 'later_session_start_upper_bound'}
     try:
         day=daily['asOf'];session=daily['finality'];zone=ZoneInfo(daily['timezone'])
         timestamp=daily['barTimestamps'][day]

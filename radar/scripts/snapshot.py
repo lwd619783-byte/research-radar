@@ -65,6 +65,18 @@ def equity_bar_final(day, timestamp, timezone, session, received_at):
 
 def completed_bars(record, *, symbol=None, now=None):
     from equity_close_proof import valid_proof, record_bar_final
+    from yahoo_meta_close import SOURCE, valid_proof as valid_meta_proof
+    if isinstance(record, dict) and (record.get('src') == SOURCE or 'yahooMetaClose' in record):
+        from market_calendar import context
+        proof, bars = record.get('yahooMetaClose'), record.get('bars')
+        if (record.get('src') != SOURCE or now is None or not valid_meta_proof(proof, symbol, now)
+                or record.get('schemaVersion') != 2 or record.get('priceBasis') != 'raw'
+                or record.get('returnBasis') != 'yahoo-adjclose' or record.get('phase') != 'closed'
+                or 'independentCloseProof' in record or record.get('timezone') != context(symbol, now)['timezone']
+                or record.get('receivedAt') != proof['receivedAt'] or not valid_bars(bars)
+                or record.get('asOf') != proof['date'] or bars[-1] != [proof['date'], proof['price'], None, None]):
+            return []
+        return [bar for bar in bars[:-1] if record_bar_final(record, bar[0], symbol=symbol, now=now)] + [bars[-1]]
     proof_ok = (isinstance(record, dict) and 'independentCloseProof' in record
                 and now is not None and valid_proof(record, record['independentCloseProof'],
                     symbol=symbol, day=record.get('asOf'), now=now))

@@ -62,6 +62,7 @@ DIAGNOSTIC_SYMBOLS = frozenset({
     '^GSPC', '^HSI', '^IXIC', '^SOX'})
 MAX_DIAGNOSTIC_INPUT = 65536
 MAX_DIAGNOSTIC_TIMESTAMP = 253402300799  # Last UTC second representable by datetime.
+CHART_DIAGNOSTIC_JSON_BUDGET = 30 * 1024  # Leave space for the summary within the 32 KiB artifact.
 MARKET_ISSUE_STATUSES = {
     'daily': frozenset({'no_common_completed_observation', 'stale'}),
     'index': frozenset({'missing_or_unconfirmed_snapshot'}),
@@ -77,20 +78,36 @@ def diagnostic_timestamp(value):
     return type(value) in (int, float) and 0 < value <= MAX_DIAGNOSTIC_TIMESTAMP
 
 
+def diagnostic_date(value):
+    if isinstance(value, str) and len(value) == 10:
+        try:
+            if dt.date.fromisoformat(value).isoformat() == value:
+                return value
+        except ValueError:
+            pass
+    return None
+
+
+def diagnostic_received_at(value):
+    if isinstance(value, str) and len(value) <= 32:
+        try:
+            clock = dt.datetime.fromisoformat(value)
+            if clock.tzinfo is not None:
+                return clock.astimezone(dt.UTC).isoformat()
+        except (ValueError, OverflowError):
+            pass
+    return None
+
+
 def safe_daily_timing(issue):
     """Keep only enumerated phases and bounded, machine-readable timestamps."""
     result = {}
     phase = issue.get('phase')
     if isinstance(phase, str) and phase in ('closed', 'intraday', 'preopen', 'unknown'):
         result['phase'] = phase
-    received_at = issue.get('receivedAt')
-    if isinstance(received_at, str) and len(received_at) <= 32:
-        try:
-            clock = dt.datetime.fromisoformat(received_at)
-            if clock.tzinfo is not None:
-                result['receivedAt'] = clock.astimezone(dt.UTC).isoformat()
-        except (ValueError, OverflowError):
-            pass
+    received_at = diagnostic_received_at(issue.get('receivedAt'))
+    if received_at:
+        result['receivedAt'] = received_at
     last_bar = issue.get('lastBarTimestamp')
     if diagnostic_timestamp(last_bar):
         result['lastBarTimestamp'] = last_bar
@@ -102,6 +119,64 @@ def safe_daily_timing(issue):
     return result
 
 
+def safe_yahoo_chart(value):
+    """Retain the last three public chart rows and numeric Yahoo session fields."""
+    if not isinstance(value, dict):
+        return {}
+
+    def epoch(timestamp):
+        return type(timestamp) is int and diagnostic_timestamp(timestamp)
+
+    def price(number):
+        return type(number) in (int, float) and -(2**53 - 1) <= number <= 2**53 - 1
+
+    result = {}
+    rows = value.get('lastThree')
+    if isinstance(rows, list):
+        result['lastThree'] = []
+        for item in rows[-3:]:
+            if not isinstance(item, dict):
+                continue
+            status, close = item.get('closeStatus'), item.get('close')
+            numeric_price = price(close)
+            positive = numeric_price and close > 0
+            if (status not in ('positive', 'null', 'close_missing', 'invalid')
+                    or (status == 'positive') != positive
+                    or (status in ('null', 'close_missing') and close is not None)):
+                continue
+            row = {'closeStatus': status, 'close': close if numeric_price else None}
+            day, timestamp = diagnostic_date(item.get('date')), item.get('timestamp')
+            if day:
+                row['date'] = day
+            if epoch(timestamp):
+                row['timestamp'] = timestamp
+            result['lastThree'].append(row)
+    market_price, market_time = value.get('regularMarketPrice'), value.get('regularMarketTime')
+    if 'regularMarketPrice' in value and (market_price is None or price(market_price)):
+        result['regularMarketPrice'] = market_price
+    if epoch(market_time):
+        result['regularMarketTime'] = market_time
+    received_at = diagnostic_received_at(value.get('receivedAt'))
+    if received_at:
+        result['receivedAt'] = received_at
+    periods = value.get('currentTradingPeriod')
+    if isinstance(periods, dict):
+        safe_periods = {}
+        for name in ('pre', 'regular', 'post'):
+            period = periods.get(name)
+            if not isinstance(period, dict):
+                continue
+            bounds = {key: period[key] for key in ('start', 'end') if epoch(period.get(key))}
+            offset = period.get('gmtoffset')
+            if type(offset) is int and -86400 < offset < 86400:
+                bounds['gmtoffset'] = offset
+            if bounds:
+                safe_periods[name] = bounds
+        if safe_periods:
+            result['currentTradingPeriod'] = safe_periods
+    return result
+
+
 def safe_market_issues(issues):
     """Keep bounded codes, approved tickers, and validated dates and timestamps."""
     if not isinstance(issues, list):
@@ -109,6 +184,7 @@ def safe_market_issues(issues):
     result = []
     # One timing block per symbol preserves the export size bound on repeated issues.
     timed_symbols = set()
+    chart_symbols = set()
     for item in issues[:100]:
         if not isinstance(item, dict):
             continue
@@ -120,26 +196,29 @@ def safe_market_issues(issues):
         if isinstance(symbol, str) and symbol in DIAGNOSTIC_SYMBOLS:
             row['symbol'] = symbol
         for key in ('sourceDate', 'observedDate', 'requiredDate', 'expectedCompletedDate'):
-            value = item.get(key)
-            try:
-                if isinstance(value, str) and dt.date.fromisoformat(value).isoformat() == value:
-                    row[key] = value
-            except ValueError:
-                pass
-        if ('symbol' in row and kind == 'daily' and status == 'no_common_completed_observation'
-                and symbol not in timed_symbols):
-            timing = safe_daily_timing(item)
-            if timing:
-                row.update(timing)
-                timed_symbols.add(symbol)
+            value = diagnostic_date(item.get(key))
+            if value:
+                row[key] = value
+        if 'symbol' in row and kind == 'daily' and status == 'no_common_completed_observation':
+            if symbol not in timed_symbols:
+                timing = safe_daily_timing(item)
+                if timing:
+                    row.update(timing)
+                    timed_symbols.add(symbol)
+            if symbol not in chart_symbols:
+                chart = safe_yahoo_chart(item.get('yahooChart'))
+                if chart:
+                    row['yahooChart'] = chart
+                    chart_symbols.add(symbol)
         result.append(row)
     return result
 
 
-def market_diagnostic_issues(data, daily_records=None):
-    """Attach calendar dates and parsed timing for failed daily observations."""
+def market_diagnostic_issues(data, daily_records=None, daily_evidence=None):
+    """Attach the parsed timing and chart evidence independently."""
     import market_calendar
     daily_records = daily_records or {}
+    daily_evidence = daily_evidence or {}
     companies = {row.get('sym'): row for row in data.get('companies', [])}
     calendars = data.get('meta', {}).get('marketCalendar', {}).get('exchanges', {})
     enriched = []
@@ -151,17 +230,33 @@ def market_diagnostic_issues(data, daily_records=None):
         if row.get('kind') == 'daily':
             info = companies.get(symbol, {}).get('marketCalendar', {})
             row.update(sourceDate=info.get('quoteDate'), expectedCompletedDate=info.get('expectedCompletedDate'))
-            record = daily_records.get(symbol)
-            if row.get('status') == 'no_common_completed_observation' and isinstance(record, dict):
-                timestamps, day = record.get('barTimestamps'), record.get('asOf')
-                row.update(phase=record.get('phase'), receivedAt=record.get('receivedAt'),
-                           finality=record.get('finality'), lastBarTimestamp=(
-                               timestamps.get(day) if isinstance(timestamps, dict) and isinstance(day, str) else None))
+            if row.get('status') == 'no_common_completed_observation':
+                row['yahooChart'] = daily_evidence.get(symbol)
+                record = daily_records.get(symbol)
+                if isinstance(record, dict):
+                    timestamps, day = record.get('barTimestamps'), record.get('asOf')
+                    row.update(phase=record.get('phase'), receivedAt=record.get('receivedAt'),
+                               finality=record.get('finality'), lastBarTimestamp=(
+                                   timestamps.get(day) if isinstance(timestamps, dict) and isinstance(day, str) else None))
         elif row.get('kind') == 'index':
             info = calendars.get(market_calendar.exchange_for(symbol), {})
             row['expectedCompletedDate'] = info.get('expectedCompletedDate')
         enriched.append(row)
     return safe_market_issues(enriched)
+
+
+def bound_chart_diagnostics(diagnostic):
+    """Preserve the existing diagnostic before budgeting optional chart evidence."""
+    charts = [(issue, issue.pop('yahooChart')) for issue in diagnostic.get('marketIssues', ())
+              if 'yahooChart' in issue]
+    if not charts:
+        return
+    remaining = CHART_DIAGNOSTIC_JSON_BUDGET - len(canonical_json(diagnostic).encode('utf-8'))
+    for issue, chart in charts:
+        size = len(canonical_json({'yahooChart': chart}).encode('utf-8'))
+        if size <= remaining:
+            issue['yahooChart'] = chart
+            remaining -= size
 
 
 def safe_collection_diagnostic(code, *, blockers=(), market_issues=(), notion_errors=(),
@@ -197,6 +292,7 @@ def safe_collection_diagnostic(code, *, blockers=(), market_issues=(), notion_er
         item = safe_error(fields,
                           note.get('table') if note.get('table') in TABLE_ORDER else None)
         result['notionErrors'].append(item)
+    bound_chart_diagnostics(result)
     return result
 
 
@@ -522,7 +618,7 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
     real_blockers = [code for code in blockers if code not in
                      ('synthetic_fixture_not_publishable', 'local_review_not_publishable', 'offline_not_publishable')]
     progress['blockers'] = real_blockers
-    progress['marketIssues'] = market_diagnostic_issues(data, market.get('daily'))
+    progress['marketIssues'] = market_diagnostic_issues(data, market.get('daily'), market.get('dailyEvidence'))
     gates.update(blockers=blockers, dataSHA256=bundle.data_digest(data),
                  asOf=data['meta']['asOf'], snapshot=data['meta']['snapshot'],
                  asOfByMarket=data['meta']['asOfByMarket'], coverage=data['meta'].get('coverage', []),
