@@ -73,7 +73,7 @@ class FailureObservabilityTests(unittest.TestCase):
             (collector, 'fetch_all', 'notion_fetch'),
             (collector, 'sanitize_fetch', 'notion_sanitize'),
             (collector, 'normalize', 'notion_normalize'),
-            (collector.build, 'load_and_validate', 'market_config'),
+            (collector.build, 'validate_market_config', 'market_config'),
             (collector.build, 'apply_research', 'research_apply'),
             (collector.build, 'release_blockers', 'release_gates'),
             (collector, 'step_summary', 'summary'),

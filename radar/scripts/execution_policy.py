@@ -7,6 +7,7 @@ PREPARATION_BRANCH = 'v3/pr5-stable-operations'
 PREMATURE_CLOSE_BRANCH = 'v3/fix-premature-close'
 NULL_LATEST_CLOSE_BRANCH = 'v3/fix-null-latest-close'
 DAILY_CARRY_BRANCH = 'v3/pr8-daily-carry'
+CLEANUP_BRANCH = 'v3/pr6-cleanup'
 LIVE_WORKFLOW = '.github/workflows/radar-interface-acceptance.yml'
 
 
@@ -16,7 +17,7 @@ def dry_run_ref_allowed(env):
         return True
     if ref not in ('refs/heads/' + SOURCE_BRANCH, 'refs/heads/' + PREPARATION_BRANCH,
                    'refs/heads/' + PREMATURE_CLOSE_BRANCH, 'refs/heads/' + NULL_LATEST_CLOSE_BRANCH,
-                   'refs/heads/' + DAILY_CARRY_BRANCH):
+                   'refs/heads/' + DAILY_CARRY_BRANCH, 'refs/heads/' + CLEANUP_BRANCH):
         return False
     return (env.get('GITHUB_WORKFLOW_REF') == REPOSITORY + '/' + LIVE_WORKFLOW + '@' + ref
             and env.get('GITHUB_WORKFLOW_SHA') == env.get('GITHUB_SHA'))

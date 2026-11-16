@@ -9,6 +9,7 @@ import unittest
 from unittest.mock import patch
 from test_integrity import NOW, build, quotes, historical_fx
 from test_review_regressions import complete_dataset
+from historical_research import historical_data
 from integrity import dated_fx, fresh_record
 
 HERE=Path(__file__).resolve().parents[2]/'audit/truthfulness-2026-10-18'
@@ -110,7 +111,7 @@ class FxFinalityTests(unittest.TestCase):
         self.assertTrue(all(r.get('rates') for r in old['fx'].values()))
         mk=json.loads(gzip.decompress((FIX/'market-finality.json.gz').read_bytes()))
         now=dt.datetime.fromisoformat(manifest['replayAt'])
-        data,report=build.load_and_validate(build.RADAR,build.REPO,now.date());self.assertFalse(report.errors)
+        data,report=historical_data(now.date());self.assertFalse(report.errors)
         D,stale,missing=build.assemble(data,mk,mk,now)
         self.assertFalse(stale);self.assertFalse(missing)
         # Immutable captured payloads predate the quote marketState contract.

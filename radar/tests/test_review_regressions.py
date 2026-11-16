@@ -12,6 +12,7 @@ import unittest
 from unittest.mock import patch
 
 from test_integrity import NOW, bars, build, dataset, months, quotes, record, financial_evidence, historical_fx
+from historical_research import historical_builder
 
 
 def monthly_record(day='2026-10-16', denominator=False):
@@ -235,12 +236,13 @@ class CompleteMainTests(unittest.TestCase):
         args = ['build.py', '--source', 'toml', '--cache', str(root/'cache.json'), '--out', str(root/'out'),
                 '--audit-json', str(root/'audit.json')]
         if force: args.append('--force')
-        with patch.object(sys, 'argv', args), patch.object(build.dt, 'datetime', FrozenClock), \
-             patch.object(build, 'load_and_validate', return_value=(data, SimpleNamespace(errors=[], warnings=[]))), \
-             patch.object(build, 'fetch_all', return_value=(mk, [])), \
-             patch.object(build, 'gh_out') as output, patch.object(build, 'gh_summary'), \
+        legacy = historical_builder()
+        with patch.object(sys, 'argv', args), patch.object(legacy.dt, 'datetime', FrozenClock), \
+             patch.object(legacy, 'load_and_validate', return_value=(data, SimpleNamespace(errors=[], warnings=[]))), \
+             patch.object(legacy, 'fetch_all', return_value=(mk, [])), \
+             patch.object(legacy, 'gh_out') as output, patch.object(legacy, 'gh_summary'), \
              contextlib.redirect_stdout(io.StringIO()):
-            code = build.main()
+            code = legacy.main()
         return code, json.loads((root/'audit.json').read_text(encoding='utf-8')), output.call_args.kwargs
 
     def test_complete_successful_main_baseline(self):

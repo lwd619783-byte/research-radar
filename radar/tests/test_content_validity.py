@@ -8,7 +8,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT/'radar/scripts'))
-import schema
+from historical_research import historical_data, schema
 
 
 class ContentDisplayTests(unittest.TestCase):
@@ -106,7 +106,7 @@ class ContentSchemaTests(unittest.TestCase):
             self.assertTrue(rep.errors)
 
     def test_live_config_only_promotes_the_officially_checked_event(self):
-        data, rep = schema.load_and_validate(ROOT/'radar', ROOT, self.today)
+        data, rep = historical_data(self.today)
         self.assertFalse(rep.errors, rep.errors)
         confirmed = [c for c in data['companies'] if c['earnings']['status']=='confirmed']
         self.assertEqual([c['id'] for c in confirmed], ['SKH'])
@@ -116,7 +116,7 @@ class ContentSchemaTests(unittest.TestCase):
         self.assertEqual(data['config']['weekly']['review']['verified_at'], '')
 
     def test_future_source_is_unavailable_to_historical_snapshots(self):
-        data, rep = schema.load_and_validate(ROOT/'radar', ROOT, dt.date(2026,10,17))
+        data, rep = historical_data(dt.date(2026,10,17))
         self.assertFalse(rep.errors, rep.errors)
         skh = next(c for c in data['companies'] if c['id']=='SKH')
         self.assertEqual(skh['earnings']['status'], 'unverified')

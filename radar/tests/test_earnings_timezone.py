@@ -12,7 +12,7 @@ sys.path.insert(0, str(RADAR / 'scripts'))
 from earnings_dates import MARKET_TIMEZONES, days_until, issuer_today, within_earnings_window
 from notion_normalize import normalize
 from render_v3 import kpi_values
-import schema
+from historical_research import historical_data, schema
 from test_notion_normalize import fixture_fetch, find_page
 
 
@@ -172,8 +172,8 @@ class EarningsRenderingAndConfigTests(unittest.TestCase):
                         row.setdefault('earnings', {})['timezone'] = 'America/Los_Angeles'
             return value
         with patch.object(schema, '_load', side_effect=edited_load):
-            before, early = schema.load_and_validate(RADAR, RADAR.parent, dt.date(2026, 11, 4), fixed_clock='2026-11-04T05:30:00Z')
-            after, late = schema.load_and_validate(RADAR, RADAR.parent, dt.date(2026, 11, 4), fixed_clock='2026-11-04T08:00:00Z')
+            before, early = historical_data(dt.date(2026, 11, 4), fixed_clock='2026-11-04T05:30:00Z')
+            after, late = historical_data(dt.date(2026, 11, 4), fixed_clock='2026-11-04T08:00:00Z')
         self.assertFalse(early.errors)
         self.assertFalse(late.errors)
         def anet_past(report):

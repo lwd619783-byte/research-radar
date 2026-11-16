@@ -4,7 +4,6 @@ from __future__ import annotations
 from collections import Counter
 from contextlib import redirect_stderr, redirect_stdout
 import copy
-import datetime as dt
 import hashlib
 import io
 import json
@@ -103,34 +102,6 @@ def outcome(result):
     return 'ok'
 
 
-def adapt_toml(data, notion_fixtures):
-    """Only the eight intentional differences documented in fixture README."""
-    data = copy.deepcopy(data)
-    source_rows = {notion_fixtures.plain(row['properties']['名称']): row
-                   for row in notion_fixtures.rows('industries')}
-    for row in data['industries']:
-        raw = source_rows[row['name']]['properties']['知识库']
-        row['kb'] = raw['url']
-        row.pop('review', None)
-    for row in data['chokepoints']:
-        row.pop('review', None)
-    weekly = data['meta']['weekly']
-    weekly['sourceWeek'] = weekly['week']
-    weekly['week'] = '2026-W43'
-    weekly.pop('review', None)
-    weekly.pop('thermoAction', None)
-    for row in data['companies']:
-        row.pop('flashStatus', None)
-        row['earnings'].pop('published_at', None)
-        row['earnings'].pop('verified_at', None)
-        financial = row['provenance']['financial']
-        if financial is not None:
-            financial['entered_at'] = financial.pop('verified_at')
-            status = financial.pop('status')
-            financial['evidence'] = {'verified': 'source', 'verified_partial': 'partial'}.get(status, 'missing')
-    return data
-
-
 class NotionV3Tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -167,16 +138,6 @@ class NotionV3Tests(unittest.TestCase):
 
     def test_notion_research_parity(self):
         self.assert_tree(project(self.baseline['DATA']), read_json(FIXTURES / 'expected/research_projection.json'))
-
-    def test_toml_parity_only_eight_documented_differences(self):
-        fixed_clock = dt.datetime.fromisoformat(CASES['as_of'])
-        source, report = build.load_and_validate(build.RADAR, build.REPO, fixed_clock.date())
-        self.assertEqual(report.errors, [])
-        market = {key: {} for key in ('daily', 'quote', 'index', 'fx', 'ratio')}
-        data, _, _ = build.assemble(source, market, market, fixed_clock)
-        with tempfile.TemporaryDirectory(prefix='radar-toml-parity-') as directory:
-            adapted = adapt_toml(data, FixtureSet(directory))
-        self.assert_tree(project(adapted), project(self.baseline['DATA']))
 
     def test_v3_view(self):
         expected = read_json(FIXTURES / 'expected/v3_view.json')

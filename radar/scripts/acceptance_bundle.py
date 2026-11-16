@@ -88,6 +88,8 @@ def check_sensitive(value):
 
 
 def classification(D):
+    if D['meta'].get('diagnosticResearchSource') == 'notion-fixture':
+        return 'SAME-EXECUTION MARKET DIAGNOSTIC WITH FIXTURE RESEARCH — NOT PUBLICATION'
     return ('OFFLINE TEST DATA — NOT NEW REAL MARKET DATA' if
             any(D['meta'].get(k) for k in ('fixture', 'offline', 'reviewPreview')) else
             'SAME-EXECUTION DIAGNOSTIC SNAPSHOT — NOT PUBLICATION')

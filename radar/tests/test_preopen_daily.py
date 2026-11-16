@@ -10,6 +10,7 @@ import unittest
 from unittest.mock import patch
 
 from test_integrity import build, quotes, financial_evidence
+from historical_research import historical_data
 from test_completed_snapshot import epoch
 from snapshot import completed_bars
 
@@ -119,7 +120,7 @@ class PreopenDailyTests(unittest.TestCase):
         self.assertEqual(index['phase'], 'unknown')
         self.assertEqual(index['price'], 999.)
         self.assertEqual(index['date'], DAY)
-        data, validation = build.load_and_validate(build.RADAR, build.REPO, CLOCK.date())
+        data, validation = historical_data(CLOCK.date())
         self.assertFalse(validation.errors)
         data['companies'] = [company for company in data['companies'] if company['sym'] == '0522.HK']
         data['companies'][0]['financial'] = financial_evidence()
@@ -136,7 +137,7 @@ class PreopenDailyTests(unittest.TestCase):
         self.assertEqual(coverage['reason'], 'phase_unknown')
 
     def test_fixed_clock_assembly_uses_completed_history_without_weakening_gates(self):
-        data, validation = build.load_and_validate(build.RADAR, build.REPO, CLOCK.date())
+        data, validation = historical_data(CLOCK.date())
         self.assertFalse(validation.errors)
         data['companies'] = [company for company in data['companies'] if company['sym'] == '0522.HK']
         company = data['companies'][0]

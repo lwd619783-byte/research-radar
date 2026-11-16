@@ -22,7 +22,6 @@
       "paths": [
         "radar/**",
         ".github/workflows/radar-production.yml",
-        "audit/truthfulness-frozen.json",
         "!radar/README.md",
         "!radar/docs/**"
       ]
