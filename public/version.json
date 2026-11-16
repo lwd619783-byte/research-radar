@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "state": "current",
-  "sourceSHA": "ef223eeb0d63b1db951264c15bad55398cee5876",
-  "runId": "43802967567",
-  "dataSHA256": "7089709d972fcce2f0b3ddf8793d24f3d8eb4ae1dc447811e236b253fabffc22",
-  "generatedAt": "2026-11-16T12:20+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/43802967567",
+  "sourceSHA": "9c517105dcfea4c273a5c1a495ba0e3083259e81",
+  "runId": "43814009456",
+  "dataSHA256": "5db47477b19facc4a4a5d2484e4c53687efaf8c6ed6a42acfb9292f5a9b30d2a",
+  "generatedAt": "2026-11-16T14:05+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/43814009456",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-11-16T12:20+08:00",
+    "generatedAt": "2026-11-16T14:05+08:00",
     "baselineAt": "2026-11-13T18:19+08:00",
     "reports": [],
     "calendar": [],
@@ -27,7 +27,14 @@
         "status": "complete"
       }
     ],
-    "lost": [],
+    "lost": [
+      {
+        "kind": "company",
+        "symbol": "000660.KS",
+        "metric": "marketCap",
+        "status": "missing"
+      }
+    ],
     "prices": [
       {
         "id": "MOD",
@@ -38,6 +45,16 @@
         "after": 135.7,
         "currency": "USD",
         "change": 0.27861
+      },
+      {
+        "id": "EMC",
+        "name": "台光电子",
+        "beforeDate": "2026-11-13",
+        "afterDate": "2026-11-16",
+        "before": 4215,
+        "after": 3795,
+        "currency": "TWD",
+        "change": -0.09964
       },
       {
         "id": "COHR",
@@ -188,7 +205,7 @@
       "scores": []
     },
     "excludedPrices": 0,
-    "sameDatePrices": 27,
+    "sameDatePrices": 26,
     "pendingResearch": 17,
     "baselineProof": {
       "state": "success",
@@ -198,15 +215,5 @@
       "sourceSHA": "ef223eeb0d63b1db951264c15bad55398cee5876",
       "dataSHA256": "7f4c44e9354ba2e5a4e4671af54822df66c5778d99e173da5f1c7476edb4dce3"
     }
-  },
-  "schedule": {
-    "cronUtc": [
-      "45 0 * * 1-5",
-      "15 4 * * 1-5",
-      "15 10 * * 1-5",
-      "50 22 * * 0"
-    ],
-    "nextRunAt": "2026-11-16T18:15:00+08:00",
-    "lateAfterMinutes": 180
   }
 }
