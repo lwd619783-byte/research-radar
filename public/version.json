@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "state": "current",
   "sourceSHA": "ef223eeb0d63b1db951264c15bad55398cee5876",
-  "runId": "43771496046",
-  "dataSHA256": "5cf77f47a51d1b00c6e9114f47ad8989b586ba4877b998377693c05ddafca975",
-  "generatedAt": "2026-11-16T06:54+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/43771496046",
+  "runId": "43782242319",
+  "dataSHA256": "69deea1e1819f02a8725cb8976be58ad2878ddd1847b613a258f4fb90d3d2f96",
+  "generatedAt": "2026-11-16T08:49+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/43782242319",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-11-16T06:54+08:00",
+    "generatedAt": "2026-11-16T08:49+08:00",
     "baselineAt": "2026-11-13T18:19+08:00",
     "reports": [],
     "calendar": [],
@@ -35,12 +35,6 @@
       {
         "kind": "company",
         "symbol": "002371.SZ",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "000660.KS",
         "metric": "marketCapUSD",
         "status": "complete"
       },
@@ -83,12 +77,6 @@
       {
         "kind": "company",
         "symbol": "1888.HK",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "3110.T",
         "metric": "marketCapUSD",
         "status": "complete"
       },
@@ -368,7 +356,7 @@
       "15 10 * * 1-5",
       "50 22 * * 0"
     ],
-    "nextRunAt": "2026-11-16T08:45:00+08:00",
+    "nextRunAt": "2026-11-16T12:15:00+08:00",
     "lateAfterMinutes": 180
   }
 }
