@@ -1,21 +1,21 @@
 {
   "schemaVersion": 3,
   "sourceSHA": "9c517105dcfea4c273a5c1a495ba0e3083259e81",
-  "runId": "44236039519",
-  "fixedClock": "2026-11-18T12:21:26.156717+08:00",
+  "runId": "44283631632",
+  "fixedClock": "2026-11-18T18:20:33.231050+08:00",
   "priceDateRange": [
     "2026-11-17",
     "2026-11-18"
   ],
-  "dataSHA256": "62d335a9a16bb28bac2aab67eab79464a72e06300ae5b749c0ca6d4f8b122d15",
+  "dataSHA256": "0e2e865c921c9bafde3d203ca07fa1a4301eca91eae7010f261df074c695fce0",
   "blockers": [],
-  "historySHA256": "3d9168e5c3bc71a574638d250045104e1814c4e6ff7f68392144dcf7052476bf",
+  "historySHA256": "e21936bfde029e813f48ec5c29d94c53a5b46f84ff85c99b1b6c0ce3c1c9e7fd",
   "files": {
-    "version.json": "2baf5d072900a64fd24fd557b80c935daf31227d9495c0df7ddc27ee7265994b",
-    "index.html": "80eb15c4f56bf316eb3270e0b65aaa568c0ea26aed6a6343c977a41a285a2cb5",
+    "version.json": "bda2744e1b2591559ff95757c34430ce4238ccf82ca65e1923f89b37635e723a",
+    "index.html": "613c1e33efd75058cd544fa950fde4cd715771fe3684c4690eb94762b2db7a3b",
     "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1"
   },
-  "researchSnapshotSHA256": "ff7ad89583548b04e27be43bfa4af68e50e49b1b5442609e6209d2cc3c3f8a9a",
+  "researchSnapshotSHA256": "304e71b827ccebc3eeb6d6b660cdae1c337b121ad8468afac40a00833a5a1bc1",
   "notion": {
     "source": "notion",
     "requests": {
@@ -54,8 +54,8 @@
         "substituted": 0
       },
       "daily": {
-        "fetched": 36,
-        "used": 36,
+        "fetched": 37,
+        "used": 37,
         "excluded": 0,
         "quarantined": 0,
         "substituted": 0
@@ -74,11 +74,11 @@
   },
   "scheduleAdmission": {
     "kind": "external_schedule",
-    "slot": "weekday-1215",
-    "plannedAt": "2026-11-18T12:15:00+08:00",
+    "slot": "weekday-1815",
+    "plannedAt": "2026-11-18T18:15:00+08:00",
     "schemaVersion": 1,
     "sourceSHA": "9c517105dcfea4c273a5c1a495ba0e3083259e81",
-    "runId": "44236039519",
-    "createdAt": "2026-11-18T12:15:19+08:00"
+    "runId": "44283631632",
+    "createdAt": "2026-11-18T18:15:19+08:00"
   }
 }
