@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "state": "current",
   "sourceSHA": "9c517105dcfea4c273a5c1a495ba0e3083259e81",
-  "runId": "44210402523",
-  "dataSHA256": "65fc4aa16cdc8c29ebd7b1c31e7e624717a7ab4598082fb24f6d744c40853a92",
-  "generatedAt": "2026-11-18T08:51+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/44210402523",
+  "runId": "44236039519",
+  "dataSHA256": "62d335a9a16bb28bac2aab67eab79464a72e06300ae5b749c0ca6d4f8b122d15",
+  "generatedAt": "2026-11-18T12:21+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/44236039519",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-11-18T08:51+08:00",
+    "generatedAt": "2026-11-18T12:21+08:00",
     "baselineAt": "2026-11-17T18:18+08:00",
     "reports": [
       {
@@ -41,128 +41,8 @@
     "restored": [
       {
         "kind": "company",
-        "symbol": "688012.SS",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "0522.HK",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "688825.SS",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "002371.SZ",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
         "symbol": "000660.KS",
         "metric": "financial",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "601208.SS",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "301377.SZ",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "301200.SZ",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "2383.TW",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "002463.SZ",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "603256.SS",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "1888.HK",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "300476.SZ",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "002916.SZ",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "600183.SS",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "000657.SZ",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "300394.SZ",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "300502.SZ",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "688498.SS",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "300308.SZ",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "600875.SS",
-        "metric": "marketCapUSD",
         "status": "complete"
       },
       {
@@ -173,37 +53,7 @@
       },
       {
         "kind": "company",
-        "symbol": "688676.SS",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "002335.SZ",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
         "symbol": "SU.PA",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "002028.SZ",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "002837.SZ",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "601179.SS",
         "metric": "marketCapUSD",
         "status": "complete"
       }
@@ -272,12 +122,6 @@
       {
         "kind": "index",
         "symbol": "000001.SS",
-        "metric": null,
-        "status": "partial"
-      },
-      {
-        "kind": "index",
-        "symbol": "^HSI",
         "metric": null,
         "status": "partial"
       }
@@ -443,7 +287,7 @@
       "15 10 * * 1-5",
       "50 22 * * 0"
     ],
-    "nextRunAt": "2026-11-18T12:15:00+08:00",
+    "nextRunAt": "2026-11-18T18:15:00+08:00",
     "lateAfterMinutes": 180
   }
 }
