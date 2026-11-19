@@ -2,93 +2,19 @@
   "schemaVersion": 1,
   "state": "current",
   "sourceSHA": "9c517105dcfea4c273a5c1a495ba0e3083259e81",
-  "runId": "44483685048",
-  "dataSHA256": "1254803f362c3996928d8fcf15156e7f2690686f674c4d39c141a7e0dc7bd6a0",
-  "generatedAt": "2026-11-19T16:04+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/44483685048",
+  "runId": "44503932794",
+  "dataSHA256": "e3c809b70ff28aeb91944df34773d929ca3877cfa7b7a865a14988f825c7bf02",
+  "generatedAt": "2026-11-19T18:19+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/44503932794",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-11-19T16:04+08:00",
+    "generatedAt": "2026-11-19T18:19+08:00",
     "baselineAt": "2026-11-18T18:20+08:00",
     "reports": [],
     "calendar": [],
-    "restored": [
-      {
-        "kind": "company",
-        "symbol": "ENR.DE",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      },
-      {
-        "kind": "company",
-        "symbol": "SU.PA",
-        "metric": "marketCapUSD",
-        "status": "complete"
-      }
-    ],
-    "lost": [
-      {
-        "kind": "company",
-        "symbol": "ENR.DE",
-        "metric": "r5",
-        "status": "missing"
-      },
-      {
-        "kind": "company",
-        "symbol": "ENR.DE",
-        "metric": "r20",
-        "status": "missing"
-      },
-      {
-        "kind": "company",
-        "symbol": "ENR.DE",
-        "metric": "r60",
-        "status": "missing"
-      },
-      {
-        "kind": "company",
-        "symbol": "ENR.DE",
-        "metric": "ytd",
-        "status": "missing"
-      },
-      {
-        "kind": "company",
-        "symbol": "ENR.DE",
-        "metric": "high52",
-        "status": "missing"
-      },
-      {
-        "kind": "company",
-        "symbol": "SU.PA",
-        "metric": "r5",
-        "status": "missing"
-      },
-      {
-        "kind": "company",
-        "symbol": "SU.PA",
-        "metric": "r20",
-        "status": "missing"
-      },
-      {
-        "kind": "company",
-        "symbol": "SU.PA",
-        "metric": "r60",
-        "status": "missing"
-      },
-      {
-        "kind": "company",
-        "symbol": "SU.PA",
-        "metric": "ytd",
-        "status": "missing"
-      },
-      {
-        "kind": "company",
-        "symbol": "SU.PA",
-        "metric": "high52",
-        "status": "missing"
-      }
-    ],
+    "restored": [],
+    "lost": [],
     "prices": [
       {
         "id": "EMC",
@@ -151,6 +77,16 @@
         "change": 0.04995
       },
       {
+        "id": "KBL",
+        "name": "建滔积层板",
+        "beforeDate": "2026-11-18",
+        "afterDate": "2026-11-19",
+        "before": 25.5,
+        "after": 24.4,
+        "currency": "HKD",
+        "change": -0.04314
+      },
+      {
         "id": "ANET",
         "name": "Arista",
         "beforeDate": "2026-11-17",
@@ -189,6 +125,16 @@
         "after": 1183000,
         "currency": "KRW",
         "change": 0.03409
+      },
+      {
+        "id": "ASMPT",
+        "name": "ASMPT",
+        "beforeDate": "2026-11-18",
+        "afterDate": "2026-11-19",
+        "before": 92.0,
+        "after": 89.0,
+        "currency": "HKD",
+        "change": -0.03261
       },
       {
         "id": "NAURA",
@@ -321,6 +267,16 @@
         "change": 0.01339
       },
       {
+        "id": "ENR",
+        "name": "西门子能源",
+        "beforeDate": "2026-11-17",
+        "afterDate": "2026-11-18",
+        "before": 125.0,
+        "after": 126.7,
+        "currency": "EUR",
+        "change": 0.01328
+      },
+      {
         "id": "JPKJ",
         "name": "金盘科技",
         "beforeDate": "2026-11-18",
@@ -441,6 +397,16 @@
         "change": -0.00662
       },
       {
+        "id": "SU",
+        "name": "施耐德电气",
+        "beforeDate": "2026-11-17",
+        "afterDate": "2026-11-18",
+        "before": 236.6,
+        "after": 238.1,
+        "currency": "EUR",
+        "change": 0.00613
+      },
+      {
         "id": "ZGXD",
         "name": "中国西电",
         "beforeDate": "2026-11-18",
@@ -478,8 +444,8 @@
       "confirmed": [],
       "scores": []
     },
-    "excludedPrices": 2,
-    "sameDatePrices": 2,
+    "excludedPrices": 0,
+    "sameDatePrices": 0,
     "pendingResearch": 22,
     "baselineProof": {
       "state": "success",
@@ -497,7 +463,7 @@
       "15 10 * * 1-5",
       "50 22 * * 0"
     ],
-    "nextRunAt": "2026-11-19T12:15:00+08:00",
+    "nextRunAt": "2026-11-20T08:45:00+08:00",
     "lateAfterMinutes": 180
   }
 }
