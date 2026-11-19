@@ -63,7 +63,25 @@ DIAGNOSTIC_SYMBOLS = frozenset({
     '^GSPC', '^HSI', '^IXIC', '^SOX'})
 MAX_DIAGNOSTIC_INPUT = 65536
 MAX_DIAGNOSTIC_TIMESTAMP = 253402300799  # Last UTC second representable by datetime.
-CHART_DIAGNOSTIC_JSON_BUDGET = 30 * 1024  # Leave space for the summary within the 32 KiB artifact.
+CHART_DIAGNOSTIC_JSON_BUDGET = 30 * 1024  # Shared provider evidence; reserve space in the 32 KiB artifact.
+DIAGNOSTIC_INDEX_SYMBOLS = frozenset({
+    '000001.SS', '399006.SZ', '000922.SS', '^HSI', 'HSTECH.HK', '^IXIC', '^GSPC', '^SOX'})
+INDEX_EVIDENCE_OUTCOMES = frozenset({'parsed', 'transport_failed', 'parse_failed', 'source_data_failed'})
+INDEX_EVIDENCE_FAILURES = frozenset({
+    'yahoo_chart_no_result', 'yahoo_chart_empty_daily_bars', 'yahoo_index_insufficient_daily_bars',
+    'index_no_backup', 'index_insufficient_daily_bars', 'index_invalid_prices_or_dates',
+    'redirect_not_followed', 'access_refused_stop_path', 'request_or_time_budget_exhausted',
+    'host_not_allowlisted', 'path_not_allowlisted', 'separate_source_only', 'response_too_large',
+    'http_error_no_more_retries', 'transport_error_no_retry', 'retry_limit', 'json_parse_failed',
+    'source_parse_error', 'source_error'})
+INDEX_SELECTION_REASONS = frozenset({
+    'retained', 'same_or_older_candidate', 'superseded_by_newer_candidate', 'no_parsed_record',
+    'record_schema_invalid', 'source_date_invalid', 'receipt_invalid', 'receipt_future',
+    'receipt_stale', 'calendar_unavailable', 'source_date_future', 'source_date_stale',
+    'current_session_not_complete', 'source_missing', 'price_invalid', 'change_invalid',
+    'selector_rejected', 'rejected_at_final_clock'})
+INDEX_REQUEST_STATUSES = frozenset({'connected', 'http_error', 'transport_error', 'stopped'})
+INDEX_EVIDENCE_TIMEZONES = frozenset({'Asia/Shanghai', 'Asia/Hong_Kong', 'America/New_York'})
 MARKET_ISSUE_STATUSES = {
     'daily': frozenset({'no_common_completed_observation', 'stale'}),
     'index': frozenset({'missing_or_unconfirmed_snapshot'}),
@@ -178,6 +196,102 @@ def safe_yahoo_chart(value):
     return result
 
 
+def safe_index_evidence(value):
+    """Keep one bounded, typed observation per approved index provider."""
+    if not isinstance(value, list):
+        return []
+    result, sources = [], set()
+    for item in value[:2]:
+        if not isinstance(item, dict):
+            continue
+        source, outcome = item.get('source'), item.get('outcome')
+        if (not isinstance(source, str) or source not in ('yahoo', 'tencent') or source in sources
+                or not isinstance(outcome, str) or outcome not in INDEX_EVIDENCE_OUTCOMES):
+            continue
+        row = {'source': source, 'outcome': outcome}
+        failure = item.get('failure')
+        if 'failure' in item and (failure is None or isinstance(failure, str) and failure in INDEX_EVIDENCE_FAILURES):
+            row['failure'] = failure
+        received = diagnostic_received_at(item.get('receivedAt'))
+        if received:
+            row['receivedAt'] = received
+        requests = item.get('requests')
+        if isinstance(requests, list):
+            row['requests'] = []
+            for request in requests[:2]:
+                if not isinstance(request, dict):
+                    continue
+                status = request.get('status')
+                if not isinstance(status, str) or status not in INDEX_REQUEST_STATUSES:
+                    continue
+                http = request.get('httpStatus')
+                event = {'status': status, 'httpStatus': http if type(http) is int and 100 <= http <= 599 else None}
+                for key in ('startedAt', 'receivedAt'):
+                    timestamp = diagnostic_received_at(request.get(key))
+                    if timestamp:
+                        event[key] = timestamp
+                row['requests'].append(event)
+        chart = safe_yahoo_chart({'lastThree': item.get('lastThree')})
+        if 'lastThree' in chart:
+            row['lastThree'] = chart['lastThree']
+        local_time = item.get('providerLocalTime')
+        if isinstance(local_time, str) and len(local_time) in (14, 19):
+            for format in ('%Y%m%d%H%M%S', '%Y/%m/%d %H:%M:%S'):
+                try:
+                    if dt.datetime.strptime(local_time, format).strftime(format) == local_time:
+                        row['providerLocalTime'] = local_time
+                        break
+                except ValueError:
+                    pass
+        meta = item.get('yahooMeta')
+        if isinstance(meta, dict):
+            safe_meta = safe_yahoo_chart(meta)
+            safe_meta.pop('lastThree', None)
+            safe_meta.pop('receivedAt', None)
+            periods = safe_meta.get('currentTradingPeriod', {})
+            if periods:
+                if 'regular' in periods:
+                    safe_meta['currentTradingPeriod'] = {'regular': periods['regular']}
+                else:
+                    safe_meta.pop('currentTradingPeriod')
+            timezone = meta.get('timezone')
+            if isinstance(timezone, str) and timezone in INDEX_EVIDENCE_TIMEZONES:
+                safe_meta['timezone'] = timezone
+            row['yahooMeta'] = safe_meta
+        parsed = item.get('parsed')
+        if isinstance(parsed, dict):
+            safe_parsed = {}
+            day = diagnostic_date(parsed.get('date'))
+            if day:
+                safe_parsed['date'] = day
+            phase = parsed.get('phase')
+            if isinstance(phase, str) and phase in ('closed', 'intraday', 'preopen', 'unknown'):
+                safe_parsed['phase'] = phase
+            received = diagnostic_received_at(parsed.get('receivedAt'))
+            if received:
+                safe_parsed['receivedAt'] = received
+            for key in ('price', 'chg'):
+                if key not in parsed:
+                    continue
+                number = parsed.get(key)
+                if number is None or type(number) in (int, float) and abs(number) <= 2**53 - 1 and math.isfinite(number):
+                    safe_parsed[key] = number
+            row['parsed'] = safe_parsed
+        elif parsed is None and 'parsed' in item:
+            row['parsed'] = None
+        selection = item.get('selection')
+        if isinstance(selection, dict):
+            safe_selection = {key: selection[key] for key in ('accepted', 'retained') if type(selection.get(key)) is bool}
+            for key in ('reason', 'finalReason'):
+                reason = selection.get(key)
+                if isinstance(reason, str) and reason in INDEX_SELECTION_REASONS:
+                    safe_selection[key] = reason
+            row['selection'] = safe_selection
+        result.append(row)
+        sources.add(source)
+    return result
+
+
 def safe_market_issues(issues):
     """Keep bounded codes, approved tickers, and validated dates and timestamps."""
     if not isinstance(issues, list):
@@ -186,6 +300,7 @@ def safe_market_issues(issues):
     # One timing block per symbol preserves the export size bound on repeated issues.
     timed_symbols = set()
     chart_symbols = set()
+    index_symbols = set()
     for item in issues[:100]:
         if not isinstance(item, dict):
             continue
@@ -211,15 +326,21 @@ def safe_market_issues(issues):
                 if chart:
                     row['yahooChart'] = chart
                     chart_symbols.add(symbol)
+        if (kind == 'index' and 'symbol' in row and symbol in DIAGNOSTIC_INDEX_SYMBOLS and symbol not in index_symbols):
+            evidence = safe_index_evidence(item.get('indexEvidence'))
+            if evidence:
+                row['indexEvidence'] = evidence
+                index_symbols.add(symbol)
         result.append(row)
     return result
 
 
-def market_diagnostic_issues(data, daily_records=None, daily_evidence=None):
+def market_diagnostic_issues(data, daily_records=None, daily_evidence=None, index_evidence=None):
     """Attach the parsed timing and chart evidence independently."""
     import market_calendar
     daily_records = daily_records or {}
     daily_evidence = daily_evidence or {}
+    index_evidence = index_evidence if isinstance(index_evidence, dict) else {}
     companies = {row.get('sym'): row for row in data.get('companies', [])}
     calendars = data.get('meta', {}).get('marketCalendar', {}).get('exchanges', {})
     enriched = []
@@ -242,21 +363,26 @@ def market_diagnostic_issues(data, daily_records=None, daily_evidence=None):
         elif row.get('kind') == 'index':
             info = calendars.get(market_calendar.exchange_for(symbol), {})
             row['expectedCompletedDate'] = info.get('expectedCompletedDate')
+            if isinstance(symbol, str) and symbol in DIAGNOSTIC_INDEX_SYMBOLS and symbol in index_evidence:
+                row['indexEvidence'] = index_evidence[symbol]
         enriched.append(row)
     return safe_market_issues(enriched)
 
 
 def bound_chart_diagnostics(diagnostic):
-    """Preserve the existing diagnostic before budgeting optional chart evidence."""
-    charts = [(issue, issue.pop('yahooChart')) for issue in diagnostic.get('marketIssues', ())
-              if 'yahooChart' in issue]
+    """Preserve base issues before budgeting optional chart and index evidence."""
+    charts = [(issue, key, issue.pop(key)) for issue in diagnostic.get('marketIssues', ())
+              for key in ('yahooChart', 'indexEvidence') if key in issue]
     if not charts:
         return
+    # Rejected index observations have no company baseline or daily carry path.
+    # Stable ordering preserves the existing chart-only diagnostic byte order.
+    charts.sort(key=lambda entry: entry[1] != 'indexEvidence')
     remaining = CHART_DIAGNOSTIC_JSON_BUDGET - len(canonical_json(diagnostic).encode('utf-8'))
-    for issue, chart in charts:
-        size = len(canonical_json({'yahooChart': chart}).encode('utf-8'))
+    for issue, key, chart in charts:
+        size = len(canonical_json({key: chart}).encode('utf-8'))
         if size <= remaining:
-            issue['yahooChart'] = chart
+            issue[key] = chart
             remaining -= size
 
 
@@ -628,7 +754,8 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
     real_blockers = [code for code in blockers if code not in
                      ('synthetic_fixture_not_publishable', 'local_review_not_publishable', 'offline_not_publishable')]
     progress['blockers'] = real_blockers
-    progress['marketIssues'] = market_diagnostic_issues(data, market.get('daily'), market.get('dailyEvidence'))
+    progress['marketIssues'] = market_diagnostic_issues(data, market.get('daily'), market.get('dailyEvidence'),
+        market.get('indexEvidence') if real_blockers else None)
     gates.update(blockers=blockers, dataSHA256=bundle.data_digest(data),
                  asOf=data['meta']['asOf'], snapshot=data['meta']['snapshot'],
                  asOfByMarket=data['meta']['asOfByMarket'], coverage=data['meta'].get('coverage', []),

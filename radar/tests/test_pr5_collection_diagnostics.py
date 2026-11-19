@@ -1,5 +1,6 @@
 """Safe controlled-failure diagnostics; all transports and secrets are synthetic."""
 import contextlib
+import copy
 import datetime as dt
 import io
 import json
@@ -11,6 +12,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import production_collect as collector
+import collection_diagnostic
 import live_notion_dry_run as live
 from notion_fixtures import FixtureSet, FakeTransport
 from notion_fixture_market import fixture_market
@@ -19,6 +21,28 @@ from research_snapshot import ResearchAbort
 SENTINEL = 'ntn_OFFLINE_DIAGNOSTIC_SENTINEL_NEVER_REAL'
 CLOCK = dt.datetime.fromisoformat('2026-10-21T18:15:00+08:00')
 BLOCKER = 'stale_quotes_not_safe_in_all_frozen_views'
+INDEX_ISSUE = {'kind': 'index', 'symbol': '^IXIC', 'status': 'missing_or_unconfirmed_snapshot'}
+INDEX_EVIDENCE = [
+    {'source': 'yahoo', 'outcome': 'source_data_failed', 'failure': 'yahoo_index_insufficient_daily_bars',
+     'requests': [{'status': 'connected', 'httpStatus': 200, 'startedAt': '2026-10-21T10:14:00+00:00',
+                   'receivedAt': '2026-10-21T10:14:01+00:00'}],
+     'receivedAt': '2026-10-21T10:14:01+00:00',
+     'lastThree': [{'date': '2026-10-20', 'timestamp': 1792503000, 'close': None, 'closeStatus': 'null'}],
+     'yahooMeta': {'regularMarketTime': 1792526400, 'regularMarketPrice': 1.25,
+                   'timezone': 'America/New_York', 'currentTradingPeriod': {
+                       'regular': {'start': 1792503000, 'end': 1792526400, 'gmtoffset': -14400}}},
+     'parsed': None, 'selection': {'accepted': False, 'retained': False, 'reason': 'no_parsed_record'}},
+    {'source': 'tencent', 'outcome': 'parsed', 'failure': None,
+     'requests': [{'status': 'connected', 'httpStatus': 200, 'startedAt': '2026-10-21T10:14:02+00:00',
+                   'receivedAt': '2026-10-21T10:14:03+00:00'}],
+     'receivedAt': '2026-10-21T10:14:03+00:00',
+     'providerLocalTime': '2026/10/21 18:14:03',
+     'lastThree': [{'date': '2026-10-20', 'close': -1, 'closeStatus': 'invalid'}],
+     'parsed': {'date': '2026-10-20', 'phase': 'closed', 'receivedAt': '2026-10-21T10:14:03+00:00',
+                'price': 125.5, 'chg': -0.01},
+     'selection': {'accepted': True, 'retained': False, 'reason': 'rejected_at_final_clock',
+                   'finalReason': 'receipt_stale'}},
+]
 
 
 class CollectionDiagnosticTests(unittest.TestCase):
@@ -45,13 +69,13 @@ class CollectionDiagnosticTests(unittest.TestCase):
         data['meta']['marketCalendar'] = {'exchanges': {'XNAS': {'expectedCompletedDate': '2026-10-20'}}}
         return result
 
-    def invoke_real_cli(self):
+    def invoke_real_cli(self, market_collect=None):
         fixtures = FixtureSet(self.root/'fixtures'); transport = FakeTransport(fixtures)
         original = collector.collect
         def injected(**kwargs):
             self.assertEqual(kwargs['token'], SENTINEL)
             self.assertNotIn('NOTION_TOKEN', collector.os.environ)
-            return original(**kwargs, transport=transport, market_collect=self.blocked_market,
+            return original(**kwargs, transport=transport, market_collect=market_collect or self.blocked_market,
                             clock=lambda: CLOCK, sleep=transport.sleep, pace=transport.pace)
         output = io.StringIO()
         with patch.object(collector.os, 'environ', {**self.env, 'NOTION_TOKEN': SENTINEL}), \
@@ -193,6 +217,114 @@ class CollectionDiagnosticTests(unittest.TestCase):
         saved = (work/'diagnostic.json').read_text('utf-8')
         self.assertEqual(json.loads(saved), {'code': BLOCKER, 'blockers': [BLOCKER], 'notionErrors': []})
         self.assertNotIn(SENTINEL, saved+output.getvalue())
+
+    def test_failed_gate_threads_index_evidence_through_cli_resanitization_and_export(self):
+        def market(*args, **kwargs):
+            result = self.blocked_market(*args, **kwargs)
+            kwargs['market_sink']['indexEvidence'] = {'^IXIC': copy.deepcopy(INDEX_EVIDENCE)}
+            return result
+
+        exit_code, text = self.invoke_real_cli(market)
+        self.assertEqual(exit_code, 2)
+        saved = json.loads((self.root/'work/diagnostic.json').read_text('utf-8'))
+        issue = next(row for row in saved['marketIssues'] if row['kind'] == 'index')
+        self.assertEqual(issue['indexEvidence'], INDEX_EVIDENCE)
+        self.assertEqual(issue['expectedCompletedDate'], '2026-10-20')
+        with patch.dict(collection_diagnostic.os.environ, {}, clear=True):
+            exported = collection_diagnostic.export(self.root/'work', self.root/'export')
+        self.assertFalse(exported['publicationAuthorized'])
+        self.assertEqual(saved, json.loads((self.root/'export/diagnostic.json').read_text('utf-8')))
+        self.assertEqual(set(exported['files']), {'diagnostic.json', 'step-summary.md'})
+        self.assertFalse((self.root/'out').exists())
+        self.assertNotIn(SENTINEL, text)
+
+    def test_index_evidence_whitelist_rejects_nested_secrets_invalid_types_and_unbounded_values(self):
+        row = copy.deepcopy(INDEX_EVIDENCE[0])
+        row.update(response=SENTINEL, exception=SENTINEL, cookie=SENTINEL,
+                   failure=SENTINEL, receivedAt=SENTINEL, providerLocalTime=SENTINEL)
+        row['requests'] = [{'status': 'http_error', 'httpStatus': 429, 'startedAt': SENTINEL,
+                            'receivedAt': '2026-10-21T18:15:00+08:00', 'url': SENTINEL, 'headers': SENTINEL}] * 3
+        row['lastThree'] = [{'date': SENTINEL, 'timestamp': True, 'close': 0, 'closeStatus': 'invalid', 'raw': SENTINEL}] * 5
+        row['yahooMeta'] = {'timezone': SENTINEL, 'regularMarketTime': float('inf'),
+            'regularMarketPrice': float('nan'), 'response': SENTINEL,
+            'currentTradingPeriod': {'regular': {'start': True, 'end': 1792526400, 'gmtoffset': 86400},
+                                     'pre': {'start': 1792503000}, 'cookie': SENTINEL}}
+        row['parsed'] = {'date': SENTINEL, 'phase': SENTINEL, 'receivedAt': SENTINEL,
+                         'price': 10**1000, 'chg': float('nan'), 'response': SENTINEL}
+        row['selection'] = {'accepted': True, 'retained': SENTINEL, 'reason': SENTINEL, 'finalReason': SENTINEL}
+        result = collector.safe_market_issues([{**INDEX_ISSUE, 'indexEvidence': [row, row, INDEX_EVIDENCE[1]]}])
+        evidence, = result[0]['indexEvidence']
+        self.assertEqual(len(evidence['requests']), 2)
+        self.assertEqual(evidence['requests'][0], {'status': 'http_error', 'httpStatus': 429,
+            'receivedAt': '2026-10-21T10:15:00+00:00'})
+        self.assertEqual(evidence['lastThree'], [{'closeStatus': 'invalid', 'close': 0}] * 3)
+        self.assertEqual(evidence['yahooMeta'], {'currentTradingPeriod': {'regular': {'end': 1792526400}}})
+        self.assertEqual(evidence['parsed'], {})
+        self.assertEqual(evidence['selection'], {'accepted': True})
+        encoded = json.dumps(result, allow_nan=False)
+        for value in (SENTINEL, 'response', 'exception', 'cookie', 'headers', 'url', 'Infinity', 'NaN'):
+            self.assertNotIn(value, encoded)
+        self.assertEqual(collector.safe_market_issues(result), result)
+        collector.bundle.check_sensitive(result)
+
+    def test_index_evidence_is_limited_to_one_block_per_approved_failed_index(self):
+        item = {**INDEX_ISSUE, 'indexEvidence': INDEX_EVIDENCE}
+        rows = [{**item, 'symbol': '3110.T'}, {**item, 'symbol': [SENTINEL]},
+                {**item, 'kind': 'daily', 'status': 'stale'}, item, item]
+        result = collector.safe_market_issues(rows)
+        self.assertTrue(all('indexEvidence' not in row for row in result[:3]))
+        self.assertEqual(result[-2:], [item, INDEX_ISSUE])
+        for value in (None, {}, SENTINEL, [None], [{'source': ['yahoo'], 'outcome': 'parsed'}],
+                      [{'source': 'yahoo', 'outcome': [SENTINEL]}]):
+            self.assertEqual(collector.safe_index_evidence(value), [])
+
+    def test_index_evidence_and_existing_chart_evidence_share_the_export_size_budget(self):
+        dates = dict.fromkeys(('sourceDate', 'observedDate', 'requiredDate', 'expectedCompletedDate'), '2026-10-20')
+        chart = {**INDEX_EVIDENCE[0]['yahooMeta'], 'lastThree': INDEX_EVIDENCE[0]['lastThree'] * 3}
+        daily = [{'kind': 'daily', 'status': 'no_common_completed_observation', 'symbol': symbol,
+                  **dates, 'yahooChart': chart} for symbol in sorted(collector.DIAGNOSTIC_SYMBOLS)]
+        indices = [{**INDEX_ISSUE, **dates, 'symbol': symbol, 'indexEvidence': INDEX_EVIDENCE}
+                   for symbol in sorted(collector.DIAGNOSTIC_INDEX_SYMBOLS)]
+        diagnostic = collector.safe_collection_diagnostic('index_observation_missing_or_stale',
+            blockers=sorted(collector.DIAGNOSTIC_CODES), market_issues=daily + indices,
+            stage='release_gates')
+        collector.save_json(self.root/'bounded/diagnostic.json', diagnostic)
+        with patch.dict(collection_diagnostic.os.environ, {}, clear=True):
+            collection_diagnostic.export(self.root/'bounded', self.root/'bounded-export')
+        self.assertEqual(len(diagnostic['marketIssues']), len(daily) + len(indices))
+        self.assertEqual(collector.sanitize_diagnostic(diagnostic), diagnostic)
+        self.assertLessEqual(sum(p.stat().st_size for p in (self.root/'bounded-export').iterdir()),
+                             collection_diagnostic.MAX_ARTIFACT)
+        self.assertEqual([row['symbol'] for row in diagnostic['marketIssues'] if row['kind'] == 'index'],
+                         sorted(collector.DIAGNOSTIC_INDEX_SYMBOLS))
+        self.assertEqual([row['symbol'] for row in diagnostic['marketIssues'] if 'indexEvidence' in row],
+                         sorted(collector.DIAGNOSTIC_INDEX_SYMBOLS))
+        self.assertLess(sum('yahooChart' in row for row in diagnostic['marketIssues']), len(daily))
+        crowded = collector.safe_collection_diagnostic('index_observation_missing_or_stale',
+            blockers=sorted(collector.DIAGNOSTIC_CODES), market_issues=daily + indices + daily,
+            stage='release_gates')
+        self.assertEqual(len(crowded['marketIssues']), 100)
+        self.assertEqual([row['symbol'] for row in crowded['marketIssues'] if row['kind'] == 'index'],
+                         sorted(collector.DIAGNOSTIC_INDEX_SYMBOLS))
+        collector.save_json(self.root/'capacity/diagnostic.json', crowded)
+        with patch.dict(collection_diagnostic.os.environ, {}, clear=True):
+            collection_diagnostic.export(self.root/'capacity', self.root/'capacity-export')
+        self.assertLessEqual(sum(p.stat().st_size for p in (self.root/'capacity-export').iterdir()),
+                             collection_diagnostic.MAX_ARTIFACT)
+
+    def test_successful_collection_does_not_add_index_evidence_to_published_payloads(self):
+        def market(*args, **kwargs):
+            result = fixture_market(*args, **kwargs)
+            kwargs['market_sink']['indexEvidence'] = {'^IXIC': copy.deepcopy(INDEX_EVIDENCE)}
+            return result
+
+        transport = FakeTransport(FixtureSet(self.root/'success-fixtures'))
+        result = collector.collect(out=self.root/'success/receipt.json', work=self.root/'success-work',
+            token=SENTINEL, transport=transport, market_collect=market, clock=lambda: CLOCK,
+            env=self.env, live_dry_run=True, sleep=transport.sleep, pace=transport.pace)
+        self.assertNotIn('indexEvidence', json.dumps(result['data']))
+        self.assertNotIn('indexEvidence', json.dumps(result['receipt']))
+        self.assertFalse((self.root/'success-work/diagnostic.json').exists())
 
 
 if __name__ == '__main__':
