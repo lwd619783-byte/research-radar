@@ -32717,14 +32717,14 @@
       ]
     },
     {
-      "generatedAt": "2026-11-20T12:21+08:00",
+      "generatedAt": "2026-11-20T14:07+08:00",
       "proof": {
         "state": "success",
-        "productionSHA": "9cab85256c85465fdb40ea4252e5a049eda9f2aa",
-        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/Esdzc5WkUSuXG1mYU1xeP5ccpUa2",
-        "reportedAt": "2026-11-20T04:21:57Z",
-        "sourceSHA": "9c517105dcfea4c273a5c1a495ba0e3083259e81",
-        "dataSHA256": "2a00d50a05969f8c6aa667934f8d7f2137a37ab9a732a023fcda2c32a72e4ddd"
+        "productionSHA": "72ee721a49b5f43ff0bfe815400d4acf6e4fea79",
+        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/7nt5bUJC6kxq7wNTVvjaYNv6cQBU",
+        "reportedAt": "2026-11-20T06:07:39Z",
+        "sourceSHA": "52f4061ac06bc2072b9f53afca8e43a291edd71a",
+        "dataSHA256": "a184e61408d2367b6a043a7eb29f8c052a5530ee33901dc9138f550b2548e91a"
       },
       "companies": [
         {
@@ -33213,11 +33213,11 @@
             "timezone": "Asia/Taipei",
             "time_note": "10/28已披露完整Q3；下期日期待官方确认"
           },
-          "close": 3120,
-          "date": "2026-11-19",
+          "close": 2810,
+          "date": "2026-11-20",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.09957,
+          "r1d": -0.09936,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -35033,13 +35033,13 @@
           "kind": "company",
           "symbol": "000660.KS",
           "metric": "marketCap",
-          "status": "complete"
+          "status": "missing"
         },
         {
           "kind": "company",
           "symbol": "000660.KS",
           "metric": "marketCapUSD",
-          "status": "partial"
+          "status": "missing"
         },
         {
           "kind": "company",
@@ -37301,7 +37301,7 @@
           "kind": "index",
           "symbol": "000001.SS",
           "metric": null,
-          "status": "partial"
+          "status": "complete"
         },
         {
           "kind": "index",
