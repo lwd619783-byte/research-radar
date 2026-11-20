@@ -184,6 +184,151 @@ class CollectionTests(unittest.TestCase):
         self.assertLess(len(receipt.encode()),probe.MAX_RECEIPT)
 
 
+class IndexCaptureTests(unittest.TestCase):
+    """Exercise raw capture through the real adapters without opening a socket."""
+    symbol='399006.SZ'
+    tencent='sz399006'
+    clock=dt.datetime(2026,11,19,4,20,tzinfo=dt.UTC)
+    point=int(dt.datetime(2026,11,18,1,30,tzinfo=dt.UTC).timestamp())
+
+    def yahoo_payload(self):
+        return {'chart':{'result':[{'timestamp':[self.point],
+            'meta':{'exchangeTimezoneName':'Asia/Shanghai','gmtoffset':28800,
+                'regularMarketTime':self.point,'regularMarketPrice':100,
+                'currentTradingPeriod':{'regular':{'start':self.point,'end':self.point+19800,'gmtoffset':28800}},
+                'longName':'UNSAFE_RAW_TEXT'},
+            'indicators':{'quote':[{'close':[100]}]}}]}}
+
+    def tencent_payload(self, close='101'):
+        qt=['']*76
+        qt[30]='20261118161457';qt[75]='CNY'
+        return {'data':{self.tencent:{'day':[
+            ['2026-11-17','100','100'],['2026-11-18','100',close]],
+            'qt':{self.tencent:qt},'untrusted':'UNSAFE_RAW_TEXT'}}}
+
+    def fetch(self, h, source, tencent_result):
+        result=self.yahoo_payload() if source=='yahoo' else tencent_result
+        response=(result if isinstance(result,Exception)
+                  else Response(json.dumps(result).encode('utf-8')))
+        h.op=Opener(response)
+        return self.adapter(h,self.symbol,self.tencent,source=source)
+
+    def inspect_source(self, source, result, capture):
+        evidence=[]
+        with patch.object(probe,'utc',return_value=self.clock.isoformat()), \
+             patch.object(probe.quotes,'stamp',side_effect=lambda **kw:dict(
+                 schemaVersion=2,receivedAt=self.clock.isoformat(),**kw)):
+            row,value=probe.inspect('index-'+source,self.symbol,source,probe.Budget(),
+                lambda h:self.fetch(h,source,result),
+                lambda v,h:probe.index_quality(v,h,symbol=self.symbol,clock=self.clock),
+                **({'index_evidence':evidence} if capture else {}))
+        return row,value,evidence
+
+    def setUp(self):
+        self.adapter=probe.quotes.index_quote
+
+    def collect_index(self, tencent_result, *, capture=True):
+        data,_=dataset()
+        data['companies']=[]
+        data['config']['indices']=[{'symbol':self.symbol,'name':'Synthetic index','tencent':self.tencent}]
+        sink={}
+        disabled=RuntimeError('unrelated_test_lane_disabled')
+        with patch.object(probe.quotes,'yahoo_quotes',side_effect=disabled), \
+             patch.object(probe.quotes,'fx',side_effect=disabled), \
+             patch.object(probe.quotes,'monthly',side_effect=disabled), \
+             patch.object(probe.quotes,'index_quote',side_effect=lambda h,s,t,source:
+                 self.fetch(h,source,tencent_result)), \
+             patch.object(probe,'utc',return_value=self.clock.isoformat()), \
+             patch.object(probe.quotes,'stamp',side_effect=lambda **kw:dict(
+                 schemaVersion=2,receivedAt=self.clock.isoformat(),**kw)):
+            rows,summary,session,gates=probe.collect(data,probe.Budget(),market_sink=sink if capture else None,
+                snapshot_clock=self.clock,calendar_policy=True)
+        return sink,rows,gates
+
+    def test_yahoo_single_point_and_tencent_transport_failure_are_independent(self):
+        failure=urllib.error.HTTPError('https://web.ifzq.gtimg.cn/',500,
+            'UNSAFE_RAW_TEXT',{},None)
+        sink,rows,gates=self.collect_index(failure)
+        yahoo,tencent=sink['indexEvidence'][self.symbol]
+        self.assertEqual([yahoo['source'],tencent['source']],['yahoo','tencent'])
+        self.assertEqual(yahoo['outcome'],'source_data_failed')
+        self.assertEqual(yahoo['failure'],'yahoo_index_insufficient_daily_bars')
+        self.assertEqual(yahoo['lastThree'],[{'date':'2026-11-18','timestamp':self.point,
+            'close':100,'closeStatus':'positive'}])
+        self.assertEqual(yahoo['yahooMeta']['timezone'],'Asia/Shanghai')
+        self.assertEqual(tencent['outcome'],'transport_failed')
+        self.assertEqual(tencent['requests'][0]['httpStatus'],500)
+        self.assertEqual(tencent['lastThree'],[])
+        for evidence in (yahoo,tencent):
+            self.assertFalse(evidence['selection']['accepted'])
+            self.assertFalse(evidence['selection']['retained'])
+        self.assertNotIn(self.symbol,sink['index'])
+        self.assertIn('index_observation_missing_or_stale',gates['blockers'])
+        self.assertNotIn('UNSAFE_RAW_TEXT',json.dumps(sink['indexEvidence']))
+
+    def test_tencent_invalid_close_does_not_replace_yahoo_raw_point(self):
+        self.tencent='sz399001'  # Configured alias differs from the symbol-derived default.
+        sink,rows,gates=self.collect_index(self.tencent_payload('not-a-price'))
+        yahoo,tencent=sink['indexEvidence'][self.symbol]
+        self.assertEqual(yahoo['failure'],'yahoo_index_insufficient_daily_bars')
+        self.assertEqual(yahoo['lastThree'][0]['closeStatus'],'positive')
+        self.assertEqual(tencent['outcome'],'parse_failed')
+        self.assertEqual(tencent['failure'],'source_parse_error')
+        self.assertEqual(tencent['providerLocalTime'],'20261118161457')
+        self.assertEqual(tencent['lastThree'][-1],{'date':'2026-11-18','timestamp':None,
+            'close':None,'closeStatus':'invalid'})
+        self.assertFalse(tencent['selection']['accepted'])
+        self.assertNotIn(self.symbol,sink['index'])
+        self.assertIn('index_observation_missing_or_stale',gates['blockers'])
+        self.assertNotIn('not-a-price',json.dumps(sink['indexEvidence']))
+
+    def test_malformed_raw_shapes_still_yield_bounded_safe_evidence(self):
+        malformed_yahoo={'chart':{'result':[{'timestamp':[float('inf'),{},'UNSAFE_RAW_TEXT'],
+            'meta':{'exchangeTimezoneName':'UNSAFE_RAW_TEXT','currentTradingPeriod':['UNSAFE_RAW_TEXT']},
+            'indicators':{'quote':[{'close':['UNSAFE_RAW_TEXT',None,{'private':'UNSAFE_RAW_TEXT'}]}]}}]}}
+        fields=[None]*31;fields[30]={'private':'UNSAFE_RAW_TEXT'}
+        malformed_tencent={'data':{self.tencent:{'day':[
+            None,{'private':'UNSAFE_RAW_TEXT'},['UNSAFE_RAW_TEXT','0',{'private':'UNSAFE_RAW_TEXT'}]],
+            'qt':{self.tencent:fields}}}}
+        for source,result in (('yahoo',malformed_yahoo),('tencent',malformed_tencent)):
+            with self.subTest(source=source),patch.object(self,'yahoo_payload',return_value=malformed_yahoo):
+                row,value,evidence=self.inspect_source(source,result,True)
+                self.assertIsNone(value)
+                self.assertFalse(row['publicationGate'])
+                self.assertEqual(len(evidence),1)
+                self.assertLessEqual(len(evidence[0]['lastThree']),3)
+                serialized=json.dumps(evidence,allow_nan=False)
+                self.assertNotIn('UNSAFE_RAW_TEXT',serialized)
+                self.assertNotIn('private',serialized)
+
+    def test_capture_preserves_adapter_and_selector_results(self):
+        for source,result in (('yahoo',{}),('tencent',self.tencent_payload()),
+                              ('tencent',self.tencent_payload('not-a-price'))):
+            with self.subTest(source=source,result=result):
+                plain_row,plain_value,_=self.inspect_source(source,result,False)
+                row,value,evidence=self.inspect_source(source,result,True)
+                self.assertEqual(row,plain_row)
+                self.assertEqual(value,plain_value)
+                self.assertEqual(probe.build.latest.select_index(value,None,self.clock,symbol=self.symbol),
+                    probe.build.latest.select_index(plain_value,None,self.clock,symbol=self.symbol))
+                self.assertEqual(len(evidence),1)
+        _,expected,_=self.inspect_source('tencent',self.tencent_payload(),False)
+        sink,rows,gates=self.collect_index(self.tencent_payload())
+        _,plain_rows,plain_gates=self.collect_index(self.tencent_payload(),capture=False)
+        self.assertEqual(rows,plain_rows)
+        self.assertEqual(gates,plain_gates)
+        self.assertEqual(sink['index'][self.symbol],expected)
+        self.assertEqual(gates['indexAssemblySources'],{self.symbol:'tencent'})
+        yahoo,tencent=sink['indexEvidence'][self.symbol]
+        self.assertFalse(yahoo['selection']['accepted'])
+        self.assertTrue(tencent['selection']['accepted'])
+        self.assertTrue(tencent['selection']['retained'])
+        self.assertEqual(sink['index'][self.symbol]['phase'],'unknown')
+        selected=next(row for row in rows if row['category']=='index-tencent')
+        self.assertTrue(selected['quality'])
+        self.assertFalse(selected['publicationGate'])
+
+
 class WorkflowTests(unittest.TestCase):
     def workflow(self): return json.loads((ROOT/'.github/workflows/radar-interface-acceptance.yml').read_text('utf-8'))
 

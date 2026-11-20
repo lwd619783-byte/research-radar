@@ -42,6 +42,17 @@ DAILY_CLOSE_RETRY_SECONDS = 240
 HOSTS = {'query1.finance.yahoo.com', 'fc.yahoo.com', 'web.ifzq.gtimg.cn'}
 DENIALS = {401, 403, 451}
 SAFE_CODE = re.compile(r'^[A-Za-z0-9.^=_-]{1,40}$')
+INDEX_SOURCE_FAILURES = frozenset({
+    'yahoo_chart_no_result', 'yahoo_chart_empty_daily_bars', 'yahoo_index_insufficient_daily_bars',
+    'index_no_backup', 'index_insufficient_daily_bars', 'index_invalid_prices_or_dates',
+})
+INDEX_TRANSPORT_FAILURES = frozenset({
+    'access_refused_stop_path', 'request_or_time_budget_exhausted', 'redirect_not_followed',
+    'response_too_large', 'http_error_no_more_retries', 'transport_error_no_retry',
+    'retry_limit', 'host_not_allowlisted', 'path_not_allowlisted', 'separate_source_only',
+})
+INDEX_REQUEST_STATUSES = frozenset({'connected', 'http_error', 'transport_error', 'stopped'})
+INDEX_PHASES = frozenset({'closed', 'intraday', 'preopen', 'unknown'})
 
 
 def utc():
@@ -244,6 +255,159 @@ def index_quality(value, h, *, symbol=None, clock=None):
                     'receivedAt':value.get('receivedAt'),'phase': value.get('phase', 'unknown')}, value.get('phase') == 'closed'
 
 
+def index_receipt(value):
+    if not isinstance(value, str) or not yahoo_meta_close.RECEIPT.fullmatch(value):
+        return None
+    try:
+        return value if dt.datetime.fromisoformat(value).utcoffset() is not None else None
+    except ValueError:
+        return None
+
+
+def index_epoch(value):
+    return value if type(value) is int and 0 < value <= 253402300799 else None
+
+
+def index_source_evidence(row, value, h, tencent_code=None):
+    """Bound raw source facts independently of parser and selector success."""
+    source = row['source']
+    failure = row['failure']
+    if failure in INDEX_SOURCE_FAILURES:
+        outcome = 'source_data_failed'
+    elif failure in INDEX_TRANSPORT_FAILURES:
+        outcome = 'transport_failed'
+    elif failure in ('json_parse_failed', 'ValueError', 'TypeError', 'KeyError', 'IndexError', 'OverflowError'):
+        outcome, failure = 'parse_failed', 'json_parse_failed' if failure == 'json_parse_failed' else 'source_parse_error'
+    elif failure is not None:
+        outcome, failure = 'parse_failed', 'source_error'
+    else:
+        outcome = 'parsed'
+    requests = []
+    for event in h.events[:2]:
+        status = event.get('httpStatus')
+        requests.append({'httpStatus': status if type(status) is int and 100 <= status <= 599 else None,
+                         'status': event.get('status') if event.get('status') in INDEX_REQUEST_STATUSES else None,
+                         'startedAt': index_receipt(event.get('startedAt')),
+                         'receivedAt': index_receipt(event.get('receivedAt'))})
+    received = next((event['receivedAt'] for event in reversed(requests) if event['httpStatus'] == 200), None)
+    document = h.documents[-1] if h.documents and isinstance(h.documents[-1], dict) else {}
+    rows, provider_time, meta_evidence = [], None, None
+    if source == 'yahoo':
+        chart = document.get('chart')
+        results = chart.get('result') if isinstance(chart, dict) else None
+        result = results[0] if isinstance(results, list) and results and isinstance(results[0], dict) else {}
+        meta = result.get('meta') if isinstance(result.get('meta'), dict) else {}
+        timezone = meta.get('exchangeTimezoneName')
+        try:
+            zone = ZoneInfo(timezone) if isinstance(timezone, str) and len(timezone) <= 64 else None
+        except (KeyError, TypeError, ValueError):
+            zone = None
+        timestamps = result.get('timestamp') if isinstance(result.get('timestamp'), list) else []
+        indicators = result.get('indicators')
+        quotes_rows = indicators.get('quote') if isinstance(indicators, dict) else None
+        quote = quotes_rows[0] if isinstance(quotes_rows, list) and quotes_rows and isinstance(quotes_rows[0], dict) else {}
+        closes = quote.get('close') if isinstance(quote.get('close'), list) else []
+        for position in range(max(0, len(timestamps) - 3), len(timestamps)):
+            timestamp = index_epoch(timestamps[position])
+            day = None
+            if timestamp is not None and zone is not None:
+                try:
+                    day = dt.datetime.fromtimestamp(timestamp, zone).date().isoformat()
+                except (ValueError, OverflowError, OSError):
+                    pass
+            close = closes[position] if position < len(closes) else None
+            status = ('close_missing' if position >= len(closes) else 'null' if close is None
+                      else 'positive' if yahoo_meta_close.positive_price(close) else 'invalid')
+            rows.append({'date': day, 'timestamp': timestamp,
+                         'close': yahoo_meta_close.public_number(close), 'closeStatus': status})
+        trading = meta.get('currentTradingPeriod')
+        regular = trading.get('regular') if isinstance(trading, dict) else None
+        periods = {}
+        if isinstance(regular, dict):
+            offset = regular.get('gmtoffset')
+            periods['regular'] = {'start': index_epoch(regular.get('start')), 'end': index_epoch(regular.get('end')),
+                                  'gmtoffset': offset if type(offset) is int and abs(offset) <= 24 * 3600 else None}
+        meta_evidence = {'regularMarketTime': index_epoch(meta.get('regularMarketTime')),
+                         'regularMarketPrice': yahoo_meta_close.public_number(meta.get('regularMarketPrice')),
+                         'timezone': timezone if zone is not None else None, 'currentTradingPeriod': periods}
+    elif source == 'tencent':
+        payload = document.get('data')
+        code = tencent_code or quotes.tencent_code(row['code'])
+        node = payload.get(code) if isinstance(payload, dict) else None
+        node = node if isinstance(node, dict) else {}
+        raw_rows = node.get('day') or node.get('qfqday') or []
+        for bar in raw_rows[-3:] if isinstance(raw_rows, list) else []:
+            bar = bar if isinstance(bar, list) else []
+            close = bar[2] if len(bar) > 2 else None
+            try:
+                price = float(close) if isinstance(close, str) and len(close) <= 32 else close
+            except ValueError:
+                price = None
+            safe_price = yahoo_meta_close.public_number(price)
+            status = ('close_missing' if len(bar) <= 2 else 'null' if close is None
+                      else 'positive' if safe_price is not None and safe_price > 0 else 'invalid')
+            rows.append({'date': bar[0] if bar and date_ok(bar[0]) else None, 'timestamp': None,
+                         'close': safe_price, 'closeStatus': status})
+        qt = node.get('qt')
+        fields = qt.get(code) if isinstance(qt, dict) else None
+        raw_time = fields[30] if isinstance(fields, list) and len(fields) > 30 else None
+        if isinstance(raw_time, str):
+            formats = {14: '%Y%m%d%H%M%S', 19: '%Y/%m/%d %H:%M:%S'}
+            pattern = formats.get(len(raw_time))
+            try:
+                if pattern and dt.datetime.strptime(raw_time, pattern).strftime(pattern) == raw_time:
+                    provider_time = raw_time
+            except ValueError:
+                pass
+    parsed = None
+    if isinstance(value, dict):
+        phase = value.get('phase')
+        parsed = {'date': value.get('date') if date_ok(value.get('date')) else None,
+                  'phase': phase if isinstance(phase, str) and phase in INDEX_PHASES else None,
+                  'receivedAt': index_receipt(value.get('receivedAt')),
+                  'price': yahoo_meta_close.public_number(value.get('price')),
+                  'chg': yahoo_meta_close.public_number(value.get('chg'))}
+    return {'source': source, 'outcome': outcome, 'failure': failure, 'requests': requests,
+            'receivedAt': received, 'lastThree': rows, 'providerLocalTime': provider_time,
+            'yahooMeta': meta_evidence, 'parsed': parsed}
+
+
+def index_rejection_reason(value, now, symbol):
+    """Explain a rejected selector result without admitting an observation."""
+    if not isinstance(value, dict) or not value:
+        return 'no_parsed_record'
+    if value.get('schemaVersion') != 2:
+        return 'record_schema_invalid'
+    day = value.get('date')
+    if not date_ok(day):
+        return 'source_date_invalid'
+    received = index_receipt(value.get('receivedAt'))
+    if received is None:
+        return 'receipt_invalid'
+    age = (now - dt.datetime.fromisoformat(received)).total_seconds()
+    if age < 0:
+        return 'receipt_future'
+    if age > 36 * 3600:
+        return 'receipt_stale'
+    if not fresh_record(value, now, day, symbol=symbol, allow_intraday=True, phase=value.get('phase', 'unknown')):
+        if symbol is not None:
+            context = calendar_context(symbol, now)
+            if context['confidence'] == 'unavailable' or not context['expectedCompletedDate']:
+                return 'calendar_unavailable'
+            if day > context['localDate']:
+                return 'source_date_future'
+            if day == context['localDate'] and day > context['expectedCompletedDate']:
+                return 'current_session_not_complete'
+        return 'source_date_stale'
+    if not value.get('src'):
+        return 'source_missing'
+    if not number(value.get('price')) or value['price'] <= 0:
+        return 'price_invalid'
+    if not number(value.get('chg')):
+        return 'change_invalid'
+    return 'selector_rejected'
+
+
 def fx_quality(value, h, currency):
     history = value.get('rates') or []
     price = history[-1][2] if history else None
@@ -267,7 +431,8 @@ def month_quality(value, h, *, symbol=None, clock=None):
                     'asOf': value.get('asOf'), 'currentDated': current is not None}, current is not None
 
 
-def inspect(category, code, source, budget, fetch, quality, *, retry_deadline=None):
+def inspect(category, code, source, budget, fetch, quality, *, retry_deadline=None, index_evidence=None,
+            index_tencent_code=None):
     if not SAFE_CODE.fullmatch(code): raise StopProbe('unexpected_config_code')
     h = (ProbeHttp(budget, source) if retry_deadline is None
          else ProbeHttp(budget, source, retry_429=False, deadline=retry_deadline))
@@ -289,6 +454,8 @@ def inspect(category, code, source, budget, fetch, quality, *, retry_deadline=No
     row['connection'] = any(e.get('httpStatus') == 200 for e in h.events)
     row['requests'] = h.events
     row['finishedAt'] = utc()
+    if index_evidence is not None and category in ('index-yahoo', 'index-tencent') and len(index_evidence) < 2:
+        index_evidence.append(index_source_evidence(row, value, h, index_tencent_code))
     return row, value
 
 
@@ -418,6 +585,7 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
     companies, tencent, currencies = inventory(data)
     rows = []
     mk = {k: {} for k in ('daily', 'quote', 'index', 'fx', 'ratio')}
+    index_evidence = {} if market_sink is not None else None
     evidence = {} if calendar_policy else None
     for source, group, category in (('yahoo', companies, 'company-yahoo-daily'), ('tencent', tencent, 'company-tencent-backup')):
         for c in group:
@@ -463,14 +631,32 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
     quote_session = {'failure':quote_failure,'requests':h.events,'batches':h.batches,'expectedBatchSizes':[len(companies[i:i+40]) for i in range(0,len(companies),40)],'returned':len(values),
                      'cookieAvailable':bool(list(h.jar)),'crumbAvailable':bool(h._crumb)}
     for x in data['config']['indices']:
+        source_evidence = index_evidence.setdefault(x['symbol'], []) if index_evidence is not None else None
         for source in ('yahoo', 'tencent') if x.get('tencent') else ('yahoo',):
+            captured_count = len(source_evidence) if source_evidence is not None else 0
+            capture = ({'index_evidence': source_evidence, 'index_tencent_code': x.get('tencent', '')}
+                       if source_evidence is not None else {})
             row,value = inspect('index-'+source, x['symbol'],source,budget,
                                 lambda h: quotes.index_quote(h,x['symbol'],x.get('tencent',''),source=source),
-                                lambda v,h: index_quality(v,h,symbol=x['symbol'] if calendar_policy else None,clock=snapshot_clock))
+                                lambda v,h: index_quality(v,h,symbol=x['symbol'] if calendar_policy else None,clock=snapshot_clock),
+                                **capture)
             rows.append(row)
             previous=mk['index'].get(x['symbol'])
-            if value and build.latest.select_index(value,None,snapshot_clock if snapshot_clock is not None else dt.datetime.now(build.BJ),symbol=x['symbol'] if calendar_policy else None) and (not previous or value.get('date','')>previous.get('date','')):
+            selected, selection_clock = None, snapshot_clock
+            if value:
+                selection_clock = snapshot_clock if snapshot_clock is not None else dt.datetime.now(build.BJ)
+                selected = build.latest.select_index(value,None,selection_clock,symbol=x['symbol'] if calendar_policy else None)
+            retained = bool(selected and (not previous or value.get('date','')>previous.get('date','')))
+            if retained:
                 mk['index'][x['symbol']] = value
+            if source_evidence is not None and len(source_evidence) > captured_count:
+                reason = ('retained' if retained else 'same_or_older_candidate' if selected else
+                          index_rejection_reason(value, selection_clock, x['symbol'] if calendar_policy else None))
+                if retained:
+                    for older in source_evidence[:-1]:
+                        if older.get('selection', {}).get('retained'):
+                            older['selection'].update(retained=False, reason='superseded_by_newer_candidate')
+                source_evidence[-1]['selection'] = {'accepted': bool(selected), 'retained': retained, 'reason': reason}
     for cur in currencies:
         row,value=inspect('fx',cur,'yahoo',budget,lambda h:quotes.fx(h,cur),lambda v,h:fx_quality(v,h,cur))
         rows.append(row)
@@ -526,7 +712,16 @@ def collect(data, budget, market_sink=None, *, snapshot_sink=None, snapshot_cloc
         group=[r for r in rows if r['category']==category]
         summary[category]={'planned':len(group),**{k:sum(bool(r[k]) for r in group) for k in ('connection','parse','quality','publicationGate')}}
     if market_sink is not None:
+        final_indices = {index['symbol'] for index in D['indices']}
+        for symbol, candidates in index_evidence.items():
+            if symbol not in final_indices:
+                for candidate in candidates:
+                    if candidate.get('selection', {}).get('retained'):
+                        candidate['selection'].update(retained=False, reason='rejected_at_final_clock',
+                            finalReason=index_rejection_reason(mk['index'].get(symbol), fixed_clock,
+                                                               symbol if calendar_policy else None))
         market_sink.update(mk)
+        market_sink['indexEvidence'] = index_evidence
     if snapshot_sink is not None:
         snapshot_sink.update(data=D, clock=fixed_clock, gates=gates)
     return rows,summary,quote_session,gates
