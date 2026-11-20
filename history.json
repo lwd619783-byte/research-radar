@@ -32714,14 +32714,14 @@
       ]
     },
     {
-      "generatedAt": "2026-11-19T16:04+08:00",
+      "generatedAt": "2026-11-19T18:19+08:00",
       "proof": {
         "state": "success",
-        "productionSHA": "7d8b8c97c9af6af2274b219f1e66b656ade282ef",
-        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/FgcnEnaFGhcTYEXU9zAc1ChPnQeP",
-        "reportedAt": "2026-11-19T08:04:17Z",
+        "productionSHA": "a1d16f7dcc2fb0841acbce74240f4dfb494d8768",
+        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/8TymyATi3dvXSuP9efmB3ncpwB6R",
+        "reportedAt": "2026-11-19T10:19:48Z",
         "sourceSHA": "9c517105dcfea4c273a5c1a495ba0e3083259e81",
-        "dataSHA256": "1254803f362c3996928d8fcf15156e7f2690686f674c4d39c141a7e0dc7bd6a0"
+        "dataSHA256": "e3c809b70ff28aeb91944df34773d929ca3877cfa7b7a865a14988f825c7bf02"
       },
       "companies": [
         {
@@ -32817,11 +32817,11 @@
             "timezone": "Asia/Hong_Kong",
             "time_note": "10/28 Q3已正式披露；下一期日期待官方确认"
           },
-          "close": 92.0,
-          "date": "2026-11-18",
+          "close": 89.0,
+          "date": "2026-11-19",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.01657,
+          "r1d": -0.03261,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33330,11 +33330,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 25.5,
-          "date": "2026-11-18",
+          "close": 24.4,
+          "date": "2026-11-19",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.02989,
+          "r1d": -0.04314,
           "financial": {
             "status": null,
             "basis": "half_year",
@@ -33963,9 +33963,9 @@
           },
           "close": 126.7,
           "date": "2026-11-18",
-          "source": "yahoo-meta-close",
+          "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": null,
+          "r1d": 0.01328,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -34200,9 +34200,9 @@
           },
           "close": 238.1,
           "date": "2026-11-18",
-          "source": "yahoo-meta-close",
+          "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": null,
+          "r1d": 0.00613,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -36584,31 +36584,31 @@
           "kind": "company",
           "symbol": "ENR.DE",
           "metric": "r5",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "ENR.DE",
           "metric": "r20",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "ENR.DE",
           "metric": "r60",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "ENR.DE",
           "metric": "ytd",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "ENR.DE",
           "metric": "high52",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
@@ -36620,7 +36620,7 @@
           "kind": "company",
           "symbol": "ENR.DE",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -36980,31 +36980,31 @@
           "kind": "company",
           "symbol": "SU.PA",
           "metric": "r5",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "SU.PA",
           "metric": "r20",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "SU.PA",
           "metric": "r60",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "SU.PA",
           "metric": "ytd",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "SU.PA",
           "metric": "high52",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
@@ -37016,7 +37016,7 @@
           "kind": "company",
           "symbol": "SU.PA",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
