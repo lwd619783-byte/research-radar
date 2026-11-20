@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "state": "current",
-  "sourceSHA": "9c517105dcfea4c273a5c1a495ba0e3083259e81",
-  "runId": "44673168738",
-  "dataSHA256": "2a00d50a05969f8c6aa667934f8d7f2137a37ab9a732a023fcda2c32a72e4ddd",
-  "generatedAt": "2026-11-20T12:21+08:00",
-  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/44673168738",
+  "sourceSHA": "52f4061ac06bc2072b9f53afca8e43a291edd71a",
+  "runId": "44684881047",
+  "dataSHA256": "a184e61408d2367b6a043a7eb29f8c052a5530ee33901dc9138f550b2548e91a",
+  "generatedAt": "2026-11-20T14:07+08:00",
+  "runUrl": "https://github.com/lwd619783-byte/research-radar/actions/runs/44684881047",
   "workflowUrl": "https://github.com/lwd619783-byte/research-radar/actions/workflows/radar-production.yml",
   "changes": {
     "mode": "previous_day",
-    "generatedAt": "2026-11-20T12:21+08:00",
+    "generatedAt": "2026-11-20T14:07+08:00",
     "baselineAt": "2026-11-19T18:19+08:00",
     "reports": [],
     "calendar": [],
@@ -30,6 +30,12 @@
     "lost": [
       {
         "kind": "company",
+        "symbol": "000660.KS",
+        "metric": "marketCap",
+        "status": "missing"
+      },
+      {
+        "kind": "company",
         "symbol": "ANET",
         "metric": "r5",
         "status": "missing"
@@ -207,15 +213,19 @@
         "symbol": "VRT",
         "metric": "high52",
         "status": "missing"
-      },
-      {
-        "kind": "index",
-        "symbol": "000001.SS",
-        "metric": null,
-        "status": "partial"
       }
     ],
     "prices": [
+      {
+        "id": "EMC",
+        "name": "台光电子",
+        "beforeDate": "2026-11-19",
+        "afterDate": "2026-11-20",
+        "before": 3120,
+        "after": 2810,
+        "currency": "TWD",
+        "change": -0.09936
+      },
       {
         "id": "MRVL",
         "name": "迈威尔 Marvell",
@@ -315,7 +325,7 @@
       "scores": []
     },
     "excludedPrices": 6,
-    "sameDatePrices": 27,
+    "sameDatePrices": 26,
     "pendingResearch": 22,
     "baselineProof": {
       "state": "success",
@@ -325,15 +335,5 @@
       "sourceSHA": "9c517105dcfea4c273a5c1a495ba0e3083259e81",
       "dataSHA256": "e3c809b70ff28aeb91944df34773d929ca3877cfa7b7a865a14988f825c7bf02"
     }
-  },
-  "schedule": {
-    "cronUtc": [
-      "45 0 * * 1-5",
-      "15 4 * * 1-5",
-      "15 10 * * 1-5",
-      "50 22 * * 0"
-    ],
-    "nextRunAt": "2026-11-20T18:15:00+08:00",
-    "lateAfterMinutes": 180
   }
 }
