@@ -46,20 +46,20 @@ class LateThresholdTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         return json.loads(result.stdout)
 
-    def test_real_toml_loader_and_assembler_publish_the_configured_180(self):
+    def test_real_toml_loader_and_assembler_publish_the_configured_60(self):
         result = self.assembled()
-        self.assertEqual(self.loaded['config']['schedule']['late_after_minutes'], 180)
+        self.assertEqual(self.loaded['config']['schedule']['late_after_minutes'], 60)
         self.assertEqual(result['meta']['schedule'], {
             'cronUtc': self.crons, 'nextRunAt': '2026-10-26T06:50:00+08:00',
             'lateAfterMinutes': self.loaded['config']['schedule']['late_after_minutes'],
         })
 
-    def test_built_deadline_is_not_late_at_179_or_180_but_is_after_180(self):
+    def test_built_deadline_is_not_late_at_59_or_60_but_is_after_60(self):
         metadata = self.assembled()['meta']['schedule']
         planned = dt.datetime.fromisoformat(metadata['nextRunAt'])
         clocks = [(planned + delta).isoformat() for delta in (
-            dt.timedelta(minutes=179), dt.timedelta(minutes=180),
-            dt.timedelta(minutes=180, seconds=1), dt.timedelta(minutes=181))]
+            dt.timedelta(minutes=59), dt.timedelta(minutes=60),
+            dt.timedelta(minutes=60, seconds=1), dt.timedelta(minutes=61))]
         self.assertEqual(self.due(metadata, clocks), [False, False, True, True])
 
     def test_no_new_success_keeps_original_overdue_slot_across_later_slots(self):
@@ -123,7 +123,7 @@ class LateThresholdTests(unittest.TestCase):
                                 'late_after_minutes = 180.0'):
                 with self.subTest(replacement=replacement):
                     (radar / 'data/config.toml').write_text(
-                        original.replace('late_after_minutes = 180', replacement), encoding='utf-8')
+                        original.replace('late_after_minutes = 60', replacement), encoding='utf-8')
                     with patch.object(schedule, 'configured_late_after_minutes', side_effect=AssertionError('unexpected fallback')):
                         _, report = validate_market_config(tomllib.loads((radar / 'data/config.toml').read_text('utf-8')),
                                                            self.clock.date())
