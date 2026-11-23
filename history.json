@@ -32714,14 +32714,14 @@
       ]
     },
     {
-      "generatedAt": "2026-11-23T12:19+08:00",
+      "generatedAt": "2026-11-23T14:05+08:00",
       "proof": {
         "state": "success",
-        "productionSHA": "163f9b7ddb4983abb883ad64e6f6b47381c3971e",
-        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/ANQH4dEm5PiZVTGRrbkNuEmQrvt9",
-        "reportedAt": "2026-11-23T04:19:30Z",
-        "sourceSHA": "52f4061ac06bc2072b9f53afca8e43a291edd71a",
-        "dataSHA256": "1343523b8f3fbf152fa648154eed9c4b971278abe96d7fafff5a4dae258d93c3"
+        "productionSHA": "57dc537433f517d637283317658077e49cd3bee3",
+        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/8uoKYXVxvnsL4eB3zQ7CcTdyHqWs",
+        "reportedAt": "2026-11-23T06:05:30Z",
+        "sourceSHA": "551b2d79c55be3faf9b84f305de337341d3109cc",
+        "dataSHA256": "8546faeef30d392b974062a9d1ac84976c734ae34d606843ff4325e590e8ea4b"
       },
       "companies": [
         {
@@ -33210,11 +33210,11 @@
             "timezone": "Asia/Taipei",
             "time_note": "10/28已披露完整Q3；下期日期待官方确认"
           },
-          "close": 2810,
-          "date": "2026-11-20",
+          "close": 3090,
+          "date": "2026-11-23",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.09936,
+          "r1d": 0.09964,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -35030,13 +35030,13 @@
           "kind": "company",
           "symbol": "000660.KS",
           "metric": "marketCap",
-          "status": "complete"
+          "status": "missing"
         },
         {
           "kind": "company",
           "symbol": "000660.KS",
           "metric": "marketCapUSD",
-          "status": "partial"
+          "status": "missing"
         },
         {
           "kind": "company",
