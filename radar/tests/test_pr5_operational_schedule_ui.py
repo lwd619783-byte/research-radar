@@ -63,11 +63,11 @@ class OperationalScheduleUiTests(unittest.TestCase):
         self.assertIn('行情更新于 10/23 13:00', result['innerHTML'])
         self.assertEqual(self.data, self.before)
 
-    def test_owned_slot_turns_red_only_after_180_and_stays_red_across_slots(self):
+    def test_owned_slot_turns_red_only_after_60_and_stays_red_across_slots(self):
         for clock, expected in (
-            ('2026-10-23T15:14:00+08:00', 'pulse ok'),
-            ('2026-10-23T15:15:00+08:00', 'pulse ok'),
-            ('2026-10-23T15:15:01+08:00', 'pulse bad'),
+            ('2026-10-23T13:14:00+08:00', 'pulse ok'),
+            ('2026-10-23T13:15:00+08:00', 'pulse ok'),
+            ('2026-10-23T13:15:01+08:00', 'pulse bad'),
             ('2026-10-23T18:15:00+08:00', 'pulse bad'),
             ('2026-10-26T08:45:00+08:00', 'pulse bad'),
         ):

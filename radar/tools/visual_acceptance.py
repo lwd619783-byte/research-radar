@@ -601,9 +601,9 @@ def run(pages: Path, out: Path):
             threshold = tomllib.loads((ROOT / 'radar/data/config.toml').read_text('utf-8'))['schedule']['late_after_minutes']
             fixed_clock = dt.datetime.fromisoformat(manifest['pages']['baseline']['fixedClock'])
             for name, seconds, expected_bad in (
-                    ('threshold-179', 179 * 60, False),
-                    ('threshold-180', 180 * 60, False),
-                    ('threshold-over-180', 180 * 60 + 1, True),
+                    ('threshold-59', 59 * 60, False),
+                    ('threshold-60', 60 * 60, False),
+                    ('threshold-over-60', 60 * 60 + 1, True),
                     ('threshold-failure-persists', 24 * 60 * 60, True)):
                 due = (fixed_clock - dt.timedelta(seconds=seconds)).isoformat(timespec='seconds')
                 metadata = {**clean, 'schedule': {**schedule, 'nextRunAt': due,
@@ -611,9 +611,9 @@ def run(pages: Path, out: Path):
                 context, page, result = visit(name, metadata=metadata)
                 try:
                     pulse = page.locator('#pulse')
-                    check(result, threshold == 180, 'Current configured late threshold must be exactly 180 minutes')
+                    check(result, threshold == 60, 'Current configured late threshold must be exactly 60 minutes')
                     check(result, ('bad' in (pulse.get_attribute('class') or '').split()) == expected_bad,
-                          f'{name}: actual rendered pulse must preserve the strict >180 boundary')
+                          f'{name}: actual rendered pulse must preserve the strict >60 boundary')
                     check(result, ('本次更新未完成' in pulse.inner_text()) == expected_bad,
                           f'{name}: absent success must retain the incomplete-update message after the deadline')
                     pulse.screenshot(path=str(out / f'{name}.png'), animations='disabled')
