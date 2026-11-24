@@ -185,6 +185,30 @@ class MarketTests(unittest.TestCase):
         self.assertEqual(points[0]['time'],'10:30')
         self.assertIsNone(rows[0]['amount'])
 
+    def test_public_sw_closes_must_reconcile_for_all_31_unique_industries(self):
+        dates = ['2026-11-17','2026-11-18','2026-11-19','2026-11-20','2026-11-23',str(DAY)]
+        summary = dict(as_of=str(DAY), source='AlphaOnly申万一级行业日度数据',
+                       rows=[dict(industry_name=n, ret_1d=100/14, ret_5d=50) for n in market.SW_LEVEL_ONE])
+        hist = dict(as_of=str(DAY), dates=dates, industries={n:dict(close=[10,11,12,13,14,15])
+                                                              for n in market.SW_LEVEL_ONE})
+        http = MarketHTTP()
+        def read(url):
+            if url.endswith('/industry-data.js'):
+                return '// public daily result\nwindow.INDUSTRY_DATABASE = ' + json.dumps(summary) + ';'
+            return 'window.INDUSTRY_GLDI_HISTORY=' + json.dumps(hist) + ';'
+        with patch.object(http,'get_text',side_effect=read):
+            rows, points = market.published_sw_industries(http, DAY)
+            self.assertEqual((len(rows), points), (31, []))
+            row = next(r for r in rows if r['name']=='国防军工')
+            self.assertEqual((row['code'],row['spark'],row['amount']), ('SW801740',[11,12,13,14,15],None))
+            for obj, change in [(summary, {'as_of':str(PREVIOUS)}),
+                                (hist, {'dates':[str(PREVIOUS)]*6}),
+                                (summary, {'rows':summary['rows'][:-1]}),
+                                (summary, {'rows':[summary['rows'][0]]*31}),
+                                (summary['rows'][0], {'ret_1d':0})]:
+                with patch.dict(obj, change), self.assertRaises(ValueError):
+                    market.published_sw_industries(http, DAY)
+
     def test_published_board_ranking_rejects_stale_pages_duplicate_and_unproven_detail(self):
         http = MarketHTTP()
         def page(n,stamp=DAY):

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from datetime import date, datetime, timedelta, timezone
 from html.parser import HTMLParser
+import json
 import math
 import re
 
@@ -17,6 +18,15 @@ TARGET_TIMES = {'09:25', '10:30', '13:30', '15:00'}
 SINA_MARKET = 'https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.'
 SINA_HEADERS = {'Referer': 'https://finance.sina.com.cn/'}
 SW_API = 'https://www.swsresearch.com/institute-sw/api/'
+# Shenwan 2021 level-one identifiers. Keep anchors stable across the direct
+# publisher and the independent closing directory, which uses different IDs.
+SW_LEVEL_ONE = dict(pair.split('/') for pair in (
+    '农林牧渔/801010 基础化工/801030 钢铁/801040 有色金属/801050 电子/801080 家用电器/801110 '
+    '食品饮料/801120 纺织服饰/801130 轻工制造/801140 医药生物/801150 公用事业/801160 交通运输/801170 '
+    '房地产/801180 商贸零售/801200 社会服务/801210 综合/801230 建筑材料/801710 建筑装饰/801720 '
+    '电力设备/801730 国防军工/801740 计算机/801750 传媒/801760 通信/801770 银行/801780 非银金融/801790 '
+    '汽车/801880 机械设备/801890 煤炭/801950 石油石化/801960 环保/801970 美容护理/801980'
+).split())
 EM_WEB_TOKEN = 'bd1d9ddb04089700cf9c27f6f7426281'
 
 
@@ -520,6 +530,58 @@ def sw_industries(http, day, attempt):
     return rows, attempt('board_intraday_missing', minutes, [])
 
 
+def published_sw_industries(http, day):
+    """Reconcile the public Shenwan 2021 daily directory to six dated index closes."""
+    def public_table(filename, assignment):
+        text = http.get_text('https://alphaonly.com.cn/data/' + filename)
+        # The files contain a JSON literal, sometimes preceded by an attribution
+        # comment. Never execute publisher JavaScript.
+        pattern = r'(?:\s*//[^\n]*\n)*\s*window\.' + assignment + r'\s*=\s*(\{.*\})\s*;?\s*'
+        match = re.fullmatch(pattern, text, flags=re.S)
+        if not match:
+            raise ValueError('sw_public_payload')
+        data = json.loads(match[1])
+        if data['as_of'] != day.isoformat():
+            raise ValueError('sw_public_day')
+        return data
+
+    table = public_table('industry-data.js', 'INDUSTRY_DATABASE')
+    series = public_table('industry-gldi-summary.js', 'INDUSTRY_GLDI_HISTORY')
+    history = series['industries']
+    if (table.get('source') != 'AlphaOnly申万一级行业日度数据' or set(history) != SW_LEVEL_ONE.keys()
+            or len(table['rows']) != len(SW_LEVEL_ONE)):
+        raise ValueError('sw_public_coverage')
+    dates = [day]
+    for _ in range(5):
+        dates.insert(0, prior_session(dates[0]))
+    if series['dates'][-6:] != [d.isoformat() for d in dates]:
+        raise ValueError('sw_public_sessions')
+
+    result = {}
+    for record in table['rows']:
+        name = record['industry_name']
+        if name not in SW_LEVEL_ONE or name in result:
+            raise ValueError('sw_public_identity')
+        values = history[name]['close']
+        if len(values) != len(series['dates']):
+            raise ValueError('sw_public_series')
+        closes = [number(x) for x in values[-6:]]
+        if any(x is None or x <= 0 for x in closes):
+            raise ValueError('sw_public_close')
+        daily, weekly = (closes[-1]/closes[i] - 1 for i in (-2,-6))
+        for observed, column in ((daily, 'ret_1d'), (weekly, 'ret_5d')):
+            reported = number(record[column])
+            if reported is None or abs(100*observed - reported) > 0.01:
+                raise ValueError('sw_public_return')
+        # The public index series has no intraday observations or net flow.
+        # The cash amount in the companion directory does not declare its unit.
+        result[name] = dict(code='SW'+SW_LEVEL_ONE[name], name=name, date=day.isoformat(),
+                            pct=daily, price=closes[-1], spark=closes[-5:], fiveDayReturn=weekly,
+                            amount=None, netFlow=None, source='AlphaOnly申万一级行业日度数据',
+                            reason='AlphaOnly申万一级行业收盘汇总，板块驱动待核')
+    return list(result.values()), []
+
+
 def limit_pool(http, endpoint, day):
     ordering = {'getTopicZTPool':'fbt:asc', 'getTopicDTPool':'fund:asc',
                 'getTopicZBPool':'fbt:asc', 'getYesterdayZTPool':'zs:desc'}
@@ -674,6 +736,10 @@ def collect_market(day, radar, http):
             result = attempt(err, lambda:boards(http, scope, day, attempt, CLIST.replace('push2.',host+'.push2.')))
         if result is None and sector == 'industry':
             result = attempt(err, lambda:sw_industries(http, day, attempt))
+            if result is None:
+                result = attempt(err, lambda:published_sw_industries(http, day))
+                if result:
+                    warnings.add('board_intraday_missing')
         if result is None and sector == 'concept':
             result = attempt(err, lambda:published_concepts(http, day))
             if result:
@@ -693,7 +759,8 @@ def collect_market(day, radar, http):
             r['reason'] = reasons[r['code']]
     for r in industries + concepts:
         if any(r['name'] in text for text in reasons.values()):
-            r['reason'] = '当日同花顺强势股归因涉及' + r['name']
+            attribution = '当日同花顺强势股归因涉及' + r['name']
+            r['reason'] = f"{r['source']} · {attribution}" if r.get('source') else attribution
     pool = attempt('limit_pool_missing', lambda:limit_pool(http,'getTopicZTPool',day))
     prior = prior_session(day)
     previous = attempt('prior_limit_pool_missing', lambda:limit_pool(http,'getTopicZTPool',prior))
