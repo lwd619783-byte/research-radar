@@ -23,8 +23,8 @@ function safeUrl(platform, address) {
 // export can be run on saved HTML without Ego, credentials or network access.
 export function extractComments({platform, date, now = Date.now(), track = 'community'}) {
   const profiles = {
-    em: ['.reply_item,.reply-item,.replyListItem', '.reply_text,.reply-content,.reply_content,.shortntxt',
-      'time,.reply_time,.reply-time,.publish_time', '.reply_like,.like_count'],
+    em: ['.reply_item,.reply-item,.replyListItem', '.reply_text,.reply-content,.reply_content,.shortntxt,.reply_title_span',
+      'time,.reply_time,.reply-time,.publish_time,.pubtime', '.reply_like,.like_count,.likemodule'],
     xq: ['.comment__item,.comment-item', '.comment__item__text,.comment__text,.comment-content',
       'time,.comment__item__time,.comment__time,.comment__item__info .time', '.comment__item__like,.like-count'],
     ths: ['.comment-item,.comment_item,.reply-item,.cmt-item', '.comment-content,.reply-content,.cmt-text,.comment_text',
@@ -55,7 +55,7 @@ export function extractComments({platform, date, now = Date.now(), track = 'comm
   // Relative labels have rounding uncertainty. Accept only intervals entirely
   // within the requested research window, even near midnight or the cutoff.
   function moment(input) {
-    const s = String(input || '').trim();
+    const s = String(input || '').trim().replace(/^(?:发布时间|发布于|发表于|评论于|回复于)[\s:：]*/u,'');
     let lo, hi;
     if (/^\d{10}(?:\d{3})?$/.test(s)) {
       lo = hi = Number(s) * (s.length === 10 ? 1000 : 1);
@@ -103,7 +103,7 @@ export function extractComments({platform, date, now = Date.now(), track = 'comm
     // Isolate the comment body. A nested author, handle or profile element
     // is never part of the returned observation.
     const clone = content.cloneNode(true);
-    clone.querySelectorAll('script,style,time,.author,.username,.nickname,[data-e2e="comment-user-name"]')
+    clone.querySelectorAll('script,style,time,.author,.username,.nickname,.item_reuser,[data-e2e="comment-user-name"]')
       .forEach(node => node.remove());
     const text = (clone.textContent || '').trim().replace(/[@＠][^\s，。！？、；）)]+/gu, '匿名用户');
     if (!text || text.length > 600) continue;

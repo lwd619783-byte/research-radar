@@ -145,6 +145,15 @@ def replay_html():
         result = page.evaluate('(' + extractor + ')', dict(platform='xhs', date=str(DAY),
             now='2026-11-24T20:17:00+08:00', track='hot'))
         assert result['comments'] == [] and result['counts'] == {'rows':1,'dated':1,'inWindow':0}
+        page.set_content('''
+          <div class="reply_item"><div class="reply_title_span">盘后评论内容位于已验证窗口</div>
+            <span class="pubtime">发表于 11-24 19:17:11</span></div>
+          <div class="reply_item"><div class="reply_title_span">晚间评论在截止时间之后</div>
+            <span class="pubtime">发表于 11-24 21:28:06</span></div>''')
+        result = page.evaluate('(' + extractor + ')', dict(platform='em', date=str(DAY),
+            now='2026-11-24T23:40:00+08:00', track='community'))
+        assert result['counts'] == {'rows':2,'dated':2,'inWindow':1}
+        assert [comment['time'] for comment in result['comments']] == ['19:17']
         url = 'https://xueqiu.com/S/SH000001'
         page.route(url, lambda route: route.fulfill(content_type='text/html', body='''
             <a href="https://www.xueqiu.com/123/456">收盘讨论</a>
