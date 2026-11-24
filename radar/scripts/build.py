@@ -513,6 +513,8 @@ def apply_research(market_data, research, fixed_clock, config=None, trading_days
     """Replace only research fields; quote values and their provenance stay paired."""
     from research_view import apply_views
     data = copy.deepcopy(market_data)
+    # Only the separately validated short-term file can supply this view.
+    data.pop('shortTerm', None)
     previous = {c['sym']: c for c in data.get('companies', [])}
     companies = []
     for research_row in research['companies']:
@@ -580,6 +582,20 @@ def apply_research(market_data, research, fixed_clock, config=None, trading_days
     return apply_views(data, research, fixed_clock, config, trading_days)
 
 
+def read_short_term(fixed_clock, *, environ=None, path=None):
+    """Read only the optional V4 plane, before binding DATA to its receipt."""
+    try:
+        from short_term_merge import load_short_term
+        if isinstance(fixed_clock, str):
+            fixed_clock = dt.datetime.fromisoformat(fixed_clock)
+        return load_short_term(path or RADAR / 'data/short_term_history.json',
+                               as_of=fixed_clock, environ=environ)
+    except Exception:
+        # Isolate this optional input, without printing provider text or credentials.
+        log('短线快照未能加载，沿用产业雷达视图')
+        return None
+
+
 def build_notion_data(*, transport=None, token=None, fixed_clock, last_good=None, config=None,
                       quotes_data=None, sleep=None, pace=None, trading_days=None):
     """Injectable offline/online research pipeline; never invent missing quotes."""
@@ -588,6 +604,9 @@ def build_notion_data(*, transport=None, token=None, fixed_clock, last_good=None
                                    last_good=last_good, config=config, sleep=sleep, pace=pace)
     market = quotes_data if quotes_data is not None else {'meta': {}, 'companies': [], 'indices': [], 'ratio': None}
     data = apply_research(market, research, fixed_clock, config, trading_days)
+    short_term = read_short_term(fixed_clock, environ={} if transport or quotes_data is not None else None)
+    if short_term is not None:
+        data['shortTerm'] = short_term
     if quotes_data is not None or transport is not None:
         data['meta']['reviewPreview'] = True
     return data, research['snapshot'], fetch
@@ -660,6 +679,10 @@ def notion_main(args, config):
             research, _ = load_research(transport=None, token=None, fixed_clock=now,
                                         last_good=previous, config=config, fetch=fetch)
         data, stale, missing = assemble_notion(research, cfg_data, market, fresh, now, config)
+        offline = args.offline or args.notion_fetch or args.fixed_clock
+        short_term = read_short_term(now, environ={} if offline else None)
+        if short_term is not None:
+            data['shortTerm'] = short_term
         if args.notion_fetch or args.fixed_clock or args.offline:
             # Standalone replay has no same-run production receipt. Only the
             # production collector may bind collected inputs to a release.
