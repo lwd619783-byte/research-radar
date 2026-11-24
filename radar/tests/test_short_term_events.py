@@ -1,5 +1,5 @@
 """Offline event-source payloads follow the published providers' field names and units."""
-from datetime import date
+from datetime import date, datetime
 import json
 import os
 from pathlib import Path
@@ -8,7 +8,8 @@ from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'tools'))
+RADAR = Path(__file__).resolve().parents[1]
+sys.path[:0] = [str(RADAR / 'tools'), str(RADAR / 'scripts')]
 from short_term_collector import events
 
 DAY = date(2026, 11, 24)
@@ -112,6 +113,60 @@ class EventTests(unittest.TestCase):
         self.assertIn('机构 +4.0 万元', desc)
         buy = [seat(str(i), i * 10000, 0) for i in range(1, 7)]
         self.assertIn('其他席位 +20.0 万元', events.seat_summary(buy, sell))
+
+    def test_batch_seats_match_only_same_stock_session_and_reason(self):
+        http = FakeSources()
+        main = http.reports['RPT_DAILYBILLBOARD_DETAILSNEW']
+        base = main[0]
+        main.extend([{**base, 'SECURITY_CODE': code, 'BILLBOARD_DEAL_AMT': amount,
+                      'EXPLANATION': reason} for code, amount, reason in (
+                          ('123283', 9e7, '日涨幅达到15%的前5只可转债'),
+                          ('000002', 8e7, '连续三个交易日异动'),
+                          ('000001', 1e4, '另一原因'), ('600410', 1e7, REASON))])
+        for side in ('BUY', 'SELL'):
+            http.reports['RPT_BILLBOARD_DAILYDETAILS' + side].extend([
+                seat('沪股通专用', 40000, 10000, SECURITY_CODE='600410'),
+                seat('旧数据', 9e8, 1e7, SECURITY_CODE='600410', TRADE_DATE='2026-11-23')])
+        warnings = []
+        summary = events.dragon(DAY, http, warnings)
+        self.assertEqual(warnings, [])
+        self.assertEqual(len(http.calls), 3)
+        for _, params in http.calls[1:]:
+            self.assertIn('(SECURITY_CODE in ("600410","000001"))', params['filter'])
+            self.assertNotIn('123283', params['filter'])
+        first, second = summary['items']
+        self.assertIn('600410', first['stock'])
+        self.assertEqual(first['seats'], '沪深股通 +3.0 万元')
+        self.assertIn('000001', second['stock'])
+        self.assertNotIn('3.0 万元', second['seats'].split('沪深股通')[-1])
+
+    def test_missing_seat_report_keeps_dated_list_without_making_up_seats(self):
+        http = FakeSources()
+        del http.reports['RPT_BILLBOARD_DAILYDETAILSSELL']
+        warnings = []
+        items = events.dragon(DAY, http, warnings)['items']
+        self.assertEqual(len(items), 1)
+        self.assertIn('暂缺', items[0]['seats'])
+        self.assertIn('龙虎榜部分席位明细暂缺', warnings)
+
+    def test_cninfo_page_failure_preserves_verified_rows_and_warns(self):
+        http = FakeSources()
+        payload = http.post_form_json(events.CNINFO, {'searchkey': '异常波动'}, {})
+        payload['totalAnnouncement'] = 32
+        edge = datetime(2026, 11, 24, 20, 30, tzinfo=events.BJ)
+        row = payload['announcements'][0]
+        payload['announcements'] += [
+            {**row}, None, {**row, 'announcementId': 'overflow', 'announcementTime': 1e30},
+            {**row, 'announcementId': 'cutoff', 'announcementTime': edge.timestamp() * 1000},
+            {**row, 'announcementId': 'later', 'announcementTime': edge.timestamp() * 1000 + 1}]
+        warnings = []
+        with patch.object(http, 'post_form_json', side_effect=[payload, TimeoutError()]) as read:
+            mines = events.disclosures(DAY, http, '异常波动', warnings)
+        self.assertEqual(len(mines), 2)
+        self.assertEqual(warnings, ['巨潮异常波动公告分页未完整'])
+        self.assertEqual([call.args[1]['pageNum'] for call in read.call_args_list], [1, 2])
+        with patch.object(http, 'post_form_json', side_effect=TimeoutError), self.assertRaises(TimeoutError):
+            events.disclosures(DAY, http, '异常波动', [])
 
     def test_one_source_fails_without_replacing_other_events(self):
         http = FakeSources()

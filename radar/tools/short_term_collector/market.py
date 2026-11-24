@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta, timezone
+from html.parser import HTMLParser
 import math
 import re
 
@@ -13,6 +14,10 @@ KLINE = 'https://push2his.eastmoney.com/api/qt/stock/kline/get'
 ALL_A = 'm:0 t:6,m:0 t:80,m:1 t:2,m:1 t:23,m:0 t:81 s:2048'
 BEIJING = 'm:0 t:81 s:2048'
 TARGET_TIMES = {'09:25', '10:30', '13:30', '15:00'}
+SINA_MARKET = 'https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.'
+SINA_HEADERS = {'Referer': 'https://finance.sina.com.cn/'}
+SW_API = 'https://www.swsresearch.com/institute-sw/api/'
+EM_WEB_TOKEN = 'bd1d9ddb04089700cf9c27f6f7426281'
 
 
 def number(value):
@@ -24,15 +29,18 @@ def number(value):
 
 
 def symbol(code):
-    code = str(code).split('.')[0]
+    code = str(code).strip().upper()
+    prefixed = re.fullmatch(r'(SH|SZ|BJ)(\d{6})', code)
+    suffix = prefixed[1] if prefixed else code.partition('.')[2].replace('SS','SH')
+    code = prefixed[2] if prefixed else code.split('.')[0]
     if not re.fullmatch(r'\d{6}', code):
         return None
     if code.startswith(('60', '688', '689')):
-        return code + '.SH'
+        return code + '.SH' if suffix in ('', 'SH') else None
     if code.startswith(('000', '001', '002', '003', '300', '301', '302')):
-        return code + '.SZ'
+        return code + '.SZ' if suffix in ('', 'SZ') else None
     if code.startswith(('43', '83', '87', '88', '92')):
-        return code + '.BJ'
+        return code + '.BJ' if suffix in ('', 'BJ') else None
     return None
 
 
@@ -72,12 +80,65 @@ def quote_rows(text, requested, day):
     return rows
 
 
-def clist(http, scope, fields):
+def sina_inventory(http, beijing_only=False, cached_pages=None):
+    """The hs_a list contains BJ, SH and SZ. Take no names from an unfinished directory."""
+    params = dict(node='hs_a')
+    total = int(http.get_json(SINA_MARKET + 'getHQNodeStockCount', params=params, headers=SINA_HEADERS))
+    if not 0 < total <= 15000:
+        raise ValueError('sina_inventory_count')
+    universe = {}
+    cache = {} if cached_pages is None else cached_pages
+    last = ''
+    for page in range(1, (total + 99) // 100 + 1):
+        if (total, page) not in cache:
+            cache[total, page] = http.get_json(SINA_MARKET + 'getHQNodeData',
+                                 params=dict(**params, page=page, num=100, sort='symbol', asc=1), headers=SINA_HEADERS)
+        data = cache[total, page]
+        if not isinstance(data, list) or len(data) != min(100, total - len(universe)):
+            raise ValueError('sina_inventory_page')
+        for item in data:
+            sym = symbol(item['code'])
+            if not sym or tencent_id(sym) != item.get('symbol') or item['symbol'] <= last:
+                raise ValueError('sina_inventory_identity')
+            last = item['symbol']
+            universe[sym] = {}
+        if beijing_only and not last.startswith('bj'):
+            beijing = {s:{} for s in universe if s.endswith('.BJ')}
+            if not beijing:
+                raise ValueError('sina_beijing_missing')
+            return beijing
+    if len(universe) != total or {s[-2:] for s in universe} != {'SH', 'SZ', 'BJ'}:
+        raise ValueError('sina_inventory_incomplete')
+    return universe
+
+
+def sina_quotes(http, ids, day):
+    url = 'https://hq.sinajs.cn/list=' + ','.join(tencent_id(s) for s in ids)
+    text = http.get_text(url, encoding='gb18030', headers=SINA_HEADERS)
+    rows = {}
+    for exchange, code, record in re.findall(r'hq_str_(sh|sz|bj)(\d{6})="([^"]*)"', text):
+        cells = record.split(',')
+        sym = code + '.' + exchange.upper()
+        if sym not in ids or len(cells) < 32 or not cells[0] or cells[30] != day.isoformat():
+            continue
+        try:
+            observed = datetime.strptime(cells[31], '%H:%M:%S')
+        except ValueError:
+            continue
+        prev, close, amount = (number(cells[i]) for i in (2, 3, 9))
+        if observed.hour < 15 or not prev or prev <= 0 or not close or close <= 0 or amount is None or amount < 0:
+            continue
+        rows[sym] = dict(code=sym, name=cells[0], date=day.isoformat(), price=close, amount=amount,
+                         pct=round((close / prev - 1) * 100, 2) / 100, turnoverRate=None)
+    return rows
+
+
+def clist(http, scope, fields, url=CLIST):
     """Stable security-code order; truncated, duplicate or changing pages invalidate the list."""
     rows, expected = {}, None
     for page in range(1, 151):
-        obj = http.get_json(CLIST, params=dict(fs=scope, pn=page, pz=100, po=0, np=1,
-                                               fid='f12', fltt=2, invt=2, fields=fields))
+        obj = http.get_json(url, params=dict(fs=scope, pn=page, pz=100, po=0, np=1,
+                            fid='f12', fltt=2, invt=2, fields=fields, ut=EM_WEB_TOKEN))
         data = obj['data']
         count = int(data['total'])
         if count <= 0 or (expected is not None and count != expected):
@@ -213,7 +274,7 @@ def core_symbols(radar):
     ids = set()
     for node in radar.get('companies', []):
         if (node.get('mkt') or node.get('market')) == 'A股':
-            sym = symbol(node.get('code') or node.get('sym'))
+            sym = symbol(node.get('sym')) or symbol(node.get('code'))
             if sym:
                 ids.add(sym)
     return ids
@@ -283,9 +344,76 @@ def timed_points(pairs, name, day, prev):
     return points
 
 
-def boards(http, scope, day, attempt):
+class _BoardPage(HTMLParser):
+    """Read the public board table cells, excluding links to individual stocks."""
+    def __init__(self, html):
+        super().__init__()
+        self.chunks, self.rows, self.row = [], [], {}
+        self.column, self.sector = '', None
+        self.feed(html)
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == 'tr':
+            self.row, self.sector = {}, None
+        elif tag == 'td':
+            self.column = attrs.get('data-label', '')
+        elif tag == 'a' and self.column == '概念':
+            match = re.fullmatch(r'/bk/(\d{1,5})\.html', attrs.get('href', ''))
+            if match:
+                self.sector = int(match[1])
+
+    def handle_data(self, value):
+        if text := value.strip():
+            self.chunks.append(text)
+            if self.column:
+                self.row[self.column] = self.row.get(self.column, '') + text
+
+    def handle_endtag(self, tag):
+        if tag == 'td':
+            self.column = ''
+        elif tag == 'tr' and self.sector is not None:
+            self.rows.append((self.sector, self.row))
+
+
+def published_concepts(http, day):
+    """The public closing directory identifies its boards as BK….DC on their detail pages."""
+    url = 'https://www.zhunshangshi.com/bk/'
+    rows, expected = {}, None
+    for page_num in range(1, 61):
+        page = _BoardPage(http.get_text(url, params={'type':'concept','page':page_num}))
+        header = re.search(r'概念板块行情一览\s*当前数据日期更新于\s*(\d{4}-\d{2}-\d{2})\s*·\s*共\s*(\d+)\s*个板块',
+                           ' '.join(page.chunks))
+        if not header or header[1] != day.isoformat() or not page.rows:
+            raise ValueError('published_concept_date')
+        count = int(header[2])
+        if expected is not None and count != expected:
+            raise ValueError('published_concept_total')
+        expected = count
+        for board_id, cells in page.rows:
+            raw_pct = re.fullmatch(r'([+−\-]?\d+(?:\.\d+)?)%', cells['涨跌幅'])
+            if not raw_pct or board_id in rows or not cells['概念']:
+                raise ValueError('published_concept_identity')
+            pct = float(raw_pct[1].replace('−','-')) / 100
+            rows[board_id] = dict(code=f'BK{board_id:04d}', name=cells['概念'], date=day.isoformat(),
+                pct=pct, amount=None, netFlow=None, source='准上市东财代码概念榜', reason='准上市收盘汇总，板块驱动待核')
+        if len(rows) >= expected:
+            break
+    if not rows or len(rows) != expected:
+        raise ValueError('published_concept_incomplete')
+    ordered = sorted(rows.items(), key=lambda pair:(pair[1]['pct'],pair[0]))
+    for board_id, row in dict(ordered[:5] + ordered[-5:]).items():
+        detail = ' '.join(_BoardPage(http.get_text(f'{url}{board_id}.html')).chunks)
+        proof = re.search(r'板块代码\s+(BK\d+)\.DC\s+最新交易日\s+(\d{4}-\d{2}-\d{2})\s+当日涨跌幅\s+([+−\-]?[\d.]+)%', detail)
+        if (not proof or proof[1] != row['code'] or proof[2] != day.isoformat()
+                or float(proof[3].replace('−','-')) / 100 != row['pct']):
+            raise ValueError('published_concept_crosscheck')
+    return list(rows.values()), []
+
+
+def boards(http, scope, day, attempt, url=CLIST):
     fields = 'f12,f14,f3,f6,f62,f124'
-    raw = clist(http, scope, fields)
+    raw = clist(http, scope, fields, url)
     rows = []
     for item in raw:
         epoch = number(item.get('f124'))
@@ -318,6 +446,78 @@ def index_points(tdx, day, name, code):
     intraday = dataframe_rows(tdx.index_bars(symbol=code, frequency=0, offset=240))
     pairs = [(str(r['datetime']), number(r['close'])) for r in intraday]
     return timed_points(pairs, name, day, prev)
+
+
+def tencent_index_points(http, day, name, slug):
+    data = http.get_json('https://web.ifzq.gtimg.cn/appstock/app/minute/query',
+                         params={'code': slug})['data'][slug]
+    lines = data['data']
+    quote = data['qt'][slug]
+    stamp = datetime.strptime(quote[30], '%Y%m%d%H%M%S')
+    if (lines['date'] != day.strftime('%Y%m%d') or quote[2] != slug[2:]
+            or stamp.date() != day or stamp.hour < 15):
+        raise ValueError('minute_date')
+    pairs = []
+    for row in lines['data']:
+        parts = row.split()
+        if len(parts) >= 2 and re.fullmatch(r'\d{4}', parts[0]):
+            clock = parts[0]
+            pairs.append((f'{day} {clock[:2]}:{clock[2:]}', number(parts[1])))
+    return timed_points(pairs, name, day, number(quote[4]))
+
+
+def sw_industries(http, day, attempt):
+    """First-party Shenwan level-one daily report. Volume is not cash turnover."""
+    def report(start, end):
+        records = {}
+        expected = None
+        for page in range(1, 11):
+            result = http.get_json(SW_API + 'index_analysis/index_analysis_report/', params=dict(
+                page=page, page_size=100, index_type='一级行业', type='DAY', swindexcode='all',
+                start_date=start.isoformat(), end_date=end.isoformat()))['data']
+            count = int(result['count'])
+            if count <= 0 or (expected is not None and count != expected) or not result['results']:
+                raise ValueError('sw_page')
+            expected = count
+            for r in result['results']:
+                date_key = date.fromisoformat(str(r['bargaindate'])[:10])
+                code = str(r['swindexcode'])
+                key = (code, date_key)
+                if not start <= date_key <= end or not re.fullmatch(r'\d{6}', code) or key in records:
+                    raise ValueError('sw_identity')
+                records[key] = r
+            if len(records) == expected:
+                return records
+        raise ValueError('sw_incomplete')
+
+    current = report(day, day)
+    rows = []
+    for (code, _), item in current.items():
+        pct, close = number(item['markup']), number(item['closeindex'])
+        if pct is None or close is None or close <= 0 or not item['swindexname']:
+            raise ValueError('sw_close')
+        rows.append(dict(code='SW'+code, name=item['swindexname'], date=day.isoformat(),
+                         pct=pct/100, price=close, amount=None, netFlow=None))
+    days = [day]
+    for _ in range(5):
+        days.insert(0, prior_session(days[0]))
+    history = attempt('board_daily_missing', lambda:report(days[0], days[-2]), {})
+    for row in rows:
+        code = row['code'][2:]
+        values = [number(history.get((code, d), {}).get('closeindex')) for d in days[:-1]] + [row['price']]
+        if all(v is not None and v > 0 for v in values[1:]):
+            row['spark'] = values[1:]
+            if values[0] and values[0] > 0:
+                row['fiveDayReturn'] = values[-1] / values[0] - 1
+    top = max(rows, key=lambda r:(r['pct'], r['code']))
+    code = top['code'][2:]
+    prior = number(history.get((code, days[-2]), {}).get('closeindex'))
+    def minutes():
+        data = http.get_json(SW_API+'index_publish/details/timelines/', params={'swindexcode':code})['data']
+        pairs = [(str(r['trading_date'])[:10]+' '+str(r['trading_time']), number(r['l8']))
+                 for r in data if str(r['l1']) == code]
+        return timed_points(pairs, top['name'], day, prior)
+    return rows, attempt('board_intraday_missing', minutes, [])
 
 
 def limit_pool(http, endpoint, day):
@@ -381,45 +581,67 @@ def collect_market(day, radar, http):
         if tdx is not None:
             for market in (0, 1):
                 universe.update(attempt('tdx_inventory_incomplete', lambda:tdx_inventory(tdx, market), {}))
+        cache = {}
         bse = attempt('beijing_inventory_missing', lambda:_inventory_records(clist(http, BEIJING, 'f12,f26')), {})
+        if not bse:
+            bse = attempt('beijing_inventory_missing', lambda:sina_inventory(http, True, cache), {})
+            if bse:
+                warnings.discard('beijing_inventory_missing')
         universe.update(bse)
         covered = bool({s[-2:] for s in universe} == {'SH','SZ','BJ'} and bse)
         em_rows = []
         em_fields = 'f12,f26,f14,f2,f3,f6,f8,f124'
-        if not covered:
-            em_rows = attempt('mainland_inventory_incomplete', lambda:clist(http, ALL_A, em_fields), [])
-            fallback = attempt('unknown_mainland_code', lambda:_inventory_records(em_rows), {})
-            if fallback:
-                universe = fallback
-                covered = {s[-2:] for s in universe} == {'SH','SZ','BJ'}
-        requested = sorted(set(universe) | core)
         quotes = {}
-        for start in range(0, len(requested), 60):
-            ids = requested[start:start+60]
-            url = 'https://qt.gtimg.cn/q=' + ','.join(tencent_id(s) for s in ids)
-            text = attempt('tencent_batch_missing', lambda:http.get_text(url, encoding='gb18030'), '')
-            quotes.update(quote_rows(text, set(ids), day))
+        def reconcile_inventory():
+            nonlocal em_rows, covered, universe
+            em_rows = attempt('mainland_inventory_incomplete', lambda:clist(http, ALL_A, em_fields), [])
+            directory = attempt('unknown_mainland_code', lambda:_inventory_records(em_rows), {})
+            if {s[-2:] for s in directory} != {'SH','SZ','BJ'}:
+                directory = attempt('sina_inventory_missing', lambda:sina_inventory(http, cached_pages=cache), {})
+            if directory:
+                universe = {s:{**universe.get(s, {}), **meta} for s,meta in directory.items()}
+                covered = True
+                warnings.difference_update({'beijing_inventory_missing','mainland_inventory_incomplete'})
+
+        queried = set()
+        def fill_quotes():
+            requested = sorted((universe.keys() | core) - queried)
+            for start in range(0, len(requested), 60):
+                ids = requested[start:start+60]
+                url = 'https://qt.gtimg.cn/q=' + ','.join(tencent_id(s) for s in ids)
+                text = attempt('tencent_batch_missing', lambda:http.get_text(url, encoding='gb18030'), '')
+                quotes.update(quote_rows(text, set(ids), day))
+                missing_ids = sorted(set(ids) - quotes.keys())
+                if missing_ids:
+                    quotes.update(attempt('sina_quotes_missing', lambda:sina_quotes(http, missing_ids, day), {}))
+            queried.update(requested)
+            for item in em_rows:
+                row = em_closed_stock(item, day)
+                if row:
+                    quotes.setdefault(row['code'], row)
+
+        used_directory = not covered
+        if used_directory:
+            reconcile_inventory()
+        fill_quotes()
         missing = universe.keys() - quotes.keys()
         halted = attempt('suspensions_missing', lambda:suspension_list(http, day), set()) if missing else set()
-        # The TDX security master may still list a delisted security. When the
-        # two sources disagree, reconcile against the fully paginated mainland
-        # quote directory and use only individually dated closes as fallback.
-        if missing - halted and not em_rows:
-            em_rows = attempt('mainland_inventory_incomplete', lambda:clist(http, ALL_A, em_fields), [])
-        if em_rows:
-            official = attempt('unknown_mainland_code',lambda:_inventory_records(em_rows),{})
-            fresh_rows = {r['code']:r for row in em_rows if (r := em_closed_stock(row, day))}
-            if {s[-2:] for s in official} == {'SH','SZ','BJ'} and fresh_rows:
-                universe = official
-                covered = True
-                for sym, row in fresh_rows.items():
-                    quotes.setdefault(sym,row)
+        if missing - halted and not used_directory:
+            # Delisted names can remain in the TDX directory. Bind any revision to
+            # an independent complete directory; request newly discovered names too.
+            reconcile_inventory()
+            fill_quotes()
         for sym, row in quotes.items():
             row.update(universe.get(sym, {}))
+            row['inMarketUniverse'] = sym in universe
         # No previous-date close, including a suspended stock, enters a ranking.
         complete = bool(covered and universe.keys() <= quotes.keys() | halted)
         if not complete:
             warnings.add('market_coverage_partial')
+        else:
+            warnings.difference_update({'tencent_batch_missing','sina_quotes_missing'})
+        if core - quotes.keys() - halted:
+            warnings.add('core_quotes_partial')
         rows = [r for sym, r in quotes.items() if sym not in halted and
                 r['amount'] > 0 and (sym in universe or not complete or sym in core)]
         # The amount and breadth concern the three-exchange universe only.
@@ -431,16 +653,39 @@ def collect_market(day, radar, http):
         enrich_candidates(rows if complete else [r for r in rows if r['code'] in core], core, day,
                           lambda sym:attempt('stock_history_missing', lambda:daily_series(tdx, http, sym, day), []))
         intraday = []
-        if tdx is not None:
-            for name, code in [('上证指数','000001'), ('创业板指','399006')]:
-                intraday.extend(attempt('index_intraday_missing', lambda:index_points(tdx, day, name, code), []))
+        for name, slug in [('上证指数','sh000001'), ('创业板指','sz399006')]:
+            pts = attempt('tdx_index_missing', lambda:index_points(tdx, day, name, slug[2:]), []) if tdx else []
+            times = {p['time'] for p in pts}
+            if not {'10:30','13:30','15:00'} <= times:
+                fallback = attempt('index_intraday_missing', lambda:tencent_index_points(http, day, name, slug), [])
+                pts.extend(p for p in fallback if p['time'] not in times)
+            if not {'10:30','13:30','15:00'} <= {p['time'] for p in pts}:
+                warnings.add('index_intraday_missing')
+            intraday.extend(pts)
     finally:
         if tdx is not None:
             attempt('tdx_close_failed', tdx.close)
 
-    industries, pts = attempt('industry_boards_missing', lambda:boards(http, 'm:90 t:2 f:!50', day, attempt), ([], []))
+    def load_boards(sector, kind, host):
+        scope = f'm:90 t:{kind} f:!50'
+        err = sector + '_boards_missing'
+        result = attempt(err, lambda:boards(http, scope, day, attempt))
+        if result is None:
+            result = attempt(err, lambda:boards(http, scope, day, attempt, CLIST.replace('push2.',host+'.push2.')))
+        if result is None and sector == 'industry':
+            result = attempt(err, lambda:sw_industries(http, day, attempt))
+        if result is None and sector == 'concept':
+            result = attempt(err, lambda:published_concepts(http, day))
+            if result:
+                warnings.update({'board_daily_missing','board_intraday_missing'})
+        if result is None:
+            return [], []
+        warnings.discard(err)
+        return result
+
+    industries, pts = load_boards('industry', 2, '17')
     intraday.extend(pts)
-    concepts, pts = attempt('concept_boards_missing', lambda:boards(http, 'm:90 t:3 f:!50', day, attempt), ([], []))
+    concepts, pts = load_boards('concept', 3, '79')
     intraday.extend(pts)
     reasons = attempt('ths_hot_missing', lambda:hot_reasons(http, day), {})
     for r in rows:
@@ -473,6 +718,7 @@ def collect_market(day, radar, http):
             warnings.discard('prior_limit_pool_missing')
     return dict(date=day.isoformat(), stocks=rows, industries=industries, concepts=concepts, breadth=breadth,
                 intraday=intraday, limitPool=pool, previousLimitPool=previous,
-                marketComplete=complete, universeComplete=complete,
+                marketComplete=complete, universeComplete=complete, coreExpected=len(core),
+                coreQuotes=len(core & quotes.keys()),
                 closeConfirmed=bool(rows or industries or concepts or any(p['time']=='15:00' for p in intraday)),
                 warnings=sorted(warnings))

@@ -12,6 +12,7 @@ from pathlib import Path
 import re
 import unicodedata
 
+from .market import symbol
 
 EM = 'https://datacenter-web.eastmoney.com/api/data/v1/get'
 THS = 'https://stock.10jqka.com.cn/gushiyuce/'
@@ -40,8 +41,8 @@ def as_date(value):
         return None
 
 
-def em_rows(http, report, filters, sort, order='1'):
-    query = dict(reportName=report, filter=filters, columns='ALL', sortColumns=sort,
+def em_rows(http, report, filters, sort, order='1', *, columns='ALL'):
+    query = dict(reportName=report, filter=filters, columns=columns, sortColumns=sort,
                  sortTypes=order, pageSize=500, source='WEB', client='WEB')
     rows = []
     for page in range(1, 13):
@@ -92,27 +93,39 @@ def seat_summary(buys, sells):
 
 
 def dragon(day, http, warnings):
-    rows = em_rows(http, 'RPT_DAILYBILLBOARD_DETAILSNEW', f"(TRADE_DATE='{day}')", 'BILLBOARD_DEAL_AMT', '-1')
+    session = f"(TRADE_DATE='{day}')"
+    rows = em_rows(http, 'RPT_DAILYBILLBOARD_DETAILSNEW', session, 'BILLBOARD_DEAL_AMT', '-1',
+                   columns='SECURITY_CODE,SECURITY_NAME_ABBR,TRADE_DATE,EXPLANATION,BILLBOARD_DEAL_AMT,BILLBOARD_NET_AMT')
     # A multi-session movement cannot be reported as a single session's cash.
     daily = [r for r in rows if as_date(r.get('TRADE_DATE')) == day and
-             re.fullmatch(r'\d{6}', str(r.get('SECURITY_CODE', ''))) and r.get('EXPLANATION')
+             re.fullmatch(r'\d{6}', str(r.get('SECURITY_CODE', ''))) and symbol(r['SECURITY_CODE']) and r.get('EXPLANATION')
              and not re.search(r'连续|三个交易日|三日|期间', r['EXPLANATION'])
              and number(r.get('BILLBOARD_DEAL_AMT')) is not None]
-    seen, items = set(), []
+    selected = {}
     for row in sorted(daily, key=lambda r: number(r['BILLBOARD_DEAL_AMT']), reverse=True):
-        code = row['SECURITY_CODE']
-        if code in seen:
-            continue
-        seen.add(code)
-        condition = f"(TRADE_DATE='{day}')(SECURITY_CODE=\"{code}\")"
+        selected.setdefault(row['SECURITY_CODE'], row)
+        if len(selected) == 5:
+            break
+    sides = {}
+    if selected:
+        codes = ','.join(f'"{code}"' for code in selected)
+        condition = f'{session}(SECURITY_CODE in ({codes}))'
         try:
-            sides = []
             for side in ('BUY', 'SELL'):
-                detail = em_rows(http, 'RPT_BILLBOARD_DAILYDETAILS' + side, condition, side, '-1')
-                sides.append([r for r in detail if r.get('SECURITY_CODE') == code and
-                              as_date(r.get('TRADE_DATE')) == day and
-                              r.get('EXPLANATION') == row['EXPLANATION']])
-            seats = seat_summary(*sides)
+                records = em_rows(http, 'RPT_BILLBOARD_DAILYDETAILS' + side, condition, side, '-1',
+                                  columns='SECURITY_CODE,TRADE_DATE,EXPLANATION,OPERATEDEPT_CODE,OPERATEDEPT_NAME,BUY,SELL,NET')
+                sides[side] = {}
+                for record in records:
+                    code = record.get('SECURITY_CODE')
+                    if code in selected and as_date(record.get('TRADE_DATE')) == day and (
+                            record.get('EXPLANATION') == selected[code]['EXPLANATION']):
+                        sides[side].setdefault(code, []).append(record)
+        except (OSError, TypeError, ValueError, KeyError):
+            sides.clear()
+    items = []
+    for code, row in selected.items():
+        try:
+            seats = seat_summary(sides['BUY'][code], sides['SELL'][code])
         except (OSError, TypeError, ValueError, KeyError):
             warnings.append('龙虎榜部分席位明细暂缺')
             seats = '当日同一上榜原因的买卖前五席明细暂缺'
@@ -121,8 +134,6 @@ def dragon(day, http, warnings):
                           tone='stale' if net is None else 'up-tag' if net > 0 else 'down-tag',
                           net='净额暂缺' if net is None else f'全榜净额 {net / 1e8:+.2f} 亿元',
                           seats=seats, note=text(row['EXPLANATION'])))
-        if len(items) == 5:
-            break
     return dict(summary=f'{day} 按龙虎榜成交额列示单日异动，收录 {len(items)} 只。', items=items)
 
 
@@ -138,36 +149,55 @@ def unlocks(day, http):
     return mines
 
 
-def disclosures(day, http, keyword):
+def disclosures(day, http, keyword, warnings=None):
     """A disclosure date is observable. The title is not a future execution date."""
     mines, seen = [], set()
     headers = {'Referer': 'https://www.cninfo.com.cn/new/disclosure', 'Origin': 'https://www.cninfo.com.cn'}
+    cutoff = datetime(day.year, day.month, day.day, 20, 30, tzinfo=BJ)
     for page in range(1, 13):
-        payload = http.post_form_json(CNINFO, dict(tabName='fulltext', column='szse', stock='',
-            plate='', secid='', category='', trade='', searchkey=keyword, sortName='time',
-            sortType='desc', seDate=f'{day}~{day}', pageNum=page, pageSize=30, isHLtitle='true'),
-            headers=headers)
-        if 'announcements' not in payload or not isinstance(payload.get('announcements'), (list, type(None))):
-            raise ValueError('invalid announcement list')
+        try:
+            payload = http.post_form_json(CNINFO, dict(tabName='fulltext', column='szse', stock='',
+                plate='', secid='', category='', trade='', searchkey=keyword, sortName='time',
+                sortType='desc', seDate=f'{day}~{day}', pageNum=page, pageSize=30, isHLtitle='true'),
+                headers=headers)
+            if not isinstance(payload, dict) or 'announcements' not in payload:
+                raise ValueError('invalid announcement response')
+            total = payload.get('totalAnnouncement')
+            if total is not None:
+                total = int(total)
+            if not isinstance(payload['announcements'], list) and not (
+                    payload['announcements'] is None and total == 0):
+                raise ValueError('invalid announcement list')
+        except (OSError, TypeError, ValueError):
+            if page == 1 or warnings is None:
+                raise
+            break
         for row in payload.get('announcements') or []:
+            if not isinstance(row, dict):
+                continue
             stamp = number(row.get('announcementTime'))
             if stamp is None:
                 continue
-            published = datetime.fromtimestamp(stamp / 1000, BJ)
+            try:
+                published = datetime.fromtimestamp(stamp / 1000, BJ)
+            except (OverflowError, OSError, ValueError):
+                continue
             ident, title = text(row.get('announcementId')), text(row.get('announcementTitle'))
-            if not ident or ident in seen or published.date() != day or published.strftime('%H:%M') > '20:30':
+            if not ident or ident in seen or published.date() != day or published > cutoff:
                 continue
             if keyword not in title or (keyword == '减持' and
                     re.search('减持完毕|减持计划.*(?:届满|结束|完成)|不减持|未减持', title)):
                 continue
             seen.add(ident)
             mines.append(dict(title=keyword + '公告', detail=f"{day} {text(row.get('secName'))}：{title}"))
-        total = payload.get('totalAnnouncement')
-        if total is not None and page * 30 >= int(total):
+        if total is not None and page * 30 >= total:
             return mines
         if total is None and payload.get('hasMore') is not True:
             return mines
-    raise ValueError('incomplete announcement list')
+    if warnings is None:
+        raise ValueError('incomplete announcement list')
+    warnings.append('巨潮' + keyword + '公告分页未完整')
+    return mines
 
 
 class THSCalendar(HTMLParser):
@@ -341,7 +371,7 @@ def collect_events(day, market, http):
     lhb = attempt('龙虎榜', lambda: dragon(day, http, warnings), dict(summary='今日龙虎榜数据暂缺', items=[]))
     mines = attempt('解禁', lambda: unlocks(day, http), [])
     for term in ('减持', '异常波动'):
-        mines.extend(attempt('巨潮' + term, lambda: disclosures(day, http, term), []))
+        mines.extend(attempt('巨潮' + term, lambda: disclosures(day, http, term, warnings), []))
     raw = []
     for name, read in (('东财会议', em_events), ('同花顺日历', ths_events), ('金十日历', jin10_events)):
         raw.extend(attempt(name, lambda: read(day, http), []))

@@ -4,10 +4,12 @@ from datetime import date, datetime, time
 import io
 import json
 from pathlib import Path
+import ssl
 import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+from urllib.error import HTTPError, URLError
 
 RADAR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RADAR / 'tools'))
@@ -34,7 +36,7 @@ class ShortTermCollectorTests(unittest.TestCase):
             elapsed[0] += delay
         def request(req, timeout):
             calls.append((req.host, elapsed[0]))
-            if len(calls) == 1:
+            if len(calls) <= 2:
                 raise TimeoutError()
             body = io.BytesIO(b'{}')
             body.headers = {}
@@ -45,7 +47,37 @@ class ShortTermCollectorTests(unittest.TestCase):
         http.get_json('https://qt.gtimg.cn/test')
         http.get_json('https://datacenter-web.eastmoney.com/test')
         http.get_json('https://push2his.eastmoney.com/test')
-        self.assertEqual([stamp for _, stamp in calls], [0, 0, 1.5, 3])
+        self.assertEqual([stamp for _, stamp in calls], [0, 1.5, 1.5, 3, 4.5])
+
+    def test_transient_read_retries_but_provider_limits_and_invalid_payloads_do_not(self):
+        url = 'https://qt.gtimg.cn/test'
+        sleep = []
+        results = [URLError(ssl.SSLEOFError(8, 'EOF')), b'{"verified":true}']
+
+        def request(req, timeout):
+            response = results.pop(0)
+            if isinstance(response, Exception):
+                raise response
+            body = io.BytesIO(response)
+            body.headers = {}
+            return body
+
+        http = PublicHttp(sleep=sleep.append, open_request=request)
+        self.assertEqual(http.get_json(url), {'verified': True})
+        self.assertEqual(sleep, [1])
+        for response in (HTTPError(url, 403, '', {}, None), HTTPError(url, 429, '', {}, None),
+                         HTTPError(url, 503, '', {'Retry-After': '600'}, None),
+                         URLError(ssl.SSLCertVerificationError()), b'not-json'):
+            results[:] = [response, b'{}']
+            with self.assertRaises((URLError, ValueError)):
+                http.get_json(url)
+            self.assertEqual(results, [b'{}'])
+
+        http.MAX_RETRIES_PER_ORIGIN = 1
+        results[:] = [TimeoutError(), b'{}']
+        with self.assertRaises(TimeoutError):
+            http.get_json(url)
+        self.assertEqual(results, [b'{}'])
 
     def test_cli_dry_run_and_real_atomic_file_round_trip_are_identical(self):
         command = ['--offline-fixture', '--output', str(self.path), '--date', self.day.isoformat()]

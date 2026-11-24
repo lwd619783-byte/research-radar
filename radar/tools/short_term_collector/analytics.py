@@ -332,7 +332,7 @@ def build_day(day: date, raw: dict, radar: dict, previous: dict | None) -> dict:
                  if c.get('market', c.get('mkt')) == 'A股' and _code(c.get('sym') or c.get('code'))}
     core = [r for r in stocks if _code(r['code']) in companies]
     company_links = {r['code']: companies[_code(r['code'])].get('ind') or '雷达核心池' for r in core}
-    market = [r for r in stocks if complete and _market_stock(r, day)]
+    market = [r for r in stocks if complete and r.get('inMarketUniverse', True) and _market_stock(r, day)]
     board_sets = {k: [r for r in _rows(raw, k, day) if _valid_quote(r)] for k in ('industries', 'concepts')}
     boards = board_sets['industries'] + board_sets['concepts']
     linked = _radar_links(boards, radar, companies)
