@@ -99,8 +99,10 @@ def _live(day, config):
                 ensure_ascii=False) + ');\nconsole.log(' + json.dumps(MARK) + '+JSON.stringify(captured));\n',
             encoding='utf-8')
         code = 'await import(' + repr(entry.as_uri()) + ')'
+        # Windows Ego emits console output on stderr when launched as a subprocess.
+        # Keep both streams in memory and consume only the marked capture line.
         result = subprocess.run([executable, 'nodejs', '-e', code], stdin=subprocess.DEVNULL,
-            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, timeout=240, check=True)
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=240, check=True)
     for raw in reversed(result.stdout.decode('utf-8', errors='replace').splitlines()):
         if raw.startswith(MARK) and len(raw) <= 2_000_000:
             return json.loads(raw[len(MARK):])

@@ -111,8 +111,10 @@ class SentimentTests(unittest.TestCase):
             self.assertIn('readSentiment', script)
             self.assertIn('ego_reader.mjs', script)
             self.assertNotIn('process.env', script)
-            self.assertEqual(kw['stderr'], subprocess.DEVNULL)
-            return subprocess.CompletedProcess(command, 0, (ego.MARK+'{"em":{"status":"ok"}}\n').encode())
+            self.assertEqual(kw['stdout'], subprocess.PIPE)
+            self.assertEqual(kw['stderr'], subprocess.STDOUT)
+            stream = 'Ego diagnostic\r\n' + ego.MARK + '{"em":{"status":"ok"}}\r\n'
+            return subprocess.CompletedProcess(command, 0, stream.encode())
         with patch.dict(os.environ, {'SHORT_TERM_EGO_BROWSER':'ego-browser'}), patch.object(subprocess, 'run', side_effect=fake_run):
             self.assertEqual(ego._live(DAY, config), {'em':{'status':'ok'}})
 
