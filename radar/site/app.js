@@ -510,7 +510,16 @@ function renderPal(){const q=$('#pq').value.trim().toLowerCase();
   $('#plist').innerHTML=h||'<div class="pempty">没有找到匹配项，试试公司名、代码或行业</div>';const on=$('.pi.on',$('#plist'));if(on)on.scrollIntoView({block:'nearest'})}
 function openPal(){const p=$('#palette');p.hidden=false;$('#pq').value='';pSel=0;renderPal();setTimeout(()=>$('#pq').focus(),10)}
 function closePal(){$('#palette').hidden=true}
-function runPal(i){const p=pRes[i];if(!p)return;closePal();p.go()}
+function runPal(i){
+  const p=pRes[i];if(!p)return;
+  closePal();
+  if($('#longTermView')?.hidden){
+    shortCtl.switchView('long');
+    history.replaceState(null,'','#'+({'公司':'leaders','行业':'radar','卡点':'choke'}[p.t]));
+    if(p.t==='公司')$('#leaders').scrollIntoView({behavior:SB()});
+  }
+  p.go();
+}
 function gotoCp(ind,name){closeDrawer();if(S.cpInd!==ind){S.cpInd=ind;setSeg($('#cpSeg'),ind);renderFlow()}document.getElementById('choke').scrollIntoView({behavior:SB()});
   if(name)setTimeout(()=>{const el=$$('#flow .cp-card').find(e=>e.dataset.cpname===name);if(el){el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash')}},450)}
 
@@ -594,7 +603,7 @@ function initObservers(){
   if(!('IntersectionObserver' in window)){$$('.reveal').forEach(el=>{el.classList.add('in');onReveal(el)});return}
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');onReveal(e.target);io.unobserve(e.target)}}),{threshold:.06,rootMargin:'0px 0px -4% 0px'});
   $$('.reveal').forEach((el,i)=>{el.style.transitionDelay=(el.closest('.bento')?(Array.from(el.parentNode.children).indexOf(el)*90):0)+'ms';io.observe(el)});
-  const spy=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)setNav(e.target.id)}),{rootMargin:'-35% 0px -60% 0px'});
+  const spy=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&!$('#longTermView')?.hidden)setNav(e.target.id)}),{rootMargin:'-35% 0px -60% 0px'});
   ['overview','radar','choke','leaders','calendar'].forEach(id=>spy.observe(document.getElementById(id)))}
 function setNav(id){$$('#nav a').forEach(a=>a.classList.toggle('active',a.dataset.sec===id));const a=$(`#nav a[data-sec="${id}"]`),ind=$('#navInd');if(a&&ind&&a.offsetWidth){ind.style.left=a.offsetLeft+'px';ind.style.width=a.offsetWidth+'px'}}
 
@@ -608,6 +617,39 @@ seg($('#metricSeg'),METRICS.map(m=>({v:m.k,l:m.k==='dd52'?'距高点':m.l})),S.m
 seg($('#indSeg'),[{v:'all',l:'全部行业'}].concat(KEY_IND.map(n=>({v:n,l:n}))),'all',v=>{S.indF=v;renderLeaders()});
 seg($('#mktSeg'),['all','A股','港股','美股','其他'].map(v=>({v,l:v==='all'?'全部市场':v})),'all',v=>{S.mktF=v;renderLeaders()});
 renderLeaders();renderCal();renderFoot();renderReleaseStatus();checkVersion();initObservers();setNav('overview');
+const teaser=document.createElement('div');
+teaser.id='todayShortTeaser';
+$('#today').appendChild(teaser);
+const shortCtl=window.AlphaRadarShortTerm?.initShortTermModule({
+  shortData:D.shortTerm||null, mountEl:$('#shortTermView'), longViewEl:$('#longTermView'), todayTeaserEl:teaser,
+  onViewChange(view){
+    const isShort=view==='short';
+    setNav(isShort?'short':'overview');
+    $('.brand').setAttribute('aria-label',isShort?'返回总览':'投研雷达');
+    if(isShort && location.hash!=='#short')history.pushState(null,'','#short');
+  }
+});
+function syncViewFromUrl(){
+  if(!shortCtl)return;
+  if(location.hash==='#short'){
+    if($('#shortTermView').hidden)shortCtl.switchView('short');
+  }else if($('#longTermView').hidden){
+    shortCtl.switchView('long');
+    const target=document.getElementById(location.hash.slice(1))||$('#overview');
+    target.scrollIntoView({behavior:SB()});
+  }
+}
+$('#navShort')?.addEventListener('click',e=>{
+  if(!shortCtl)return;
+  e.preventDefault();
+  shortCtl.switchView('short');
+});
+// Reveal the target before the browser performs native fragment scrolling.
+document.querySelectorAll('#nav a:not(#navShort),.brand').forEach(a=>a.addEventListener('click',()=>{
+  if($('#longTermView')?.hidden)shortCtl.switchView('long');
+}));
+window.addEventListener('hashchange',syncViewFromUrl);
+syncViewFromUrl();
 setInterval(()=>{renderReleaseStatus();checkVersion()},120000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkVersion()});
 let rt=0;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{$$('.seg').forEach(moveThumb);if(S.view==='map')renderMap();if(S.drawerType==='company')drawChart(byId[S.drawer]);const a=$('#nav a.active');if(a)setNav(a.dataset.sec)},120)});
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{$$('.seg').forEach(moveThumb);const a=$('#nav a.active');if(a)setNav(a.dataset.sec)});

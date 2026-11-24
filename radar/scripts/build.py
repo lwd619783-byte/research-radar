@@ -422,7 +422,7 @@ def render(D: dict, out_dir: Path, operations=None) -> Path:
     site = RADAR / "site"
     h = (site / "index.html").read_text("utf-8")
     css = (site / "style.css").read_text("utf-8")
-    js = (site / "app.js").read_text("utf-8")
+    js = (site / "short-term-v4-ui.js").read_text("utf-8") + "\n" + (site / "app.js").read_text("utf-8")
     def script_json(value):
         encoded = json.dumps(value, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
         for char, escaped in (('<', '\\u003c'), ('>', '\\u003e'), ('&', '\\u0026'),
