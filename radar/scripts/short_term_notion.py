@@ -1,12 +1,14 @@
 """Optional read-only V4 corrections. The caller validates and sanitizes the result."""
 import copy
-from datetime import date
+from datetime import date, timedelta
 import json
 import os
+import re
 from pathlib import Path
 import time
 from uuid import UUID
 
+from market_calendar import calendar_data, is_session
 from notion_source import DEFAULTS, NotionError, UrllibTransport
 
 
@@ -91,31 +93,62 @@ def _ledger(day, row):
     day['cycle']['activeStep'] = day['cycle']['steps'].index(stage)
     day['headline'] = row['定调结论']
     day['sentimentScore'] = day['ego']['score'] = score
-    # A manually supplied third anchor may be the day's only observation.
-    # Preserve its numbered slot when the collector and build reapply the row.
-    anchors = {}
-    for position, anchor in enumerate(day['anchors'], 1):
-        slot = next((n for n in range(1, 4) if
-                     anchor['code'].startswith(f'ANCHOR {n:02}')), position)
-        anchors[slot] = anchor
+    anchors = day['anchors']
+    by_slot = {slot: item for item in anchors if (slot := _slot(item))}
     for i in range(1, 4):
         title = row.get(f'明日锚点_{i}')
-        if title:
-            # Numeric thresholds and explanations attached to the old claim
-            # cannot be reused for a different human-authored observation.
-            anchors[i] = {'code': f'ANCHOR {i:02}', 'title': title, 'desc': '台账观察项'}
-    day['anchors'] = [anchors[i] for i in sorted(anchors)]
+        if title and title != by_slot.get(i, {}).get('title'):
+            # Discard thresholds attached to the old claim only when it changed.
+            by_slot[i] = {'code': f'ANCHOR {i:02}', 'title': title, 'desc': '台账观察项'}
+    day['anchors'] = [by_slot[i] for i in sorted(by_slot)] + [a for a in anchors if not _slot(a)]
+
+
+def _slot(item):
+    match = re.match(r'^ANCHOR\s+0?([1-3])\b', item.get('code', ''), re.I)
+    return int(match[1]) if match else None
+
+
+def _overlay_reconcile(day, days, original_days, row):
+    current = date.fromisoformat(day['date'])
+    prior_date = current - timedelta(days=1)
+    sessions = calendar_data()['exchanges']['XSHG']
+    while not is_session(sessions, prior_date):
+        prior_date -= timedelta(days=1)
+    prior_id = prior_date.isoformat()
     reconcile = day['yesterdayReconcile']
-    corrected = False
-    for i, item in enumerate(reconcile['items'][:3], 1):
+    if reconcile.get('targetDate') not in (None, '', '前1交易日', prior_id):
+        return
+    prior = days.get(prior_id, {})
+    old_prior = original_days.get(prior_id, {})
+    claims = {_slot(a): a for a in prior.get('anchors', []) if _slot(a)}
+    old_claims = {_slot(a): a.get('title') for a in old_prior.get('anchors', []) if _slot(a)}
+    items = {_slot(it): it for it in reconcile['items'] if _slot(it)}
+    other = [it for it in reconcile['items'] if not _slot(it)]
+    changed = False
+    for i in range(1, 4):
+        anchor = claims.get(i)
+        if anchor and old_claims.get(i) != anchor['title'] and i in items:
+            # A different human observation invalidates an automatic conclusion.
+            del items[i]
+            changed = True
         status, actual = row.get(f'对账状态_{i}'), row.get(f'对账实盘_{i}')
-        if status and actual:
-            item.update(status=status, statusLabel=LABELS[status], actual=actual)
-            corrected = True
-    if corrected:
-        reconcile['summary'] = '台账校正后，' + '、'.join(
-            f'{i} 项{label}' for key, label in LABELS.items()
-            if (i := sum(item['status'] == key for item in reconcile['items'])))
+        if not (status and actual):
+            continue
+        item = items.get(i)
+        if item is None:
+            if not anchor:
+                continue
+            item = items[i] = {'code': anchor['code'], 'claim': anchor['title']}
+        item.update(status=status, statusLabel=LABELS[status], actual=actual)
+        changed = True
+    if changed:
+        reconcile['items'] = [items[i] for i in sorted(items)] + other
+        missing = sorted(set(claims) - set(items))
+        labels = [f'{n} 项{label}' for key, label in LABELS.items()
+                  if (n := sum(it['status'] == key for it in reconcile['items']))]
+        if missing:
+            labels.append('、'.join(f'ANCHOR {i:02}' for i in missing) + ' 暂缺实盘结论')
+        reconcile['summary'] = '台账校正后，' + '、'.join(labels)
 
 
 def _catalyst(row, as_of):
@@ -145,6 +178,8 @@ def apply_overrides(history, *, environ=None, transport=None):
         transport.deadline = time.monotonic() + 12
     result = copy.deepcopy(history)
     days = {day['date']: day for day in result['days']}
+    original_days = {day['date']: day for day in history['days']}
+    ledger = {}
     as_of = date.fromisoformat(max(days))
     events = {event['id']: event for event in result['catalysts']}
     changed_events = False
@@ -168,6 +203,7 @@ def apply_overrides(history, *, environ=None, transport=None):
                 if table == 'short_term_ledger':
                     if row['交易日期'] in days:
                         _ledger(days[row['交易日期']], row)
+                        ledger[row['交易日期']] = row
                 else:
                     event = _catalyst(row, as_of)
                     if event:
@@ -178,6 +214,9 @@ def apply_overrides(history, *, environ=None, transport=None):
                         changed_events = True
             except (KeyError, TypeError, ValueError):
                 continue
+    if ledger:
+        for key, day in days.items():
+            _overlay_reconcile(day, days, original_days, ledger.get(key, {}))
     if changed_events:
         result['catalysts'] = sorted(events.values(), key=lambda event: (event['startDate'], event['id']))
     return result

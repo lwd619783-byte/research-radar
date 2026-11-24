@@ -596,6 +596,12 @@ def read_short_term(fixed_clock, *, environ=None, path=None):
         return None
 
 
+def is_short_term_preview(short):
+    meta = short.get('meta', {})
+    label = meta.get('sourceLabel')
+    return bool(meta.get('reviewOnly') or (isinstance(label, str) and 'fixture' in label.lower()))
+
+
 def build_notion_data(*, transport=None, token=None, fixed_clock, last_good=None, config=None,
                       quotes_data=None, sleep=None, pace=None, trading_days=None):
     """Injectable offline/online research pipeline; never invent missing quotes."""
@@ -607,7 +613,7 @@ def build_notion_data(*, transport=None, token=None, fixed_clock, last_good=None
     short_term = read_short_term(fixed_clock, environ={} if transport or quotes_data is not None else None)
     if short_term is not None:
         data['shortTerm'] = short_term
-    if quotes_data is not None or transport is not None:
+    if quotes_data is not None or transport is not None or (short_term and is_short_term_preview(short_term)):
         data['meta']['reviewPreview'] = True
     return data, research['snapshot'], fetch
 
@@ -683,7 +689,7 @@ def notion_main(args, config):
         short_term = read_short_term(now, environ={} if offline else None)
         if short_term is not None:
             data['shortTerm'] = short_term
-        if args.notion_fetch or args.fixed_clock or args.offline:
+        if offline or (short_term and is_short_term_preview(short_term)):
             # Standalone replay has no same-run production receipt. Only the
             # production collector may bind collected inputs to a release.
             data['meta']['reviewPreview'] = True

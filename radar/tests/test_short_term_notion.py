@@ -109,6 +109,56 @@ class NotionOverrideTests(unittest.TestCase):
         self.assertEqual(twice, once)
         self.assertEqual([a['code'] for a in twice['days'][0]['anchors']], ['ANCHOR 03'])
 
+    def test_sparse_reconcile_uses_actual_identifier_and_manual_evidence(self):
+        history = copy.deepcopy(self.history)
+        today, prior = history['days'][:2]
+        today['yesterdayReconcile']['items'] = today['yesterdayReconcile']['items'][2:]
+        prior['anchors'] = prior['anchors'][1:]
+        ledger = {**self.ledger, '对账状态_2': ('select', 'partial'), '对账实盘_2': ('rich_text','上一交易日第二项的收盘记录')}
+        transport = Mock()
+        transport.request.side_effect = [response([page(ledger)]), response([])]
+        result = apply_overrides(history, environ=ENV, transport=transport)
+        items = result['days'][0]['yesterdayReconcile']['items']
+        self.assertEqual([i['code'][:9] for i in items], ['ANCHOR 02','ANCHOR 03'])
+        self.assertEqual(items[0]['claim'], prior['anchors'][0]['title'])
+        self.assertEqual(items[0]['status'], 'partial')
+        self.assertEqual(items[1], today['yesterdayReconcile']['items'][0])
+
+    def test_no_prior_claim_or_missing_manual_observation_never_creates_result(self):
+        for prior_available in (False, True):
+            with self.subTest(prior=prior_available):
+                history = copy.deepcopy(self.history)
+                history['days'][0]['yesterdayReconcile']['items'] = []
+                row = self.ledger.copy()
+                if prior_available:
+                    row.pop('对账实盘_1')
+                else:
+                    # The last available day is Friday, not the expected Monday.
+                    history['days'].pop(1)
+                transport = Mock()
+                transport.request.side_effect = [response([page(row)]), response([])]
+                result = apply_overrides(history, environ=ENV, transport=transport)
+                self.assertEqual(result['days'][0]['yesterdayReconcile']['items'], [])
+
+    def test_prior_manual_change_invalidates_mismatched_automatic_claim(self):
+        history = copy.deepcopy(self.history)
+        prior = {**self.ledger, '交易日期': ('title', history['days'][1]['date']),
+                 '明日锚点_1': ('rich_text','新观察项')}
+        # The second pass applies the new prior title even if the next day's
+        # correction arrived first from the remote pagination order.
+        for has_today_entry in (False, True):
+            rows = [page(self.ledger), page(prior)] if has_today_entry else [page(prior)]
+            transport = Mock()
+            transport.request.side_effect = [response(rows), response([])]
+            result = apply_overrides(history, environ=ENV, transport=transport)
+            rec = result['days'][0]['yesterdayReconcile']
+            if has_today_entry:
+                self.assertEqual(rec['items'][0]['claim'],'新观察项')
+                self.assertEqual(rec['items'][0]['actual'],'收盘量能偏低')
+            else:
+                self.assertFalse(any(it['code'].startswith('ANCHOR 01') for it in rec['items']))
+                self.assertIn('ANCHOR 01',rec['summary'])
+
     def test_echoed_token_never_enters_data(self):
         transport = Mock()
         echoed = page({**self.event, '事件标题': ('rich_text', ENV['NOTION_TOKEN'])})

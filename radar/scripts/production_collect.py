@@ -744,7 +744,7 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
     research = normalize(fetched, contract, final_clock, last_good=previous, config=config)
     stage('research_apply')
     data = build.apply_research(selected['data'], research, final_clock, config)
-    if short_term is not None:
+    if short_term is not None and (synthetic or not build.is_short_term_preview(short_term)):
         data['shortTerm'] = short_term
     if synthetic:
         data['meta']['reviewPreview'] = True

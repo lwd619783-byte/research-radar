@@ -1,3 +1,5 @@
 __pycache__/
 audit/visual/
 audit/runtime/
+radar/data/.short_term_history.json.lock
+radar/data/.short-term-*.tmp
