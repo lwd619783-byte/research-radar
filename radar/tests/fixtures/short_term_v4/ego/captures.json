@@ -1,0 +1,180 @@
+{
+  "em": {
+    "status": "ok",
+    "tracks": [
+      "community"
+    ],
+    "comments": [
+      {
+        "id": "offline-0",
+        "text": "盘后观察板块走势偏强，明日留意量能。",
+        "date": "2026-11-24",
+        "time": "19:30",
+        "likes": 12,
+        "track": "community"
+      },
+      {
+        "id": "offline-1",
+        "text": "联系 v 信：demo12345 获取免费资料",
+        "date": "2026-11-24",
+        "time": "19:15",
+        "likes": 12,
+        "track": "community"
+      },
+      {
+        "id": "offline-2",
+        "text": "昨天的旧评论不能当作今天样本。",
+        "date": "2026-11-23",
+        "time": "19:30",
+        "likes": 12,
+        "track": "community"
+      }
+    ]
+  },
+  "xq": {
+    "status": "ok",
+    "tracks": [
+      "community"
+    ],
+    "comments": [
+      {
+        "id": "offline-0",
+        "text": "今天盘面成交延续分歧，方向仍需观察。",
+        "date": "2026-11-24",
+        "time": "19:30",
+        "likes": 12,
+        "track": "community"
+      },
+      {
+        "id": "offline-1",
+        "text": "联系 v 信：demo12345 获取免费资料",
+        "date": "2026-11-24",
+        "time": "19:15",
+        "likes": 12,
+        "track": "community"
+      },
+      {
+        "id": "offline-2",
+        "text": "昨天的旧评论不能当作今天样本。",
+        "date": "2026-11-23",
+        "time": "19:30",
+        "likes": 12,
+        "track": "community"
+      }
+    ]
+  },
+  "ths": {
+    "status": "ok",
+    "tracks": [
+      "community"
+    ],
+    "comments": [
+      {
+        "id": "offline-0",
+        "text": "盘后观察板块走势偏强，明日留意量能。",
+        "date": "2026-11-24",
+        "time": "19:30",
+        "likes": 12,
+        "track": "community"
+      },
+      {
+        "id": "offline-1",
+        "text": "联系 v 信：demo12345 获取免费资料",
+        "date": "2026-11-24",
+        "time": "19:15",
+        "likes": 12,
+        "track": "community"
+      },
+      {
+        "id": "offline-2",
+        "text": "昨天的旧评论不能当作今天样本。",
+        "date": "2026-11-23",
+        "time": "19:30",
+        "likes": 12,
+        "track": "community"
+      }
+    ]
+  },
+  "dy": {
+    "status": "ok",
+    "tracks": [
+      "hot",
+      "kol"
+    ],
+    "comments": [
+      {
+        "id": "offline-0",
+        "text": "盘后讨论情绪偏高，指数压力位可能走弱。",
+        "date": "2026-11-24",
+        "time": "19:30",
+        "likes": 12,
+        "track": "hot"
+      },
+      {
+        "id": "offline-1",
+        "text": "联系 v 信：demo12345 获取免费资料",
+        "date": "2026-11-24",
+        "time": "19:15",
+        "likes": 12,
+        "track": "hot"
+      },
+      {
+        "id": "offline-2",
+        "text": "昨天的旧评论不能当作今天样本。",
+        "date": "2026-11-23",
+        "time": "19:30",
+        "likes": 12,
+        "track": "hot"
+      },
+      {
+        "id": "offline-k",
+        "text": "新一轮成交规模仍需观察，走势呈现分歧。",
+        "date": "2026-11-24",
+        "time": "19:15",
+        "likes": 5,
+        "track": "kol"
+      }
+    ]
+  },
+  "xhs": {
+    "status": "ok",
+    "tracks": [
+      "hot",
+      "kol"
+    ],
+    "comments": [
+      {
+        "id": "offline-0",
+        "text": "盘后观察板块走势偏强，明日留意量能。",
+        "date": "2026-11-24",
+        "time": "19:30",
+        "likes": 12,
+        "track": "hot"
+      },
+      {
+        "id": "offline-1",
+        "text": "联系 v 信：demo12345 获取免费资料",
+        "date": "2026-11-24",
+        "time": "19:15",
+        "likes": 12,
+        "track": "hot"
+      },
+      {
+        "id": "offline-2",
+        "text": "昨天的旧评论不能当作今天样本。",
+        "date": "2026-11-23",
+        "time": "19:30",
+        "likes": 12,
+        "track": "hot"
+      },
+      {
+        "id": "offline-k",
+        "text": "新一轮成交规模仍需观察，走势呈现分歧。",
+        "date": "2026-11-24",
+        "time": "19:15",
+        "likes": 5,
+        "track": "kol"
+      }
+    ]
+  }
+}

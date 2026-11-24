@@ -8,7 +8,7 @@ import re
 
 from market_calendar import calendar_data, is_session, known_non_session
 from short_term_merge import contract, sanitize_short_term_text
-from .market import symbol
+from .market import symbol, tradable_name
 
 
 def _number(x):
@@ -57,8 +57,7 @@ def _rows(raw, key, day):
 
 
 def _market_stock(row, day):
-    name = row['name'].strip().upper()
-    if re.match(r'^(?:S?\*?ST|N|C)', name) or '退市' in name or name.endswith('退'):
+    if not tradable_name(row['name']):
         return False
     try:
         listed = date.fromisoformat(row.get('listed') or row.get('listedBefore'))

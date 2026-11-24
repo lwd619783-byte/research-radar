@@ -71,6 +71,25 @@ class ShortTermCollectorTests(unittest.TestCase):
             with collector.writer_lock(self.path):
                 self.fail('second writer acquired the same destination')
 
+    def test_offline_sentiment_and_skip_apply_to_the_same_hard_observations(self):
+        command = ['--offline-fixture', '--dry-run']
+        payloads = []
+        with patch('socket.socket', side_effect=AssertionError('Network forbidden')):
+            for switches in ([], ['--skip-ego']):
+                output = io.StringIO()
+                with redirect_stdout(output):
+                    self.assertEqual(collector.main(command + switches), 0)
+                snapshot = json.loads(output.getvalue())
+                payloads.append(snapshot['days'][0])
+                self.assertNotIn('@离线样本', output.getvalue())
+        full, skipped = payloads
+        self.assertEqual(len(full['ego']['platforms']), 5)
+        self.assertTrue(0 <= full['sentimentScore'] <= 100)
+        self.assertEqual(skipped['ego']['posts'], [])
+        self.assertIsNone(skipped['sentimentScore'])
+        for key in ('stocks', 'breadth', 'industries', 'concepts', 'anchors'):
+            self.assertEqual(full[key], skipped[key])
+
     def test_cold_start_and_failed_run_preserve_observation_dates(self):
         with self.assertRaises(collector.CollectionError):
             self.snapshot({'date': self.day.isoformat(), 'stocks': []})

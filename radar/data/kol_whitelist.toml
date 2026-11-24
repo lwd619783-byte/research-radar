@@ -1,0 +1,18 @@
+# 本机可用 SHORT_TERM_KOL_WHITELIST_FILE 指向仓库外同结构文件。
+# kol 填公开作者主页 HTTPS 地址。标签使用原文，不加 #。
+[platforms.em]
+seeds = ["https://guba.eastmoney.com/list,zssh000001.html"]
+
+[platforms.xq]
+seeds = ["https://xueqiu.com/S/SH000001"]
+
+[platforms.ths]
+seeds = ["https://t.10jqka.com.cn/"]
+
+[platforms.dy]
+kol = []
+tags = ["A股复盘"]
+
+[platforms.xhs]
+kol = []
+tags = ["A股复盘"]

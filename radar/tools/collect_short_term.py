@@ -179,6 +179,14 @@ def run(args):
             except Exception:
                 warnings.append('events_unavailable')
             raw['warnings'] = warnings
+        if raw.get('closeConfirmed'):
+            from short_term_collector.ego_sentiment import collect_sentiment
+            try:
+                raw['ego'] = collect_sentiment(day, skip=args.skip_ego, previous=latest_before(history, day),
+                                               captures=fixture.get('egoCaptures', {}) if offline else None)
+            except Exception:
+                raw.setdefault('warnings', []).append('ego_unavailable')
+        if not offline:
             clock = datetime.now(BJ)
         result = assemble(raw, radar, history, day, clock, offline=offline)
         if preview:
@@ -198,6 +206,7 @@ def main(argv=None):
     parser.add_argument('--dry-run', action='store_true', help='Print sanitized JSON without writing files')
     parser.add_argument('--offline-fixture', nargs='?', type=Path, const=RAW_FIXTURE, metavar='RAW_JSON')
     parser.add_argument('--radar-data', type=Path, help='Published V3 DATA.json or single-file HTML')
+    parser.add_argument('--skip-ego', action='store_true', help='Collect the hard-data review without opening Ego')
     parser.add_argument('--output', type=Path)
     try:
         return run(parser.parse_args(argv))

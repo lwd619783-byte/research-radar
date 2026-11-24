@@ -219,6 +219,11 @@ def core_symbols(radar):
     return ids
 
 
+def tradable_name(name):
+    name = name.strip().upper()
+    return not (re.match(r'^(?:S?\*?ST|N|C)', name) or '退市' in name or name.endswith('退'))
+
+
 def enrich_candidates(rows, core, day, series):
     """Query age and prices only for the two ranking frontiers and radar names."""
     checked = set()
@@ -233,13 +238,14 @@ def enrich_candidates(rows, core, day, series):
                 row['spark'] = [v for _, v in values[-5:]]
         return row
 
-    active = sorted((r for r in rows if r['amount'] >= 1e9 and
-                     not re.search(r'ST|退', r['name'], re.I)), key=lambda r:(r['pct'], r['code']))
-    for order in (active, reversed(active)):
+    active = [r for r in rows if r['amount'] >= 1e9 and tradable_name(r['name'])]
+    for direction in (1, -1):
+        order = sorted((r for r in active if direction * r['pct'] > 0),
+                       key=lambda r: (-direction * r['pct'], r['code']))
         found = 0
         for row in order:
             if not row.get('listed') and len(checked) >= 80 and row['code'] not in checked:
-                break
+                continue
             listed = row.get('listed') or enrich(row).get('listedBefore')
             if listed and (day - date.fromisoformat(listed)).days >= 30:
                 enrich(row)

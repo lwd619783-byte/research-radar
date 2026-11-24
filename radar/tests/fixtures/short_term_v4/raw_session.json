@@ -6,6 +6,13 @@
     "chokepoints": [{"name": "样本卡点", "ind": "样本行业甲"}],
     "companies": [{"sym": "600001.SS", "code": "600001", "name": "样本甲", "mkt": "A股", "ind": "样本行业甲"}]
   },
+  "egoCaptures": {
+    "em":{"status":"ok","tracks":["forum"],"comments":[{"date":"2026-11-24","time":"16:10","track":"forum","text":"@离线样本，板块放量走强，观察明天能否延续。","likes":3}]},
+    "xq":{"status":"ok","tracks":["forum"],"comments":[{"date":"2026-11-24","time":"17:10","track":"forum","text":"行业缩量回调，还是担心后续需求走弱。","likes":2}]},
+    "ths":{"status":"ok","tracks":["forum"],"comments":[{"date":"2026-11-24","time":"17:30","track":"forum","text":"整体震荡，先看下一交易日的成交变化。","likes":2}]},
+    "dy":{"status":"ok","tracks":["whitelist","hot"],"comments":[{"date":"2026-11-24","time":"18:20","track":"whitelist","text":"今天行业放量上涨，看多后续需求。","likes":4},{"date":"2026-11-24","time":"19:20","track":"hot","text":"尾盘转弱，暂时观望明天的开盘。","likes":1}]},
+    "xhs":{"status":"ok","tracks":["whitelist","hot"],"comments":[{"date":"2026-11-24","time":"18:45","track":"whitelist","text":"成交恢复，但想再看几天的订单情况。","likes":1},{"date":"2026-11-24","time":"20:01","track":"hot","text":"今天高开低走，担心风险继续释放。","likes":1}]}
+  },
   "market": {
     "date": "2026-11-24",
     "closeConfirmed": true,
