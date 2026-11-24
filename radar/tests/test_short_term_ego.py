@@ -123,8 +123,10 @@ def replay_html():
     """Execute the shipped extractComments function in real Chromium, entirely offline."""
     from playwright.sync_api import sync_playwright
     reader = (RADAR / 'tools/short_term_collector/ego_reader.mjs').as_uri()
-    program = f'import {{extractComments}} from {json.dumps(reader)};process.stdout.write(extractComments.toString())'
-    extractor = subprocess.check_output(['node', '--input-type=module', '-e', program], encoding='utf-8')
+    program = (f'import {{extractComments,discoverWorks}} from {json.dumps(reader)};'
+               'process.stdout.write(JSON.stringify([extractComments.toString(),discoverWorks.toString()]))')
+    extractor, discovery = json.loads(subprocess.check_output(
+        ['node', '--input-type=module', '-e', program], encoding='utf-8'))
     raw = {}
     with sync_playwright() as pw:
         browser = pw.chromium.launch()
@@ -138,6 +140,18 @@ def replay_html():
             assert len(result['comments']) == 2, (platform,'same-day source dates')
             assert all('测试昵称乙' not in r['text'] and r['date']==str(DAY) for r in result['comments'])
             raw[platform] = result
+        page.set_content('''<div class="comment-item"><div class="comment-content">有效正文但发生在窗口外</div>
+          <time datetime="2026-11-24T20:16:00+08:00">2分钟前</time></div>''')
+        result = page.evaluate('(' + extractor + ')', dict(platform='xhs', date=str(DAY),
+            now='2026-11-24T20:17:00+08:00', track='hot'))
+        assert result['comments'] == [] and result['counts'] == {'rows':1,'dated':1,'inWindow':0}
+        url = 'https://xueqiu.com/S/SH000001'
+        page.route(url, lambda route: route.fulfill(content_type='text/html', body='''
+            <a href="https://www.xueqiu.com/123/456">收盘讨论</a>
+            <a href="https://example.com/987/654">外站链接</a>
+            <a href="http://xueqiu.com/456/789">无 HTTPS</a>'''))
+        page.goto(url)
+        assert page.evaluate('(' + discovery + ')', dict(platform='xq',track='community')) == ['/123/456']
         browser.close()
     result = ego.collect_sentiment(DAY, captures=raw)
     assert len(result['platforms']) == len(result['posts']) == result['sampleCount'] == 5

@@ -68,6 +68,7 @@ export function extractComments({platform, date, now = Date.now(), track = 'comm
         const y = year || dateToday.slice(0,4);
         const literal = [y,month.padStart(2,'0'),day.padStart(2,'0')].join('-');
         lo = hi = Date.parse(literal + 'T' + h.padStart(2,'0') + ':' + m + ':' + sec + '+08:00');
+        if (!Number.isFinite(lo) || inChina(lo).slice(0,10) !== literal) return null;
       } else if ((match = s.match(/^(今天|今日|昨天)\s*(\d{1,2}):(\d\d)/))) {
         const d = inChina(observed - (match[1] === '昨天' ? 86400000 : 0)).slice(0,10);
         lo = hi = Date.parse(d+'T'+match[2].padStart(2,'0')+':'+match[3]+':00+08:00');
@@ -79,12 +80,13 @@ export function extractComments({platform, date, now = Date.now(), track = 'comm
         hi = observed; lo = hi - 60000 + 1;
       }
     }
-    if (!(lo >= start && hi <= end)) return null;
-    return inChina(hi);
+    return Number.isFinite(lo) && Number.isFinite(hi) ? {lo,hi} : null;
   }
   const comments = [], seen = new Set();
+  const counts = {rows:0, dated:0, inWindow:0};
   for (const row of document.querySelectorAll(rowSelector)) {
     if (!visible(row)) continue;
+    counts.rows++;
     const own = selector => Array.from(row.querySelectorAll(selector)).find(
       el => visible(el) && el.closest(rowSelector) === row);
     const content = own(bodySelector);
@@ -92,8 +94,12 @@ export function extractComments({platform, date, now = Date.now(), track = 'comm
     if (!content || !clock) continue;
     const rawTime = [clock.getAttribute('datetime'), clock.getAttribute('data-time'),
       clock.getAttribute('title'), clock.innerText].filter(Boolean);
-    const stamp = rawTime.map(moment).find(Boolean);
-    if (!stamp) continue;
+    const time = rawTime.map(moment).find(Boolean);
+    if (!time) continue;
+    counts.dated++;
+    if (!(time.lo >= start && time.hi <= end)) continue;
+    counts.inWindow++;
+    const stamp = inChina(time.hi);
     // Isolate the comment body. A nested author, handle or profile element
     // is never part of the returned observation.
     const clone = content.cloneNode(true);
@@ -110,12 +116,12 @@ export function extractComments({platform, date, now = Date.now(), track = 'comm
     comments.push(item);
     if (comments.length >= 20) break;
   }
-  return {status:comments.length ? 'ok' : 'empty', comments, truncated:comments.length >= 20};
+  return {status:comments.length ? 'ok' : 'empty', comments, counts, truncated:comments.length >= 20};
 }
 
 // A new comment on an old video is not evidence about tonight's review.
 // Read the visible work's own publication date, outside all comment nodes.
-export function datedReview({platform,date,now}) {
+export function datedReview({platform,date,now,readyOnly=false}) {
   const clock = typeof now === 'number' ? now : Date.parse(now);
   const chinaDate = ms => new Date(ms+8*3600000).toISOString().slice(0,10);
   const title = platform === 'dy' ? '[data-e2e="video-desc"],[data-e2e="detail-video-desc"],.video-info-detail h1' :
@@ -125,8 +131,10 @@ export function datedReview({platform,date,now}) {
   const shown = s => Array.from(document.querySelectorAll(s)).filter(e => e.getClientRects().length &&
     !e.closest('.comment-item,[data-e2e="comment-level-1"],[aria-hidden="true"],[hidden]'));
   const subject = shown(title).map(e=>e.innerText).join(' ');
+  const clocks = shown(dates);
+  if (readyOnly) return Boolean(subject.trim() && clocks.length);
   if (!/复盘|收盘|收评|盘后|大盘|A股|涨停|连板|龙虎榜/iu.test(subject)) return false;
-  for (const el of shown(dates)) {
+  for (const el of clocks) {
     for (const value of [el.getAttribute('datetime'),el.getAttribute('title'),el.innerText]) {
       if (!value) continue;
       const s = value.trim().replace(/^(?:编辑于|发布于|发布时间[：:]?)\s*/, '');
@@ -171,7 +179,10 @@ export function discoverWorks({platform, track}) {
   for (const anchor of document.querySelectorAll('a[href]')) {
     if (!anchor.getClientRects().length || anchor.closest('[hidden],.advertisement,[data-ad]')) continue;
     const url = new URL(anchor.href, location.href);
-    if (url.origin !== location.origin || !pattern.test(url.pathname)) continue;
+    const sameXueqiu = platform === 'xq' && ['xueqiu.com','www.xueqiu.com'].includes(location.hostname)
+      && ['xueqiu.com','www.xueqiu.com'].includes(url.hostname);
+    if (url.protocol !== 'https:' || url.username || url.password || url.port ||
+        (!sameXueqiu && url.origin !== location.origin) || !pattern.test(url.pathname)) continue;
     let likes = null;
     if (containers[platform]) {
       if (!anchor.closest(containers[platform])) continue;
@@ -217,37 +228,51 @@ function controlError(error) {
     .test(String(error?.code || '')+' '+String(error?.message || ''));
 }
 
+function timedOut(error) {
+  return /timeout|timed.out|unresponsive/i.test(String(error?.code)+' '+String(error?.message));
+}
+
 function checkDestination(platform, address) {
   const url = new URL(address);
   if ((platform === 'dy' && url.hostname === 'sso.douyin.com') ||
       (platform === 'em' && url.hostname === 'passport2.eastmoney.com') ||
-      (platform === 'ths' && url.hostname === 'passport.10jqka.com.cn')) {
+      (platform === 'ths' && url.hostname === 'passport.10jqka.com.cn') ||
+      (platform === 'xhs' && ['rednote.com','www.rednote.com'].includes(url.hostname) && url.pathname === '/login')) {
     throw Error('login_required');
   }
   if (!safeUrl(platform,address)) throw Error('off_platform');
   if (/^\/(?:passport\/login|login|signin)(?:\/|$)/i.test(url.pathname)) throw Error('login_required');
 }
 
-async function readPlatform(task, page, platform, spec, date, at) {
-  const comments = [], seen = new Set(), tracks = [], trackStatus = {};
+async function readPlatform(task, page, platform, spec, date) {
+  const comments = [], seen = new Set(), tracks = [], trackStatus = {}, trackDetails = {};
   const requested = sources(platform,spec);
-  const deadline = Date.now()+24000;
-  let truncated=false;
+  let deadline, detail, truncated=false;
   const budget = max => {
     const left = deadline-Date.now();
     if (left < 1) throw Error('timeout');
     return Math.min(left,max);
   };
   let active = page;
-  async function go(url) {
+  async function go(url, retry=true) {
     if (!safeUrl(platform,url)) throw Error('off_platform');
-    await active.goto(url,{timeout:budget(4500)});
+    detail.stage='seed_navigation';
+    try {
+      await active.goto(url,{timeout:budget(8500)});
+    } catch (error) {
+      if (!retry || controlError(error) || !timedOut(error) || deadline-Date.now()<4000) throw error;
+      detail.navigationRetries++;
+      await active.goto(url,{timeout:budget(14000)});
+    }
     checkDestination(platform,await active.url());
+    detail.stage='seed_loaded';
   }
   async function sample(track, include=true) {
-    const payload = await active.evaluate(extractComments,{platform,date,track,now:at});
+    const payload = await active.evaluate(extractComments,{platform,date,track,now:Date.now()});
     if (['login_required','captcha_required'].includes(payload.status)) throw Error(payload.status);
     if (!include) return 0;
+    detail.stage='comment_sample';
+    for (const name of ['rows','dated','inWindow']) detail[name] = Math.max(detail[name], payload.counts?.[name] ?? 0);
     if(payload.truncated) truncated=true;
     for (const c of payload.comments) {
       const key = c.date+'|'+c.time+'|'+c.text;
@@ -259,7 +284,12 @@ async function readPlatform(task, page, platform, spec, date, at) {
     const panel = platform === 'dy' ? '[data-e2e="video-player-comment"]' : '[aria-label="展开评论"]';
     if (track !== 'community') {
       await sample(track,false);
-      if (!await active.evaluate(datedReview,{platform,date,now:at})) return 0;
+      detail.stage='work_date';
+      try {
+        await active.waitForFunction(datedReview,{platform,date,now:Date.now(),readyOnly:true},{timeout:budget(3500)});
+      } catch (error) { if (controlError(error) || !timedOut(error)) throw error; }
+      await sample(track,false);
+      if (!await active.evaluate(datedReview,{platform,date,now:Date.now()})) return 0;
     }
     let count = await sample(track);
     if (!count) {
@@ -268,7 +298,7 @@ async function readPlatform(task, page, platform, spec, date, at) {
         return items.length === 1 && !document.querySelector(
           '[data-e2e="comment-level-1"],.comment-item,.reply_item,.comment__item');
       },panel);
-      if (open) await active.click(panel,{label:'查看作品评论'});
+      if (open) await active.click(panel,{label:'查看作品评论',timeout:budget(2500)});
       try {
         await active.waitForFunction(()=>Boolean(document.querySelector(
           '.reply_item,.reply-item,.comment__item,.comment-item,.cmt-item,[data-e2e="comment-level-1"],[role="dialog"]'
@@ -279,20 +309,23 @@ async function readPlatform(task, page, platform, spec, date, at) {
     return count;
   }
   for (const [track, urls] of Object.entries(requested)) {
-    let matched = 0, worksRead = 0, failed = false, timedOut=false;
+    let matched = 0, worksRead = 0, failed = false, expired = false;
     if (!urls.length) { trackStatus[track]='unconfigured'; continue; }
+    deadline=Date.now()+26000;
+    detail=trackDetails[track]={stage:'configured', navigationRetries:0, links:0, works:0, rows:0, dated:0, inWindow:0};
     if(urls.length>3) truncated=true;
-    for (const seed of urls.slice(0,3)) {
+    const seeds = urls.slice(0,3);
+    for (const [seedIndex, seed] of seeds.entries()) {
       try {
         active = page;
-        await go(seed);
+        // Give the next approved seed a chance before retrying a dead one.
+        await go(seed, seedIndex === seeds.length - 1);
         if (track === 'community') {
           const direct = await readWork(track);
           if (direct) { matched+=direct; continue; }
         } else {
           // Check blocking UI without treating any feed-level commentary as a sample.
-          const check = await active.evaluate(extractComments,{platform,date,track,now:at});
-          if (['login_required','captcha_required'].includes(check.status)) throw Error(check.status);
+          await sample(track,false);
         }
         let links = await active.evaluate(discoverWorks,{platform,track});
         if (!links.length) {
@@ -303,28 +336,33 @@ async function readPlatform(task, page, platform, spec, date, at) {
           } catch (err) { if (controlError(err)) throw err; }
           links = await active.evaluate(discoverWorks,{platform,track});
         }
+        detail.links=Math.max(detail.links, links.length);
         if(links.length>=6)truncated=true;
         for (const [index,path] of links.entries()) {
-          if (worksRead>=LIMIT_PER_TRACK) { truncated=true; break; }
-          if (index) { active = page; await go(seed); }
-          // path comes only from an allowlisted content-link pattern above.
-          // Clicking preserves the site's signed navigation inside the browser.
-          const receipt = await active.click('loc=css:a[href*="'+path+'"] >> nth=0',{label:'打开复盘讨论'});
-          if (receipt?.popups?.length) active=task.page(receipt.popups[0].label);
+          if (worksRead>=LIMIT_PER_TRACK || Date.now()>=deadline) { truncated=true; break; }
           let preserve=false;
           try {
+            if (index) { active = page; await go(seed, false); }
+            // Follow the displayed, allowlisted work link so site navigation stays inside Ego.
+            detail.stage='work_navigation';
+            const receipt = await active.click('loc=css:a[href*="'+path+'"] >> nth=0',{
+              label:'打开复盘讨论',timeout:budget(2800)});
+            if (receipt?.popups?.length) active=task.page(receipt.popups[0].label);
             checkDestination(platform,await active.url());
             const id = path.split('/').filter(Boolean).pop();
             await active.waitForFunction(({path,id}) => location.pathname === path ||
               location.pathname.endsWith('/'+id) || new URLSearchParams(location.search).get('modal_id') === id,
               {path,id},{timeout:budget(3200)});
             checkDestination(platform,await active.url());
+            detail.works++;
             const found = await readWork(track);
             matched += found;
             if (found) worksRead++;
           } catch(err) {
             preserve=controlError(err)||['login_required','captcha_required'].includes(err.message);
-            throw err;
+            if (preserve) throw err;
+            failed=true;
+            if (timedOut(err)) expired=true;
           } finally {
             if (active !== page && !preserve) await active.close();
           }
@@ -334,17 +372,17 @@ async function readPlatform(task, page, platform, spec, date, at) {
         if (['login_required','captcha_required'].includes(err.message)) {
           trackStatus[track] = err.message;
           if (matched) tracks.push(track);
-          return {status:err.message,tracks,trackStatus,comments,truncated:true};
+          return {status:err.message,tracks,trackStatus,trackDetails,comments,truncated:true};
         }
         failed = true;
-        if (/timeout|timed.out|unresponsive/i.test(String(err.code)+' '+String(err.message))) timedOut=true;
+        if (timedOut(err)) expired=true;
       }
       if (Date.now() >= deadline) break;
       if (worksRead >= LIMIT_PER_TRACK && seed !== urls.at(-1)) { truncated=true; break; }
     }
     if (matched) tracks.push(track);
     if(failed||Date.now()>=deadline)truncated=true;
-    trackStatus[track] = matched ? 'ok' : timedOut||Date.now()>=deadline ? 'timeout' : failed ? 'unavailable' : 'empty';
+    trackStatus[track] = matched ? 'ok' : expired||Date.now()>=deadline ? 'timeout' : failed ? 'unavailable' : 'empty';
   }
   const values = Object.values(trackStatus);
   let status = 'empty';
@@ -352,7 +390,7 @@ async function readPlatform(task, page, platform, spec, date, at) {
   else if (tracks.length) status = 'partial';
   else if (values.includes('timeout')) status = 'timeout';
   else if (values.includes('unavailable')) status = 'unavailable';
-  return {status,tracks,trackStatus,
+  return {status,tracks,trackStatus,trackDetails,
     truncated:truncated||comments.length>MAX_COMMENTS*4,comments:comments.slice(0,MAX_COMMENTS*4)};
 }
 
@@ -368,10 +406,9 @@ export async function readPlatforms(config) {
   }
   const task = await taskSpace(spaceName);
   const page = task.page('p1');
-  const observed = Date.now();
   for (const platform of PLATFORMS) {
     try {
-      const row = await readPlatform(task,page,platform,config.platforms?.[platform] || {},config.date,observed);
+      const row = await readPlatform(task,page,platform,config.platforms?.[platform] || {},config.date);
       result[platform] = row;
       if (['login_required','captcha_required'].includes(row.status)) {
         await task.handOff();
