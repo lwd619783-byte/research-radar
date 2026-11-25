@@ -1,28 +1,28 @@
 {
   "schemaVersion": 3,
   "sourceSHA": "551b2d79c55be3faf9b84f305de337341d3109cc",
-  "runId": "45545516758",
-  "fixedClock": "2026-11-25T12:21:16.803216+08:00",
+  "runId": "45593197664",
+  "fixedClock": "2026-11-25T18:20:50.720383+08:00",
   "priceDateRange": [
     "2026-11-24",
     "2026-11-25"
   ],
-  "dataSHA256": "a157cad74e2ca65e4efc48c0c347d3d73949960ee48f01a597836b141ea9a0c8",
+  "dataSHA256": "b733c100af6165fa36edf9aa118320c24e9bd725a773fee032bbab6b4367f1bb",
   "blockers": [],
-  "historySHA256": "c1ec224e6a840d6f0d780cf67d8a7a92245719e426d0722daed2025109e497ed",
+  "historySHA256": "7f258209ed2890101c7757d5fb613728565b4690af07642462bafedbfc9097b8",
   "files": {
-    "index.html": "a06b8a4339a8546c31b00a82d57f644c1c4bd4f7e4cff89fb73e4c57930ede22",
-    "version.json": "44e4b8f50e2be94155543edfccf021d5e95537f606e1675e6bf6a75659a63318",
+    "version.json": "9c1789dffe80168013007c99e2f24d9b4c9dcc9405806d66edc9722293365ced",
+    "index.html": "07c4e2e81609d8b69adbccda462cb3ca49bcc34da66b040f37f27d13c590e289",
     "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1"
   },
-  "researchSnapshotSHA256": "d3194428c345dee25f52809991a5c75aaabc83f693e4f35d840b4c19bfde6eb9",
+  "researchSnapshotSHA256": "2ee9180dba5fbbb767f6ad1a2d3c5da0db1f228746e4cb0f27abb70fe15c2069",
   "notion": {
     "source": "notion",
     "requests": {
       "GET": 6,
-      "POST": 6,
-      "retries": 0,
-      "total": 12
+      "POST": 7,
+      "retries": 1,
+      "total": 13
     },
     "counts": {
       "industries": {
@@ -54,8 +54,8 @@
         "substituted": 0
       },
       "daily": {
-        "fetched": 45,
-        "used": 45,
+        "fetched": 46,
+        "used": 46,
         "excluded": 0,
         "quarantined": 0,
         "substituted": 0
@@ -74,11 +74,11 @@
   },
   "scheduleAdmission": {
     "kind": "external_schedule",
-    "slot": "weekday-1215",
-    "plannedAt": "2026-11-25T12:15:00+08:00",
+    "slot": "weekday-1815",
+    "plannedAt": "2026-11-25T18:15:00+08:00",
     "schemaVersion": 1,
     "sourceSHA": "551b2d79c55be3faf9b84f305de337341d3109cc",
-    "runId": "45545516758",
-    "createdAt": "2026-11-25T12:15:20+08:00"
+    "runId": "45593197664",
+    "createdAt": "2026-11-25T18:15:19+08:00"
   }
 }
