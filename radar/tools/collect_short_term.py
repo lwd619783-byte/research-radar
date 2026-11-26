@@ -294,9 +294,20 @@ def source_commit():
     try:
         commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=RADAR, stderr=subprocess.DEVNULL,
                                          text=True, timeout=5).strip()
-        return commit if len(commit) == 40 and all(c in '0123456789abcdef' for c in commit) else None
     except (OSError, subprocess.SubprocessError):
-        return None
+        # A desktop task may read a pinned checkout owned by its installer
+        # even when Git declines to run there. Read only a detached HEAD.
+        git_dir = RADAR.parent / '.git'
+        try:
+            if git_dir.is_file():
+                pointer = re.fullmatch(r'gitdir: ([^\r\n\x00]+)\n?', git_dir.read_text(encoding='utf-8'))
+                if not pointer:
+                    return None
+                git_dir = git_dir.parent / pointer[1]
+            commit = (git_dir / 'HEAD').read_text(encoding='ascii').rstrip('\n')
+        except (OSError, UnicodeError):
+            return None
+    return commit if re.fullmatch(r'[0-9a-f]{40}', commit) else None
 
 
 def observe(raw, result=None):

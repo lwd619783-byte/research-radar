@@ -30,6 +30,34 @@ class ShortTermCollectorTests(unittest.TestCase):
         return collector.assemble(raw or self.fixture['market'], self.fixture['radar'], previous,
                                   self.day, self.clock, offline=True)
 
+    def test_receipt_reads_pinned_linked_worktree_when_git_declines(self):
+        root = Path(self.tmp.name)
+        checkout = root / 'shadow checkout'
+        (checkout / 'radar').mkdir(parents=True)
+        admin = root / 'main/.git/worktrees/shadow'
+        admin.mkdir(parents=True)
+        pointer = checkout / '.git'
+        (admin / 'gitdir').write_text(str(pointer) + '\n', encoding='utf-8')
+        (admin / 'commondir').write_text('../..\n', encoding='ascii')
+        commit = '1234567890abcdef' * 2 + '12345678'
+        (admin / 'HEAD').write_text(commit + '\n', encoding='ascii')
+        denied = collector.subprocess.CalledProcessError(128, ['git', 'rev-parse', 'HEAD'])
+        with (patch.object(collector, 'RADAR', checkout / 'radar'),
+              patch.object(collector.subprocess, 'check_output', side_effect=denied)):
+            for target in (str(admin), '../main/.git/worktrees/shadow'):
+                with self.subTest(target=target):
+                    pointer.write_text(f'gitdir: {target}\n', encoding='utf-8')
+                    self.assertEqual(collector.source_commit(), commit)
+            for content in (f'gitdir {admin}\n', f'gitdir: {admin}\nextra\n', 'gitdir: ../absent\n'):
+                with self.subTest(pointer=content):
+                    pointer.write_text(content, encoding='utf-8')
+                    self.assertIsNone(collector.source_commit())
+            pointer.write_text(f'gitdir: {admin}\n', encoding='utf-8')
+            for head in ('ref: refs/heads/main\n', 'f' * 39 + '\n'):
+                with self.subTest(head=head):
+                    (admin / 'HEAD').write_text(head, encoding='ascii')
+                    self.assertIsNone(collector.source_commit())
+
     def test_serial_limiter_applies_after_failures_across_all_eastmoney_hosts(self):
         elapsed, calls = [0.0], []
         def nap(delay):
