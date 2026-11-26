@@ -183,6 +183,11 @@ class MarketTests(unittest.TestCase):
             self.assertEqual([p['time'] for p in points],['09:25','15:00'])
             self.assertTrue(points[0]['auctionConfirmed'])
             self.assertAlmostEqual(points[0]['pct'],.01)
+            with patch.dict(data,code='BK0001',market=90):
+                board_points = market.em_session_points(http,'90.BK0001','样本',DAY,board=True)
+            self.assertEqual([(p['source'],p['basis'],p['interval']) for p in board_points],
+                             [('eastmoney_trends2','eastmoney_previous_close','opening_auction'),
+                              ('eastmoney_trends2','eastmoney_previous_close','1m')])
             for row in [bar('09:30'),bar('09:25',volume=0),bar('09:25',amount=0),
                         bar('09:25',stamp=PREVIOUS),bar('09:25',price=0)]:
                 self.assertEqual([p['time'] for p in read(row,close)],['15:00'])
@@ -219,6 +224,8 @@ class MarketTests(unittest.TestCase):
         with patch.object(http,'get_json',side_effect=read):
             result,points = market.em_board_details(http,rows,DAY,attempt)
             self.assertEqual({p['code'] for p in points},{'BK0001','BK0003'})
+            self.assertEqual({(p['source'],p['basis'],p['interval']) for p in points},
+                             {('eastmoney_trends2','eastmoney_previous_close','1m')})
             self.assertEqual(len(points),6)
             self.assertEqual(result[0]['spark'],[98.5,99,99.5,100,99])
             self.assertAlmostEqual(result[-1]['fiveDayReturn'],101/98-1)
@@ -263,7 +270,8 @@ class MarketTests(unittest.TestCase):
         http = MarketHTTP()
         def read(url,params):
             if url.endswith('timelines/'):
-                return {'data':[dict(l1='801010',trading_date=str(DAY),trading_time='10:30:00',l8=16)]}
+                return {'data':[dict(l1='801010',trading_date=str(DAY),trading_time=t,l8=16)
+                                for t in ('10:30:00','10:30:25','13:30:59')]}
             dates = ['2026-11-17','2026-11-18','2026-11-19','2026-11-20','2026-11-23',str(DAY)]
             rows = [dict(swindexcode='801010',swindexname='农林牧渔',bargaindate=d,closeindex=10+i,markup=1.2)
                     for i,d in enumerate(dates) if params['start_date']<=d<=params['end_date']]
@@ -273,6 +281,9 @@ class MarketTests(unittest.TestCase):
         self.assertEqual(rows[0]['pct'],.012)
         self.assertEqual(rows[0]['spark'],[11,12,13,14,15])
         self.assertEqual(points[0]['time'],'10:30')
+        self.assertEqual(len(points),1)
+        self.assertEqual((points[0]['source'],points[0]['basis'],points[0]['interval']),
+                         ('shenwan_timelines','shenwan_daily_previous_close','point'))
         self.assertIsNone(rows[0]['amount'])
 
     def test_public_sw_closes_must_reconcile_for_all_31_unique_industries(self):
@@ -372,6 +383,8 @@ class MarketTests(unittest.TestCase):
         self.assertEqual(top['spark'],[11,12,13,14,15])
         self.assertEqual(top['fiveDayReturn'],.5)
         self.assertEqual(set(p['time'] for p in raw['intraday']),{'10:30','13:30','15:00'})
+        self.assertEqual({(p['source'],p['basis'],p['interval']) for p in raw['intraday'] if p.get('code')},
+                         {('eastmoney_kline','eastmoney_unadjusted_daily_previous_close','5m')})
         self.assertTrue(all(r.get('listedBefore') or r.get('listed') for r in raw['stocks']))
         self.assertIn('同花顺',top['reason'])
 

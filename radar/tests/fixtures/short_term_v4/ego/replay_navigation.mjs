@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
+import {runInNewContext} from 'node:vm';
 import {approvedHotAuthor, discoverWorks, datedReview, extractComments, readPlatforms}
   from '../../../../tools/short_term_collector/ego_reader.mjs';
 
@@ -132,6 +133,21 @@ test('a discovered public community article can open with its own navigation bud
   assert.equal(result.em.status, 'ok');
   assert.equal(result.em.trackDetails.community.works, 1);
   assert.equal(result.em.comments.length, 1);
+});
+
+test('stock bar reply counts prioritize readable discussions without discarding unknown rows', () => {
+  const counts = [null, '0', '3', '0', '2', '0', '0', '0', '1'];
+  const origin = 'https://guba.eastmoney.com';
+  const stockBarPath = i => `/news,zssh000001,${i + 1}.html`;
+  const anchors = counts.map((count, i) => ({
+    href: origin + stockBarPath(i), getClientRects: () => [1],
+    closest: selector => selector === 'tr.listitem' && count !== null
+      ? {querySelector: name => name === '.reply' ? {textContent: count} : null} : null,
+  }));
+  const selected = runInNewContext(`(${discoverWorks.toString()})({platform:'em',track:'community'})`, {
+    URL, location: new URL(origin), document: {querySelectorAll: () => anchors},
+  });
+  assert.deepEqual(Array.from(selected), [2, 4, 8, 0, 1, 3].map(stockBarPath));
 });
 
 for (const status of ['login_required', 'captcha_required']) {

@@ -121,7 +121,8 @@ class ShortTermAnalyticsTests(unittest.TestCase):
     def test_rotation_compares_two_adjacent_observations_within_one_board_universe(self):
         raw = observations()
         raw['intraday'] = [
-            dict(date=TUE.isoformat(), time=t, code=code, name=name, pct=pct, source='板块日内行情')
+            dict(date=TUE.isoformat(), time=t, code=code, name=name, pct=pct,
+                 source='eastmoney_trends2',basis='eastmoney_previous_close',interval='1m')
             for t, left, right in [('10:30', .03, -.02), ('13:30', -.01, .02), ('15:00', .01, -.005)]
             for code, name, pct in [('BK01', '光互连', left), ('BK02', '物流', right)]]
         nodes = {n['time']:n['detail'] for n in build_day(TUE, raw, R, None)['timeline']}
@@ -132,6 +133,8 @@ class ShortTermAnalyticsTests(unittest.TestCase):
         for case, changes in [('missing', {'pct':None}), ('wrong_day', {'date':MON.isoformat()}),
                               ('other_catalog', {'code':'GN01', 'name':'光模块新材料'}),
                               ('unknown_code', {'code':'other'}), ('source', {'source':'其他口径'}),
+                              ('missing_source', {'source':''}), ('no_basis', {'basis':None}),
+                              ('basis', {'basis':'开盘价'}), ('interval', {'interval':'5m'}),
                               ('tied', {'pct':-.01})]:
             with self.subTest(case=case):
                 changed = [*raw['intraday']]
@@ -141,6 +144,31 @@ class ShortTermAnalyticsTests(unittest.TestCase):
         conflicting = [*raw['intraday'], {**raw['intraday'][3], 'pct':.05}]
         day = build_day(TUE, {**raw, 'intraday':conflicting}, R, None)
         self.assertNotIn('转为', ' '.join(node['detail'] for node in day['timeline']))
+        mixed = [*raw['intraday'], {**raw['intraday'][3], 'source':'其他口径'}]
+        day = build_day(TUE, {**raw, 'intraday':mixed}, R, None)
+        self.assertNotIn('转为', ' '.join(node['detail'] for node in day['timeline']))
+        missing = [{k:v for k,v in row.items() if k != 'interval'} for row in raw['intraday']]
+        day = build_day(TUE, {**raw, 'intraday':missing}, R, None)
+        self.assertNotIn('转为', ' '.join(node['detail'] for node in day['timeline']))
+        unchanged = [{**row,'pct':.03 if row['code']=='BK01' else -.02} for row in raw['intraday']]
+        same_time = [{**row,'time':'10:30'} for row in raw['intraday']]
+        for ticks in (unchanged,same_time):
+            day = build_day(TUE, {**raw,'intraday':ticks}, R, None)
+            self.assertNotIn('转为',' '.join(node['detail'] for node in day['timeline']))
+
+    def test_auction_node_requires_boolean_execution_confirmation_and_observation_date(self):
+        raw = observations()
+        tick = dict(date=TUE.isoformat(),time='09:25',name='上证指数',pct=.003)
+        for change, valid in [({},False),({'auctionConfirmed':False},False),({'auctionConfirmed':1},False),
+                              ({'auctionConfirmed':'true'},False),({'auctionConfirmed':True,'date':None},False),
+                              ({'auctionConfirmed':True,'date':MON.isoformat()},False),({'auctionConfirmed':True},True)]:
+            with self.subTest(change=change):
+                row = {**tick,**change}
+                if row.get('date') is None:
+                    row.pop('date')
+                nodes = build_day(TUE,{**raw,'intraday':[row,*raw['intraday']]},R,None)['timeline']
+                self.assertEqual(any(n['time']=='09:25' for n in nodes),valid)
+                self.assertIn('10:30',{n['time'] for n in nodes})
 
     def test_anchors_pass_partial_fail_missing_data_and_changed_claim(self):
         monday = build_day(MON, observations(MON), R, None)

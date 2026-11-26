@@ -6,7 +6,7 @@ from pathlib import Path
 import sys
 from tempfile import TemporaryDirectory
 import unittest
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 RADAR = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(RADAR / 'tools'), str(RADAR / 'scripts')]
@@ -274,6 +274,8 @@ class EventTests(unittest.TestCase):
         self.assertEqual(result['dragonTiger']['items'], [])
         self.assertIn('龙虎榜暂缺', result['warnings'])
         self.assertIn('金十日历暂缺', result['warnings'])
+        self.assertEqual(result['jin10Coverage'], dict(status='unavailable', inputRows=None,
+            datedRows=None, firstObservedDate=None, lastObservedDate=None, eligibleForwardRows=None))
         self.assertEqual(len(result['events']), 2)
         self.assertEqual(len(result['mines']), 2)
 
@@ -295,3 +297,51 @@ class EventTests(unittest.TestCase):
         with patch.dict(os.environ, {'JIN10_MCP_TOKEN':'fixture'}, clear=True), patch.object(events, '_jin10_mcp', fake_mcp):
             rows = events.jin10_events(DAY, FakeSources())
         self.assertEqual([r['title'] for r in rows], ['美国测试事件'])
+
+    def collect_calendar(self, day, rows):
+        payload = dict(status=200, data=rows)
+        with patch.dict(os.environ, {'JIN10_MCP_TOKEN': 'fixture'}, clear=True), patch.object(
+                events, '_jin10_mcp', new=AsyncMock(return_value=payload)):
+            return events.collect_events(day, {}, FakeSources())
+
+    def test_calendar_export_ending_on_26th_transitions_to_past_only_on_27th(self):
+        rows = [dict(title='美国周初例项', pub_time='2026-11-23 10:00', star=4),
+                dict(title='中国周四例项', pub_time='2026-11-26 09:00', star=5)]
+        for day, status, warning in ((26, 'no_forward_evidence', '本次输入未提供'),
+                                     (27, 'past_only', '输入日期均早于目标日')):
+            with self.subTest(day=day):
+                result = self.collect_calendar(date(2026, 11, day), rows)
+                self.assertEqual(result['jin10Coverage'], dict(status=status, inputRows=2,
+                    datedRows=2, firstObservedDate='2026-11-23', lastObservedDate='2026-11-26',
+                    eligibleForwardRows=0))
+                self.assertTrue(any(warning in line for line in result['warnings']))
+                self.assertFalse(any(e['category'] == 'macro' for e in result['events']))
+
+    def test_calendar_observed_dates_and_eligible_rows_use_beijing_and_existing_filters(self):
+        rows = [dict(title='美国定稿时点', pub_time='2026-11-24T12:30:00Z', star=5),
+                dict(title='中国定稿之后', pub_time='2026-11-24T12:31:00Z', star=3),
+                dict(title='美国窗口末日', pub_time='2027-01-08 18:00', star=4),
+                dict(title='美国窗口之外', pub_time='2027-01-08T16:10:00Z', star=5),
+                dict(title='中国低星例项', pub_time='2026-11-26 18:00', star=2),
+                dict(title='德国例项', pub_time='2026-11-22 10:00', star=5),
+                dict(title='德国日期待核', pub_time='待定', star=5)]
+        result = self.collect_calendar(DAY, rows)
+        self.assertEqual(result['jin10Coverage'], dict(status='forward_events', inputRows=7,
+            datedRows=6, firstObservedDate='2026-11-22', lastObservedDate='2027-01-09',
+            eligibleForwardRows=2))
+        self.assertEqual([e['title'] for e in result['events'] if e['category'] == 'macro'],
+                         ['中国定稿之后', '美国窗口末日'])
+        self.assertFalse(any('金十' in line for line in result['warnings']))
+
+    def test_only_unusable_or_undated_calendar_rows_cannot_imply_future_macro_coverage(self):
+        future_low_star = dict(title='中国低星例项', pub_time='2026-11-27 18:00', star=2)
+        undated = dict(title='德国日期待核', pub_time='', star=5)
+        for rows, status, dated in (([future_low_star], 'no_forward_evidence', 1),
+                                    ([undated], 'no_dated_evidence', 0),
+                                    ([], 'no_dated_evidence', 0)):
+            with self.subTest(rows=rows):
+                result = self.collect_calendar(DAY, rows)
+                coverage = result['jin10Coverage']
+                self.assertEqual((coverage['status'], coverage['inputRows'], coverage['datedRows'],
+                                  coverage['eligibleForwardRows']), (status, len(rows), dated, 0))
+                self.assertTrue(any('金十日历本次输入' in line for line in result['warnings']))

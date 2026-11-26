@@ -348,18 +348,28 @@ def _timeline(raw, day, breadth, dragon, ego, board_sets):
     result = []
     previous, previous_time = {}, None
     for time, label in [('09:25', '集合竞价'), ('10:30', '早盘'), ('13:30', '午后'), ('15:00', '收盘')]:
-        ticks = [r for r in bars if r.get('time') == time and r.get('name') and _number(r.get('pct'))]
+        ticks = [r for r in bars if r.get('time') == time and r.get('name') and _number(r.get('pct'))
+                 and (time != '09:25' or (r.get('auctionConfirmed') is True and r.get('date') == day.isoformat()))]
         details = [f"{r['name']} {_pct(r['pct'])}" for r in ticks[:6]]
         groups = {}
+        methods, ambiguous = {}, set()
         for tick in ticks:
             board = tick.get('code'), tick['name']
             kinds = board_kinds.get(board, set())
-            if len(kinds) != 1 or tick.get('date') != day.isoformat():
+            if len(kinds) != 1:
                 continue
-            group = (next(iter(kinds)), tick.get('source'), tick.get('basis'), tick.get('interval'))
+            kind = next(iter(kinds))
+            method = (tick.get('source'), tick.get('basis'), tick.get('interval'))
+            if (tick.get('date') != day.isoformat() or
+                    not all(isinstance(v,str) and v.strip() for v in method) or
+                    methods.setdefault(kind, method) != method):
+                ambiguous.add(kind)
+                continue
+            group = (kind, *method)
             values = groups.setdefault(group, {})
             if values.setdefault(board, tick['pct']) != tick['pct']:
                 values[board] = None
+        groups = {g:v for g,v in groups.items() if g[0] not in ambiguous}
         details.extend(_board_switches(previous, groups, previous_time))
         previous, previous_time = groups, time
         if time == '15:00':

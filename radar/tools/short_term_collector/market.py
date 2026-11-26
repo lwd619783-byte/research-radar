@@ -373,15 +373,17 @@ def board_net_flow(http, code, day):
     return net
 
 
-def timed_points(pairs, name, day, prev, code=None):
+def timed_points(pairs, name, day, prev, code=None, *, source=None, basis=None, interval=None):
     if prev is None or prev <= 0:
         return []
     points = []
     for stamp, price in pairs:
-        if stamp[:10] == day.isoformat() and stamp[11:16] in TARGET_TIMES - {'09:25'} and price and price > 0:
+        if (stamp[:10] == day.isoformat() and stamp[10:11] in (' ', 'T') and
+                stamp[11:16] in TARGET_TIMES - {'09:25'} and re.fullmatch(r'(?::00(?:\.0+)?)?',stamp[16:])
+                and price and price > 0):
             point = dict(date=day.isoformat(), time=stamp[11:16], name=name, pct=price / prev - 1)
             if code:
-                point['code'] = code
+                point.update(code=code,source=source,basis=basis,interval=interval)
             points.append(point)
     return points
 
@@ -411,13 +413,14 @@ def em_session_points(http, secid, name, day, *, board=False):
     if closing is None or closing <= 0:
         raise ValueError('trends_unclosed')
     pairs = [(f'{day} {clock}',values[0]) for clock,values in bars.items()]
-    points = timed_points(pairs,name,day,prev,code if board else None)
+    points = timed_points(pairs,name,day,prev,code if board else None,
+                          source='eastmoney_trends2', basis='eastmoney_previous_close', interval='1m')
     price, volume, amount = bars.get('09:25', (None,None,None))
     if all(v is not None and v > 0 for v in (price,volume,amount)):
         auction = dict(date=day.isoformat(), time='09:25', name=name, pct=price/prev-1,
                        auctionConfirmed=True)
         if board:
-            auction['code'] = code
+            auction.update(code=code,source='eastmoney_trends2',basis='eastmoney_previous_close',interval='opening_auction')
         points.insert(0,auction)
     return points
 
@@ -567,7 +570,8 @@ def em_board_details(http, rows, day, attempt):
             if prior and not {'10:30','13:30','15:00'} <= {p['time'] for p in pts}:
                 def five_minute_bars():
                     bars = board_history(http, code, day, 5)
-                    return checked_minutes(timed_points(bars,row['name'],day,prior,code))
+                    return checked_minutes(timed_points(bars,row['name'],day,prior,code,
+                        source='eastmoney_kline', basis='eastmoney_unadjusted_daily_previous_close', interval='5m'))
                 seen = {p['time'] for p in pts}
                 pts.extend(p for p in attempt('board_intraday_missing',five_minute_bars,[]) if p['time'] not in seen)
             segments.extend(pts)
@@ -651,10 +655,10 @@ def sw_industries(http, day, attempt):
             row['spark'] = values[1:]
             if values[0] and values[0] > 0:
                 row['fiveDayReturn'] = values[-1] / values[0] - 1
-    return rows, sw_extreme_points(http,rows,day,attempt)
+    return rows, sw_extreme_points(http,rows,day,attempt,'shenwan_daily_previous_close')
 
 
-def sw_extreme_points(http, rows, day, attempt):
+def sw_extreme_points(http, rows, day, attempt, basis):
     ordered = sorted(rows, key=lambda r:(r['pct'],r['code']))
     points = []
     for row in {r['code']:r for r in (ordered[0],ordered[-1])}.values():
@@ -665,7 +669,10 @@ def sw_extreme_points(http, rows, day, attempt):
             data = http.get_json(SW_API+'index_publish/details/timelines/', params={'swindexcode':code})['data']
             pairs = [(str(r['trading_date'])[:10]+' '+str(r['trading_time']),number(r['l8']))
                      for r in data if str(r['l1'])==code]
-            seen = timed_points(pairs,row['name'],day,row['spark'][-2],row['code'])
+            # l8 is the observed index level at trading_time, with no K-line window.
+            # Use an exact clock observation; further ticks within the minute cannot stand in for it.
+            seen = timed_points(pairs,row['name'],day,row['spark'][-2],row['code'],
+                                source='shenwan_timelines',basis=basis,interval='point')
             if not seen:
                 raise ValueError('sw_minutes_missing')
             return seen
@@ -841,7 +848,7 @@ def _load_board(day, panel, http, warnings):
         if result is None:
             result = attempt(err, lambda:published_sw_industries(http, day))
             if result:
-                result = (result[0],sw_extreme_points(http,result[0],day,attempt))
+                result = (result[0],sw_extreme_points(http,result[0],day,attempt,'alphaonly_shenwan_daily_previous_close'))
     if result is None and panel == 'concepts':
         result = attempt(err, lambda:published_concepts(http, day))
         if result:

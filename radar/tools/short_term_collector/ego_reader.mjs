@@ -201,6 +201,7 @@ export function discoverWorks({platform, track}) {
     if (url.protocol !== 'https:' || url.username || url.password || url.port ||
         (!sameXueqiu && url.origin !== location.origin) || !pattern.test(url.pathname)) continue;
     let likes = null;
+    let replies = null;
     if (containers[platform]) {
       if (!anchor.closest(containers[platform])) continue;
       const card = anchor.closest('.note-item,li,article,[data-e2e*="card"],[data-e2e="user-post-list-item"]')
@@ -211,13 +212,22 @@ export function discoverWorks({platform, track}) {
       const count = text?.trim().replaceAll(',','').match(/^(\d+(?:\.\d+)?)\s*(万)?$/);
       if (count) likes = Number(count[1]) * (count[2] ? 10000 : 1);
     }
-    found.set(url.pathname, {path:url.pathname, likes});
+    if (platform === 'em' && track === 'community') {
+      const value = anchor.closest('tr.listitem')?.querySelector('.reply')?.textContent?.trim();
+      if (value && /^\d{1,9}$/.test(value)) replies = Number(value);
+    }
+    found.set(url.pathname, {path:url.pathname, likes, replies:replies ?? found.get(url.pathname)?.replies ?? null});
     if (found.size >= 40) break;
   }
   const works = Array.from(found.values());
   // Ordered result links are retained for the platform's popularity search.
   // Where displayed likes exist, prefer the most discussed visible works.
   if (track === 'hot') works.sort((a,b) => (b.likes ?? -1)-(a.likes ?? -1));
+  if (platform === 'em' && track === 'community') {
+    // The verified 列表「评论」column describes volume, not comment dates.
+    const priority = work => work.replies > 0 ? 0 : work.replies === null ? 1 : 2;
+    works.sort((a,b) => priority(a)-priority(b));
+  }
   // The first result can be a pinned older work. Inspect a bounded shortlist
   // until the collector has found two dated reviews, or the time budget ends.
   return works.slice(0,6).map(work=>work.path);

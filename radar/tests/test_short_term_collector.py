@@ -215,6 +215,8 @@ class ShortTermCollectorTests(unittest.TestCase):
         when = datetime.combine(self.day, time(18, 15), collector.BJ)
         stages = []
         raw = copy.deepcopy(self.fixture['market'])
+        calendar = {'status': 'no_forward_evidence', 'lastObservedDate': str(self.day), 'eligibleForwardRows': 0}
+        raw['jin10Coverage'] = calendar
         recovered = {**raw, 'warnings': []}
         raw.update(concepts=[], warnings=['concept_boards_missing'])
         captured = collect_sentiment(self.day, captures=self.fixture['egoCaptures'])
@@ -244,6 +246,7 @@ class ShortTermCollectorTests(unittest.TestCase):
         snapshot = json.loads(self.path.read_bytes())
         self.assertEqual(snapshot['generatedAt'], self.clock.isoformat(timespec='seconds'))
         self.assertNotIn('platformDiagnostics', snapshot['days'][0]['ego'])
+        self.assertNotIn('jin10Coverage', snapshot)
         (receipt_file,) = receipts.rglob('*.json')
         receipt = json.loads(receipt_file.read_bytes())
         self.assertTrue(receipt['onTime'])
@@ -251,6 +254,8 @@ class ShortTermCollectorTests(unittest.TestCase):
         self.assertGreater(receipt['boardRetryCoverage']['conceptRows'], 0)
         self.assertEqual(receipt['coverage']['egoCoverage'], 'complete')
         self.assertEqual(receipt['coverage']['egoTrackDiagnostics'], diagnostics)
+        self.assertEqual(receipt['coverage']['jin10Coverage'], calendar)
+        self.assertEqual(sum(receipt['coverage']['catalystSourceRows'].values()), len(snapshot['catalysts']))
         self.assertEqual(receipt['dataSHA256'], collector.data_digest(snapshot))
 
     def test_late_announcement_fetch_does_not_delay_the_final_slot(self):

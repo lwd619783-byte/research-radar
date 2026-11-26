@@ -285,7 +285,7 @@ def collect_sentiment(day, *, skip=False, previous=None, captures=None, breadth=
         if raw_status in ('ok', 'partial'):
             status[platform] = 'ok' if complete else 'partial'
         comparable = complete and not cap.get('truncated') and len(cap.get('comments', [])) < 300
-        method = SIGNATURE + '-' + signature.get(platform, 'fixture')
+        method = (SIGNATURE + '-reply-priority' if platform == 'em' else SIGNATURE) + '-' + signature.get(platform, 'fixture')
         old = baseline.get(platform, {})
         previous_count = old.get('sampleCount')
         volume = '—'

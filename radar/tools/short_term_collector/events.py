@@ -21,6 +21,7 @@ EM = 'https://datacenter-web.eastmoney.com/api/data/v1/get'
 THS = 'https://stock.10jqka.com.cn/gushiyuce/'
 CNINFO = 'https://www.cninfo.com.cn/new/hisAnnouncement/query'
 BJ = timezone(timedelta(hours=8))
+CATALYST_WINDOW_DAYS = 45
 UNLOCK_WAN = 10_000  # LIFT_MARKET_CAP is in ten-thousand CNY; the screen is >= 1亿.
 CONFERENCE = re.compile('大会|峰会|博览会|展览会|交易会|发布会|开发者会议|行业会议|论坛')
 
@@ -390,7 +391,7 @@ def ths_events(day, http):
 
 
 def em_events(day, http):
-    end = day + timedelta(days=45)
+    end = day + timedelta(days=CATALYST_WINDOW_DAYS)
     rows = em_rows(http, 'RPT_CPH_FECALENDAR',
         f"(STD_TYPE_CODE=\"1\")(START_DATE>='{day}')(START_DATE<='{end}')", 'START_DATE')
     return [dict(when=as_date(r.get('START_DATE')), end=as_date(r.get('END_DATE')), title=text(r['FE_NAME']),
@@ -417,7 +418,7 @@ async def _jin10_mcp(token):
                 return result.structuredContent or json.loads(result.content[0].text)
 
 
-def jin10_events(day, http):
+def jin10_events(day, http, *, coverage=None):
     path = os.environ.get('SHORT_TERM_JIN10_CALENDAR_FILE')
     token = os.environ.get('JIN10_MCP_TOKEN')
     if path:
@@ -433,16 +434,38 @@ def jin10_events(day, http):
     if payload.get('status') != 200 or not isinstance(payload.get('data'), list):
         raise ValueError('invalid calendar')
     events = []
+    dates = []
     for row in payload['data']:
         title, stamp, stars = text(row.get('title')), text(row.get('pub_time')), row.get('star')
-        if type(stars) is not int or stars not in (3, 4, 5) or not title.startswith(('美国', '中国')):
+        eligible = type(stars) is int and stars in (3, 4, 5) and title.startswith(('美国', '中国'))
+        try:
+            moment = datetime.fromisoformat(stamp)
+            moment = moment.replace(tzinfo=BJ) if moment.tzinfo is None else moment.astimezone(BJ)
+        except (ValueError, OverflowError):
+            if eligible:
+                raise
             continue
-        moment = datetime.fromisoformat(stamp)
-        moment = moment.replace(tzinfo=BJ) if moment.tzinfo is None else moment.astimezone(BJ)
-        if moment.date() == day and moment.strftime('%H:%M') <= '20:30':
+        dates.append(moment.date())
+        if not eligible or (moment.date() == day and moment.strftime('%H:%M') <= '20:30'):
             continue
         events.append(dict(when=moment.date(), title=title, mapping='宏观流动性', category='macro',
                            stars=stars, focus=moment.strftime('北京时间 %Y-%m-%d %H:%M 公布'), source='金十财经日历'))
+    if coverage is not None:
+        end = day + timedelta(days=CATALYST_WINDOW_DAYS)
+        forward_rows = sum(day <= row['when'] <= end for row in events)
+        first, last = min(dates, default=None), max(dates, default=None)
+        if not last:
+            status = 'no_dated_evidence'
+        elif last < day:
+            status = 'past_only'
+        elif forward_rows:
+            status = 'forward_events'
+        else:
+            status = 'no_forward_evidence'
+        coverage.update(status=status, inputRows=len(payload['data']), datedRows=len(dates),
+                        firstObservedDate=first.isoformat() if first else None,
+                        lastObservedDate=last.isoformat() if last else None,
+                        eligibleForwardRows=forward_rows)
     return events
 
 
@@ -456,7 +479,7 @@ def catalysts(day, raw, market):
     events = {}
     for row in raw:
         d = row['when']
-        if not d or not day <= d <= day + timedelta(days=45):
+        if not d or not day <= d <= day + timedelta(days=CATALYST_WINDOW_DAYS):
             continue
         title = row['title']
         short = re.split(r'将于|将定于|拟于|定于', title, maxsplit=1)[0].strip()
@@ -514,7 +537,17 @@ def collect_events(day, market, http):
     mines.extend(disclosure_items)
     warnings.extend(disclosure_warnings)
     raw = []
-    for name, read in (('东财会议', em_events), ('同花顺日历', ths_events), ('金十日历', jin10_events)):
+    for name, read in (('东财会议', em_events), ('同花顺日历', ths_events)):
         raw.extend(attempt(name, lambda: read(day, http), []))
+    coverage = dict(status='unavailable', inputRows=None, datedRows=None,
+                    firstObservedDate=None, lastObservedDate=None, eligibleForwardRows=None)
+    raw.extend(attempt('金十日历', lambda: jin10_events(day, http, coverage=coverage), []))
+    coverage_warning = {
+        'past_only': '金十日历输入日期均早于目标日，前瞻日程待核',
+        'no_forward_evidence': '金十日历本次输入未提供定稿后45日窗口内可纳入的中美3至5星日程',
+        'no_dated_evidence': '金十日历本次输入未含可核日期，前瞻日程待核',
+    }.get(coverage['status'])
+    if coverage_warning:
+        warnings.append(coverage_warning)
     return dict(dragonTiger=lhb, mines=mines[:128], events=catalysts(day, raw, market)[:128],
-                warnings=list(dict.fromkeys(warnings)))
+                warnings=list(dict.fromkeys(warnings)), jin10Coverage=coverage)

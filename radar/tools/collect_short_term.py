@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 from contextlib import contextmanager, nullcontext, redirect_stderr, redirect_stdout
 from datetime import date, datetime, time, timedelta
 import json
@@ -327,6 +328,7 @@ def source_commit():
 def observe(raw, result=None):
     row = result['days'][0] if result else {}
     sentiment = raw.get('ego') or {}
+    events = result['catalysts'] if result else raw.get('events') or []
     return {
         'asOf': row.get('date'), 'sessions': len(result['days']) if result else 0,
         'marketComplete': bool(result and result['meta'].get('observations', {}).get('marketComplete') == 1
@@ -336,7 +338,9 @@ def observe(raw, result=None):
         'limitUpRows': len(raw['limitPool']) if isinstance(raw.get('limitPool'), list) else None,
         'timelinePoints': sorted({p['time'] for p in raw.get('intraday', [])}),
         'dragonTigerRows': len(raw.get('dragonTiger', {}).get('items') or []),
-        'riskRows': len(raw.get('mines') or []), 'catalystRows': len(result['catalysts'] if result else raw.get('events') or []),
+        'riskRows': len(raw.get('mines') or []), 'catalystRows': len(events),
+        'catalystSourceRows': dict(sorted(Counter(event.get('source') or '未标来源' for event in events).items())),
+        'jin10Coverage': raw.get('jin10Coverage', {}),
         'anchorsCompared': len(row.get('yesterdayReconcile', {}).get('items', [])), 'egoCoverage': sentiment.get('coverage', 'missing'),
         'egoSamples': sentiment.get('sampleCount', 0), 'egoPlatforms': sentiment.get('platformStatus', {}),
         'egoTrackDiagnostics': sentiment.get('platformDiagnostics', {}),
