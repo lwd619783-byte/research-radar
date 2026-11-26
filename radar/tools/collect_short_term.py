@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import argparse
-from contextlib import contextmanager, nullcontext
+from contextlib import contextmanager, nullcontext, redirect_stderr, redirect_stdout
 from datetime import date, datetime, time, timedelta
 import json
 import os
@@ -473,10 +473,18 @@ def run_session(args, day, offline, fixture, http, path, preview, receipt, phase
         return finish('dry_run' if preview else 'written', 0)
 
 
+@contextmanager
+def quiet_output():
+    with open(os.devnull, 'w', encoding='utf-8') as sink, redirect_stdout(sink), redirect_stderr(sink):
+        yield
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--date', type=date.fromisoformat)
-    parser.add_argument('--dry-run', action='store_true', help='Print sanitized JSON without writing files')
+    output_mode = parser.add_mutually_exclusive_group()
+    output_mode.add_argument('--dry-run', action='store_true', help='Print sanitized JSON without writing files')
+    output_mode.add_argument('--quiet', action='store_true', help='Suppress console output when writing a snapshot')
     parser.add_argument('--offline-fixture', nargs='?', type=Path, const=RAW_FIXTURE, metavar='RAW_JSON')
     parser.add_argument('--radar-data', type=Path, help='Published V3 DATA.json or single-file HTML')
     parser.add_argument('--skip-ego', action='store_true', help='Collect the hard-data review without opening Ego')
@@ -484,14 +492,18 @@ def main(argv=None):
     parser.add_argument('--receipt-dir', type=Path, help='Local directory for per-attempt timing, coverage and diagnostic receipts')
     parser.add_argument('--preview-dir', type=Path, help='Build and scan one local review page per written session')
     parser.add_argument('--output', type=Path)
-    try:
-        return run(parser.parse_args(argv))
-    except CollectionError as error:
-        print(str(error), file=sys.stderr)
-    except Exception as error:
-        # Provider exception text can contain request headers or unsanitized posts.
-        print(f'采集未完成（{type(error).__name__}），已保留原快照', file=sys.stderr)
-    return 1
+    args = parser.parse_args(argv)
+    if args.quiet and args.offline_fixture is not None and args.output is None:
+        parser.error('--quiet with --offline-fixture requires --output')
+    with quiet_output() if args.quiet else nullcontext():
+        try:
+            return run(args)
+        except CollectionError as error:
+            print(str(error), file=sys.stderr)
+        except Exception as error:
+            # Provider exception text can contain request headers or unsanitized posts.
+            print(f'采集未完成（{type(error).__name__}），已保留原快照', file=sys.stderr)
+        return 1
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 import copy
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from datetime import date, datetime, time
 import io
 import json
@@ -130,6 +130,36 @@ class ShortTermCollectorTests(unittest.TestCase):
         with collector.writer_lock(self.path), self.assertRaises(collector.CollectionError):
             with collector.writer_lock(self.path):
                 self.fail('second writer acquired the same destination')
+
+    def test_quiet_writer_preserves_receipt_snapshot_and_live_ci_guard(self):
+        receipts = self.path.parent / 'receipts'
+        command = ['--quiet', '--output', str(self.path), '--receipt-dir', str(receipts)]
+        stdout, stderr = io.StringIO(), io.StringIO()
+        with (redirect_stdout(stdout), redirect_stderr(stderr),
+              patch.dict(collector.os.environ, {'CI':'true', 'GITHUB_ACTIONS':'true'}),
+              patch('socket.socket', side_effect=AssertionError('unexpected network'))):
+            self.assertEqual(collector.main([*command, '--offline-fixture']), 0)
+            original = self.path.read_bytes()
+            live_path = self.path.with_name('live.json')
+            with patch.object(collector, 'now_bj', return_value=self.clock), patch.object(collector, 'gather_local') as live:
+                self.assertEqual(collector.main(['--quiet', '--output', str(live_path), '--receipt-dir', str(receipts)]), 1)
+                live.assert_not_called()
+            self.assertFalse(live_path.exists())
+        self.assertEqual((stdout.getvalue(), stderr.getvalue()), ('', ''))
+        self.assertEqual(self.path.read_bytes(), original)
+        snapshot = json.loads(original)
+        self.assertEqual(collector.normalize_history(snapshot), snapshot)
+        (file,) = receipts.rglob('*.json')
+        receipt = json.loads(file.read_bytes())
+        self.assertEqual(receipt['outcome'], 'written')
+        self.assertEqual(receipt['exitCode'], 0)
+        self.assertEqual(receipt['dataSHA256'], collector.data_digest(snapshot))
+
+    def test_quiet_rejects_explicit_and_implicit_dry_run(self):
+        for switches in (['--dry-run'], ['--offline-fixture']):
+            with self.subTest(switches=switches), redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as rc:
+                collector.main(['--quiet', *switches])
+            self.assertEqual(rc.exception.code, 2)
 
     def test_offline_sentiment_and_skip_apply_to_the_same_hard_observations(self):
         command = ['--offline-fixture', '--dry-run']

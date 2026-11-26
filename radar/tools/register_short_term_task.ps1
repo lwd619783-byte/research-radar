@@ -30,13 +30,11 @@ function Beijing-Now {
     return [TimeZoneInfo]::ConvertTimeBySystemTimeZoneId([DateTimeOffset]::UtcNow, 'China Standard Time')
 }
 
-function Invoke-LocalCollector([string]$Executable, [string]$WorkingDirectory, [string[]]$CliArguments) {
+function Start-LocalCollector([string]$Executable, [string]$WorkingDirectory, [string[]]$CliArguments) {
     $startInfo = [Diagnostics.ProcessStartInfo]::new($Executable)
     $startInfo.WorkingDirectory = $WorkingDirectory
     $startInfo.UseShellExecute = $false
     $startInfo.CreateNoWindow = $true
-    $startInfo.RedirectStandardOutput = $true
-    $startInfo.RedirectStandardError = $true
     if ($startInfo.PSObject.Properties['ArgumentList']) {
         foreach ($arg in $CliArguments) { $startInfo.ArgumentList.Add($arg) }
     } else {
@@ -44,17 +42,11 @@ function Invoke-LocalCollector([string]$Executable, [string]$WorkingDirectory, [
         # latter cannot contain a literal quote and may contain spaces.
         $startInfo.Arguments = ($CliArguments.ForEach({ '"' + ($_ -replace '(\\+)$', '$1$1') + '"' })) -join ' '
     }
-    $process = [Diagnostics.Process]::new()
-    $process.StartInfo = $startInfo
+    $process = [Diagnostics.Process]::Start($startInfo)
+    if (-not $process) { throw 'Could not start the local collector.' }
     try {
-        if (-not $process.Start()) { throw 'Could not start the local collector.' }
-        # Drain both anonymous pipes without saving any provider output.
-        $stdout = $process.StandardOutput.BaseStream.CopyToAsync([IO.Stream]::Null)
-        $stderr = $process.StandardError.BaseStream.CopyToAsync([IO.Stream]::Null)
-        $process.WaitForExit()
-        [void]$stdout.GetAwaiter().GetResult()
-        [void]$stderr.GetAwaiter().GetResult()
-        return $process.ExitCode
+        # The hidden worker owns its lifetime and writes the completion receipt.
+        return $process.Id
     } finally {
         $process.Dispose()
     }
@@ -69,9 +61,10 @@ if ($RunCollector) {
     $day = $started.ToString('yyyy-MM-dd')
     $rc = 0
     $state = 'before_target'
+    $collectorPid = '-'
     if ($Through -and $started.Date -gt $Through.Date) { return }
     if ($started.TimeOfDay -ge [TimeSpan]::FromMinutes(1050)) {
-        $cli = @('-B', $collector, '--date', $day, '--evening', '--receipt-dir', (Join-Path $logFolder 'runs'))
+        $cli = @('-B', $collector, '--date', $day, '--evening', '--quiet', '--receipt-dir', (Join-Path $logFolder 'runs'))
         if ($RadarData) { $cli += @('--radar-data', $RadarData) }
         if ($SkipEgo) { $cli += '--skip-ego' }
         if ($ShadowDirectory) {
@@ -84,15 +77,15 @@ if ($RunCollector) {
             }
         }
         try {
-            $rc = Invoke-LocalCollector $python $repo $cli
-            $state = switch ($rc) { 0 { 'read_receipt' } 2 { 'stale' } 3 { 'kept_better_same_day' } default { 'failed' } }
+            $collectorPid = Start-LocalCollector $python $repo $cli
+            $state = 'started'
         } catch {
             $state = 'launcher_failed'
             $rc = 1
         }
     }
     Add-Content -LiteralPath $log -Encoding ASCII -Value (
-        '{0:o} day={1} state={2} exit={3}' -f (Beijing-Now), $day, $state, $rc)
+        '{0:o} day={1} state={2} launcher_exit={3} worker_pid={4}' -f (Beijing-Now), $day, $state, $rc, $collectorPid)
     exit $rc
 }
 

@@ -66,7 +66,7 @@ Get-ScheduledTask -TaskName 'ResearchRadar-ShortTerm-2030'
 Get-ScheduledTaskInfo -TaskName 'ResearchRadar-ShortTerm-2030'
 ```
 
-正式任务摘要位于 `%LOCALAPPDATA%\ResearchRadar\short-term\YYYY-MM.log`，逐次回执在同目录的 `runs/日期/` 内。核对准备、舆情、公告、落盘和验收页的实际时间，结合三市、核心池、板块、风险、催化和五站的覆盖字段判断是否达标。`onTime` 只标识落盘发生在 20:30 这一分钟，不能单独证明覆盖完整。公告刷新设有截止保护，最近一次完成观察以 `announcementObservedAt` 为准。任务启动策略为 `StartWhenAvailable`，恢复后按当日日期判断，实测迟到会留在回执中。任务运行满 3 小时会停止。
+正式任务摘要位于 `%LOCALAPPDATA%\ResearchRadar\short-term\YYYY-MM.log`，逐次回执在同目录的 `runs/日期/` 内。计划任务返回前会记录隐藏采集进程的 PID 和启动结果。采集完成以回执的 `outcome` 和 `exitCode` 为准。核对准备、舆情、公告、落盘和验收页的实际时间，结合三市、核心池、板块、风险、催化和五站的覆盖字段判断是否达标。`onTime` 标识落盘发生在 20:30 这一分钟。公告刷新设有截止保护，最近一次完成观察以 `announcementObservedAt` 为准。任务启动策略为 `StartWhenAvailable`，恢复后按当日日期判断，实测迟到会留在回执中。
 
 在已核验、固定到具体提交的 checkout 内先部署本机影子任务。将 `-ShadowDirectory` 指向源码库之外的目录，`-Through` 指定最后一个试跑日期；历史文件、逐次回执和经过原扫描的验收页都写在该目录。影子任务单独名为 `ResearchRadar-ShortTerm-Shadow`。将试采白名单放入 `kol.toml`，将本机授权导出的周历放入 `jin10-week.json`，跨周需用当周的源输入。影子验收先覆盖五个交易日，最后三个须按相同方式连续达到所选覆盖门槛。
 
@@ -76,7 +76,7 @@ Get-ScheduledTaskInfo -TaskName 'ResearchRadar-ShortTerm-2030'
 Get-ScheduledTask -TaskName 'ResearchRadar-ShortTerm-Shadow'
 ```
 
-`IgnoreNew` 让已有任务运行时跳过第二次计划触发。CLI 写快照前还会取得当前目标文件对应的 OS 文件锁，跨进程重入会报告 `collector_already_running`。锁文件可常驻，锁随持有进程结束释放。写入通过同目录临时文件、回读校验和原子替换完成。
+`IgnoreNew` 在启动器运行期间跳过第二次计划触发。采集进程在临时准备和写快照前取得当前目标文件对应的 OS 文件锁，跨进程重入会报告 `collector_already_running`。锁文件可常驻，锁随持有进程结束释放。写入通过同目录临时文件、回读校验和原子替换完成。
 
 ## 当晚运行与覆盖判读
 
