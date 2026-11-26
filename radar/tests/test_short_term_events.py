@@ -64,6 +64,105 @@ class FakeSources:
 
 
 class EventTests(unittest.TestCase):
+    @staticmethod
+    def notice(ident, title, stamp='2026-11-10 16:00', code='600001'):
+        issued = datetime.fromisoformat(stamp).replace(tzinfo=events.BJ)
+        return dict(announcementId=ident, announcementTitle=title, secCode=code, secName='甲公司',
+                    announcementTime=issued.timestamp() * 1000,
+                    adjunctUrl=f'finalpage/{issued.date()}/{ident}.PDF')
+
+    def test_forward_window_uses_announced_dates_and_only_within_five_natural_days(self):
+        sample = dict(when=datetime(2026, 11, 10, 16, tzinfo=events.BJ), ident='1225000001',
+                      code='600001', name='甲公司')
+        wording = ('减持期间：2026 年 11 月 25 日～2027 年 2 月 24 日。'
+                   '拟减持起始日期为2026年11月29日，减持结束日期为2027年2月28日。'
+                   '减持期间2026年11月24日至2027年2月23日。'
+                   '减持期间2026年11月30日至2027年2月28日。')
+        rows, has_dates = events._notice_windows(sample, wording, DAY, '减持')
+        self.assertTrue(has_dates)
+        self.assertEqual([x['title'] for x in rows], ['减持计划窗口'] * 2)
+        self.assertIn('2026-11-25 至 2027-02-24', rows[0]['detail'])
+        self.assertIn('披露日 2026-11-10，巨潮公告编号 1225000001', rows[0]['detail'])
+        self.assertIn('2026-11-29', rows[1]['detail'])
+        relative = '减持期间：自本公告披露之日起15个交易日后的3个月内。'
+        for unproven in (relative, '前次减持期间：2026年11月25日至2027年2月24日。',
+                         '本次拟减持数量不超过总股本1%。本报告期为2026年11月25日至2027年2月24日。'):
+            self.assertEqual(events._notice_windows(sample, unproven, DAY, '减持'), ([], False))
+        raw = '减持期间：自减持计划披露之日起15个交易日后的3个月内进行，即从2026年11月25日至2027年2月24日止。'
+        self.assertEqual(len(events._notice_windows(sample, raw, DAY, '减持')[0]), 1)
+        for word in ('公司股票将于2026年11月27日开市起复牌。', '公司股票自2026年11月27日开市起停牌。'):
+            self.assertEqual(len(events._notice_windows(sample, word, DAY, '异常波动')[0]), 1)
+        self.assertEqual(events._notice_windows(sample, '若公司股票于2026年11月27日开市起复牌，则另行公告。',
+                                                DAY, '异常波动'), ([], False))
+
+    def test_early_plan_suppressed_after_update_and_late_pass_fetches_only_today(self):
+        plan = self.notice('1225000001', '股东减持计划的预披露公告')
+        withdrawn = self.notice('1225000002', '提前终止减持计划的公告', '2026-11-24 18:20')
+        still_valid = self.notice('1225000003', '股东减持计划预披露公告', code='600002')
+        not_yet = self.notice('1225000004', '更正减持计划公告', '2026-11-24 20:30:01', '600002')
+        relative = self.notice('1225000005', '股东拟减持股份公告', code='600003')
+        halt = self.notice('1225000006', '股票交易异常波动暨停牌核查公告', '2026-11-23 19:00')
+
+        def source(url, params, headers):
+            rows = [withdrawn, not_yet, still_valid, plan, relative] if params['searchkey'] == '减持' else [halt]
+            return dict(announcements=rows, totalAnnouncement=len(rows))
+
+        def document(http, n):
+            return {'1225000003':'减持期间：2026年11月29日至2027年2月28日。',
+                    '1225000005':'计划自本公告披露之日起15个交易日后的3个月内减持。',
+                    '1225000006':'公司股票将于2026年11月25日开市起停牌。'}[n['ident']]
+
+        http = FakeSources()
+        with patch.object(http, 'post_form_json', side_effect=source) as lists, patch.object(
+                events, '_notice_pdf', side_effect=document) as pdf:
+            items, warnings = events.collect_disclosure_risks(DAY, http)
+            self.assertEqual(pdf.call_count, 3)
+            self.assertEqual([x['title'] for x in items], ['减持计划窗口', '异常波动停牌安排', '减持计划变更公告'])
+            self.assertIn('（600002）', items[0]['detail'])
+            self.assertIn('（600001）', items[-1]['detail'])
+            self.assertEqual(warnings, ['巨潮减持部分公告未核到明确计划日期'])
+            pdf.reset_mock()
+            lists.reset_mock()
+            late, warnings = events.collect_disclosure_risks(DAY, http, recent_only=True)
+            self.assertEqual(late, [items[-1]])
+            self.assertEqual(warnings, [])
+            pdf.assert_not_called()
+            self.assertEqual([c.args[1]['seDate'] for c in lists.call_args_list], [f'{DAY}~{DAY}'] * 2)
+
+    def test_pdf_failures_leave_verified_notice_and_reject_unrelated_attachments(self):
+        http = FakeSources()
+        for url in ('https://foreign.test/x.pdf', 'finalpage/2026-11-23/999.pdf'):
+            with self.assertRaises(ValueError):
+                events._notice_pdf(http, dict(ident='1225000001', path=url))
+        notice = self.notice('1225000001', '股东减持计划预披露公告', '2026-11-24 18:00')
+        def listed(url, params, headers):
+            return dict(hasMore=False, announcements=[notice] if params['searchkey'] == '减持' else [])
+        with patch.object(http, 'post_form_json', side_effect=listed), patch.object(
+                events, '_notice_pdf', side_effect=ImportError):
+            rows, warnings = events.collect_disclosure_risks(DAY, http)
+        self.assertEqual([x['title'] for x in rows], ['减持公告'])
+        self.assertIn('巨潮计划日期核对缺少本机 PDF 读取组件', warnings)
+
+    def test_deadline_and_incomplete_listing_never_construct_a_future_window(self):
+        http = FakeSources()
+        notice = self.notice('1225000001', '股东减持计划预披露公告', '2026-11-24 18:00')
+        def source(url, params, headers):
+            return dict(announcements=[notice], totalAnnouncement=1) if params['searchkey'] == '减持' else dict(
+                announcements=[], totalAnnouncement=0)
+        with patch.object(http, 'post_form_json', side_effect=source), patch.object(
+                events.time, 'monotonic', side_effect=[100, 281]), patch.object(events, '_notice_pdf') as read:
+            items, warnings = events.collect_disclosure_risks(DAY, http)
+            read.assert_not_called()
+        self.assertEqual([r['title'] for r in items], ['减持公告'])
+        self.assertEqual(warnings, ['巨潮减持原公告核对时限内未完成'])
+        truncated = dict(announcements=[notice], totalAnnouncement=2)
+        with patch.object(http, 'post_form_json', side_effect=[truncated, dict(announcements=[], totalAnnouncement=0)]), (
+                patch.object(events, '_notice_pdf')) as read:
+            items, warnings = events.collect_disclosure_risks(DAY, http)
+            read.assert_not_called()
+        self.assertEqual([r['title'] for r in items], ['减持公告'])
+        self.assertEqual(warnings, ['巨潮减持公告分页未完整'])
+
     def test_whole_pipeline_dedup_and_calibrated_stage(self):
         raw = dict(status=200, data=[
             dict(title='美国非农就业人数', pub_time='2026-11-27 20:30', star=5),

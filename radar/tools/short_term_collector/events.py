@@ -5,11 +5,14 @@ from datetime import date, datetime, timedelta, timezone
 import hashlib
 from html import unescape
 from html.parser import HTMLParser
+from http.client import HTTPException
+from io import BytesIO
 import json
 import math
 import os
 from pathlib import Path
 import re
+import time
 import unicodedata
 
 from .market import symbol
@@ -149,16 +152,16 @@ def unlocks(day, http):
     return mines
 
 
-def disclosures(day, http, keyword, warnings=None):
-    """A disclosure date is observable. The title is not a future execution date."""
-    mines, seen = [], set()
+def _notice_rows(day, http, keyword, start, warnings):
+    notices, seen = [], set()
+    received, expected = 0, None
     headers = {'Referer': 'https://www.cninfo.com.cn/new/disclosure', 'Origin': 'https://www.cninfo.com.cn'}
     cutoff = datetime(day.year, day.month, day.day, 20, 30, tzinfo=BJ)
     for page in range(1, 13):
         try:
             payload = http.post_form_json(CNINFO, dict(tabName='fulltext', column='szse', stock='',
                 plate='', secid='', category='', trade='', searchkey=keyword, sortName='time',
-                sortType='desc', seDate=f'{day}~{day}', pageNum=page, pageSize=30, isHLtitle='true'),
+                sortType='desc', seDate=f'{start}~{day}', pageNum=page, pageSize=30, isHLtitle='true'),
                 headers=headers)
             if not isinstance(payload, dict) or 'announcements' not in payload:
                 raise ValueError('invalid announcement response')
@@ -168,11 +171,16 @@ def disclosures(day, http, keyword, warnings=None):
             if not isinstance(payload['announcements'], list) and not (
                     payload['announcements'] is None and total == 0):
                 raise ValueError('invalid announcement list')
-        except (OSError, TypeError, ValueError):
+            if expected is not None and total != expected:
+                raise ValueError('announcement total changed')
+            expected = total
+        except (OSError, HTTPException, TypeError, ValueError):
             if page == 1 or warnings is None:
                 raise
             break
-        for row in payload.get('announcements') or []:
+        records = payload.get('announcements') or []
+        received += len(records)
+        for row in records:
             if not isinstance(row, dict):
                 continue
             stamp = number(row.get('announcementTime'))
@@ -183,21 +191,153 @@ def disclosures(day, http, keyword, warnings=None):
             except (OverflowError, OSError, ValueError):
                 continue
             ident, title = text(row.get('announcementId')), text(row.get('announcementTitle'))
-            if not ident or ident in seen or published.date() != day or published > cutoff:
+            if not ident or ident in seen or not start <= published.date() <= day or published > cutoff:
                 continue
-            if keyword not in title or (keyword == '减持' and
-                    re.search('减持完毕|减持计划.*(?:届满|结束|完成)|不减持|未减持', title)):
+            if keyword not in title:
                 continue
             seen.add(ident)
-            mines.append(dict(title=keyword + '公告', detail=f"{day} {text(row.get('secName'))}：{title}"))
+            notices.append(dict(when=published, ident=ident, title=title, code=text(row.get('secCode')),
+                                name=text(row.get('secName')), path=text(row.get('adjunctUrl'))))
         if total is not None and page * 30 >= total:
-            return mines
+            if received != total:
+                break
+            return notices
         if total is None and payload.get('hasMore') is not True:
-            return mines
+            return notices
     if warnings is None:
         raise ValueError('incomplete announcement list')
     warnings.append('巨潮' + keyword + '公告分页未完整')
-    return mines
+    return notices
+
+
+PLAN_UPDATE = re.compile('终止|取消|撤回|撤销|届满|结束|完成|完毕|结果|更正|变更|调整|延期|补充|进展')
+PLAN_TITLE = re.compile('预披露|减持.*计划|计划.*减持|拟减持')
+DATE_PART = r'(20\d{2}年\d{1,2}月\d{1,2}日)'
+# An absolute range immediately following the plan's own timing field. A relative
+# notice period, a historical trade, and a restricted-trading period are distinct.
+PLAN_RANGE = re.compile(
+    r'(?:减持期间|减持时间区间|减持时间|拟减持区间|计划减持区间|变动区间)'
+    r'[:为]?(?:自(?:本次|本)?(?:减持计划公告|预披露公告|公告|减持计划)(?:披露|发布)?之?日'
+    r'起?(?:\d+|十五)个交易日后的?(?:\d+|三)个月内(?:进行)?[,.(]*(?:即为|即从|即)?[(]?)?'
+    r'(?:为|从|自)?' + DATE_PART + r'(?:起)?(?:至|到|~|—|－|-)' + DATE_PART)
+PLAN_DATES = re.compile(r'拟减持(?:起始|开始)日期(?:为|:)'
+                        + DATE_PART + r'[,，、](?:拟)?减持(?:结束|截止)日期(?:为|:)' + DATE_PART)
+PLAN_INTENT = re.compile(r'(?:计划|拟)(?:自|于|在)' + DATE_PART + r'(?:起)?至' + DATE_PART
+                         + r'(?:内|止|期间)?(?:以|通过|采用)(?:集中竞价|大宗交易|竞价交易|和|或|、|/|方式){1,15}减持')
+SUSPEND_DATE = re.compile(r'(?:本公司|公司)股票(?:将)?(?:于|自)' + DATE_PART
+                          + r'(?:[（(]星期[一二三四五六日][）)])?(?:开市|开盘)?(?:起)?(停牌|复牌)')
+
+
+def _notice_windows(notice, body, day, keyword):
+    """Extract dates only from the issuer's prospective, explicitly dated wording."""
+    body = re.sub(r'\s+', '', unicodedata.normalize('NFKC', body))
+    patterns = (PLAN_RANGE, PLAN_DATES, PLAN_INTENT) if keyword == '减持' else (SUSPEND_DATE,)
+    windows, explicit_dates = [], False
+    for pattern in patterns:
+        for match in pattern.finditer(body):
+            before = re.split(r'[。；;]', body[max(0, match.start()-50):match.start()])[-1]
+            if re.search('此前|前次|上次|追溯|曾于|不减持|禁止|不得|若|如果|预计|可能|尚待|拟申请', before):
+                continue
+            try:
+                begin = datetime.strptime(match[1], '%Y年%m月%d日').date()
+                end = datetime.strptime(match[2], '%Y年%m月%d日').date() if keyword == '减持' else begin
+            except ValueError:
+                continue
+            if end < begin:
+                continue
+            explicit_dates = True
+            if not day < begin <= day + timedelta(days=5):
+                continue
+            label = '减持计划窗口' if keyword == '减持' else '异常波动' + match[2] + '安排'
+            schedule = f'原公告拟减持期间 {begin} 至 {end}' if keyword == '减持' else f'原公告明确 {begin} {match[2]}'
+            item = dict(title=label, detail=f"{notice['name']}（{notice['code']}），{schedule}。"
+                        f"披露日 {notice['when'].date()}，巨潮公告编号 {notice['ident']}。")
+            if item not in windows:
+                windows.append(item)
+    return windows, explicit_dates
+
+
+def _notice_pdf(http, notice):
+    # Only fetch dated CNINFO attachment paths belonging to this notice.
+    ident = notice['ident']
+    if not ident.isascii() or not ident.isdigit() or not re.fullmatch(
+            r'finalpage/20\d{2}-\d{2}-\d{2}/' + re.escape(ident) + r'\.pdf', notice['path'], re.I):
+        raise ValueError('invalid notice attachment')
+    from pypdf import PdfReader
+    data = http.get_bytes('https://static.cninfo.com.cn/' + notice['path'])
+    if not data.startswith(b'%PDF-'):
+        raise ValueError('invalid notice PDF')
+    reader = PdfReader(BytesIO(data))
+    return '\n'.join((page.extract_text() or '') for page in reader.pages[:6])
+
+
+def _same_day_notices(notices, day, keyword):
+    items = []
+    for n in notices:
+        if n['when'].date() != day:
+            continue
+        label = keyword + '公告'
+        if keyword == '减持' and (PLAN_UPDATE.search(n['title']) or re.search('不减持|未减持', n['title'])):
+            if not symbol(n['code']):
+                continue
+            label = '减持计划变更公告'
+        subject = n['name'] + (f"（{n['code']}）" if symbol(n['code']) else '')
+        items.append(dict(title=label, detail=f"{day} {subject}：{n['title']}。巨潮公告编号 {n['ident']}。"))
+    return items
+
+
+def disclosures(day, http, keyword, warnings=None):
+    return _same_day_notices(_notice_rows(day, http, keyword, day, warnings), day, keyword)
+
+
+def collect_disclosure_risks(day, http, *, recent_only=False):
+    """At final review refresh today's announcements only. Historical PDFs belong to the earlier pass."""
+    warnings, today, upcoming = [], [], []
+    deadline = time.monotonic() + 180
+    for keyword, lookback, doc_limit in (('减持', 35, 48), ('异常波动', 5, 8)):
+        start = day if recent_only else day - timedelta(days=lookback)
+        try:
+            records = _notice_rows(day, http, keyword, start, warnings)
+        except (OSError, HTTPException, TypeError, ValueError):
+            warnings.append('巨潮' + keyword + '暂缺')
+            continue
+        today.extend(_same_day_notices(records, day, keyword))
+        if recent_only:
+            continue
+        # A later correction/result can supersede an earlier plan. Without a
+        # shareholder identifier, suppress the earlier plan for the entire issuer.
+        updates = {}
+        for n in records:
+            if PLAN_UPDATE.search(n['title']) or re.search('不减持|未减持', n['title']):
+                updates[n['code']] = max(updates.get(n['code'], n['when']), n['when'])
+        # Failed pagination cannot establish the absence of later amendments.
+        if '巨潮' + keyword + '公告分页未完整' in warnings:
+            continue
+        candidates = [n for n in records if symbol(n['code']) and
+                      (n['code'] not in updates or n['when'] > updates[n['code']]) and
+                      (PLAN_TITLE.search(n['title']) if keyword == '减持' else re.search('停牌|复牌', n['title']))]
+        if len(candidates) > doc_limit:
+            warnings.append('巨潮' + keyword + '原公告查验数量未覆盖全部候选')
+        for n in candidates[:doc_limit]:
+            if time.monotonic() >= deadline:
+                warnings.append('巨潮' + keyword + '原公告核对时限内未完成')
+                break
+            try:
+                body = _notice_pdf(http, n)
+            except ImportError:
+                warnings.append('巨潮计划日期核对缺少本机 PDF 读取组件')
+                break
+            except Exception:
+                warnings.append('巨潮' + keyword + '部分公告原文暂缺')
+                continue
+            if not body.strip():
+                warnings.append('巨潮' + keyword + '部分公告原文不可读')
+                continue
+            windows, explicit_dates = _notice_windows(n, body, day, keyword)
+            upcoming.extend(windows)
+            if not explicit_dates:
+                warnings.append('巨潮' + keyword + '部分公告未核到明确计划日期')
+    return upcoming + today, list(dict.fromkeys(warnings))
 
 
 class THSCalendar(HTMLParser):
@@ -370,8 +510,9 @@ def collect_events(day, market, http):
 
     lhb = attempt('龙虎榜', lambda: dragon(day, http, warnings), dict(summary='今日龙虎榜数据暂缺', items=[]))
     mines = attempt('解禁', lambda: unlocks(day, http), [])
-    for term in ('减持', '异常波动'):
-        mines.extend(attempt('巨潮' + term, lambda: disclosures(day, http, term, warnings), []))
+    disclosure_items, disclosure_warnings = collect_disclosure_risks(day, http)
+    mines.extend(disclosure_items)
+    warnings.extend(disclosure_warnings)
     raw = []
     for name, read in (('东财会议', em_events), ('同花顺日历', ths_events), ('金十日历', jin10_events)):
         raw.extend(attempt(name, lambda: read(day, http), []))
