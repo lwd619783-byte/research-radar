@@ -13,10 +13,11 @@ const platforms = {
 };
 
 class FakePage {
-  constructor({fail, challenge, clock}) {
+  constructor({fail, challenge, clock, latency = () => 0}) {
     this.fail = fail;
     this.challenge = challenge;
     this.clock = clock;
+    this.latency = latency;
     this.address = 'about:blank';
     this.navigations = new Map();
   }
@@ -25,10 +26,12 @@ class FakePage {
     const calls = this.navigations.get(address) || [];
     this.navigations.set(address, calls);
     calls.push(timeout);
-    if (this.fail(address, calls.length)) {
+    const duration = this.latency(address);
+    if (this.fail(address, calls.length) || duration > timeout) {
       this.clock.value += timeout;
       throw Object.assign(new Error('Navigation timed out'), {code: 'EGO_NAVIGATION_TIMEOUT'});
     }
+    this.clock.value += duration;
     this.address = address;
   }
 
@@ -90,7 +93,8 @@ test('all seven tracks retry the same seed with bounded time and survive an earl
     fail: (address, attempt) => attempt === 1 || address === platforms.em.seeds[0],
   });
   assert.equal(page.navigations.size, 7);
-  for (const [seed, calls] of page.navigations) assert.deepEqual(calls, [8500, 14000], seed);
+  const community = new Set([...platforms.em.seeds, ...platforms.xq.seeds, ...platforms.ths.seeds]);
+  for (const [seed, calls] of page.navigations) assert.deepEqual(calls, [community.has(seed) ? 20000 : 8500, 14000], seed);
   assert.equal(result.em.status, 'timeout');
   assert.equal(result.em.trackDetails.community.stage, 'seed_navigation');
   for (const [platform, report] of Object.entries(result)) {
@@ -102,6 +106,15 @@ test('all seven tracks retry the same seed with bounded time and survive an earl
   }
   assert.equal(task.handoffs, 0);
   assert.equal(task.finishes, 1);
+});
+
+test('a slow community entrance can finish one navigation and reach comments', async () => {
+  const seed = platforms.em.seeds[0];
+  const {result, page} = await replay({fail: () => false, latency: address => address === seed ? 17500 : 0});
+  assert.deepEqual(page.navigations.get(seed), [20000]);
+  assert.equal(result.em.status, 'ok');
+  assert.equal(result.em.trackDetails.community.navigationRetries, 0);
+  assert.equal(result.em.trackDetails.community.inWindow, 1);
 });
 
 for (const status of ['login_required', 'captcha_required']) {

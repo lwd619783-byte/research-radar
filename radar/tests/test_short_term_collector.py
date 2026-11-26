@@ -218,6 +218,8 @@ class ShortTermCollectorTests(unittest.TestCase):
         recovered = {**raw, 'warnings': []}
         raw.update(concepts=[], warnings=['concept_boards_missing'])
         captured = collect_sentiment(self.day, captures=self.fixture['egoCaptures'])
+        diagnostics = {'em': {'community': {'status': 'ok', 'stage': 'comment_sample', 'links': 1}}}
+        captured['platformDiagnostics'] = diagnostics
 
         def wait(day, target):
             nonlocal when
@@ -241,12 +243,14 @@ class ShortTermCollectorTests(unittest.TestCase):
         refresh.assert_called_once()
         snapshot = json.loads(self.path.read_bytes())
         self.assertEqual(snapshot['generatedAt'], self.clock.isoformat(timespec='seconds'))
+        self.assertNotIn('platformDiagnostics', snapshot['days'][0]['ego'])
         (receipt_file,) = receipts.rglob('*.json')
         receipt = json.loads(receipt_file.read_bytes())
         self.assertTrue(receipt['onTime'])
         self.assertEqual(receipt['boardRetryCoverage']['conceptRows'], len(recovered['concepts']))
         self.assertGreater(receipt['boardRetryCoverage']['conceptRows'], 0)
         self.assertEqual(receipt['coverage']['egoCoverage'], 'complete')
+        self.assertEqual(receipt['coverage']['egoTrackDiagnostics'], diagnostics)
         self.assertEqual(receipt['dataSHA256'], collector.data_digest(snapshot))
 
     def test_late_announcement_fetch_does_not_delay_the_final_slot(self):

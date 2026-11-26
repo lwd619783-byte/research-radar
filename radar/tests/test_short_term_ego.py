@@ -24,7 +24,12 @@ def captures():
 
 class SentimentTests(unittest.TestCase):
     def test_all_platform_json_and_metric_sample_share(self):
-        data = ego.collect_sentiment(DAY, captures=captures())
+        raw = captures()
+        raw['xq'].update(trackStatus={'community': 'ok'},
+                         trackDetails={'community': {'stage': 'comment_sample', 'rows': 8}})
+        data = ego.collect_sentiment(DAY, captures=raw)
+        self.assertEqual(data['platformDiagnostics'], {'xq': {'community': {
+            'status': 'ok', 'stage': 'comment_sample', 'rows': 8}}})
         self.assertEqual((data['coverage'], data['sampleCount']), ('complete', 7))
         self.assertEqual(len(data['platforms']), 5)
         # Per-platform scores are 100, 50, 100, 25 and 75; all five are equally weighted.
@@ -33,6 +38,27 @@ class SentimentTests(unittest.TestCase):
         self.assertTrue(all(row['volume'] == '—' for row in data['platforms']))
         self.assertTrue(all(row['author'] == '匿名用户' for row in data['posts']))
         self.assertTrue(all(row['bull']+row['bear']+row['flat']==100 for row in data['platforms']))
+
+    def test_zero_sample_track_diagnostics_allow_only_reported_counts_and_enums(self):
+        private = 'https://example.test/profile/@private'
+        raw = {
+            'em': {'status': 'timeout', 'trackStatus': {'community': 'timeout', private: 'ok'},
+                   'trackDetails': {'community': {'stage': 'seed_navigation', 'navigationRetries': 1,
+                        'links': 0, 'rows': 0, 'works': False, 'inWindow': 10**20, 'dated': -1, 'url': private},
+                        'hot': {'stage': 'hot_author'}}},
+            'xhs': {'status': 'empty', 'trackStatus': {'kol': 'unconfigured', 'hot': private},
+                    'trackDetails': {'hot': {'stage': private, 'navigationRetries': True, 'links': '0'}}},
+            'dy': {'trackStatus': [], 'trackDetails': {'kol': [private]}},
+            private: {'trackStatus': {'community': 'ok'}}}
+        data = ego.collect_sentiment(DAY, captures=raw)
+        self.assertEqual(data['sampleCount'], 0)
+        self.assertIsNone(data['score'])
+        self.assertEqual(data['platformDiagnostics'], {
+            'em': {'community': {'status': 'timeout', 'stage': 'seed_navigation', 'navigationRetries': 1,
+                                 'links': 0, 'rows': 0}},
+            'xhs': {'kol': {'status': 'unconfigured'}}})
+        self.assertNotIn(private, json.dumps(data))
+        self.assertEqual(ego.collect_sentiment(DAY, skip=True)['platformDiagnostics'], {})
 
     def test_before_writing_scrub_identifiers_and_all_scan_words(self):
         words = list(contract()['ego_sanitization']['banned_word_mask_map']) + list(UI_WORDS)

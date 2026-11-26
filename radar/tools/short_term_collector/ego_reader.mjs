@@ -271,11 +271,11 @@ async function readPlatform(task, page, platform, spec, date) {
     return Math.min(left,max);
   };
   let active = page;
-  async function go(url, retry=true) {
+  async function go(url, retry=true, navigationTimeout=8500) {
     if (!safeUrl(platform,url)) throw Error('off_platform');
     detail.stage='seed_navigation';
     try {
-      await active.goto(url,{timeout:budget(8500)});
+      await active.goto(url,{timeout:budget(navigationTimeout)});
     } catch (error) {
       if (!retry || controlError(error) || !timedOut(error) || deadline-Date.now()<4000) throw error;
       detail.navigationRetries++;
@@ -333,7 +333,7 @@ async function readPlatform(task, page, platform, spec, date) {
   for (const [track, urls] of Object.entries(requested)) {
     let matched = 0, worksRead = 0, failed = false, expired = false;
     if (!urls.length) { trackStatus[track]='unconfigured'; continue; }
-    deadline=Date.now()+26000;
+    deadline=Date.now()+(track === 'community' ? 36000 : 26000);
     detail=trackDetails[track]={stage:'configured', navigationRetries:0, links:0, works:0, rows:0, dated:0, inWindow:0};
     if(urls.length>3) truncated=true;
     const seeds = urls.slice(0,3);
@@ -341,7 +341,8 @@ async function readPlatform(task, page, platform, spec, date) {
       try {
         active = page;
         // Give the next approved seed a chance before retrying a dead one.
-        await go(seed, seedIndex === seeds.length - 1);
+        const finalSeed = seedIndex === seeds.length - 1;
+        await go(seed, finalSeed, track === 'community' && finalSeed ? 20000 : 8500);
         if (track === 'community') {
           const direct = await readWork(track);
           if (direct) { matched+=direct; continue; }

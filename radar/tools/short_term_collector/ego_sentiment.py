@@ -44,12 +44,42 @@ SIGNATURE = 'dated-comments-v3'
 MARK = 'RESEARCH_RADAR_EGO_V4 '
 STATUS = {'ok', 'partial', 'empty', 'no_sample', 'timeout', 'login_required', 'captcha',
           'handoff', 'unavailable', 'skipped', 'error', 'user_control'}
+TRACK_STATUS = {'ok', 'empty', 'timeout', 'unavailable', 'unconfigured', 'login_required', 'captcha_required'}
+TRACK_STAGES = {'configured', 'seed_navigation', 'seed_loaded', 'work_navigation', 'work_date',
+                'hot_author', 'comment_sample'}
+# The reader tries up to three seeds and six works per seed. DOM counts may
+# include visible comments outside the window, so they can exceed the sample cap.
+TRACK_COUNT_LIMITS = {'navigationRetries': 3, 'links': 6, 'works': 18, 'rows': 100_000,
+                      'dated': 100_000, 'inWindow': 100_000}
 
 
-def _empty(message, status=None):
+def _empty(message, status=None, diagnostics=None):
     return dict(score=None, state='样本暂缺', summary=message, platforms=[], posts=[],
                 coverage='missing', sampleCount=0,
-                platformStatus=status or {p: 'unavailable' for p in NAMES})
+                platformStatus=status or {p: 'unavailable' for p in NAMES}, platformDiagnostics=diagnostics or {})
+
+
+def _track_diagnostics(platform, capture):
+    statuses = capture.get('trackStatus')
+    details = capture.get('trackDetails')
+    result = {}
+    for track in (('kol', 'hot') if platform in SOCIAL else ('community',)):
+        row = {}
+        status = statuses.get(track) if isinstance(statuses, dict) else None
+        if isinstance(status, str) and status in TRACK_STATUS:
+            row['status'] = status
+        detail = details.get(track) if isinstance(details, dict) else None
+        if isinstance(detail, dict):
+            stage = detail.get('stage')
+            if isinstance(stage, str) and stage in TRACK_STAGES:
+                row['stage'] = stage
+            for key, limit in TRACK_COUNT_LIMITS.items():
+                value = detail.get(key)
+                if type(value) is int and 0 <= value <= limit:
+                    row[key] = value
+        if row:
+            result[track] = row
+    return result
 
 
 def _validated_config():
@@ -231,9 +261,11 @@ def collect_sentiment(day, *, skip=False, previous=None, captures=None, breadth=
         return _empty('未取得平台样本')
     baseline = _prior(previous, day)
     platforms, posts, scores, details = [], [], [], []
-    status = {}
+    status, diagnostics = {}, {}
     for platform, name in NAMES.items():
         cap = captures.get(platform) or {}
+        if isinstance(cap, dict) and (tracks_observed := _track_diagnostics(platform, cap)):
+            diagnostics[platform] = tracks_observed
         raw_status = cap.get('status') if isinstance(cap, dict) else None
         if raw_status == 'captcha_required':
             raw_status = 'captcha'
@@ -276,7 +308,7 @@ def collect_sentiment(day, *, skip=False, previous=None, captures=None, breadth=
                 kolContext=CONTEXT[item['track']], author='匿名用户', time=item['time'], likes=like_text,
                 sentimentTag=tag, sentimentTone=css, quote=item['quote'], aiDiag=diagnosis))
     if not scores:
-        return _empty('本次未取得符合时间和去噪条件的评论', status)
+        return _empty('本次未取得符合时间和去噪条件的评论', status, diagnostics)
     score = round(sum(scores) / len(scores))
     social = [v for k, v in details if k in SOCIAL]
     forum = [v for k, v in details if k not in SOCIAL]
@@ -290,4 +322,5 @@ def collect_sentiment(day, *, skip=False, previous=None, captures=None, breadth=
         summary += f'短视频及图文圈相对社区的看多占比差为 {spread:+.1f} 个百分点。'
     return dict(score=score, state='样本偏多' if score > 60 else '样本偏空' if score < 40 else '样本分歧',
                 summary=summary, sampleCount=count, platforms=platforms, posts=posts,
-                circleSpread=spread, coverage='complete' if complete else 'partial', platformStatus=status)
+                circleSpread=spread, coverage='complete' if complete else 'partial',
+                platformStatus=status, platformDiagnostics=diagnostics)

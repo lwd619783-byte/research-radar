@@ -264,6 +264,9 @@ def assemble(raw, radar, history, day, clock, *, offline=False, environ=None):
             raise CollectionError('no_dated_market_snapshot')
         stale = {**history, 'meta': {**history['meta'], 'isStale': True}}
         return normalize_history(stale)
+    sentiment = raw.get('ego') or {}
+    if 'platformDiagnostics' in sentiment:
+        raw = {**raw, 'ego': {key: value for key, value in sentiment.items() if key != 'platformDiagnostics'}}
     record = build_day(day, raw, radar, latest_before(history, day))
     record['pulse']['finalTime'] = clock.astimezone(BJ).strftime('%m/%d %H:%M 汇总')
     older = [row for row in (history or {}).get('days', []) if row['date'] != day.isoformat()]
@@ -336,6 +339,7 @@ def observe(raw, result=None):
         'riskRows': len(raw.get('mines') or []), 'catalystRows': len(result['catalysts'] if result else raw.get('events') or []),
         'anchorsCompared': len(row.get('yesterdayReconcile', {}).get('items', [])), 'egoCoverage': sentiment.get('coverage', 'missing'),
         'egoSamples': sentiment.get('sampleCount', 0), 'egoPlatforms': sentiment.get('platformStatus', {}),
+        'egoTrackDiagnostics': sentiment.get('platformDiagnostics', {}),
         'warnings': sorted(set(raw.get('warnings', []))),
     }
 
