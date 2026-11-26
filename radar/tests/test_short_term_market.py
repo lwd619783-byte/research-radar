@@ -44,12 +44,12 @@ class MarketHTTP:
                 return {'data':{'diff':[{'f12':c,'f26':20200101} for c in ('000001','600000','920001')],
                                 'total':3}}
             return {'data':{'total':2,'diff':[{'f12':'BK000' + str(page),'f14':'测试板块',
-                        'f3':2*page,'f6':1.2e9,'f62':1e7,'f124':END}]}}
+                        'f3':7.14,'f6':1.2e9,'f62':1e7,'f124':END}]}}
         if url == market.KLINE:
             base = [(d, i+10) for i,d in enumerate(('2026-11-17','2026-11-18','2026-11-19',
                                                         '2026-11-20','2026-11-23',str(DAY)))]
             if params['klt'] == 5:
-                base = [(str(DAY)+' 10:30',17),(str(DAY)+' 13:30',18)]
+                base = [(str(DAY)+' 10:30',17),(str(DAY)+' 13:30',18),(str(DAY)+' 15:00',15)]
             return {'data':{'code':params['secid'][3:], 'klines':[f'{d},11,{v},11' for d,v in base]}}
         if 'fqkline/get' in url:
             key = params['param'].split(',')[0]
@@ -169,6 +169,96 @@ class MarketTests(unittest.TestCase):
         with patch.object(market,'index_points',return_value=[]), patch.object(market,'open_tdx',return_value=Tdx()):
             self.assertIn('index_intraday_missing',market.collect_market(DAY,{},MarketHTTP())['warnings'])
 
+    def test_auction_requires_executed_target_minute_identity_and_close(self):
+        http = MarketHTTP()
+        data = dict(code='000001', market=1, name='上证指数', preClose=100)
+        def bar(clock, price=101, volume=10, amount=1010, stamp=DAY):
+            return f'{stamp} {clock},100,{price},102,100,{volume},{amount},101'
+        close = bar('15:00')
+        with patch.object(http,'get_json',return_value={'data':data}):
+            def read(*lines):
+                data['trends'] = list(lines)
+                return market.em_session_points(http,'1.000001','上证指数',DAY)
+            points = read(bar('09:25'),close)
+            self.assertEqual([p['time'] for p in points],['09:25','15:00'])
+            self.assertTrue(points[0]['auctionConfirmed'])
+            self.assertAlmostEqual(points[0]['pct'],.01)
+            for row in [bar('09:30'),bar('09:25',volume=0),bar('09:25',amount=0),
+                        bar('09:25',stamp=PREVIOUS),bar('09:25',price=0)]:
+                self.assertEqual([p['time'] for p in read(row,close)],['15:00'])
+            for lines in [(bar('09:25'),), (bar('09:25'),bar('15:00',price=-1)),
+                          (bar('09:25'),bar('09:25'),close)]:
+                with self.assertRaises(ValueError):
+                    read(*lines)
+            for typo in [dict(code='399006'),dict(market=0),dict(name='样本')]:
+                with patch.dict(data,typo), self.assertRaises(ValueError):
+                    read(bar('09:25'),close)
+
+    def test_board_extremes_crosschecked_history_turnover_and_dated_flow(self):
+        http = MarketHTTP()
+        dates = ['2026-11-17','2026-11-18','2026-11-19','2026-11-20','2026-11-23',str(DAY)]
+        closes = {'BK0001':99, 'BK0002':100, 'BK0003':101}
+        def read(url,params):
+            code = params['secid'][3:]
+            close = closes[code]
+            if url == market.KLINE:
+                self.assertEqual(params['klt'],101)
+                bars = [f'{d},100,{v},102,98,10,6060,2,{v-100}' for d,v in
+                        zip(dates,[98,98.5,99,99.5,100,close])]
+                return {'data':dict(code=code,klines=bars)}
+            if 'trends2' in url:
+                ticks = [f'{DAY} {t},100,{close},102,98,10,6060,100' for t in ('10:30','13:30','15:00')]
+                return {'data':dict(code=code,market=90,preClose=100,trends=ticks)}
+            return {'data':dict(code=code,klines=[f'{DAY},-1234,0,0,-1000,-234'])}
+        rows = [dict(code=c,name=c,pct=(p-100)/100) for c,p in closes.items()]
+        def attempt(_, callback, fallback=None):
+            try:
+                return callback()
+            except (KeyError,ValueError,StopIteration):
+                return fallback
+        with patch.object(http,'get_json',side_effect=read):
+            result,points = market.em_board_details(http,rows,DAY,attempt)
+            self.assertEqual({p['code'] for p in points},{'BK0001','BK0003'})
+            self.assertEqual(len(points),6)
+            self.assertEqual(result[0]['spark'],[98.5,99,99.5,100,99])
+            self.assertAlmostEqual(result[-1]['fiveDayReturn'],101/98-1)
+            self.assertTrue(all((r['amount'],r['netFlow'])==(6060,-1234) for r in result))
+            mismatched = [dict(code='BK0001',name='错误收益',pct=.85)]
+            changed,points = market.em_board_details(http,mismatched,DAY,attempt)
+            self.assertNotIn('spark',changed[0])
+            self.assertNotIn('amount',changed[0])
+            self.assertEqual(points,[])
+        for code,klines in [('BK9999',[f'{DAY},-10,0,0,-9,-1']),
+                            ('BK0001',[f'{PREVIOUS},-10,0,0,-9,-1']),
+                            ('BK0001',[f'{DAY},-10,0,0,20,100'])]:
+            with patch.object(http,'get_json',return_value={'data':dict(code=code,klines=klines)}):
+                with self.assertRaises(ValueError):
+                    market.board_net_flow(http,'BK0001',DAY)
+
+    def test_only_complete_dated_membership_and_quotes_prove_board_turnover(self):
+        http = MarketHTTP()
+        listing = (f'概念板块行情一览 当前数据日期更新于 {DAY} · 共 1 个板块'
+                   '<tr><td data-label="概念"><a href="/bk/816.html">样本</a></td>'
+                   '<td data-label="涨跌幅">1.23%</td></tr>')
+        detail = f'板块代码 BK0816.DC 最新交易日 {DAY} 当日涨跌幅 1.23%'
+        def table(count, stamp):
+            return (f'<h2>样本板块股票</h2><div>行情日期 {stamp} · 按当日涨跌幅排序 · 共 {count} 只</div>'
+                    '<tr><td data-label="股票名称 / 代码"><a href="/stock/000001/">样本 000001.SZ</a></td></tr>'
+                    '<tr><td data-label="股票名称 / 代码"><a href="/stock/600000/">样本 600000.SH</a></td></tr>'
+                    '<tr><td data-label="领涨股票"><a href="/stock/000002/">样本 000002.SZ</a></td></tr>')
+        for count,stamp,complete in [(2,DAY,True),(3,DAY,False),(2,PREVIOUS,None)]:
+            with patch.object(http,'get_text',side_effect=[listing,detail+table(count,stamp)]):
+                rows,_ = market.published_concepts(http,DAY)
+            row = rows[0]
+            self.assertIs(row.get('constituentsComplete'),complete)
+            if complete is not None:
+                self.assertEqual(row['constituents'],['000001.SZ','600000.SH'])
+            quotes = {'000001.SZ':dict(date=str(DAY),amount=1350)}
+            market.constituent_turnover(rows,quotes,set(),DAY)
+            self.assertIsNone(row['amount'])
+            market.constituent_turnover(rows,quotes,{'600000.SH'},DAY)
+            self.assertEqual(row['amount'],1350 if complete else None)
+
     def test_shenwan_report_requires_exact_day_and_uses_prices_for_spark(self):
         http = MarketHTTP()
         def read(url,params):
@@ -208,6 +298,25 @@ class MarketTests(unittest.TestCase):
                                 (summary['rows'][0], {'ret_1d':0})]:
                 with patch.dict(obj, change), self.assertRaises(ValueError):
                     market.published_sw_industries(http, DAY)
+
+    def test_public_sw_member_card_requires_dated_same_industry_complete_count(self):
+        row = dict(name='银行',code='SW801780',pct=.0005)
+        http = MarketHTTP()
+        def page(count=1, stamp=DAY, code='801780', pct='+0.05'):
+            return (f'<link rel="canonical" href="https://www.yyqyx.com/b/{code}.SI">'
+                    f'银行 申万一级行业 {pct}% 主力净额 -10.14亿元 成分股 {count} 只 数据日 {stamp}'
+                    '<h2 id="sec5">全部成分股（按代码）</h2>'
+                    f'<p>共 {count} 只成分股，按代码顺序。</p><div class="tags">'
+                    '<a class="tag" href="https://www.yyqyx.com/s/000001.SZ">样本</a></div>'
+                    '<a class="tag" href="https://www.yyqyx.com/s/600000.SH">无关</a>')
+        for count in [1,10]:
+            with patch.object(http,'get_text',return_value=page(count)):
+                result = market.sw_members(http,row,DAY)
+            self.assertEqual(result['constituents'],['000001.SZ'])
+            self.assertEqual(result['constituentsComplete'],count==1)
+        for kwargs in [dict(stamp=PREVIOUS),dict(code='801080'),dict(count=0),dict(pct='+1.99')]:
+            with patch.object(http,'get_text',return_value=page(**kwargs)), self.assertRaises(ValueError):
+                market.sw_members(http,row,DAY)
 
     def test_published_board_ranking_rejects_stale_pages_duplicate_and_unproven_detail(self):
         http = MarketHTTP()

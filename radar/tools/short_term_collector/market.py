@@ -328,29 +328,91 @@ def enrich_candidates(rows, core, day, series):
             enrich(row)
 
 
-def board_history(http, code, day, frequency):
+def board_candles(http, code, day, frequency):
     obj = http.get_json(KLINE, params=dict(secid='90.' + code, klt=frequency, fqt=0,
                         end=day.strftime('%Y%m%d'), lmt=100 if frequency != 101 else 6,
-                        fields1='f1,f2,f3,f4,f5,f6', fields2='f51,f52,f53,f54,f55,f56,f57'))
+                        fields1='f1,f2,f3,f4,f5,f6', fields2='f51,f52,f53,f54,f55,f56,f57,f58,f59'))
     data = obj['data']
     if data.get('code') != code:
         raise ValueError('board_identity')
-    pairs = []
+    bars = {}
     for line in data['klines']:
         cells = line.split(',')
         close = number(cells[2])
+        if cells[0] in bars:
+            raise ValueError('board_duplicate_bar')
         if close and close > 0:
-            pairs.append((cells[0], close))
-    return sorted(pairs)
+            bars[cells[0]] = (close, number(cells[6]) if len(cells)>6 else None,
+                              number(cells[8]) if len(cells)>8 else None)
+    return bars
 
 
-def timed_points(pairs, name, day, prev):
+def board_history(http, code, day, frequency):
+    return sorted((stamp, bar[0]) for stamp,bar in board_candles(http,code,day,frequency).items())
+
+
+def board_net_flow(http, code, day):
+    data = http.get_json('https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get',
+        params=dict(secid='90.'+code, klt=101, lmt=10, fields1='f1,f2,f3,f7',
+                    fields2='f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63,f64,f65'))['data']
+    if data.get('code') != code:
+        raise ValueError('board_flow_identity')
+    observed = [line.split(',') for line in data['klines'] if line.split(',',1)[0] == day.isoformat()]
+    if len(observed) != 1 or len(observed[0]) < 6:
+        raise ValueError('board_flow_day')
+    net, large, super_large = (number(observed[0][i]) for i in (1,4,5))
+    # Main orders are the large and super-large series, all three in CNY.
+    if None in (net,large,super_large) or abs(net-large-super_large) > max(2,abs(net)*1e-6):
+        raise ValueError('board_flow_components')
+    return net
+
+
+def timed_points(pairs, name, day, prev, code=None):
     if prev is None or prev <= 0:
         return []
     points = []
     for stamp, price in pairs:
-        if stamp[:10] == day.isoformat() and stamp[11:16] in TARGET_TIMES and price and price > 0:
-            points.append(dict(date=day.isoformat(), time=stamp[11:16], name=name, pct=price / prev - 1))
+        if stamp[:10] == day.isoformat() and stamp[11:16] in TARGET_TIMES - {'09:25'} and price and price > 0:
+            point = dict(date=day.isoformat(), time=stamp[11:16], name=name, pct=price / prev - 1)
+            if code:
+                point['code'] = code
+            points.append(point)
+    return points
+
+
+def em_session_points(http, secid, name, day, *, board=False):
+    """iscr/iscca request auction bars; a priced indication with no execution is insufficient."""
+    data = http.get_json('https://push2his.eastmoney.com/api/qt/stock/trends2/get', params=dict(
+        secid=secid, fields1='f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13',
+        fields2='f51,f52,f53,f54,f55,f56,f57,f58',ndays=1,iscr=1,iscca=1))['data']
+    exch, code = secid.split('.')
+    prev = number(data.get('preClose'))
+    if (data.get('code') != code or str(data.get('market')) != exch or
+            not prev or prev <= 0 or (not board and data.get('name')!=name)):
+        raise ValueError('trends_identity')
+    bars = {}
+    for line in data['trends']:
+        cells = line.split(',')
+        if len(cells)<7 or not re.fullmatch(re.escape(day.isoformat()) + r' \d{2}:\d{2}', cells[0]):
+            continue
+        clock = cells[0][11:]
+        if clock not in TARGET_TIMES:
+            continue
+        if clock in bars:
+            raise ValueError('trends_duplicate')
+        bars[clock] = (number(cells[2]), number(cells[5]), number(cells[6]))
+    closing = bars.get('15:00',(None,))[0]
+    if closing is None or closing <= 0:
+        raise ValueError('trends_unclosed')
+    pairs = [(f'{day} {clock}',values[0]) for clock,values in bars.items()]
+    points = timed_points(pairs,name,day,prev,code if board else None)
+    price, volume, amount = bars.get('09:25', (None,None,None))
+    if all(v is not None and v > 0 for v in (price,volume,amount)):
+        auction = dict(date=day.isoformat(), time='09:25', name=name, pct=price/prev-1,
+                       auctionConfirmed=True)
+        if board:
+            auction['code'] = code
+        points.insert(0,auction)
     return points
 
 
@@ -360,18 +422,23 @@ class _BoardPage(HTMLParser):
         super().__init__()
         self.chunks, self.rows, self.row = [], [], {}
         self.column, self.sector = '', None
+        self.members, self.stock = [], None
         self.feed(html)
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         if tag == 'tr':
-            self.row, self.sector = {}, None
+            self.row, self.sector, self.stock = {}, None, None
         elif tag == 'td':
             self.column = attrs.get('data-label', '')
         elif tag == 'a' and self.column == '概念':
             match = re.fullmatch(r'/bk/(\d{1,5})\.html', attrs.get('href', ''))
             if match:
                 self.sector = int(match[1])
+        elif tag == 'a' and self.column == '股票名称 / 代码':
+            match = re.fullmatch(r'/stock/(\d{6})/', attrs.get('href', ''))
+            if match:
+                self.stock = match[1]
 
     def handle_data(self, value):
         if text := value.strip():
@@ -384,6 +451,10 @@ class _BoardPage(HTMLParser):
             self.column = ''
         elif tag == 'tr' and self.sector is not None:
             self.rows.append((self.sector, self.row))
+        elif tag == 'tr' and self.stock is not None:
+            match = re.search(r'(\d{6}\.(?:SH|SZ|BJ))$', self.row.get('股票名称 / 代码',''))
+            if match and match[1][:6] == self.stock and symbol(match[1]) == match[1]:
+                self.members.append(match[1])
 
 
 def published_concepts(http, day):
@@ -413,11 +484,18 @@ def published_concepts(http, day):
         raise ValueError('published_concept_incomplete')
     ordered = sorted(rows.items(), key=lambda pair:(pair[1]['pct'],pair[0]))
     for board_id, row in dict(ordered[:5] + ordered[-5:]).items():
-        detail = ' '.join(_BoardPage(http.get_text(f'{url}{board_id}.html')).chunks)
+        detail_page = _BoardPage(http.get_text(f'{url}{board_id}.html'))
+        detail = ' '.join(detail_page.chunks)
         proof = re.search(r'板块代码\s+(BK\d+)\.DC\s+最新交易日\s+(\d{4}-\d{2}-\d{2})\s+当日涨跌幅\s+([+−\-]?[\d.]+)%', detail)
         if (not proof or proof[1] != row['code'] or proof[2] != day.isoformat()
                 or float(proof[3].replace('−','-')) / 100 != row['pct']):
             raise ValueError('published_concept_crosscheck')
+        header = re.search(re.escape(row['name']) + r'板块股票\s+行情日期\s+(\d{4}-\d{2}-\d{2})\s*·\s*按当日涨跌幅排序\s*·\s*共\s*(\d+)\s*只',detail)
+        unique = set(detail_page.members)
+        if (header and header[1] == day.isoformat() and unique and
+                len(unique) == len(detail_page.members) <= int(header[2])):
+            row['constituents'] = sorted(unique)
+            row['constituentsComplete'] = len(unique) == int(header[2])
     return list(rows.values()), []
 
 
@@ -434,18 +512,66 @@ def boards(http, scope, day, attempt, url=CLIST):
             raise ValueError('board_date_or_value')
         rows.append(dict(code=item['f12'], name=item['f14'], date=day.isoformat(),
                          pct=pct/100, amount=number(item.get('f6')), netFlow=number(item.get('f62'))))
+    return em_board_details(http, rows, day, attempt)
+
+
+def em_board_details(http, rows, day, attempt):
+    """Enrich only the ranking frontiers, using exactly the same Eastmoney BK identity."""
     rows.sort(key=lambda r:(r['pct'], r['code']))
+    if not rows:
+        return rows, []
+    extremes = {rows[-1]['code'], rows[0]['code']}
+    # Visit the two extremes first. Stop polling a broken feed after two
+    # consecutive failures, independently for price and flow.
+    selected = {r['code']:r for r in [rows[-1], rows[0], *rows[-5:], *rows[:5]]}
+    date_keys = [day]
+    for _ in range(5):
+        date_keys.insert(0,prior_session(date_keys[0]))
+    keys = [d.isoformat() for d in date_keys]
     segments = []
-    for row in {r['code']:r for r in rows[:5] + rows[-5:]}.values():
-        bars = attempt('board_daily_missing', lambda:board_history(http, row['code'], day, 101), [])
-        if not bars or bars[-1][0] != day.isoformat():
-            continue
-        row['spark'] = [v for _, v in bars[-5:]]
-        if len(bars) >= 6:
-            row['fiveDayReturn'] = bars[-1][1] / bars[-6][1] - 1
-        if row is rows[-1] and len(bars) > 1:
-            intraday = attempt('board_intraday_missing', lambda:board_history(http, row['code'], day, 5), [])
-            segments.extend(timed_points(intraday, row['name'], day, bars[-2][1]))
+    date_errors = flow_errors = 0
+    for code,row in selected.items():
+        if date_errors < 2:
+            def daily():
+                bars = board_candles(http, code, day, 101)
+                close, amount, reported_pct = bars[keys[-1]]
+                prior = bars[keys[-2]][0]
+                pct = reported_pct if reported_pct is not None else 100*(close/prior-1)
+                if abs(pct-100*row['pct']) > 0.02:
+                    raise ValueError('board_daily_return_mismatch')
+                if amount is not None and amount >= 0 and row.get('amount') is None:
+                    row['amount'] = amount
+                if all(k in bars for k in keys[-5:]):
+                    row['spark'] = [bars[k][0] for k in keys[-5:]]
+                    if keys[0] in bars:
+                        row['fiveDayReturn'] = close/bars[keys[0]][0]-1
+                return prior
+            prior = attempt('board_daily_missing', daily)
+            date_errors = 0 if prior is not None else date_errors+1
+        else:
+            prior = None
+        if code in extremes:
+            def checked_minutes(pts):
+                closing = next((p['pct'] for p in pts if p['time']=='15:00'),None)
+                if closing is None or abs(closing-row['pct']) > .0003:
+                    raise ValueError('board_minute_return_mismatch')
+                return pts
+            pts = attempt('board_auction_or_minutes_missing', lambda:checked_minutes(
+                em_session_points(http, '90.'+code, row['name'], day, board=True)), [])
+            if prior and not {'10:30','13:30','15:00'} <= {p['time'] for p in pts}:
+                def five_minute_bars():
+                    bars = board_history(http, code, day, 5)
+                    return checked_minutes(timed_points(bars,row['name'],day,prior,code))
+                seen = {p['time'] for p in pts}
+                pts.extend(p for p in attempt('board_intraday_missing',five_minute_bars,[]) if p['time'] not in seen)
+            segments.extend(pts)
+        if row.get('netFlow') is None and flow_errors < 2:
+            flow = attempt('board_flow_missing', lambda:board_net_flow(http,code,day))
+            if flow is not None:
+                row['netFlow'] = flow
+                flow_errors = 0
+            else:
+                flow_errors += 1
     return rows, segments
 
 
@@ -519,15 +645,72 @@ def sw_industries(http, day, attempt):
             row['spark'] = values[1:]
             if values[0] and values[0] > 0:
                 row['fiveDayReturn'] = values[-1] / values[0] - 1
-    top = max(rows, key=lambda r:(r['pct'], r['code']))
-    code = top['code'][2:]
-    prior = number(history.get((code, days[-2]), {}).get('closeindex'))
-    def minutes():
-        data = http.get_json(SW_API+'index_publish/details/timelines/', params={'swindexcode':code})['data']
-        pairs = [(str(r['trading_date'])[:10]+' '+str(r['trading_time']), number(r['l8']))
-                 for r in data if str(r['l1']) == code]
-        return timed_points(pairs, top['name'], day, prior)
-    return rows, attempt('board_intraday_missing', minutes, [])
+    return rows, sw_extreme_points(http,rows,day,attempt)
+
+
+def sw_extreme_points(http, rows, day, attempt):
+    ordered = sorted(rows, key=lambda r:(r['pct'],r['code']))
+    points = []
+    for row in {r['code']:r for r in (ordered[0],ordered[-1])}.values():
+        def minutes():
+            if len(row.get('spark',[])) < 2:
+                raise ValueError('sw_previous_close')
+            code = row['code'][2:]
+            data = http.get_json(SW_API+'index_publish/details/timelines/', params={'swindexcode':code})['data']
+            pairs = [(str(r['trading_date'])[:10]+' '+str(r['trading_time']),number(r['l8']))
+                     for r in data if str(r['l1'])==code]
+            seen = timed_points(pairs,row['name'],day,row['spark'][-2],row['code'])
+            if not seen:
+                raise ValueError('sw_minutes_missing')
+            return seen
+        points.extend(attempt('board_intraday_missing',minutes,[]))
+    return points
+
+
+def sw_members(http, row, day):
+    """The public Shenwan directory labels its date and full or truncated constituent list."""
+    code = SW_LEVEL_ONE[row['name']]
+    if row['code'] != 'SW' + code:
+        raise ValueError('sw_members_identity')
+    url = 'https://www.yyqyx.com/b/' + code + '.SI'
+    page = http.get_text(url)
+    if f'<link rel="canonical" href="{url}">' not in page:
+        raise ValueError('sw_members_identity')
+    text = ' '.join(_BoardPage(page).chunks)
+    proof = re.search(re.escape(row['name']) + r' 申万一级行业 ([+−\-]?[\d.]+)% 主力净额 .{1,40}? 成分股 (\d+) 只 数据日 (\d{4}-\d{2}-\d{2})', text)
+    if (not proof or proof[3] != day.isoformat() or
+            abs(float(proof[1].replace('−','-')) - 100*row['pct']) > .02):
+        raise ValueError('sw_members_date_or_return')
+    section = re.search(r'<h2 id="sec5">全部成分股（按代码）</h2>\s*<p[^>]*>共\s*(\d+)\s*只成分股[^<]*</p>\s*<div class="tags">(.*?)</div>',page,re.S)
+    if not section or section[1] != proof[2]:
+        raise ValueError('sw_members_table')
+    links = re.findall(r'<a\b[^>]*\bhref="([^"]+)"',section[2])
+    members = []
+    for link in links:
+        match = re.fullmatch(r'(?:https://www\.yyqyx\.com)?/s/(\d{6}\.(?:SZ|SH|BJ))',link)
+        if not match or symbol(match[1]) != match[1]:
+            raise ValueError('sw_members_symbol')
+        members.append(match[1])
+    total = int(proof[2])
+    if not members or len(set(members)) != len(members) or len(members) > total:
+        raise ValueError('sw_members_count')
+    return dict(constituents=sorted(members),constituentsComplete=len(members)==total)
+
+
+def constituent_turnover(boards, quotes, halted, day):
+    """Fill turnover only from complete dated membership and every member's terminal status."""
+    for row in boards:
+        if (row.get('amount') is not None or row.get('constituentsComplete') is not True
+                or row.get('date') != day.isoformat()):
+            continue
+        members = set(row.get('constituents', []))
+        if not members or not members <= quotes.keys() | halted:
+            continue
+        traded = [quotes[s] for s in members - halted]
+        if all(r.get('date') == day.isoformat() and number(r.get('amount')) is not None
+               and r['amount'] >= 0 for r in traded):
+            row['amount'] = sum(r['amount'] for r in traded)
+            row['amountSource'] = '同日已核完整成分成交额合计'
 
 
 def published_sw_industries(http, day):
@@ -718,6 +901,12 @@ def collect_market(day, radar, http):
         for name, slug in [('上证指数','sh000001'), ('创业板指','sz399006')]:
             pts = attempt('tdx_index_missing', lambda:index_points(tdx, day, name, slug[2:]), []) if tdx else []
             times = {p['time'] for p in pts}
+            secid = ('1.' if slug.startswith('sh') else '0.') + slug[2:]
+            auction = attempt('auction_0925_missing',lambda:em_session_points(http,secid,name,day),[])
+            pts.extend(p for p in auction if p['time'] not in times)
+            times.update(p['time'] for p in auction)
+            if '09:25' not in times:
+                warnings.add('auction_0925_missing')
             if not {'10:30','13:30','15:00'} <= times:
                 fallback = attempt('index_intraday_missing', lambda:tencent_index_points(http, day, name, slug), [])
                 pts.extend(p for p in fallback if p['time'] not in times)
@@ -739,11 +928,11 @@ def collect_market(day, radar, http):
             if result is None:
                 result = attempt(err, lambda:published_sw_industries(http, day))
                 if result:
-                    warnings.add('board_intraday_missing')
+                    result = (result[0],sw_extreme_points(http,result[0],day,attempt))
         if result is None and sector == 'concept':
             result = attempt(err, lambda:published_concepts(http, day))
             if result:
-                warnings.update({'board_daily_missing','board_intraday_missing'})
+                result = em_board_details(http,result[0],day,attempt)
         if result is None:
             return [], []
         warnings.discard(err)
@@ -751,7 +940,20 @@ def collect_market(day, radar, http):
 
     industries, pts = load_boards('industry', 2, '17')
     intraday.extend(pts)
+    sw = sorted((r for r in industries if r['code'].startswith('SW')),key=lambda r:(r['pct'],r['code']))
+    if sw:
+        failures = 0
+        for row in {r['code']:r for r in [sw[-1],sw[0],*sw[-5:],*sw[:5]]}.values():
+            members = attempt('sw_members_missing',lambda:sw_members(http,row,day))
+            if members is None:
+                failures += 1
+                if failures >= 2:
+                    break
+            else:
+                row.update(members)
+                failures = 0
     concepts, pts = load_boards('concept', 3, '79')
+    constituent_turnover(industries+concepts,quotes,halted,day)
     intraday.extend(pts)
     reasons = attempt('ths_hot_missing', lambda:hot_reasons(http, day), {})
     for r in rows:
