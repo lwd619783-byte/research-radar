@@ -1,21 +1,21 @@
 {
   "schemaVersion": 3,
   "sourceSHA": "551b2d79c55be3faf9b84f305de337341d3109cc",
-  "runId": "45754033954",
-  "fixedClock": "2026-11-26T12:21:31.578590+08:00",
+  "runId": "45799598194",
+  "fixedClock": "2026-11-26T18:20:32.201571+08:00",
   "priceDateRange": [
     "2026-11-25",
     "2026-11-26"
   ],
-  "dataSHA256": "aec78c8c3785e3d355fd3b7f75778feb103c6aa3c79c8c6fdd0635393ecfdb8a",
+  "dataSHA256": "307bef908cfbc97db4cc5b22d9f0f57d88f17744c46d484bb4601ec99fff8ebf",
   "blockers": [],
-  "historySHA256": "22f6fae7e0c8a989cba36ea33ebfcbd0fff9d0848438ccc47691a425e573317b",
+  "historySHA256": "e41624ac43e032bc139ef00e3df709fe7f67843e6a994bd7ff9abfd3b7bd5f4a",
   "files": {
-    "index.html": "64b728a3f795f23efca1085932821ef2035c35bb7010ccbbb489bdc3fc2a52e4",
-    "version.json": "180e83bb06957f38b37b7aaa8562e0f8447868cf8700b670f7d3359d4e24c2ac",
-    "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1"
+    "robots.txt": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
+    "index.html": "433f2e2f81484d4f7074b907e9104a3ed63e576de42375e94d95decbfa74cd28",
+    "version.json": "b62bbf3aa62aa365c4cae68cbeb0be135facf42e1a718c702b144090c4ae8d99"
   },
-  "researchSnapshotSHA256": "f0978bc5e5ecb337cc90bb8fe3203731dd908d7f80a43ccf9c7d37ef4828e8c1",
+  "researchSnapshotSHA256": "2784bf305d4fc8c26e07020562f474ba352e20c00c4fd6e913cb84da8899d637",
   "notion": {
     "source": "notion",
     "requests": {
@@ -54,8 +54,8 @@
         "substituted": 0
       },
       "daily": {
-        "fetched": 48,
-        "used": 48,
+        "fetched": 49,
+        "used": 49,
         "excluded": 0,
         "quarantined": 0,
         "substituted": 0
@@ -74,11 +74,11 @@
   },
   "scheduleAdmission": {
     "kind": "external_schedule",
-    "slot": "weekday-1215",
-    "plannedAt": "2026-11-26T12:15:00+08:00",
+    "slot": "weekday-1815",
+    "plannedAt": "2026-11-26T18:15:00+08:00",
     "schemaVersion": 1,
     "sourceSHA": "551b2d79c55be3faf9b84f305de337341d3109cc",
-    "runId": "45754033954",
-    "createdAt": "2026-11-26T12:15:19+08:00"
+    "runId": "45799598194",
+    "createdAt": "2026-11-26T18:15:19+08:00"
   }
 }

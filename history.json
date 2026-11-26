@@ -32717,14 +32717,14 @@
       ]
     },
     {
-      "generatedAt": "2026-11-26T08:51+08:00",
+      "generatedAt": "2026-11-26T12:21+08:00",
       "proof": {
         "state": "success",
-        "productionSHA": "736ec266502b7aebb0343ac2f458a1cca40bdac3",
-        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/8kh6JZaqZwXS7d1hsJVrgUQX8fAh",
-        "reportedAt": "2026-11-26T00:51:37Z",
+        "productionSHA": "b0facafcb975fa187dd709b4486f3d85c2f1d088",
+        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/CmocHS2Hh4pb1e4SEUHz1wKQywEm",
+        "reportedAt": "2026-11-26T04:21:45Z",
         "sourceSHA": "551b2d79c55be3faf9b84f305de337341d3109cc",
-        "dataSHA256": "42b0216e925133af72574fcc7f4f6e27e933d94de2363e7587399ab7655589b9"
+        "dataSHA256": "aec78c8c3785e3d355fd3b7f75778feb103c6aa3c79c8c6fdd0635393ecfdb8a"
       },
       "companies": [
         {
@@ -34577,7 +34577,7 @@
           "kind": "company",
           "symbol": "688012.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -34709,7 +34709,7 @@
           "kind": "company",
           "symbol": "0522.HK",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -34775,7 +34775,7 @@
           "kind": "company",
           "symbol": "688825.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -34907,7 +34907,7 @@
           "kind": "company",
           "symbol": "002371.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -35171,7 +35171,7 @@
           "kind": "company",
           "symbol": "601208.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -35237,7 +35237,7 @@
           "kind": "company",
           "symbol": "301377.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -35303,7 +35303,7 @@
           "kind": "company",
           "symbol": "301200.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -35369,7 +35369,7 @@
           "kind": "company",
           "symbol": "2383.TW",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -35435,7 +35435,7 @@
           "kind": "company",
           "symbol": "002463.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -35501,7 +35501,7 @@
           "kind": "company",
           "symbol": "603256.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -35567,7 +35567,7 @@
           "kind": "company",
           "symbol": "1888.HK",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -35699,7 +35699,7 @@
           "kind": "company",
           "symbol": "300476.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -35765,7 +35765,7 @@
           "kind": "company",
           "symbol": "002916.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -35831,7 +35831,7 @@
           "kind": "company",
           "symbol": "600183.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -35897,7 +35897,7 @@
           "kind": "company",
           "symbol": "000657.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -36293,7 +36293,7 @@
           "kind": "company",
           "symbol": "300394.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -36359,7 +36359,7 @@
           "kind": "company",
           "symbol": "300502.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -36425,7 +36425,7 @@
           "kind": "company",
           "symbol": "688498.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -36491,7 +36491,7 @@
           "kind": "company",
           "symbol": "300308.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -36557,7 +36557,7 @@
           "kind": "company",
           "symbol": "600875.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -36821,7 +36821,7 @@
           "kind": "company",
           "symbol": "688676.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -36887,7 +36887,7 @@
           "kind": "company",
           "symbol": "002335.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -37085,7 +37085,7 @@
           "kind": "company",
           "symbol": "002028.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -37217,7 +37217,7 @@
           "kind": "company",
           "symbol": "002837.SZ",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -37283,7 +37283,7 @@
           "kind": "company",
           "symbol": "601179.SS",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -37319,7 +37319,7 @@
           "kind": "index",
           "symbol": "^HSI",
           "metric": null,
-          "status": "partial"
+          "status": "complete"
         },
         {
           "kind": "index",
