@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from dataclasses import dataclass
 from datetime import date, timedelta
 import math
 import re
@@ -118,52 +119,89 @@ def _rank(quotes, links, reason):
     return result
 
 
+@dataclass
+class BoardMatch:
+    industry: str | None
+    score: int | None
+    points: dict[str, str]
+    ambiguous: bool
+
+    def star_label(self):
+        if self.score is None or self.score < 16:
+            return None
+        names = [name for name, ind in self.points.items() if ind == self.industry]
+        if names:
+            return f'{self.industry} · {self.score}/20 · 卡点：' + '、'.join(sorted(names))
+        return None
+
+
+def _has_term(term, labels):
+    if not isinstance(term, str) or len(term.strip()) < 2:
+        return False
+    if term.isascii():
+        pattern = r'(?<![a-z0-9])' + re.escape(term) + r'(?![a-z0-9])'
+        return any(re.search(pattern, label, re.I) for label in labels)
+    return any(term.casefold() in label.casefold() for label in labels)
+
+
 def _radar_links(boards, radar, companies):
     industries = {r['name']: r for r in radar.get('industries', []) if r.get('name')}
-    points = [(p['name'], p['ind']) for p in radar.get('chokepoints', [])
-              if isinstance(p.get('name'), str) and p.get('ind') in industries]
+    points = {p['name']: p for p in radar.get('chokepoints', [])
+              if isinstance(p.get('name'), str) and p.get('ind') in industries}
     linked = {}
     for row in boards:
-        tags = ' '.join([row['name'], *(x for x in row.get('keywords', []) if isinstance(x, str))])
-        candidates = {n for n in industries if n == row['name'] or (len(n) >= 2 and n in tags)}
-        candidates.update(ind for term, ind in points if len(term) >= 2 and term in tags)
-        if not candidates:
-            members = [companies.get(_code(k)) for k in row.get('constituents', [])]
+        labels = [row['name'], *(s for s in row.get('keywords', []) if isinstance(s, str))]
+        candidates = {n for n in industries if n == row['name'] or _has_term(n, labels)}
+        hits = {}
+        for name, point in points.items():
+            segments = re.split(r'[、/，,；;]', point.get('seg') or '')
+            if any(_has_term(term.strip(), labels) for term in [name, *segments]):
+                hits[name] = point['ind']
+        candidates.update(hits.values())
+        member_ids = {_code(code) or str(code) for code in row.get('constituents', [])}
+        members = [companies.get(code) for code in member_ids]
+        if not candidates and row.get('constituentsComplete', True):
             votes = Counter(m['ind'] for m in members if m and m.get('ind') in industries)
             if votes:
-                winner, hits = votes.most_common(1)[0]
-                if hits > len(members) / 2:
+                winner, count = votes.most_common(1)[0]
+                if count > len(members) / 2:
                     candidates.add(winner)
-        if len(candidates) == 1:
-            ind = industries[next(iter(candidates))]
-            score = ind.get('total')
-            if type(score) is int and 0 <= score <= 20:
-                linked[row['code']] = (ind['name'], score)
+        for company in members:
+            if company and (point := points.get(company.get('cp'))) and point['ind'] == company.get('ind'):
+                hits[point['name']] = point['ind']
+        industry = next(iter(candidates)) if len(candidates) == 1 else None
+        score = industries.get(industry, {}).get('total')
+        unresolved = len(candidates) > 1 or (not industry and any(m and m.get('ind') in industries for m in members))
+        linked[row['code']] = BoardMatch(industry, score if type(score) is int and 0 <= score <= 20 else None,
+                                         hits, unresolved)
     return linked
 
 
-def _matrix(boards, linked, has_radar):
+def _matrix(boards, linked, radar):
     rules = [('q-res', '主线共振', 'ai', '高分行业上涨'), ('q-pulse', '纯情绪脉冲', 'stale', '短线活跃'),
              ('q-dip', '主线分歧', 'auto', '高分行业回调'), ('q-kill', '双杀回避', 'conflict', '弱势观察')]
     quadrants = {k: dict(key=k, title=title, badge='st ' + tone, badgeText=label, items=[])
                  for k, title, tone, label in rules}
-    if has_radar:
+    if radar.get('industries'):
         for row in sorted(boards, key=lambda r: (-abs(r['pct']), r['code'])):
-            match = linked.get(row['code'])
-            high = bool(match and match[1] >= 16)
+            match = linked[row['code']]
+            if match.ambiguous or (match.industry and match.score is None):
+                continue
+            high = match.score is not None and match.score >= 16
             change = row['pct']
             if change >= .02:
                 key = 'q-res' if high else 'q-pulse'
             elif high and change < 0:
                 key = 'q-dip'
-            elif not match and change <= -.02:
+            elif radar.get('chokepoints') and not match.points and change <= -.02:
                 key = 'q-kill'
             else:
                 continue
             if len(quadrants[key]['items']) < 5:
-                text = f'{match[0]} · {match[1]}/20 分' if match else '未匹配雷达行业'
+                text = f'{match.industry} · {match.score}/20 分' if match.industry else '未匹配雷达行业'
+                note = '未命中雷达卡点' if key == 'q-kill' else '依行业评分及当日涨跌划分'
                 quadrants[key]['items'].append(dict(name=row['name'], meta=f'{text} · {_pct(change)}',
-                                                     note='依行业评分及当日涨跌划分'))
+                                                     note=note))
     return list(quadrants.values())
 
 
@@ -280,19 +318,58 @@ def reconcile_previous_day(previous, day, metrics):
     return dict(targetDate=prior, summary=summary, items=items)
 
 
-def _timeline(raw, day, breadth, dragon, ego):
+def _board_switches(previous, current, previous_time):
+    details = []
+    for group, values in current.items():
+        prior = previous.get(group, {})
+        if len(values) < 2 or values.keys() != prior.keys() or None in (*values.values(), *prior.values()):
+            continue
+        changes = []
+        for sign, label in ((1, '领涨'), (-1, '领跌')):
+            leaders = []
+            for snapshot in (prior, values):
+                extreme = max(sign * pct for pct in snapshot.values())
+                names = [name for (_, name), pct in snapshot.items() if sign * pct == extreme]
+                if extreme > 0 and len(names) == 1:
+                    leaders.append(names[0])
+            if len(leaders) == 2 and leaders[0] != leaders[1]:
+                changes.append(f'{label}由{leaders[0]}转为{leaders[1]}')
+        if changes:
+            details.append(f'相较 {previous_time}，同组 {len(values)} 个{group[0]}样本中' + '，'.join(changes))
+    return details
+
+
+def _timeline(raw, day, breadth, dragon, ego, board_sets):
     bars = _rows(raw, 'intraday', day)
+    board_kinds = {}
+    for key, label in [('industries', '行业'), ('concepts', '概念')]:
+        for row in board_sets[key]:
+            board_kinds.setdefault((row['code'], row['name']), set()).add(label)
     result = []
-    for time, label in [('09:25', '集合竞价'), ('10:30', '早盘'), ('13:30', '午后')]:
+    previous, previous_time = {}, None
+    for time, label in [('09:25', '集合竞价'), ('10:30', '早盘'), ('13:30', '午后'), ('15:00', '收盘')]:
         ticks = [r for r in bars if r.get('time') == time and r.get('name') and _number(r.get('pct'))]
-        if ticks:
-            detail = '；'.join(f"{r['name']} {_pct(r['pct'])}" for r in ticks[:6])
-            result.append(dict(time=time, phase=label, title='时点涨跌幅', detail=detail, tag='分时记录'))
-    close = [f'{r["name"]} {_pct(r["pct"])}' for r in bars if r.get('time') == '15:00' and r.get('name') and _number(r.get('pct'))]
-    if breadth['turnover'] != '—':
-        close.append('成交额 ' + breadth['turnover'])
+        details = [f"{r['name']} {_pct(r['pct'])}" for r in ticks[:6]]
+        groups = {}
+        for tick in ticks:
+            board = tick.get('code'), tick['name']
+            kinds = board_kinds.get(board, set())
+            if len(kinds) != 1 or tick.get('date') != day.isoformat():
+                continue
+            group = (next(iter(kinds)), tick.get('source'), tick.get('basis'), tick.get('interval'))
+            values = groups.setdefault(group, {})
+            if values.setdefault(board, tick['pct']) != tick['pct']:
+                values[board] = None
+        details.extend(_board_switches(previous, groups, previous_time))
+        previous, previous_time = groups, time
+        if time == '15:00':
+            if breadth['turnover'] != '—':
+                details.append('成交额 ' + breadth['turnover'])
+            result.append(dict(time=time, phase=label, title='收盘行情', detail='；'.join(details) or '收盘汇总暂缺',
+                               tag='盘后记录'))
+        elif details:
+            result.append(dict(time=time, phase=label, title='时点涨跌幅', detail='；'.join(details), tag='分时记录'))
     for time, phase, title, detail in [
-        ('15:00', '收盘', '收盘行情', '；'.join(close[:8]) or '收盘汇总暂缺'),
         ('17:30', '盘后栏目', '龙虎榜席位与公告', dragon.get('summary') or '龙虎榜数据暂缺'),
         ('20:15', '晚间栏目', '散户舆情样本', ego.get('summary') or '舆情样本暂缺')]:
         result.append(dict(time=time, phase=phase, title=title, detail=detail, tag='盘后记录'))
@@ -336,7 +413,7 @@ def build_day(day: date, raw: dict, radar: dict, previous: dict | None) -> dict:
     board_sets = {k: [r for r in _rows(raw, k, day) if _valid_quote(r)] for k in ('industries', 'concepts')}
     boards = board_sets['industries'] + board_sets['concepts']
     linked = _radar_links(boards, radar, companies)
-    board_links = {k: f'{n} · {s}/20' for k, (n, s) in linked.items() if s >= 16}
+    board_links = {code: match.star_label() for code, match in linked.items()}
     groups = {k: _rank(rows, board_links, '行业/题材短线资金波动') for k, rows in board_sets.items()}
     leader = next(iter(groups['industries']['up']), None)
     current = _pool(raw, 'limitPool', day)
@@ -361,8 +438,8 @@ def build_day(day: date, raw: dict, radar: dict, previous: dict | None) -> dict:
                   yesterdayReconcile=reconcile_previous_day(previous, day, metrics),
                   stocks=dict(market=_rank(market, company_links, '按当日收盘涨跌幅排序'),
                               radar=_rank(core, company_links, '雷达核心池收盘涨跌幅')),
-                  cycle=cycle, matrix=_matrix(boards, linked, bool(radar.get('industries'))), dragonTiger=dragon,
-                  ego=ego, anchors=_anchors(metrics, leader), timeline=_timeline(raw, day, breadth, dragon, ego),
+                  cycle=cycle, matrix=_matrix(boards, linked, radar), dragonTiger=dragon,
+                  ego=ego, anchors=_anchors(metrics, leader), timeline=_timeline(raw, day, breadth, dragon, ego, board_sets),
                   strategyPlan=dict(offense='观察领涨方向的次日延续情况。', defense='留意盘后公告及异动提示。',
                                     mines=raw.get('mines') or []), **groups)
     return _public_text(result)

@@ -159,6 +159,23 @@ export function datedReview({platform,date,now,readyOnly=false}) {
   return false;
 }
 
+export function approvedHotAuthor({platform,authors}) {
+  const selector = {
+    dy: '[data-e2e="video-author-name"] a,a[data-e2e="video-author-name"],.video-info-detail .author a,.video-info-detail [class*="author"] a',
+    xhs: '#noteContainer .author-container a,.note-detail-mask .author-wrapper a,#noteContainer .author-wrapper a',
+  }[platform];
+  if (!selector || !authors.length) return false;
+  const site = host => host.replace(/^www\./,'');
+  const path = url => url.pathname.replace(/\/$/,'');
+  const allowed = new Set(authors.map(address => path(new URL(address))));
+  return [...document.querySelectorAll(selector)].some(link => {
+    if (!link.getClientRects().length || link.closest('[hidden],[aria-hidden="true"],.comment-item')) return false;
+    const author = new URL(link.href,location.href);
+    return author.protocol==='https:' && !author.username && !author.password && !author.port &&
+      site(author.hostname)===site(location.hostname) && allowed.has(path(author));
+  });
+}
+
 // Return only public work paths. For signed links the browser itself follows
 // the displayed anchor. Query strings, authors, device and session state
 // never leave the page.
@@ -290,6 +307,11 @@ async function readPlatform(task, page, platform, spec, date) {
       } catch (error) { if (controlError(error) || !timedOut(error)) throw error; }
       await sample(track,false);
       if (!await active.evaluate(datedReview,{platform,date,now:Date.now()})) return 0;
+      if (track === 'hot') {
+        detail.stage='hot_author';
+        const authors = (spec.kol || []).concat(spec.hot_kol || []);
+        if (!await active.evaluate(approvedHotAuthor,{platform,authors})) return 0;
+      }
     }
     let count = await sample(track);
     if (!count) {

@@ -40,7 +40,7 @@ NOISE = re.compile(r'^(?:哈哈|呵呵|收到|打卡|签到|路过|围观|点赞
 BULL = re.compile('看涨|看多|多头|偏强|走强|上涨|突破|放量回升|承接较强|继续上行|企稳|不看空')
 BEAR = re.compile('看跌|看空|空头|偏弱|走弱|下跌|跌破|缩量回落|承接较弱|继续下行|不看好|承压')
 CJ = timezone(timedelta(hours=8))
-SIGNATURE = 'dated-comments-v2'
+SIGNATURE = 'dated-comments-v3'
 MARK = 'RESEARCH_RADAR_EGO_V4 '
 STATUS = {'ok', 'partial', 'empty', 'no_sample', 'timeout', 'login_required', 'captcha',
           'handoff', 'unavailable', 'skipped', 'error', 'user_control'}
@@ -60,29 +60,33 @@ def _validated_config():
     for platform in NAMES:
         opts = settings[platform]
         key = 'kol' if platform in SOCIAL else 'seeds'
-        urls = opts.get(key, [])
-        if not isinstance(urls, list) or len(urls) > 16:
-            raise ValueError('invalid URLs')
-        for url in urls:
-            parsed = urlsplit(url)
-            host = parsed.hostname or ''
-            domain = DOMAINS[platform]
-            if (parsed.scheme != 'https' or parsed.username or parsed.password or parsed.port
-                    or parsed.query or parsed.fragment or len(url) > 512 or
-                    (host != domain and not host.endswith('.' + domain))):
-                raise ValueError('expected public profile or community URL')
-            if platform == 'dy' and not re.fullmatch(r'/user/[a-zA-Z0-9_-]+/?', parsed.path):
-                raise ValueError('expected Douyin profile')
-            if platform == 'xhs' and not re.fullmatch(r'/user/profile/[a-zA-Z0-9_-]+/?', parsed.path):
-                raise ValueError('expected Xiaohongshu profile')
-        config[platform] = {key: urls}
+        config[platform] = {key: _validated_urls(platform, opts.get(key, []))}
         if platform in SOCIAL:
+            config[platform]['hot_kol'] = _validated_urls(platform, opts.get('hot_kol', []))
             tags = opts.get('tags', ['A股复盘'])
             if not isinstance(tags, list) or not 1 <= len(tags) <= 3 or not all(
                     isinstance(tag, str) and re.fullmatch(r'[\w\u3400-\u9fff]{1,25}', tag) for tag in tags):
                 raise ValueError('invalid topic')
             config[platform]['tags'] = tags
     return config
+
+
+def _validated_urls(platform, urls):
+    if not isinstance(urls, list) or len(urls) > 16 or any(not isinstance(url, str) for url in urls):
+        raise ValueError('invalid URLs')
+    for url in urls:
+        parsed = urlsplit(url)
+        host = parsed.hostname or ''
+        domain = DOMAINS[platform]
+        if (parsed.scheme != 'https' or parsed.username or parsed.password or parsed.port
+                or parsed.query or parsed.fragment or len(url) > 512
+                or (host != domain and not host.endswith('.' + domain))):
+            raise ValueError('expected public profile or community URL')
+        if platform == 'dy' and not re.fullmatch(r'/user/[a-zA-Z0-9_-]+/?', parsed.path):
+            raise ValueError('expected Douyin profile')
+        if platform == 'xhs' and not re.fullmatch(r'/user/profile/[a-zA-Z0-9_-]+/?', parsed.path):
+            raise ValueError('expected Xiaohongshu profile')
+    return urls
 
 
 def _live(day, config):
@@ -190,7 +194,23 @@ def _prior(previous, day):
             if isinstance(row, dict) and row.get('id') in NAMES}
 
 
-def collect_sentiment(day, *, skip=False, previous=None, captures=None):
+def _counterpoint(counts, breadth):
+    total = sum(counts.values())
+    if total < 5 or not breadth:
+        return '样本或同日全市场宽度不足，情绪背离待核。'
+    advancing, declining = (breadth.get(key) for key in ('up', 'down'))
+    if any(type(v) is not int or v < 0 for v in (advancing, declining)) or not advancing + declining:
+        return '同日全市场宽度缺失，情绪背离待核。'
+    bullish, bearish = counts['bull'] / total, counts['bear'] / total
+    advance_share = advancing / (advancing + declining)
+    if bullish >= .6 and advance_share <= .4:
+        return f'样本中 {bullish:.0%} 看多，同日有涨跌的股票中 {1-advance_share:.0%} 下跌，两者方向背离。'
+    if bearish >= .6 and advance_share >= .6:
+        return f'样本中 {bearish:.0%} 看空，同日有涨跌的股票中 {advance_share:.0%} 上涨，两者方向背离。'
+    return '样本情绪与同日盘面未达到预设背离阈值。'
+
+
+def collect_sentiment(day, *, skip=False, previous=None, captures=None, breadth=None):
     if skip:
         return _empty('已跳过本机舆情采集', {p: 'skipped' for p in NAMES})
     signature = {}
@@ -246,6 +266,7 @@ def collect_sentiment(day, *, skip=False, previous=None, captures=None):
             tracks=tracks, coverage='complete' if complete else 'partial', comparable=comparable, sampleMethod=method))
         scores.append(100 * (counts['bull'] + .5 * counts['flat']) / total)
         details.append((platform, bull))
+        diagnosis = _counterpoint(counts, breadth)
         for item in samples[:3]:
             direction, likes = item['direction'], item['likes']
             tag, css = {'bull': ('偏多', 'up-tag'), 'flat': ('中性或分歧', 'stale'),
@@ -253,7 +274,7 @@ def collect_sentiment(day, *, skip=False, previous=None, captures=None):
             like_text = f'{likes} 赞' if type(likes) is int and 0 <= likes <= 100_000_000 else '赞数暂缺'
             posts.append(dict(platform=platform, platName=name, pillClass=platform,
                 kolContext=CONTEXT[item['track']], author='匿名用户', time=item['time'], likes=like_text,
-                sentimentTag=tag, sentimentTone=css, quote=item['quote'], aiDiag='按评论方向词归类 · ' + tag))
+                sentimentTag=tag, sentimentTone=css, quote=item['quote'], aiDiag=diagnosis))
     if not scores:
         return _empty('本次未取得符合时间和去噪条件的评论', status)
     score = round(sum(scores) / len(scores))

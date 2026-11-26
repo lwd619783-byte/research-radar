@@ -134,6 +134,67 @@ class ShortTermCollectorTests(unittest.TestCase):
         self.assertEqual(collector.main(['--offline-fixture', '--output', str(self.path)]), 1)
         self.assertEqual(self.path.read_bytes(), b'{corrupt')
 
+    def test_same_day_partial_rerun_cannot_replace_existing_better_snapshot(self):
+        command = ['--offline-fixture', '--output', str(self.path)]
+        with redirect_stdout(io.StringIO()):
+            self.assertEqual(collector.main(command), 0)
+        earlier_bytes = self.path.read_bytes()
+        degraded = copy.deepcopy(self.fixture)
+        degraded['market'].update(marketComplete=False, universeComplete=False, concepts=[])
+        source = self.path.with_name('partial.json')
+        source.write_text(json.dumps(degraded), 'utf-8')
+        receipts = self.path.parent / 'receipts'
+        self.assertEqual(collector.main(['--offline-fixture', str(source), '--output', str(self.path),
+                                         '--receipt-dir', str(receipts)]), 3)
+        self.assertEqual(self.path.read_bytes(), earlier_bytes)
+        (receipt_file,) = receipts.rglob('*.json')
+        receipt = json.loads(receipt_file.read_bytes())
+        self.assertEqual(receipt['outcome'], 'kept_better_same_day')
+        self.assertIn('breadth.turnover', receipt['keptEvidence'])
+
+    def test_staged_evening_waits_for_sentiment_refresh_and_final_time(self):
+        from short_term_collector.ego_sentiment import collect_sentiment
+        when = datetime.combine(self.day, time(18, 15), collector.BJ)
+        stages = []
+        raw = copy.deepcopy(self.fixture['market'])
+        captured = collect_sentiment(self.day, captures=self.fixture['egoCaptures'])
+
+        def wait(day, target):
+            nonlocal when
+            self.assertEqual(day, self.day)
+            stages.append(target)
+            when = datetime.combine(day, target, collector.BJ)
+
+        receipts = self.path.parent / 'receipts'
+        with (patch.object(collector, 'now_bj', lambda: when),
+              patch.object(collector, 'gather_local', return_value=(raw, self.fixture['radar'])),
+              patch.object(collector, 'wait_until', side_effect=wait),
+              patch.object(collector, 'refresh_disclosures') as refresh,
+              patch('short_term_collector.ego_sentiment.collect_sentiment', return_value=captured),
+              redirect_stdout(io.StringIO())):
+            self.assertEqual(collector.main(['--evening', '--output', str(self.path),
+                                             '--receipt-dir', str(receipts)]), 0)
+        self.assertEqual(stages, [time(20,15), time(20,28), time(20,30)])
+        refresh.assert_called_once()
+        snapshot = json.loads(self.path.read_bytes())
+        self.assertEqual(snapshot['generatedAt'], self.clock.isoformat(timespec='seconds'))
+        (receipt_file,) = receipts.rglob('*.json')
+        receipt = json.loads(receipt_file.read_bytes())
+        self.assertTrue(receipt['onTime'])
+        self.assertEqual(receipt['coverage']['egoCoverage'], 'complete')
+        self.assertEqual(receipt['dataSHA256'], collector.data_digest(snapshot))
+
+    def test_late_announcement_fetch_does_not_delay_the_final_slot(self):
+        final_clock = datetime.combine(self.day, time(20, 30), collector.BJ)
+        mine = {'title': '减持计划窗口', 'detail': '同日已核候选窗口'}
+        collected = {'mines': [mine], 'warnings': []}
+        with (patch.object(collector, 'now_bj', return_value=final_clock),
+              patch.object(collector, 'refresh_disclosures') as refresh):
+            self.assertFalse(collector.refresh_before_final(self.day, collected, PublicHttp()))
+        refresh.assert_not_called()
+        self.assertEqual(collected['mines'], [mine])
+        self.assertIn('巨潮晚间复核超时', collected['warnings'])
+
     def test_dates_preserve_only_latest_ten_and_replace_repeated_session(self):
         history = None
         for stamp in ('2026-11-09','2026-11-10','2026-11-11','2026-11-12','2026-11-13',

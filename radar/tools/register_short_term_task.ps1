@@ -5,7 +5,9 @@ param(
     [Parameter(Mandatory, ParameterSetName = 'Run')][switch]$RunCollector,
     [string]$PythonPath = (Get-Command python.exe -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source,
     [string]$RadarData,
-    [switch]$SkipEgo
+    [switch]$SkipEgo,
+    [string]$ShadowDirectory,
+    [datetime]$Through
 )
 
 $ErrorActionPreference = 'Stop'
@@ -14,6 +16,15 @@ $repo = (Get-Item -LiteralPath $PSScriptRoot).Parent.Parent.FullName
 $collector = Join-Path $PSScriptRoot 'collect_short_term.py'
 $python = (Get-Item -LiteralPath $PythonPath -ErrorAction Stop).FullName
 if ($RadarData) { $RadarData = (Get-Item -LiteralPath $RadarData -ErrorAction Stop).FullName }
+if ($ShadowDirectory) {
+    $ShadowDirectory = [IO.Path]::GetFullPath($ShadowDirectory)
+    $checkoutPrefix = $repo.TrimEnd('\') + '\'
+    if ($ShadowDirectory -eq $repo -or $ShadowDirectory.StartsWith($checkoutPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+        throw 'The shadow directory must be outside the source checkout.'
+    }
+    $taskName = 'ResearchRadar-ShortTerm-Shadow'
+}
+if ($Through -and -not $ShadowDirectory) { throw 'A finite end date is only supported for the shadow task.' }
 
 function Beijing-Now {
     return [TimeZoneInfo]::ConvertTimeBySystemTimeZoneId([DateTimeOffset]::UtcNow, 'China Standard Time')
@@ -22,16 +33,26 @@ function Beijing-Now {
 if ($RunCollector) {
     if (-not $PSCmdlet.ShouldProcess($repo, 'Collect local market snapshot')) { return }
     $started = Beijing-Now
-    $logFolder = Join-Path $env:LOCALAPPDATA 'ResearchRadar\short-term'
+    $logFolder = if ($ShadowDirectory) { $ShadowDirectory } else { Join-Path $env:LOCALAPPDATA 'ResearchRadar\short-term' }
     New-Item -ItemType Directory -Path $logFolder -Force | Out-Null
     $log = Join-Path $logFolder ($started.ToString('yyyy-MM') + '.log')
     $day = $started.ToString('yyyy-MM-dd')
     $rc = 0
     $state = 'before_target'
-    if ($started.TimeOfDay -ge [TimeSpan]::FromMinutes(1230)) {
-        $cli = @('-B', $collector, '--date', $day)
+    if ($Through -and $started.Date -gt $Through.Date) { return }
+    if ($started.TimeOfDay -ge [TimeSpan]::FromMinutes(1050)) {
+        $cli = @('-B', $collector, '--date', $day, '--evening', '--receipt-dir', (Join-Path $logFolder 'runs'))
         if ($RadarData) { $cli += @('--radar-data', $RadarData) }
         if ($SkipEgo) { $cli += '--skip-ego' }
+        if ($ShadowDirectory) {
+            $cli += @('--output', (Join-Path $ShadowDirectory 'history.json'), '--preview-dir', (Join-Path $ShadowDirectory 'pages'))
+            $whitelist = Join-Path $ShadowDirectory 'kol.toml'
+            $calendar = Join-Path $ShadowDirectory 'jin10-week.json'
+            if (Test-Path -LiteralPath $whitelist -PathType Leaf) { $env:SHORT_TERM_KOL_WHITELIST_FILE = $whitelist }
+            if (-not $env:JIN10_MCP_TOKEN -and (Test-Path -LiteralPath $calendar -PathType Leaf)) {
+                $env:SHORT_TERM_JIN10_CALENDAR_FILE = $calendar
+            }
+        }
         Push-Location -LiteralPath $repo
         try {
             # Provider output stays out of scheduler logs, including native stderr.
@@ -39,7 +60,7 @@ if ($RunCollector) {
             & $python @cli *> $null
             $rc = $LASTEXITCODE
             if ($null -eq $rc) { $rc = 1 }
-            $state = switch ($rc) { 0 { 'finished_or_closed' } 2 { 'stale' } default { 'failed' } }
+            $state = switch ($rc) { 0 { 'read_receipt' } 2 { 'stale' } 3 { 'kept_better_same_day' } default { 'failed' } }
         } finally {
             Pop-Location
             $ErrorActionPreference = 'Stop'
@@ -56,14 +77,18 @@ if (-not (Test-Path -LiteralPath $psExe)) { $psExe = Join-Path $PSHOME 'powershe
 $actionArgs = '-NoLogo -NoProfile -NonInteractive -WindowStyle Hidden -File "{0}" -RunCollector -PythonPath "{1}"' -f $PSCommandPath, $python
 if ($RadarData) { $actionArgs += ' -RadarData "{0}"' -f $RadarData }
 if ($SkipEgo) { $actionArgs += ' -SkipEgo' }
+if ($ShadowDirectory) { $actionArgs += ' -ShadowDirectory "{0}"' -f $ShadowDirectory }
+if ($Through) { $actionArgs += ' -Through {0:yyyy-MM-dd}' -f $Through }
 
-$startDate = (Beijing-Now).ToString('yyyy-MM-dd') + 'T20:30:00+08:00'
+$startDate = (Beijing-Now).ToString('yyyy-MM-dd') + 'T18:15:00+08:00'
+$endBoundary = if ($Through) { '<EndBoundary>{0:yyyy-MM-dd}T00:00:00+08:00</EndBoundary>' -f $Through.AddDays(1) } else { '' }
 $sid = [Security.Principal.WindowsIdentity]::GetCurrent().User.Value
 $xml = @"
 <Task version="1.4" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
-  <RegistrationInfo><Description>Research Radar local evening snapshot</Description></RegistrationInfo>
+  <RegistrationInfo><Description>Research Radar local preparation and 20:30 snapshot</Description></RegistrationInfo>
   <Triggers><CalendarTrigger>
     <StartBoundary>$startDate</StartBoundary>
+    $endBoundary
     <Enabled>true</Enabled>
     <ScheduleByDay><DaysInterval>1</DaysInterval></ScheduleByDay>
   </CalendarTrigger></Triggers>
@@ -86,7 +111,7 @@ $xml = @"
 </Task>
 "@
 if ($EmitXml) { Write-Output $xml; return }
-if ($PSCmdlet.ShouldProcess($taskName, 'Register local 20:30 Beijing time scheduled task')) {
+if ($PSCmdlet.ShouldProcess($taskName, 'Register local preparation for the 20:30 Beijing snapshot')) {
     Register-ScheduledTask -TaskName $taskName -Xml $xml -Force:$Replace -ErrorAction Stop | Out-Null
     Write-Output "Registered $taskName"
 }

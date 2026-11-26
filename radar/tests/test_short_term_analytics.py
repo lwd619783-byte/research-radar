@@ -72,8 +72,33 @@ class ShortTermAnalyticsTests(unittest.TestCase):
         matrix = {q['key']:[r['name'] for r in q['items']] for q in day['matrix']}
         self.assertEqual(matrix, {'q-res':['光电配件', '光互连'], 'q-dip':['光模块新材料'],
                                   'q-pulse':['运输'], 'q-kill':['物流']})
-        self.assertIn('16/20', day['concepts']['down'][0]['radarLink'])
+        self.assertEqual(day['concepts']['down'][0]['radarLink'], '光互连 · 16/20 · 卡点：光模块')
+        self.assertIsNone(day['industries']['up'][0]['radarLink'])
+        self.assertIsNone(day['concepts']['up'][0]['radarLink'])
         self.assertIsNone(day['industries']['down'][0]['radarLink'])
+
+    def test_chokepoints_from_segment_or_verified_member_and_low_score_deep_decline(self):
+        raw = observations()
+        raw['concepts'] = [quote('GN1', 'CPO器件', .06), quote('GN2', '光电部件', .04, constituents=['SZ000002']),
+                           quote('GN3', '运输设备', -.07), quote('GN4', '铁路轴承', -.06),
+                           quote('GN5', 'XCPO设备', .03)]
+        radar = {**R, 'chokepoints': [{'name':'光模块', 'seg':'CPO、光纤', 'ind':'光互连'},
+                                      {'name':'铁路轴承', 'ind':'运输'}],
+                 'companies': [{**R['companies'][0], 'cp':'光模块'}]}
+        day = build_day(TUE, raw, radar, None)
+        links = {r['name']:r['radarLink'] for r in day['concepts']['up'] + day['concepts']['down']}
+        self.assertEqual(links['CPO器件'], links['光电部件'])
+        self.assertIn('光模块', links['光电部件'])
+        self.assertIsNone(links['XCPO设备'])
+        self.assertIsNone(links['铁路轴承'])
+        killed = {r['name'] for q in day['matrix'] if q['key'] == 'q-kill' for r in q['items']}
+        self.assertIn('运输设备', killed)
+        self.assertNotIn('铁路轴承', killed)
+        raw['concepts'][1]['constituentsComplete'] = False
+        day = build_day(TUE, raw, radar, None)
+        partial = next(r for r in day['concepts']['up'] if r['name'] == '光电部件')
+        self.assertIsNone(partial['radarLink'])
+        self.assertFalse(any(r['name'] == '光电部件' for q in day['matrix'] for r in q['items']))
 
     def test_cycle_uses_prior_cohort_identity_and_absence_is_not_zero(self):
         raw = observations()
@@ -92,6 +117,30 @@ class ShortTermAnalyticsTests(unittest.TestCase):
         self.assertIn('+1.20%', day['timeline'][0]['detail'])
         raw['intraday'] = None
         self.assertEqual([t['time'] for t in build_day(TUE, raw, R, None)['timeline']], ['15:00','17:30','20:15'])
+
+    def test_rotation_compares_two_adjacent_observations_within_one_board_universe(self):
+        raw = observations()
+        raw['intraday'] = [
+            dict(date=TUE.isoformat(), time=t, code=code, name=name, pct=pct, source='板块日内行情')
+            for t, left, right in [('10:30', .03, -.02), ('13:30', -.01, .02), ('15:00', .01, -.005)]
+            for code, name, pct in [('BK01', '光互连', left), ('BK02', '物流', right)]]
+        nodes = {n['time']:n['detail'] for n in build_day(TUE, raw, R, None)['timeline']}
+        self.assertIn('相较 10:30，同组 2 个行业样本中领涨由光互连转为物流，领跌由物流转为光互连', nodes['13:30'])
+        self.assertIn('相较 13:30，同组 2 个行业样本中领涨由物流转为光互连', nodes['15:00'])
+        self.assertNotIn('转为', nodes['10:30'])
+
+        for case, changes in [('missing', {'pct':None}), ('wrong_day', {'date':MON.isoformat()}),
+                              ('other_catalog', {'code':'GN01', 'name':'光模块新材料'}),
+                              ('unknown_code', {'code':'other'}), ('source', {'source':'其他口径'}),
+                              ('tied', {'pct':-.01})]:
+            with self.subTest(case=case):
+                changed = [*raw['intraday']]
+                changed[3] = {**changed[3], **changes}
+                day = build_day(TUE, {**raw, 'intraday':changed}, R, None)
+                self.assertNotIn('转为', ' '.join(node['detail'] for node in day['timeline']))
+        conflicting = [*raw['intraday'], {**raw['intraday'][3], 'pct':.05}]
+        day = build_day(TUE, {**raw, 'intraday':conflicting}, R, None)
+        self.assertNotIn('转为', ' '.join(node['detail'] for node in day['timeline']))
 
     def test_anchors_pass_partial_fail_missing_data_and_changed_claim(self):
         monday = build_day(MON, observations(MON), R, None)

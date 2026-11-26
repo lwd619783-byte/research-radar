@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {discoverWorks, datedReview, extractComments, readPlatforms}
+import {approvedHotAuthor, discoverWorks, datedReview, extractComments, readPlatforms}
   from '../../../../tools/short_term_collector/ego_reader.mjs';
 
 const date = '2026-11-24';
@@ -46,6 +46,7 @@ class FakePage {
       return args.platform === 'dy' ? ['/video/123456'] : ['/explore/1234567890abcdef'];
     }
     if (fn === datedReview) return true;
+    if (fn === approvedHotAuthor) return args.authors.length > 0;
     assert.fail('Unexpected evaluation in navigation replay');
   }
 

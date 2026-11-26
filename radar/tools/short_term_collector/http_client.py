@@ -101,5 +101,8 @@ class PublicHttp:
     def get_text(self, url, params=None, encoding='utf-8', headers=None):
         return self._request(url, params=params, headers=headers).decode(encoding)
 
+    def get_bytes(self, url, headers=None):
+        return self._request(url, headers=headers)
+
     def post_form_json(self, url, params, headers=None):
         return json.loads(self._request(url, form=params, headers=headers))

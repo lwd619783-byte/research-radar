@@ -98,6 +98,17 @@ class SentimentTests(unittest.TestCase):
             with patch.dict(os.environ, {'GITHUB_ACTIONS':'true'}, clear=True):
                 self.assertIsNone(ego.collect_sentiment(DAY)['score'])
 
+    def test_counterpoint_uses_actual_breadth_and_adequate_anonymous_samples(self):
+        rows = [dict(text=f'今天继续看多，承接力度观察样本 {i}', date=str(DAY), time='19:00', track='community')
+                for i in range(5)]
+        dataset = {'em': {'status': 'ok', 'comments': rows}}
+        compared = ego.collect_sentiment(DAY, captures=dataset, breadth={'up': 100, 'down': 300})
+        self.assertIn('75% 下跌，两者方向背离', compared['posts'][0]['aiDiag'])
+        self.assertIn('待核', ego.collect_sentiment(DAY, captures=dataset)['posts'][0]['aiDiag'])
+        dataset['em']['comments'].pop()
+        small = ego.collect_sentiment(DAY, captures=dataset, breadth={'up': 100, 'down': 300})
+        self.assertIn('待核', small['posts'][0]['aiDiag'])
+
     def test_bundled_config_and_safe_esm_entry(self):
         with patch.dict(os.environ, {}, clear=True):
             config = ego._validated_config()
@@ -123,9 +134,9 @@ def replay_html():
     """Execute the shipped extractComments function in real Chromium, entirely offline."""
     from playwright.sync_api import sync_playwright
     reader = (RADAR / 'tools/short_term_collector/ego_reader.mjs').as_uri()
-    program = (f'import {{extractComments,discoverWorks}} from {json.dumps(reader)};'
-               'process.stdout.write(JSON.stringify([extractComments.toString(),discoverWorks.toString()]))')
-    extractor, discovery = json.loads(subprocess.check_output(
+    program = (f'import {{extractComments,discoverWorks,approvedHotAuthor}} from {json.dumps(reader)};'
+               'process.stdout.write(JSON.stringify([extractComments,discoverWorks,approvedHotAuthor].map(f=>f.toString())))')
+    extractor, discovery, author_check = json.loads(subprocess.check_output(
         ['node', '--input-type=module', '-e', program], encoding='utf-8'))
     raw = {}
     with sync_playwright() as pw:
@@ -161,6 +172,14 @@ def replay_html():
             <a href="http://xueqiu.com/456/789">无 HTTPS</a>'''))
         page.goto(url)
         assert page.evaluate('(' + discovery + ')', dict(platform='xq',track='community')) == ['/123/456']
+        media_url = 'https://www.douyin.com/video/42'
+        page.route(media_url, lambda route: route.fulfill(content_type='text/html', body='''
+            <div data-e2e="video-author-name"><a href="/user/ACTUAL">作品作者</a></div>
+            <a href="/user/OTHER">相关推荐</a>'''))
+        page.goto(media_url)
+        observed = page.evaluate('(' + author_check + ')', dict(platform='dy', authors=['https://www.douyin.com/user/ACTUAL']))
+        unrelated = page.evaluate('(' + author_check + ')', dict(platform='dy', authors=['https://www.douyin.com/user/OTHER']))
+        assert observed and not unrelated
         browser.close()
     result = ego.collect_sentiment(DAY, captures=raw)
     assert len(result['platforms']) == len(result['posts']) == result['sampleCount'] == 5
