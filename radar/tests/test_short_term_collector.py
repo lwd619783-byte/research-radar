@@ -194,7 +194,8 @@ class ShortTermCollectorTests(unittest.TestCase):
             when = datetime.combine(day, target, collector.BJ)
 
         receipts = self.path.parent / 'receipts'
-        with (patch.object(collector, 'now_bj', lambda: when),
+        with (patch.dict(collector.os.environ, {}, clear=True),
+              patch.object(collector, 'now_bj', lambda: when),
               patch.object(collector, 'gather_local', return_value=(raw, self.fixture['radar'])),
               patch.object(collector, 'wait_until', side_effect=wait),
               patch.object(collector, 'refresh_disclosures') as refresh,
