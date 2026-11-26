@@ -30,6 +30,36 @@ function Beijing-Now {
     return [TimeZoneInfo]::ConvertTimeBySystemTimeZoneId([DateTimeOffset]::UtcNow, 'China Standard Time')
 }
 
+function Invoke-LocalCollector([string]$Executable, [string]$WorkingDirectory, [string[]]$CliArguments) {
+    $startInfo = [Diagnostics.ProcessStartInfo]::new($Executable)
+    $startInfo.WorkingDirectory = $WorkingDirectory
+    $startInfo.UseShellExecute = $false
+    $startInfo.CreateNoWindow = $true
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+    if ($startInfo.PSObject.Properties['ArgumentList']) {
+        foreach ($arg in $CliArguments) { $startInfo.ArgumentList.Add($arg) }
+    } else {
+        # Scheduled arguments are switches, dates and Windows paths. The
+        # latter cannot contain a literal quote and may contain spaces.
+        $startInfo.Arguments = ($CliArguments.ForEach({ '"' + ($_ -replace '(\\+)$', '$1$1') + '"' })) -join ' '
+    }
+    $process = [Diagnostics.Process]::new()
+    $process.StartInfo = $startInfo
+    try {
+        if (-not $process.Start()) { throw 'Could not start the local collector.' }
+        # Drain both anonymous pipes without saving any provider output.
+        $stdout = $process.StandardOutput.BaseStream.CopyToAsync([IO.Stream]::Null)
+        $stderr = $process.StandardError.BaseStream.CopyToAsync([IO.Stream]::Null)
+        $process.WaitForExit()
+        [void]$stdout.GetAwaiter().GetResult()
+        [void]$stderr.GetAwaiter().GetResult()
+        return $process.ExitCode
+    } finally {
+        $process.Dispose()
+    }
+}
+
 if ($RunCollector) {
     if (-not $PSCmdlet.ShouldProcess($repo, 'Collect local market snapshot')) { return }
     $started = Beijing-Now
@@ -53,17 +83,12 @@ if ($RunCollector) {
                 $env:SHORT_TERM_JIN10_CALENDAR_FILE = $calendar
             }
         }
-        Push-Location -LiteralPath $repo
         try {
-            # Provider output stays out of scheduler logs, including native stderr.
-            $ErrorActionPreference = 'Continue'
-            & $python @cli *> $null
-            $rc = $LASTEXITCODE
-            if ($null -eq $rc) { $rc = 1 }
+            $rc = Invoke-LocalCollector $python $repo $cli
             $state = switch ($rc) { 0 { 'read_receipt' } 2 { 'stale' } 3 { 'kept_better_same_day' } default { 'failed' } }
-        } finally {
-            Pop-Location
-            $ErrorActionPreference = 'Stop'
+        } catch {
+            $state = 'launcher_failed'
+            $rc = 1
         }
     }
     Add-Content -LiteralPath $log -Encoding ASCII -Value (
