@@ -13,11 +13,12 @@ const platforms = {
 };
 
 class FakePage {
-  constructor({fail, challenge, clock, latency = () => 0}) {
+  constructor({fail, challenge, clock, latency = () => 0, forumWork = null}) {
     this.fail = fail;
     this.challenge = challenge;
     this.clock = clock;
     this.latency = latency;
+    this.forumWork = forumWork;
     this.address = 'about:blank';
     this.navigations = new Map();
   }
@@ -42,14 +43,19 @@ class FakePage {
       if (this.challenge?.platform === args.platform) {
         return {status: this.challenge.status, comments: []};
       }
+      if (args.platform === 'em' && this.forumWork && !this.address.endsWith(this.forumWork)) {
+        return {status: 'ok', comments: []};
+      }
       return {status: 'ok', counts: {rows: 1, dated: 1, inWindow: 1},
         comments: [{text: '离线复盘评论 ' + args.track, track: args.track, date, time: '19:20'}]};
     }
     if (fn === discoverWorks) {
+      if (args.platform === 'em' && this.forumWork) return [this.forumWork];
       return args.platform === 'dy' ? ['/video/123456'] : ['/explore/1234567890abcdef'];
     }
     if (fn === datedReview) return true;
     if (fn === approvedHotAuthor) return args.authors.length > 0;
+    if (this.forumWork && args === '[aria-label="展开评论"]') return false;
     assert.fail('Unexpected evaluation in navigation replay');
   }
 
@@ -115,6 +121,17 @@ test('a slow community entrance can finish one navigation and reach comments', a
   assert.equal(result.em.status, 'ok');
   assert.equal(result.em.trackDetails.community.navigationRetries, 0);
   assert.equal(result.em.trackDetails.community.inWindow, 1);
+});
+
+test('a discovered public community article can open with its own navigation budget', async () => {
+  const forumWork = '/news,zssh000001,123456.html';
+  const destination = new URL(forumWork, platforms.em.seeds[0]).href;
+  const {result, page} = await replay({fail: () => false, forumWork,
+    latency: address => address === destination ? 7000 : 0});
+  assert.deepEqual(page.navigations.get(destination), [15000]);
+  assert.equal(result.em.status, 'ok');
+  assert.equal(result.em.trackDetails.community.works, 1);
+  assert.equal(result.em.comments.length, 1);
 });
 
 for (const status of ['login_required', 'captcha_required']) {

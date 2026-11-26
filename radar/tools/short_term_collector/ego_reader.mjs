@@ -361,16 +361,25 @@ async function readPlatform(task, page, platform, spec, date) {
         }
         detail.links=Math.max(detail.links, links.length);
         if(links.length>=6)truncated=true;
+        const communityBase = track === 'community' ? await active.url() : null;
         for (const [index,path] of links.entries()) {
           if (worksRead>=LIMIT_PER_TRACK || Date.now()>=deadline) { truncated=true; break; }
           let preserve=false;
           try {
-            if (index) { active = page; await go(seed, false); }
-            // Follow the displayed, allowlisted work link so site navigation stays inside Ego.
-            detail.stage='work_navigation';
-            const receipt = await active.click('loc=css:a[href*="'+path+'"] >> nth=0',{
-              label:'打开复盘讨论',timeout:budget(2800)});
-            if (receipt?.popups?.length) active=task.page(receipt.popups[0].label);
+            if (communityBase) {
+              const work = safeUrl(platform, new URL(path, communityBase).href);
+              if (!work) throw Error('off_platform');
+              active = page;
+              detail.stage='work_navigation';
+              await active.goto(work.href, {timeout:budget(15000)});
+            } else {
+              if (index) { active = page; await go(seed, false); }
+              // Follow signed social links on the page without exporting their query strings.
+              detail.stage='work_navigation';
+              const receipt = await active.click('loc=css:a[href*="'+path+'"] >> nth=0',{
+                label:'打开复盘讨论',timeout:budget(2800)});
+              if (receipt?.popups?.length) active=task.page(receipt.popups[0].label);
+            }
             checkDestination(platform,await active.url());
             const id = path.split('/').filter(Boolean).pop();
             await active.waitForFunction(({path,id}) => location.pathname === path ||
