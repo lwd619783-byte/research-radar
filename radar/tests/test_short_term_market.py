@@ -387,6 +387,74 @@ class MarketTests(unittest.TestCase):
         self.assertIn('market_coverage_partial',raw['warnings'])
         self.assertEqual({r['code'] for r in raw['stocks']},{'000001.SZ','600000.SH'})
 
+    def test_final_directory_recovers_only_missing_quotes_with_core_first(self):
+        for recover_all in (True,False):
+            http = MarketHTTP()
+            initial_json = http.get_json
+            calls = []
+            def directory(url,params):
+                if url == market.CLIST and params['fs'] == market.ALL_A:
+                    return {'data':{'total':4,'diff':[{'f12':c,'f26':20200101} for c in
+                                                    ('000001','600000','920001','600002')]}}
+                return initial_json(url,params)
+            def read(url,**kwargs):
+                if 'qt.gtimg.cn/q=' in url:
+                    batch = url.split('q=')[1].split(',')
+                    calls.append(batch)
+                    if len(calls)==1:
+                        return quote('bj920001')
+                    return '\n'.join(quote(s,stamp='20261123150100' if
+                                          s=='sz000001' else '20261124150100') for s in batch)
+                if 'hq.sinajs.cn/list=' in url and len(calls)==3 and recover_all:
+                    self.assertTrue(url.endswith('=sz000001'))
+                    cells = ['0'] * 32
+                    for i,v in {0:'有效补采',2:'10',3:'10.2',9:'1200000000',30:str(DAY),31:'15:03:01'}.items():
+                        cells[i] = v
+                    return 'var hq_str_sz000001="' + ','.join(cells) + '";'
+                raise OSError()
+            radar = {'companies':[{'code':'SH600000','mkt':'A股'}]}
+            with (patch.object(market,'open_tdx',return_value=Tdx()),
+                  patch.object(http,'get_text',side_effect=read),
+                  patch.object(http,'get_json',side_effect=directory)):
+                raw = market.collect_market(DAY,radar,http)
+            self.assertEqual(calls,[['sz000001','sh600000','bj920001'],['sh600002'],['sh600000','sz000001']])
+            self.assertEqual(raw['coreQuotes'],1)
+            self.assertEqual(raw['marketComplete'],recover_all)
+            self.assertEqual('up' in raw['breadth'],recover_all)
+            self.assertEqual('market_coverage_partial' in raw['warnings'],not recover_all)
+            if recover_all:
+                self.assertEqual(raw['breadth']['turnoverCny'],4*1_200_000_000)
+                self.assertTrue(all(r['date']==str(DAY) for r in raw['stocks']))
+                self.assertIn('有效补采',{r['name'] for r in raw['stocks']})
+
+    def test_missing_quotes_retry_skips_proven_halts_and_respects_budget(self):
+        def run(budget, *, halts=('000001.SZ',), batch=40):
+            http = MarketHTTP()
+            calls = []
+            def read(url,**kwargs):
+                if 'qt.gtimg.cn/q=' in url:
+                    calls.append(url.split('q=')[1].split(','))
+                    return quote('bj920001') if len(calls)==1 else quote('sh600000')
+                raise OSError()
+            with (patch.object(market,'open_tdx',return_value=Tdx()),
+                  patch.object(market,'suspension_list',return_value=set(halts)),
+                  patch.object(market,'RECOVERY_BATCH_SIZE',batch),
+                  patch.object(market,'RECOVERY_MAX_BATCHES',1),
+                  patch.object(market,'RECOVERY_SECONDS',budget),
+                  patch.object(http,'get_text',side_effect=read)):
+                return market.collect_market(DAY,{},http), calls
+        recovered,calls = run(150)
+        self.assertEqual(calls[-1],['sh600000'])
+        self.assertTrue(recovered['marketComplete'])
+        self.assertEqual(recovered['breadth']['up'],2)
+        expired,calls = run(0)
+        self.assertEqual(len(calls),1)
+        self.assertFalse(expired['marketComplete'])
+        self.assertNotIn('turnoverCny',expired['breadth'])
+        capped,calls = run(150,halts=(),batch=1)
+        self.assertEqual(calls[1:],[['sz000001']])
+        self.assertFalse(capped['marketComplete'])
+
     def test_wrong_date_pool_rejected_even_with_explicit_requested_date(self):
         http = MarketHTTP()
         with patch.object(http,'get_json',return_value={'data':{'qdate':'20261124','tc':0,'pool':[]}}):

@@ -6,6 +6,7 @@ from html.parser import HTMLParser
 import json
 import math
 import re
+import time
 
 from market_calendar import calendar_data, is_session
 
@@ -15,6 +16,11 @@ KLINE = 'https://push2his.eastmoney.com/api/qt/stock/kline/get'
 ALL_A = 'm:0 t:6,m:0 t:80,m:1 t:2,m:1 t:23,m:0 t:81 s:2048'
 BEIJING = 'm:0 t:81 s:2048'
 TARGET_TIMES = {'09:25', '10:30', '13:30', '15:00'}
+RECOVERY_BATCH_SIZE = 40
+RECOVERY_MAX_BATCHES = 24
+RECOVERY_SECONDS = 150
+# PublicHttp's two 8-second attempts and its one-second pause on these feeds.
+QUOTE_REQUEST_RESERVE = 17
 SINA_MARKET = 'https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.'
 SINA_HEADERS = {'Referer': 'https://finance.sina.com.cn/'}
 SW_API = 'https://www.swsresearch.com/institute-sw/api/'
@@ -810,6 +816,9 @@ def open_tdx():
 
 def collect_market(day, radar, http):
     warnings = set()
+    started = datetime.now(BJ)
+    sentiment_at = started.replace(hour=20, minute=15, second=0, microsecond=0)
+    staged = started.date() == day and started < sentiment_at
 
     def attempt(code, work, fallback=None):
         try:
@@ -848,17 +857,19 @@ def collect_market(day, radar, http):
                 covered = True
                 warnings.difference_update({'beijing_inventory_missing','mainland_inventory_incomplete'})
 
+        def read_batch(ids, deadline=None):
+            url = 'https://qt.gtimg.cn/q=' + ','.join(tencent_id(s) for s in ids)
+            text = attempt('tencent_batch_missing', lambda:http.get_text(url, encoding='gb18030'), '')
+            quotes.update(quote_rows(text, set(ids), day))
+            unresolved = [s for s in ids if s not in quotes]
+            if unresolved and (deadline is None or time.monotonic() + QUOTE_REQUEST_RESERVE < deadline):
+                quotes.update(attempt('sina_quotes_missing', lambda:sina_quotes(http, unresolved, day), {}))
+
         queried = set()
         def fill_quotes():
-            requested = sorted((universe.keys() | core) - queried)
+            requested = sorted((universe.keys() | core) - queried - quotes.keys())
             for start in range(0, len(requested), 60):
-                ids = requested[start:start+60]
-                url = 'https://qt.gtimg.cn/q=' + ','.join(tencent_id(s) for s in ids)
-                text = attempt('tencent_batch_missing', lambda:http.get_text(url, encoding='gb18030'), '')
-                quotes.update(quote_rows(text, set(ids), day))
-                missing_ids = sorted(set(ids) - quotes.keys())
-                if missing_ids:
-                    quotes.update(attempt('sina_quotes_missing', lambda:sina_quotes(http, missing_ids, day), {}))
+                read_batch(requested[start:start+60])
             queried.update(requested)
             for item in em_rows:
                 row = em_closed_stock(item, day)
@@ -870,12 +881,26 @@ def collect_market(day, radar, http):
             reconcile_inventory()
         fill_quotes()
         missing = universe.keys() - quotes.keys()
-        halted = attempt('suspensions_missing', lambda:suspension_list(http, day), set()) if missing else set()
+        need_halts = missing or core - quotes.keys()
+        halted = attempt('suspensions_missing', lambda:suspension_list(http, day), set()) if need_halts else set()
         if missing - halted and not used_directory:
             # Delisted names can remain in the TDX directory. Bind any revision to
             # an independent complete directory; request newly discovered names too.
             reconcile_inventory()
             fill_quotes()
+        # Revisit only unresolved members of the final roster (and tracked core),
+        # after already dated quotes and proven full-day halts have been removed.
+        unresolved = sorted((universe.keys() | core) - quotes.keys() - halted,
+                            key=lambda sym:(sym not in core, sym))
+        budget = RECOVERY_SECONDS
+        if staged:
+            budget = min(budget, (sentiment_at - datetime.now(BJ)).total_seconds())
+        deadline = time.monotonic() + budget
+        limit = min(len(unresolved), RECOVERY_BATCH_SIZE * RECOVERY_MAX_BATCHES)
+        for start in range(0, limit, RECOVERY_BATCH_SIZE):
+            if time.monotonic() + QUOTE_REQUEST_RESERVE >= deadline:
+                break
+            read_batch(unresolved[start:start+RECOVERY_BATCH_SIZE], deadline)
         for sym, row in quotes.items():
             row.update(universe.get(sym, {}))
             row['inMarketUniverse'] = sym in universe
