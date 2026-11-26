@@ -814,12 +814,7 @@ def open_tdx():
     return Quotes.factory(market='std', timeout=4, heartbeat=False, auto_retry=False)
 
 
-def collect_market(day, radar, http):
-    warnings = set()
-    started = datetime.now(BJ)
-    sentiment_at = started.replace(hour=20, minute=15, second=0, microsecond=0)
-    staged = started.date() == day and started < sentiment_at
-
+def _record_failures(warnings):
     def attempt(code, work, fallback=None):
         try:
             return work()
@@ -827,6 +822,93 @@ def collect_market(day, radar, http):
             # Library exceptions can include gateway details. Emit only fixed codes.
             warnings.add(code)
             return fallback
+    return attempt
+
+
+BOARD_FEEDS = {'industries':('industry_boards_missing',2,'17'),
+               'concepts':('concept_boards_missing',3,'79')}
+
+
+def _load_board(day, panel, http, warnings):
+    attempt = _record_failures(warnings)
+    err, kind, host = BOARD_FEEDS[panel]
+    scope = f'm:90 t:{kind} f:!50'
+    result = attempt(err, lambda:boards(http, scope, day, attempt))
+    if result is None:
+        result = attempt(err, lambda:boards(http, scope, day, attempt, CLIST.replace('push2.',host+'.push2.')))
+    if result is None and panel == 'industries':
+        result = attempt(err, lambda:sw_industries(http, day, attempt))
+        if result is None:
+            result = attempt(err, lambda:published_sw_industries(http, day))
+            if result:
+                result = (result[0],sw_extreme_points(http,result[0],day,attempt))
+    if result is None and panel == 'concepts':
+        result = attempt(err, lambda:published_concepts(http, day))
+        if result:
+            result = em_board_details(http,result[0],day,attempt)
+    if not result or not result[0]:
+        warnings.add(err)
+        return [], []
+    warnings.discard(err)
+    sw = sorted((r for r in result[0] if r['code'].startswith('SW')),key=lambda r:(r['pct'],r['code']))
+    if sw:
+        failures = 0
+        for row in {r['code']:r for r in [sw[-1],sw[0],*sw[-5:],*sw[:5]]}.values():
+            members = attempt('sw_members_missing',lambda:sw_members(http,row,day))
+            if members is None:
+                failures += 1
+                if failures >= 2:
+                    break
+            else:
+                row.update(members)
+                failures = 0
+    return result
+
+
+def retry_missing_boards(day, raw, http):
+    """Recover missing complete dated board lists without refreshing accepted observations."""
+    revised = dict(raw)
+    if raw.get('date') != day.isoformat():
+        return revised
+    quotes = {r['code']:r for r in raw.get('stocks') or [] if r.get('date') == day.isoformat() and r.get('code')}
+    for panel in BOARD_FEEDS:
+        if raw.get(panel):
+            continue
+        err = BOARD_FEEDS[panel][0]
+        errors = set()
+        try:
+            rows, points = _load_board(day,panel,http,errors)
+        except Exception:
+            continue
+        if not rows or any(row.get('date') != day.isoformat() for row in rows):
+            continue
+        # Raw snapshots omit proven halts. Only sum a board when every member
+        # has a retained dated stock quote; otherwise keep its turnover absent.
+        constituent_turnover(rows,quotes,set(),day)
+        revised[panel] = rows
+        existing = revised.get('intraday') or []
+        merged = list(existing)
+        seen = {(p.get('date'),p.get('time'),p.get('code') or p.get('name')) for p in existing}
+        board_ids = {row['code'] for row in rows}
+        for p in points:
+            if p.get('date') != day.isoformat() or p.get('code') not in board_ids:
+                continue
+            key = (p['date'],p['time'],p['code'])
+            if key not in seen:
+                merged.append(p)
+                seen.add(key)
+        revised['intraday'] = merged
+        warnings = [w for w in revised.get('warnings',[]) if w != err]
+        revised['warnings'] = warnings + sorted(errors.difference(warnings))
+    return revised
+
+
+def collect_market(day, radar, http):
+    warnings = set()
+    started = datetime.now(BJ)
+    sentiment_at = started.replace(hour=20, minute=15, second=0, microsecond=0)
+    staged = started.date() == day and started < sentiment_at
+    attempt = _record_failures(warnings)
 
     core = core_symbols(radar)
     tdx = attempt('tdx_unavailable', open_tdx)
@@ -942,42 +1024,9 @@ def collect_market(day, radar, http):
         if tdx is not None:
             attempt('tdx_close_failed', tdx.close)
 
-    def load_boards(sector, kind, host):
-        scope = f'm:90 t:{kind} f:!50'
-        err = sector + '_boards_missing'
-        result = attempt(err, lambda:boards(http, scope, day, attempt))
-        if result is None:
-            result = attempt(err, lambda:boards(http, scope, day, attempt, CLIST.replace('push2.',host+'.push2.')))
-        if result is None and sector == 'industry':
-            result = attempt(err, lambda:sw_industries(http, day, attempt))
-            if result is None:
-                result = attempt(err, lambda:published_sw_industries(http, day))
-                if result:
-                    result = (result[0],sw_extreme_points(http,result[0],day,attempt))
-        if result is None and sector == 'concept':
-            result = attempt(err, lambda:published_concepts(http, day))
-            if result:
-                result = em_board_details(http,result[0],day,attempt)
-        if result is None:
-            return [], []
-        warnings.discard(err)
-        return result
-
-    industries, pts = load_boards('industry', 2, '17')
+    industries, pts = _load_board(day,'industries',http,warnings)
     intraday.extend(pts)
-    sw = sorted((r for r in industries if r['code'].startswith('SW')),key=lambda r:(r['pct'],r['code']))
-    if sw:
-        failures = 0
-        for row in {r['code']:r for r in [sw[-1],sw[0],*sw[-5:],*sw[:5]]}.values():
-            members = attempt('sw_members_missing',lambda:sw_members(http,row,day))
-            if members is None:
-                failures += 1
-                if failures >= 2:
-                    break
-            else:
-                row.update(members)
-                failures = 0
-    concepts, pts = load_boards('concept', 3, '79')
+    concepts, pts = _load_board(day,'concepts',http,warnings)
     constituent_turnover(industries+concepts,quotes,halted,day)
     intraday.extend(pts)
     reasons = attempt('ths_hot_missing', lambda:hot_reasons(http, day), {})

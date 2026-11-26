@@ -375,6 +375,53 @@ class MarketTests(unittest.TestCase):
         self.assertTrue(all(r.get('listedBefore') or r.get('listed') for r in raw['stocks']))
         self.assertIn('同花顺',top['reason'])
 
+    def test_single_board_retry_retains_other_panel_quotes_and_first_minute(self):
+        index = dict(date=str(DAY),time='13:30',name='上证指数',pct=.02)
+        old = dict(date=str(DAY),time='10:30',name='测试板块',code='BK0001',pct=.198)
+        for panel,other,scope,warning in [('concepts','industries','m:90 t:3 f:!50','concept_boards_missing'),
+                                         ('industries','concepts','m:90 t:2 f:!50','industry_boards_missing')]:
+            with self.subTest(panel=panel):
+                http = MarketHTTP()
+                raw = {panel:[], other:[{'code':'历史已核行','date':str(DAY)}],
+                       'stocks':[{'code':'000001.SZ','date':str(DAY),'amount':123}],
+                       'date':str(DAY),'intraday':[index,old],'marketComplete':False,
+                       'warnings':[warning,'auction_0925_missing','core_quotes_partial']}
+                original = json.dumps(raw)
+                revised = market.retry_missing_boards(DAY,raw,http)
+                self.assertEqual(json.dumps(raw),original)
+                self.assertEqual(http.pages,[(scope,1),(scope,2)])
+                self.assertEqual([r['code'] for r in revised[panel]],['BK0001','BK0002'])
+                self.assertEqual(revised[other],raw[other])
+                self.assertEqual(revised['stocks'],raw['stocks'])
+                self.assertFalse(revised['marketComplete'])
+                self.assertEqual(revised['intraday'][:2],[index,old])
+                self.assertEqual([p for p in revised['intraday'] if
+                                  p.get('code')=='BK0001' and p['time']=='10:30'],[old])
+                self.assertEqual(len(revised['intraday']),7)
+                self.assertNotIn(warning,revised['warnings'])
+                self.assertTrue({'auction_0925_missing','core_quotes_partial'} <= set(revised['warnings']))
+                reread = market.retry_missing_boards(DAY,revised,http)
+                self.assertEqual(reread,revised)
+                self.assertEqual(len(http.pages),2)
+
+    def test_board_retry_rejects_stale_close_and_never_changes_failed_panel(self):
+        raw = dict(date=str(DAY),industries=[{'code':'SW801780'}],concepts=[],
+                   intraday=[],warnings=['concept_boards_missing','board_flow_missing'])
+        http = MarketHTTP()
+        read = http.get_json
+        def stale(url,params):
+            if 'clist/get' in url:
+                return {'data':{'total':1,'diff':[dict(f12='BK0001',f14='上日板块',
+                                                         f3=2.5,f124=END-86400)]}}
+            return read(url,params)
+        with patch.object(http,'get_json',side_effect=stale) as calls:
+            self.assertEqual(market.retry_missing_boards(PREVIOUS,raw,http),raw)
+            calls.assert_not_called()
+            revised = market.retry_missing_boards(DAY,raw,http)
+        self.assertEqual(revised,raw)
+        self.assertIsNot(revised,raw)
+        self.assertEqual(calls.call_count,2)
+
     def test_missing_exchange_quotes_never_leak_aggregate_counts(self):
         http = MarketHTTP()
         http.stale = {'bj920001'}

@@ -215,6 +215,8 @@ class ShortTermCollectorTests(unittest.TestCase):
         when = datetime.combine(self.day, time(18, 15), collector.BJ)
         stages = []
         raw = copy.deepcopy(self.fixture['market'])
+        recovered = {**raw, 'warnings': []}
+        raw.update(concepts=[], warnings=['concept_boards_missing'])
         captured = collect_sentiment(self.day, captures=self.fixture['egoCaptures'])
 
         def wait(day, target):
@@ -228,18 +230,22 @@ class ShortTermCollectorTests(unittest.TestCase):
               patch.object(collector, 'now_bj', lambda: when),
               patch.object(collector, 'gather_local', return_value=(raw, self.fixture['radar'])),
               patch.object(collector, 'wait_until', side_effect=wait),
+              patch('short_term_collector.market.retry_missing_boards', return_value=recovered) as recover,
               patch.object(collector, 'refresh_disclosures') as refresh,
               patch('short_term_collector.ego_sentiment.collect_sentiment', return_value=captured),
               redirect_stdout(io.StringIO())):
             self.assertEqual(collector.main(['--evening', '--output', str(self.path),
                                              '--receipt-dir', str(receipts)]), 0)
-        self.assertEqual(stages, [time(20,15), time(20,28), time(20,30)])
+        self.assertEqual(stages, [time(19,25), time(20,15), time(20,28), time(20,30)])
+        recover.assert_called_once()
         refresh.assert_called_once()
         snapshot = json.loads(self.path.read_bytes())
         self.assertEqual(snapshot['generatedAt'], self.clock.isoformat(timespec='seconds'))
         (receipt_file,) = receipts.rglob('*.json')
         receipt = json.loads(receipt_file.read_bytes())
         self.assertTrue(receipt['onTime'])
+        self.assertEqual(receipt['boardRetryCoverage']['conceptRows'], len(recovered['concepts']))
+        self.assertGreater(receipt['boardRetryCoverage']['conceptRows'], 0)
         self.assertEqual(receipt['coverage']['egoCoverage'], 'complete')
         self.assertEqual(receipt['dataSHA256'], collector.data_digest(snapshot))
 

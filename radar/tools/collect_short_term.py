@@ -30,6 +30,8 @@ HISTORY = RADAR / 'data/short_term_history.json'
 RAW_FIXTURE = RADAR / 'tests/fixtures/short_term_v4/raw_session.json'
 PUBLIC_RELEASE = 'https://raw.githubusercontent.com/lwd619783-byte/research-radar/production/'
 PREPARE_TIME = time(17, 30)
+BOARD_RETRY_TIME = time(19, 25)
+BOARD_RETRY_CUTOFF = time(20, 10)
 SENTIMENT_TIME = time(20, 15)
 REFRESH_TIME = time(20, 28)
 FINAL_TIME = time(20, 30)
@@ -222,25 +224,34 @@ def refresh_disclosures(day, raw, http):
     return not source_warnings
 
 
-def refresh_before_final(day, raw, http):
+def before_deadline(deadline, work):
+    remaining = (deadline - now_bj()).total_seconds()
+    if remaining <= 0:
+        return None
     pending = Queue(maxsize=1)
-    revised = {**raw, 'warnings': list(raw.get('warnings', [])), 'mines': list(raw.get('mines', []))}
 
     def read():
-        completed = refresh_disclosures(day, revised, http)
-        pending.put((revised['mines'], revised['warnings'], completed))
-
-    cutoff = datetime.combine(day, FINAL_TIME, BJ)
-    left = (cutoff - now_bj()).total_seconds()
-    if left > 0:
-        Thread(target=read, daemon=True).start()
         try:
-            raw['mines'], raw['warnings'], completed = pending.get(timeout=left)
-            return completed
-        except Empty:
-            pass
-    raw.setdefault('warnings', []).append('巨潮晚间复核超时')
-    return False
+            pending.put(work())
+        except Exception:
+            pending.put(None)
+
+    Thread(target=read, daemon=True).start()
+    try:
+        return pending.get(timeout=remaining)
+    except Empty:
+        return None
+
+
+def refresh_before_final(day, raw, http):
+    revised = {**raw, 'warnings': list(raw.get('warnings', [])), 'mines': list(raw.get('mines', []))}
+    completed = before_deadline(datetime.combine(day, FINAL_TIME, BJ),
+                                lambda: refresh_disclosures(day, revised, http))
+    if completed is None:
+        raw.setdefault('warnings', []).append('巨潮晚间复核超时')
+        return False
+    raw['mines'], raw['warnings'] = revised['mines'], revised['warnings']
+    return completed
 
 
 def assemble(raw, radar, history, day, clock, *, offline=False, environ=None):
@@ -418,6 +429,19 @@ def run_session(args, day, offline, fixture, http, path, preview, receipt, phase
                     raw, radar = retried, revision
                 phase('hardRetryFinishedAt')
         if args.evening:
+            board_cutoff = datetime.combine(day, BOARD_RETRY_CUTOFF, BJ)
+            if (not raw.get('industries') or not raw.get('concepts')) and now_bj() < board_cutoff:
+                from short_term_collector.market import retry_missing_boards
+                wait_until(day, BOARD_RETRY_TIME)
+                phase('boardRetryStartedAt')
+                recovered = before_deadline(board_cutoff, lambda source=raw: retry_missing_boards(day, source, http))
+                if recovered is None:
+                    raw = {**raw, 'warnings': [*raw.get('warnings', []), '板块晚间补采未完成']}
+                else:
+                    raw = recovered
+                receipt['boardRetryCoverage'] = {'industryRows': len(raw.get('industries', [])),
+                                                 'conceptRows': len(raw.get('concepts', []))}
+                phase('boardRetryFinishedAt')
             wait_until(day, SENTIMENT_TIME)
         if raw.get('closeConfirmed') or args.evening:
             phase('egoStartedAt')
