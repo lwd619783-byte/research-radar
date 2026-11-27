@@ -40,7 +40,7 @@ NOISE = re.compile(r'^(?:哈哈|呵呵|收到|打卡|签到|路过|围观|点赞
 BULL = re.compile('看涨|看多|多头|偏强|走强|上涨|突破|放量回升|承接较强|继续上行|企稳|不看空')
 BEAR = re.compile('看跌|看空|空头|偏弱|走弱|下跌|跌破|缩量回落|承接较弱|继续下行|不看好|承压')
 CJ = timezone(timedelta(hours=8))
-SIGNATURE = 'dated-comments-v3'
+SIGNATURE = 'dated-comments-v4'
 MARK = 'RESEARCH_RADAR_EGO_V4 '
 STATUS = {'ok', 'partial', 'empty', 'no_sample', 'timeout', 'login_required', 'captcha',
           'handoff', 'unavailable', 'skipped', 'error', 'user_control'}

@@ -14,19 +14,24 @@ const platforms = {
 };
 
 class FakePage {
-  constructor({fail, challenge, clock, latency = () => 0, forumWork = null, delayedHot = false}) {
+  constructor({fail, challenge, clock, latency = () => 0, forumWork = null,
+    delayedForum = false, delayedHot = false, delayedXueqiu = false, stalledLoad = false}) {
     this.fail = fail;
     this.challenge = challenge;
     this.clock = clock;
     this.latency = latency;
     this.forumWork = forumWork;
+    this.forumReady = !delayedForum;
     this.delayedHot = delayedHot;
+    this.delayedXueqiu = delayedXueqiu;
+    this.xueqiuCommentReady = false;
+    this.stalledLoad = stalledLoad;
     this.hotReady = !delayedHot;
     this.address = 'about:blank';
     this.navigations = new Map();
   }
 
-  async goto(address, {timeout}) {
+  async goto(address, {timeout,waitUntil}) {
     const calls = this.navigations.get(address) || [];
     this.navigations.set(address, calls);
     calls.push(timeout);
@@ -37,6 +42,12 @@ class FakePage {
     }
     this.clock.value += duration;
     this.address = address;
+    if (this.stalledLoad && waitUntil !== 'commit') {
+      this.clock.value += timeout-duration;
+      throw Object.assign(new Error('Navigation timed out after document commit'), {
+        code: 'EGO_NAVIGATION_TIMEOUT', committed: true,
+      });
+    }
   }
 
   async url() { return this.address; }
@@ -49,17 +60,22 @@ class FakePage {
       if (args.platform === 'em' && this.forumWork && !this.address.endsWith(this.forumWork)) {
         return {status: 'ok', comments: []};
       }
+      if (args.platform === 'xq' && this.delayedXueqiu && !this.xueqiuCommentReady) {
+        return {status: 'ok', comments: []};
+      }
       return {status: 'ok', counts: {rows: 1, dated: 1, inWindow: 1},
         comments: [{text: '离线复盘评论 ' + args.track, track: args.track, date, time: '19:20'}]};
     }
     if (fn === discoverWorks) {
-      if (args.platform === 'em' && this.forumWork) return [this.forumWork];
+      if (args.platform === 'em' && this.forumWork) return this.forumReady ? [this.forumWork] : [];
+      if (args.platform === 'xq' && this.delayedXueqiu) return ['/123456/789012'];
       if (args.platform === 'dy' && args.track === 'hot' && !this.hotReady) return [];
       return args.platform === 'dy' ? ['/video/123456'] : ['/explore/1234567890abcdef'];
     }
     if (fn === datedReview) return true;
     if (fn === approvedHotAuthor) return args.authors.length > 0;
     if (this.forumWork && args === '[aria-label="展开评论"]') return false;
+    if (this.delayedXueqiu && args === '[aria-label="展开评论"]') return false;
     assert.fail('Unexpected evaluation in navigation replay');
   }
 
@@ -71,11 +87,22 @@ class FakePage {
   }
 
   async waitForFunction(fn,args,opts) {
+    if (!this.forumReady && fn === discoverWorks && args.platform === 'em') {
+      assert.equal(args.readyOnly,true);
+      assert.ok(opts.timeout >= 17000 && opts.timeout <= 22000);
+      this.clock.value += 17000;
+      this.forumReady = true;
+    }
     if (this.delayedHot && fn === discoverWorks && args.platform === 'dy' && args.track === 'hot') {
       assert.equal(args.readyOnly,true);
       assert.ok(opts.timeout >= 4500);
       this.clock.value += 4500;
       this.hotReady = true;
+    }
+    if (this.delayedXueqiu && args === undefined && this.address.endsWith('/123456/789012')) {
+      assert.ok(opts.timeout >= 4500);
+      this.clock.value += 4500;
+      this.xueqiuCommentReady = true;
     }
     return true;
   }
@@ -151,6 +178,22 @@ test('a discovered public community article can open with its own navigation bud
   assert.equal(result.em.status, 'ok');
   assert.equal(result.em.trackDetails.community.works, 1);
   assert.equal(result.em.comments.length, 1);
+});
+
+test('a committed document can provide links and comments while embedded resources stall', async () => {
+  const {result, page} = await replay({fail: () => false, stalledLoad:true, delayedForum:true,
+    forumWork:'/news,zssh000001,123456.html'});
+  assert.equal(page.navigations.get(platforms.em.seeds[0]).length, 1);
+  assert.equal(result.em.trackDetails.community.works, 1);
+  assert.equal(result.em.trackDetails.community.inWindow, 1);
+  assert.equal(result.dy.trackDetails.hot.inWindow, 1);
+  assert.equal(result.xhs.trackDetails.kol.inWindow, 1);
+});
+
+test('a selected Xueqiu discussion waits for delayed comment rows', async () => {
+  const {result} = await replay({fail: () => false, delayedXueqiu:true});
+  assert.equal(result.xq.trackDetails.community.works, 1);
+  assert.equal(result.xq.trackDetails.community.inWindow, 1);
 });
 
 test('stock bar reply counts prioritize readable discussions without discarding unknown rows', () => {

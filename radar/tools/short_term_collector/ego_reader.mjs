@@ -25,8 +25,9 @@ export function extractComments({platform, date, now = Date.now(), track = 'comm
   const profiles = {
     em: ['.reply_item,.reply-item,.replyListItem', '.reply_text,.reply-content,.reply_content,.shortntxt,.reply_title_span',
       'time,.reply_time,.reply-time,.publish_time,.pubtime', '.reply_like,.like_count,.likemodule'],
-    xq: ['.comment__item,.comment-item', '.comment__item__text,.comment__text,.comment-content',
-      'time,.comment__item__time,.comment__time,.comment__item__info .time', '.comment__item__like,.like-count'],
+    xq: ['.comment__item,.comment-item', '.comment__item__main > p,.comment__item__text,.comment__text,.comment-content',
+      'time,.comment__item__main__hd > .time,.comment__item__time,.comment__time,.comment__item__info .time',
+      '.comment__item__like,.like-count'],
     ths: ['.comment-item,.comment_item,.reply-item,.cmt-item', '.comment-content,.reply-content,.cmt-text,.comment_text',
       'time,.comment-time,.cmt-time,.reply-time', '.like-count,.praise-count'],
     dy: ['[data-e2e="comment-level-1"],[data-e2e="comment-level-2"],[data-e2e="comment-item"]',
@@ -103,7 +104,7 @@ export function extractComments({platform, date, now = Date.now(), track = 'comm
     // Isolate the comment body. A nested author, handle or profile element
     // is never part of the returned observation.
     const clone = content.cloneNode(true);
-    clone.querySelectorAll('script,style,time,.author,.username,.nickname,.item_reuser,[data-e2e="comment-user-name"]')
+    clone.querySelectorAll('script,style,time,.author,.username,.user-name,.nickname,.item_reuser,[data-e2e="comment-user-name"]')
       .forEach(node => node.remove());
     const text = (clone.textContent || '').trim().replace(/[@＠][^\s，。！？、；）)]+/gu, '匿名用户');
     if (!text || text.length > 600) continue;
@@ -287,16 +288,19 @@ async function readPlatform(task, page, platform, spec, date) {
     if (!safeUrl(platform,url)) throw Error('off_platform');
     detail.stage='seed_navigation';
     try {
-      await active.goto(url,{timeout:budget(navigationTimeout)});
+      // Embedded resources can stall after the document is usable. The DOM
+      // checks below wait for the specific links and comments we need.
+      await active.goto(url,{waitUntil:'commit',timeout:budget(navigationTimeout)});
     } catch (error) {
       if (!retry || controlError(error) || !timedOut(error) || deadline-Date.now()<4000) throw error;
       detail.navigationRetries++;
-      await active.goto(url,{timeout:budget(14000)});
+      await active.goto(url,{waitUntil:'commit',timeout:budget(14000)});
     }
     checkDestination(platform,await active.url());
     detail.stage='seed_loaded';
   }
   async function sample(track, include=true) {
+    checkDestination(platform,await active.url());
     const payload = await active.evaluate(extractComments,{platform,date,track,now:Date.now()});
     if (['login_required','captcha_required'].includes(payload.status)) throw Error(payload.status);
     if (!include) return 0;
@@ -309,7 +313,7 @@ async function readPlatform(task, page, platform, spec, date) {
     }
     return payload.comments.length;
   }
-  async function readWork(track) {
+  async function readWork(track, discovered=false) {
     const panel = platform === 'dy' ? '[data-e2e="video-player-comment"]' : '[aria-label="展开评论"]';
     if (track !== 'community') {
       await sample(track,false);
@@ -333,10 +337,11 @@ async function readPlatform(task, page, platform, spec, date) {
           '[data-e2e="comment-level-1"],.comment-item,.reply_item,.comment__item');
       },panel);
       if (open) await active.click(panel,{label:'查看作品评论',timeout:budget(2500)});
+      const commentTimeout = platform === 'xq' && discovered ? 6500 : 1800;
       try {
         await active.waitForFunction(()=>Boolean(document.querySelector(
           '.reply_item,.reply-item,.comment__item,.comment-item,.cmt-item,[data-e2e="comment-level-1"],[role="dialog"]'
-        )),undefined,{timeout:budget(1800)});
+        )),undefined,{timeout:budget(commentTimeout)});
       } catch (err) { if (controlError(err)) throw err; }
       count = await sample(track);
     }
@@ -364,10 +369,13 @@ async function readPlatform(task, page, platform, spec, date) {
         }
         let links = await active.evaluate(discoverWorks,{platform,track});
         if (!links.length) {
+          // A community list can populate well after the document commits.
+          // Keep time for the next seed except on the final community attempt.
+          const linkTimeout = track === 'community' && finalSeed ? 22000 : 6500;
           try {
             await active.waitForFunction(discoverWorks,{platform,track,readyOnly:true},
-              {timeout:budget(track === 'community' ? 1500 : 6500)});
-          } catch (err) { if (controlError(err)) throw err; }
+              {timeout:budget(linkTimeout)});
+          } catch (err) { if (controlError(err) || !timedOut(err)) throw err; }
           await sample(track,false);
           links = await active.evaluate(discoverWorks,{platform,track});
         }
@@ -383,7 +391,7 @@ async function readPlatform(task, page, platform, spec, date) {
               if (!work) throw Error('off_platform');
               active = page;
               detail.stage='work_navigation';
-              await active.goto(work.href, {timeout:budget(15000)});
+              await active.goto(work.href, {waitUntil:'commit',timeout:budget(15000)});
             } else {
               if (index) { active = page; await go(seed, false); }
               // Follow signed social links on the page without exporting their query strings.
@@ -399,7 +407,7 @@ async function readPlatform(task, page, platform, spec, date) {
               {path,id},{timeout:budget(3200)});
             checkDestination(platform,await active.url());
             detail.works++;
-            const found = await readWork(track);
+            const found = await readWork(track,true);
             matched += found;
             if (found) worksRead++;
           } catch(err) {
