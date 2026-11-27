@@ -14,12 +14,14 @@ const platforms = {
 };
 
 class FakePage {
-  constructor({fail, challenge, clock, latency = () => 0, forumWork = null}) {
+  constructor({fail, challenge, clock, latency = () => 0, forumWork = null, delayedHot = false}) {
     this.fail = fail;
     this.challenge = challenge;
     this.clock = clock;
     this.latency = latency;
     this.forumWork = forumWork;
+    this.delayedHot = delayedHot;
+    this.hotReady = !delayedHot;
     this.address = 'about:blank';
     this.navigations = new Map();
   }
@@ -52,6 +54,7 @@ class FakePage {
     }
     if (fn === discoverWorks) {
       if (args.platform === 'em' && this.forumWork) return [this.forumWork];
+      if (args.platform === 'dy' && args.track === 'hot' && !this.hotReady) return [];
       return args.platform === 'dy' ? ['/video/123456'] : ['/explore/1234567890abcdef'];
     }
     if (fn === datedReview) return true;
@@ -67,7 +70,15 @@ class FakePage {
     return {};
   }
 
-  async waitForFunction() { return true; }
+  async waitForFunction(fn,args,opts) {
+    if (this.delayedHot && fn === discoverWorks && args.platform === 'dy' && args.track === 'hot') {
+      assert.equal(args.readyOnly,true);
+      assert.ok(opts.timeout >= 4500);
+      this.clock.value += 4500;
+      this.hotReady = true;
+    }
+    return true;
+  }
 }
 
 async function replay(options) {
@@ -122,6 +133,13 @@ test('a slow community entrance can finish one navigation and reach comments', a
   assert.equal(result.em.status, 'ok');
   assert.equal(result.em.trackDetails.community.navigationRetries, 0);
   assert.equal(result.em.trackDetails.community.inWindow, 1);
+});
+
+test('a social search waits for matching work cards within its track deadline', async () => {
+  const {result} = await replay({fail: () => false, delayedHot:true});
+  assert.equal(result.dy.trackStatus.hot,'ok');
+  assert.equal(result.dy.trackDetails.hot.links,1);
+  assert.ok(result.dy.comments.some(comment=>comment.track === 'hot'));
 });
 
 test('a discovered public community article can open with its own navigation budget', async () => {

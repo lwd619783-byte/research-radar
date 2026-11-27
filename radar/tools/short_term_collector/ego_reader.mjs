@@ -179,7 +179,7 @@ export function approvedHotAuthor({platform,authors}) {
 // Return only public work paths. For signed links the browser itself follows
 // the displayed anchor. Query strings, authors, device and session state
 // never leave the page.
-export function discoverWorks({platform, track}) {
+export function discoverWorks({platform, track, readyOnly = false}) {
   const pattern = {
     em:/^\/news,[\w-]+,\d+\.html$/i, xq:/^\/\d+\/\d+\/?$/,
     ths:/^\/(?:pid[_/]\d+|[^/]+\/post\/\d+|(?:discussion|article)\/\d+)(?:\.s?html?)?\/?$/,
@@ -212,6 +212,7 @@ export function discoverWorks({platform, track}) {
       const count = text?.trim().replaceAll(',','').match(/^(\d+(?:\.\d+)?)\s*(万)?$/);
       if (count) likes = Number(count[1]) * (count[2] ? 10000 : 1);
     }
+    if (readyOnly) return true;
     if (platform === 'em' && track === 'community') {
       const value = anchor.closest('tr.listitem')?.querySelector('.reply')?.textContent?.trim();
       if (value && /^\d{1,9}$/.test(value)) replies = Number(value);
@@ -219,6 +220,7 @@ export function discoverWorks({platform, track}) {
     found.set(url.pathname, {path:url.pathname, likes, replies:replies ?? found.get(url.pathname)?.replies ?? null});
     if (found.size >= 40) break;
   }
+  if (readyOnly) return false;
   const works = Array.from(found.values());
   // Ordered result links are retained for the platform's popularity search.
   // Where displayed likes exist, prefer the most discussed visible works.
@@ -363,10 +365,10 @@ async function readPlatform(task, page, platform, spec, date) {
         let links = await active.evaluate(discoverWorks,{platform,track});
         if (!links.length) {
           try {
-            await active.waitForFunction(()=>Boolean(document.querySelector(
-              '.note-item a[href],a[href*="/video/"],a[href*="/news,"],.timeline__item a[href],a[href*="pid_"]'
-            )),undefined,{timeout:budget(1500)});
+            await active.waitForFunction(discoverWorks,{platform,track,readyOnly:true},
+              {timeout:budget(track === 'community' ? 1500 : 6500)});
           } catch (err) { if (controlError(err)) throw err; }
+          await sample(track,false);
           links = await active.evaluate(discoverWorks,{platform,track});
         }
         detail.links=Math.max(detail.links, links.length);
