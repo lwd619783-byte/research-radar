@@ -1,0 +1,265 @@
+"""Deterministic raw observations, without accounts, HTTP or market gateways."""
+from datetime import date
+from pathlib import Path
+import sys
+import unittest
+
+RADAR = Path(__file__).resolve().parents[1]
+sys.path[:0] = [str(RADAR / 'scripts'), str(RADAR / 'tools')]
+from short_term_collector.analytics import build_day, dated_stock_quotes
+from short_term_merge import normalize_history
+
+MON = date(2026, 11, 23)
+TUE = date(2026, 11, 24)
+R = {'companies': [{'sym': '000002.SZ', 'mkt': 'A股', 'ind': '光互连'},
+                   {'code': 'SH688001', 'market': 'A股', 'ind': '光互连'},
+                   {'code': '000009', 'mkt': '港股', 'ind': '地产'}],
+     'industries': [{'name': '光互连', 'total': 16}, {'name': '运输', 'total': 12}],
+     'chokepoints': [{'name': '光模块', 'ind': '光互连'}]}
+
+
+def quote(code, name, pct, **kwargs):
+    return {'code': code, 'name': name, 'pct': pct, 'amount': 1e9, 'listed': '2026-01-01', **kwargs}
+
+
+def observations(day=TUE):
+    return {'date': day.isoformat(), 'marketComplete': True,
+            'stocks': [quote('000001.SZ', '甲', .1, listed='2026-10-25'),
+                       quote('000002.SZ', '乙', -.08, amount=999999999),
+                       quote('000003.SZ', '*ST丙', .5), quote('000004.SZ', '丁退', -.7),
+                       quote('000005.SZ', '戊', .2, listed='2026-10-26'),
+                       quote('000006.SZ', '己', -.24, listed=None),
+                       quote('000007.SZ', '庚', -.05, listed=None, listedBefore='2025-01-01'),
+                       quote('000008.SZ', 'N辛', .4), quote('000009.SZ', '壬', .1, amount=1),
+                       quote('688001.SH', '癸', .03, amount=4)],
+            'industries': [quote('BK01', '光互连', .03, netFlow=-2e8, spark=[9,10,11,12,13,14]),
+                           quote('BK02', '物流', -.03), quote('BK03', '日常消费', 0)],
+            'concepts': [quote('GN01', '光模块新材料', -.01), quote('GN02', '运输', .02),
+                         quote('GN03', '光电配件', .05, constituents=['000002','688001'])],
+            'breadth': {'up': 2010, 'down': 2000, 'flat': 100, 'turnoverCny': 1000000000000,
+                        'limitUp': 10, 'limitDown': 8, 'brokenRate': .2, 'yesterdayPremium': -.01},
+            'limitPool': [{'code': '000001', 'name': '甲', 'height': 4},
+                          {'code': '000003', 'name': '丙', 'height': 2}],
+            'previousLimitPool': [{'code': '000001', 'name': '甲', 'height': 3},
+                                  {'code': '000002', 'name': '乙', 'height': 2},
+                                  {'code': '000003', 'name': '丙', 'height': 1}],
+            'intraday': [{'date': day.isoformat(), 'time': '10:30', 'name': '上证指数', 'pct': .012},
+                         {'date': '2026-10-01', 'time': '13:30', 'name': '不同时点', 'pct': -.5}]}
+
+
+class ShortTermAnalyticsTests(unittest.TestCase):
+    def test_filter_threshold_proof_exclusions_and_independent_core(self):
+        day = build_day(TUE, observations(), R, None)
+        market, core = day['stocks']['market'], day['stocks']['radar']
+        self.assertEqual([r['name'] for r in market['up']], ['甲'])
+        self.assertEqual([r['name'] for r in market['down']], ['庚'])
+        self.assertEqual([r['name'] for r in core['down']], ['乙'])
+        self.assertEqual([r['name'] for r in core['up']], ['癸'])
+        self.assertEqual(market['up'][0]['turnover'], '10.00 亿')
+
+    def test_ranking_limits_sorted_both_sides_and_spark(self):
+        raw = observations()
+        raw['stocks'] = [quote(f'{100+i:06d}.SZ', str(i), i/100) for i in range(-6,7)]
+        day = build_day(TUE, raw, R, None)
+        for side, expected in [('up', [.06,.05,.04,.03,.02]), ('down', [-.06,-.05,-.04,-.03,-.02])]:
+            self.assertEqual([r['pct'] for r in day['stocks']['market'][side]], expected)
+            self.assertEqual([r['rank'] for r in day['stocks']['market'][side]], [1,2,3,4,5])
+        self.assertEqual(day['industries']['up'][0]['spark'], [10,11,12,13,14])
+        self.assertEqual(day['industries']['up'][0]['netFlow'], '-2.00 亿')
+
+    def test_board_match_core_member_majority_and_four_quadrants(self):
+        day = build_day(TUE, observations(), R, None)
+        matrix = {q['key']:[r['name'] for r in q['items']] for q in day['matrix']}
+        self.assertEqual(matrix, {'q-res':['光电配件', '光互连'], 'q-dip':['光模块新材料'],
+                                  'q-pulse':['运输'], 'q-kill':['物流']})
+        self.assertEqual(day['concepts']['down'][0]['radarLink'], '光互连 · 16/20 · 卡点：光模块')
+        self.assertIsNone(day['industries']['up'][0]['radarLink'])
+        self.assertIsNone(day['concepts']['up'][0]['radarLink'])
+        self.assertIsNone(day['industries']['down'][0]['radarLink'])
+
+    def test_chokepoints_from_segment_or_verified_member_and_low_score_deep_decline(self):
+        raw = observations()
+        raw['concepts'] = [quote('GN1', 'CPO器件', .06), quote('GN2', '光电部件', .04, constituents=['SZ000002']),
+                           quote('GN3', '运输设备', -.07), quote('GN4', '铁路轴承', -.06),
+                           quote('GN5', 'XCPO设备', .03)]
+        radar = {**R, 'chokepoints': [{'name':'光模块', 'seg':'CPO、光纤', 'ind':'光互连'},
+                                      {'name':'铁路轴承', 'ind':'运输'}],
+                 'companies': [{**R['companies'][0], 'cp':'光模块'}]}
+        day = build_day(TUE, raw, radar, None)
+        links = {r['name']:r['radarLink'] for r in day['concepts']['up'] + day['concepts']['down']}
+        self.assertEqual(links['CPO器件'], links['光电部件'])
+        self.assertIn('光模块', links['光电部件'])
+        self.assertIsNone(links['XCPO设备'])
+        self.assertIsNone(links['铁路轴承'])
+        killed = {r['name'] for q in day['matrix'] if q['key'] == 'q-kill' for r in q['items']}
+        self.assertIn('运输设备', killed)
+        self.assertNotIn('铁路轴承', killed)
+        raw['concepts'][1]['constituentsComplete'] = False
+        day = build_day(TUE, raw, radar, None)
+        partial = next(r for r in day['concepts']['up'] if r['name'] == '光电部件')
+        self.assertIsNone(partial['radarLink'])
+        self.assertFalse(any(r['name'] == '光电部件' for q in day['matrix'] for r in q['items']))
+
+    def test_cycle_uses_prior_cohort_identity_and_absence_is_not_zero(self):
+        raw = observations()
+        day = build_day(TUE, raw, R, None)
+        self.assertEqual([t['rate'] for t in day['cycle']['tiers']], ['1/1 (100%)','0/1 (0%)','1/1 (100%)'])
+        self.assertEqual(day['cycle']['activeStep'], 2)
+        raw['previousLimitPool'] = None
+        self.assertIsNone(build_day(TUE, raw, R, None)['cycle']['activeStep'])
+        raw['previousLimitPool'] = [{'date': '2025-01-01', 'code':'000001', 'height':3}]
+        self.assertFalse(build_day(TUE, raw, R, None)['cycle']['tiers'])
+
+    def test_timeline_uses_only_exact_time_and_date_or_three_node_fallback(self):
+        raw = observations()
+        day = build_day(TUE, raw, R, None)
+        self.assertEqual([t['time'] for t in day['timeline']], ['10:30','15:00','17:30','20:15'])
+        self.assertIn('+1.20%', day['timeline'][0]['detail'])
+        raw['intraday'] = None
+        self.assertEqual([t['time'] for t in build_day(TUE, raw, R, None)['timeline']], ['15:00','17:30','20:15'])
+
+    def test_rotation_compares_two_adjacent_observations_within_one_board_universe(self):
+        raw = observations()
+        raw['intraday'] = [
+            dict(date=TUE.isoformat(), time=t, code=code, name=name, pct=pct,
+                 source='eastmoney_trends2',basis='eastmoney_previous_close',interval='1m')
+            for t, left, right in [('10:30', .03, -.02), ('13:30', -.01, .02), ('15:00', .01, -.005)]
+            for code, name, pct in [('BK01', '光互连', left), ('BK02', '物流', right)]]
+        nodes = {n['time']:n['detail'] for n in build_day(TUE, raw, R, None)['timeline']}
+        self.assertIn('相较 10:30，同组 2 个行业样本中领涨由光互连转为物流，领跌由物流转为光互连', nodes['13:30'])
+        self.assertIn('相较 13:30，同组 2 个行业样本中领涨由物流转为光互连', nodes['15:00'])
+        self.assertNotIn('转为', nodes['10:30'])
+
+        for case, changes in [('missing', {'pct':None}), ('wrong_day', {'date':MON.isoformat()}),
+                              ('other_catalog', {'code':'GN01', 'name':'光模块新材料'}),
+                              ('unknown_code', {'code':'other'}), ('source', {'source':'其他口径'}),
+                              ('missing_source', {'source':''}), ('no_basis', {'basis':None}),
+                              ('basis', {'basis':'开盘价'}), ('interval', {'interval':'5m'}),
+                              ('tied', {'pct':-.01})]:
+            with self.subTest(case=case):
+                changed = [*raw['intraday']]
+                changed[3] = {**changed[3], **changes}
+                day = build_day(TUE, {**raw, 'intraday':changed}, R, None)
+                self.assertNotIn('转为', ' '.join(node['detail'] for node in day['timeline']))
+        conflicting = [*raw['intraday'], {**raw['intraday'][3], 'pct':.05}]
+        day = build_day(TUE, {**raw, 'intraday':conflicting}, R, None)
+        self.assertNotIn('转为', ' '.join(node['detail'] for node in day['timeline']))
+        mixed = [*raw['intraday'], {**raw['intraday'][3], 'source':'其他口径'}]
+        day = build_day(TUE, {**raw, 'intraday':mixed}, R, None)
+        self.assertNotIn('转为', ' '.join(node['detail'] for node in day['timeline']))
+        missing = [{k:v for k,v in row.items() if k != 'interval'} for row in raw['intraday']]
+        day = build_day(TUE, {**raw, 'intraday':missing}, R, None)
+        self.assertNotIn('转为', ' '.join(node['detail'] for node in day['timeline']))
+        unchanged = [{**row,'pct':.03 if row['code']=='BK01' else -.02} for row in raw['intraday']]
+        same_time = [{**row,'time':'10:30'} for row in raw['intraday']]
+        for ticks in (unchanged,same_time):
+            day = build_day(TUE, {**raw,'intraday':ticks}, R, None)
+            self.assertNotIn('转为',' '.join(node['detail'] for node in day['timeline']))
+
+    def test_auction_node_requires_boolean_execution_confirmation_and_observation_date(self):
+        raw = observations()
+        tick = dict(date=TUE.isoformat(),time='09:25',name='上证指数',pct=.003)
+        for change, valid in [({},False),({'auctionConfirmed':False},False),({'auctionConfirmed':1},False),
+                              ({'auctionConfirmed':'true'},False),({'auctionConfirmed':True,'date':None},False),
+                              ({'auctionConfirmed':True,'date':MON.isoformat()},False),({'auctionConfirmed':True},True)]:
+            with self.subTest(change=change):
+                row = {**tick,**change}
+                if row.get('date') is None:
+                    row.pop('date')
+                nodes = build_day(TUE,{**raw,'intraday':[row,*raw['intraday']]},R,None)['timeline']
+                self.assertEqual(any(n['time']=='09:25' for n in nodes),valid)
+                self.assertIn('10:30',{n['time'] for n in nodes})
+
+    def test_anchors_pass_partial_fail_missing_data_and_changed_claim(self):
+        monday = build_day(MON, observations(MON), R, None)
+        raw = observations()
+        raw['breadth'].update(turnoverCny=1.01e12, limitUp=3)
+        raw['industries'][0]['pct'] = -.01
+        raw['limitPool'][0]['height'] = 2
+        result = build_day(TUE, raw, R, monday)
+        self.assertEqual(result['breadth']['turnoverDelta'], '100.00 亿')
+        self.assertEqual([r['status'] for r in result['yesterdayReconcile']['items']], ['pass','partial','fail'])
+        monday['anchors'][0]['title'] = '人工改变观察事项'
+        raw['breadth']['limitUp'] = None
+        result = build_day(TUE, raw, R, monday)
+        self.assertEqual([r['code'] for r in result['yesterdayReconcile']['items']], ['ANCHOR 03'])
+        self.assertIn('ANCHOR 01、ANCHOR 02', result['yesterdayReconcile']['summary'])
+        monday['date'] = '2026-11-20'
+        result = build_day(TUE, raw, R, monday)
+        self.assertEqual(result['breadth']['turnoverDelta'], '—')
+        self.assertEqual(result['yesterdayReconcile']['items'], [])
+
+    def test_sw_anchor_crossing_to_eastmoney_is_reconciled_outside_the_ranking(self):
+        thu, fri = date(2026,11,26), date(2026,11,27)
+        raw = observations(thu)
+        raw.update(marketComplete=False,industries=[quote('SW801770','通信',.0236,price=4217.84)])
+        raw['limitPool'][0]['height'] = 5
+        prior = build_day(thu,raw,R,None)
+        raw = observations(fri)
+        raw['industries'] = [quote('BK1326','半导体设备',.176),quote('BK9999','通信',-.10)]
+        raw['limitPool'][0]['height'] = 6
+        baseline = build_day(fri,raw,R,prior)
+        confirmed = dict(code='SW801770',name='通信',date=str(fri),price=4751.19,pct=.12645097964835061,
+                         spark=[4218.51,4216.36,4120.73,4217.84,4751.19],source='AlphaOnly申万一级行业日度数据')
+        def check(rows):
+            result = build_day(fri,{**raw,'anchorBoardQuotes':rows},R,prior)
+            self.assertEqual({k:v for k,v in baseline.items() if k!='yesterdayReconcile'},
+                             {k:v for k,v in result.items() if k!='yesterdayReconcile'})
+            return {r['code']:r for r in result['yesterdayReconcile']['items']}
+        self.assertNotIn('ANCHOR 03',check([]))
+        item = check([confirmed])['ANCHOR 03']
+        self.assertEqual(item['status'],'pass')
+        self.assertIn('SW801770 涨跌 +12.65%',item['actual'])
+        self.assertNotIn('ANCHOR 01',check([confirmed]))
+        for rows in [[confirmed,confirmed], [{**confirmed,'date':str(thu)}], [{**confirmed,'code':'SW801760'}],
+                     [{**confirmed,'name':'传媒'}], [{**confirmed,'source':'其他口径'}],
+                     [{**confirmed,'spark':[1,2,3,4000,4751.19]}], [{**confirmed,'pct':-.03}]]:
+            self.assertNotIn('ANCHOR 03',check(rows))
+        prior['industries']['up'][0]['px'] = None
+        self.assertNotIn('ANCHOR 03',check([confirmed]))
+
+    def test_missing_universe_no_false_global_counts_and_legacy_market_flag(self):
+        raw = observations()
+        raw.pop('marketComplete')
+        result = build_day(TUE, raw, R, None)
+        self.assertIsNone(result['breadth']['up'])
+        self.assertIsNone(result['sentimentScore'])
+        self.assertEqual(result['stocks']['market'], {'up': [], 'down': []})
+        self.assertTrue(result['stocks']['radar']['down'])
+        raw['universeComplete'] = True
+        self.assertEqual(build_day(TUE, raw, R, None)['breadth']['up'],2010)
+
+    def test_wrong_date_weekend_and_official_holiday_refused(self):
+        for requested, raw in [(MON, observations()),(date(2026,11,22), observations(date(2026,11,22))),
+                               (date(2026,10,1),observations(date(2026,10,1)))]:
+            with self.subTest(requested=requested), self.assertRaises(ValueError):
+                build_day(requested, raw, R, None)
+
+    def test_wrong_dates_conflicting_and_repeated_stock_codes(self):
+        raw = observations()
+        a = quote('000002.SZ', '乙', -.08)
+        raw['stocks'] = [a, {**a, 'code': 'SZ000002'},
+                         quote('600001.BJ', '错市场', .3), quote('000003.SZ', '错日', .8, date='2026-11-23'),
+                         quote('000004.SZ', '无效报价', float('nan')), quote('000005.SZ', '无效现价', .1, price=0)]
+        usable, complete = dated_stock_quotes(raw,TUE)
+        self.assertFalse(complete)
+        self.assertEqual(usable, [a])
+        self.assertEqual(dated_stock_quotes(raw, MON), ([], False))
+        raw['stocks'].append({**a,'pct': .23})
+        self.assertEqual(dated_stock_quotes(raw,TUE), ([], False))
+        result = build_day(TUE, raw, R, None)
+        self.assertFalse(result['stocks']['radar']['down'])
+        self.assertIsNone(result['breadth']['up'])
+
+    def test_day_with_dirty_text_passes_cloud_contract_and_drops_handles(self):
+        raw = observations()
+        raw['industries'][0]['reason'] = '买入 @角色；待核'
+        day = build_day(TUE, raw, R, None)
+        self.assertEqual(day['industries']['up'][0]['reason'],'介入 匿名用户；待查')
+        history = {'schemaVersion':'4.0-short-term', 'generatedAt':'2026-11-24T20:30:00+08:00',
+                   'days':[day], 'meta':{}, 'catalysts':[]}
+        self.assertEqual(normalize_history(history)['days'],[day])
+
+
+if __name__ == '__main__':
+    unittest.main()

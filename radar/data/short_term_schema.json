@@ -1,0 +1,142 @@
+{
+  "schema_version": "4.0-short-term",
+  "timezone": "Asia/Shanghai",
+  "target_repo": "lwd619783-byte/research-radar",
+  "source_branch": "fix/radar-truthfulness-2026-10-18",
+  "publish_cadence": {
+    "mode": "daily_single_final",
+    "local_collect_time": "20:30",
+    "rolling_trading_days": 10
+  },
+  "data_planes": {
+    "local_snapshot_path": "radar/data/short_term_history.json",
+    "data_key_in_html": "DATA.shortTerm",
+    "notion_optional_tables": {
+      "short_term_ledger": {
+        "purpose": "手机端或人工快速校正每日复盘定调、周期与次日锚点",
+        "key": "交易日期",
+        "columns": [
+          { "name": "交易日期", "type": "title", "required": true, "format": "YYYY-MM-DD" },
+          { "name": "定调结论", "type": "rich_text", "required": true, "max_chars": 80 },
+          { "name": "散户情绪分", "type": "number", "required": true, "min": 0, "max": 100 },
+          { "name": "短线周期阶段", "type": "select", "required": true, "options": ["冰点期", "回暖试错", "主升发酵", "高位分歧", "退潮弱势"] },
+          { "name": "明日锚点_1", "type": "rich_text", "required": false, "max_chars": 120 },
+          { "name": "明日锚点_2", "type": "rich_text", "required": false, "max_chars": 120 },
+          { "name": "明日锚点_3", "type": "rich_text", "required": false, "max_chars": 120 },
+          { "name": "停用", "type": "checkbox", "required": false }
+        ]
+      },
+      "catalyst_calendar": {
+        "purpose": "重磅宏观与产业大会星级催化日历，支持人工补充星级与预期位置",
+        "key": "事件ID",
+        "columns": [
+          { "name": "事件ID", "type": "title", "required": true },
+          { "name": "日期窗口", "type": "rich_text", "required": true },
+          { "name": "开始日期", "type": "date", "required": true },
+          { "name": "星级", "type": "select", "required": true, "options": ["3", "4", "5"] },
+          { "name": "类别", "type": "select", "required": true, "options": ["industry", "macro"] },
+          { "name": "事件标题", "type": "rich_text", "required": true, "max_chars": 80 },
+          { "name": "核心看点", "type": "rich_text", "required": true, "max_chars": 120 },
+          { "name": "映射方向", "type": "rich_text", "required": true, "max_chars": 100 },
+          { "name": "阶段标签", "type": "rich_text", "required": true, "max_chars": 30 },
+          { "name": "预期与兑现推演", "type": "rich_text", "required": true, "max_chars": 180 },
+          { "name": "停用", "type": "checkbox", "required": false }
+        ]
+      }
+    }
+  },
+  "stock_screening_rules": {
+    "market_top5": {
+      "exclude_new_listed_days": 30,
+      "exclude_name_patterns": ["ST", "*ST", "退", "N", "C"],
+      "min_turnover_cny": 1000000000,
+      "top_n": 5
+    },
+    "radar_pool_top5": {
+      "source": "DATA.companies where market == 'A股'",
+      "top_n": 5
+    }
+  },
+  "ego_sanitization": {
+    "platforms": ["em", "xq", "ths", "dy", "xhs"],
+    "dy_xhs_strategy": "kol_whitelist_plus_hot_tag_comments",
+    "anonymize_author": true,
+    "strip_at_handles": true,
+    "drop_spam_and_promo": true,
+    "banned_word_mask_map": {
+      "买入": "介入",
+      "卖出": "离场",
+      "加仓": "增配",
+      "减仓": "降配",
+      "抄底": "低吸",
+      "逃顶": "高抛",
+      "目标价": "预期位",
+      "推荐": "提及",
+      "定投": "分批配置",
+      "止损": "风控离场",
+      "止盈": "获利兑现",
+      "建仓": "开仓",
+      "清仓": "全部离场",
+      "满仓": "全仓",
+      "重仓": "高仓位",
+      "必涨": "偏强",
+      "稳赚": "高胜率",
+      "翻倍": "大幅上涨",
+      "牛股": "强股",
+      "金股": "重点标的",
+      "已核实": "已记录",
+      "已审核": "已归档",
+      "人工确认": "人工录入",
+      "已验证": "已比对"
+    }
+  },
+  "day_entry_contract": {
+    "required_keys": [
+      "date",
+      "shortDate",
+      "weekday",
+      "themeColor",
+      "sentimentScore",
+      "sentimentState",
+      "headline",
+      "subHeadline",
+      "pulse",
+      "breadth",
+      "yesterdayReconcile",
+      "industries",
+      "concepts",
+      "stocks",
+      "timeline",
+      "cycle",
+      "matrix",
+      "dragonTiger",
+      "ego",
+      "anchors",
+      "strategyPlan"
+    ],
+    "themeColor_enum": ["up", "warn", "down"],
+    "reconcile_status_enum": ["pass", "partial", "fail"],
+    "cycle_steps_fixed": ["冰点期", "回暖试错", "主升发酵", "高位分歧", "退潮弱势"],
+    "matrix_keys_fixed": ["q-res", "q-pulse", "q-dip", "q-kill"]
+  },
+  "catalyst_entry_contract": {
+    "required_keys": [
+      "id",
+      "dateLabel",
+      "startDate",
+      "daysLeft",
+      "stars",
+      "category",
+      "categoryLabel",
+      "title",
+      "focus",
+      "mapping",
+      "phaseTag",
+      "phaseTone",
+      "expectationNote"
+    ],
+    "stars_enum": [3, 4, 5],
+    "category_enum": ["industry", "macro"],
+    "phaseTone_enum": ["ai", "auto", "stale", "conflict", "up-tag", "down-tag"]
+  }
+}

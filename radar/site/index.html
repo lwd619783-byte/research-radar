@@ -32,6 +32,7 @@
       <a href="#choke" data-sec="choke">卡点地图</a>
       <a href="#leaders" data-sec="leaders">龙头公司</a>
       <a href="#calendar" data-sec="calendar">财报日历</a>
+      <a href="#short" id="navShort" data-sec="short" class="is-new">短线复盘</a>
     </nav>
     <div class="actions">
       <button class="search-trigger" id="openPalette" aria-label="搜索"><span id="icSearch"></span><span class="txt">搜索公司、代码、行业、卡点</span><kbd id="kbdHint">⌘K</kbd></button>
@@ -43,6 +44,7 @@
 </header>
 
 <main class="wrap">
+  <div id="longTermView">
   <!-- 总览 -->
   <section id="overview" class="section">
     <div class="hero-head reveal">
@@ -111,6 +113,8 @@
     <div class="card cal-card reveal"><div class="cal-head"><div class="ind-legend" id="calLegend"></div><span class="hint">横向滑动查看更多 →</span></div><div class="cal" id="cal" data-src="notion"></div></div>
   </section>
 
+  </div>
+  <div id="shortTermView" class="sr-view" hidden></div>
   <footer class="foot" id="foot"><!--__SSR_FOOT__--></footer>
 </main>
 

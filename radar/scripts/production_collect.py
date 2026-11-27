@@ -703,6 +703,8 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
     finally:
         progress['notionErrors'] = safe_collection_diagnostic('collection_failed',
             notion_errors=diagnostic_notion_errors(raw))['notionErrors']
+    short_term = build.read_short_term(initial, environ={} if synthetic else
+                                      {**env, 'NOTION_TOKEN': token})
     token = None
     del raw
     stage('notion_handoff')
@@ -742,6 +744,8 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
     research = normalize(fetched, contract, final_clock, last_good=previous, config=config)
     stage('research_apply')
     data = build.apply_research(selected['data'], research, final_clock, config)
+    if short_term is not None and (synthetic or not build.is_short_term_preview(short_term)):
+        data['shortTerm'] = short_term
     if synthetic:
         data['meta']['reviewPreview'] = True
     available = sum(isinstance(row.get('price'), (int, float)) and not isinstance(row.get('price'), bool)
@@ -787,7 +791,17 @@ def collect(*, out, work, baseline=None, token='', transport=None, market_collec
     stage('summary')
     text = step_summary(data)
     stage('bundle_write')
-    saved = bundle.write_bundle(out.parent, data, receipt, final_clock, research_snapshot=snapshot)
+    try:
+        saved = bundle.write_bundle(out.parent, data, receipt, final_clock, research_snapshot=snapshot)
+    except bundle.BundleError as error:
+        if str(error) != 'bundle_size_limit' or 'shortTerm' not in data:
+            raise
+        # write_bundle checks the complete byte budget before exposing anything.
+        # Rebind the smaller DATA and run every gate again at the same clock.
+        del data['shortTerm']
+        receipt['publication']['dataSHA256'] = bundle.data_digest(data)
+        saved = bundle.write_bundle(out.parent, data, receipt, final_clock, research_snapshot=snapshot)
+        text += '\n短线快照超出归档容量，本版仅发布产业雷达。\n'
     stage('summary')
     write_summary(work, text, env)
     return {'archive': saved, 'data': data, 'receipt': receipt, 'snapshot': snapshot,

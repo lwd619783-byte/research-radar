@@ -112,6 +112,15 @@ class ProductionCollectionTests(unittest.TestCase):
                             for company in result['data']['companies']))
         self.no_leak()
 
+    def test_short_term_over_archive_budget_rebinds_only_the_v3_snapshot(self):
+        from acceptance_bundle import MAX_BUNDLE, data_digest, verify_bundle
+        with patch.object(collector.build, 'read_short_term', return_value={'note': 'A' * MAX_BUNDLE}):
+            result = self.collect()
+        self.assertNotIn('shortTerm', result['data'])
+        self.assertIn('短线快照超出归档容量', result['summary'])
+        self.assertEqual(result['receipt']['publication']['dataSHA256'], data_digest(result['data']))
+        verify_bundle(self.root / 'current')
+
     def test_market_blocker_writes_only_work_diagnostics(self):
         def failed_market(*args, **kwargs):
             answer = fixture_market(*args, **kwargs)
