@@ -32717,14 +32717,14 @@
       ]
     },
     {
-      "generatedAt": "2026-11-26T12:21+08:00",
+      "generatedAt": "2026-11-26T18:20+08:00",
       "proof": {
         "state": "success",
-        "productionSHA": "b0facafcb975fa187dd709b4486f3d85c2f1d088",
-        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/CmocHS2Hh4pb1e4SEUHz1wKQywEm",
-        "reportedAt": "2026-11-26T04:21:45Z",
+        "productionSHA": "71392e806ff25658e69b08c27584e477ae02958b",
+        "deploymentUrl": "https://vercel.com/lkdmkl/research-radar/GYcgDQVyNGjthah8BzeAVuXmSp1b",
+        "reportedAt": "2026-11-26T10:20:48Z",
         "sourceSHA": "551b2d79c55be3faf9b84f305de337341d3109cc",
-        "dataSHA256": "aec78c8c3785e3d355fd3b7f75778feb103c6aa3c79c8c6fdd0635393ecfdb8a"
+        "dataSHA256": "307bef908cfbc97db4cc5b22d9f0f57d88f17744c46d484bb4601ec99fff8ebf"
       },
       "companies": [
         {
@@ -32742,11 +32742,11 @@
             "timezone": "Asia/Shanghai",
             "time_note": "10/31已披露2026Q3；下一期官方日期待定"
           },
-          "close": 239.9,
-          "date": "2026-11-25",
+          "close": 224.2,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.07457,
+          "r1d": -0.06524,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -32820,11 +32820,11 @@
             "timezone": "Asia/Hong_Kong",
             "time_note": "10/28 Q3已正式披露；下一期日期待官方确认"
           },
-          "close": 79.95,
-          "date": "2026-11-25",
+          "close": 80.65,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.11364,
+          "r1d": 0.00876,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -32859,11 +32859,11 @@
             "timezone": "Asia/Shanghai",
             "time_note": "10/31已披露2026Q3；下一期官方日期待定"
           },
-          "close": 33.6,
-          "date": "2026-11-25",
+          "close": 32.69,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.07336,
+          "r1d": -0.02708,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -32936,11 +32936,11 @@
             "timezone": "Asia/Shanghai",
             "time_note": "10/30已披露2026Q3；下一期官方日期待定"
           },
-          "close": 495.0,
-          "date": "2026-11-25",
+          "close": 479.4,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.09546,
+          "r1d": -0.03143,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33013,11 +33013,11 @@
             "timezone": "Asia/Seoul",
             "time_note": "10/28已披露Q3初步结果；下一期日期待官方确认"
           },
-          "close": 1030000,
-          "date": "2026-11-25",
+          "close": 1053000,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.11054,
+          "r1d": 0.02233,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33094,11 +33094,11 @@
             "timezone": "Asia/Shanghai",
             "time_note": "2026Q3已于10/28披露；下一期日期待定"
           },
-          "close": 25.47,
-          "date": "2026-11-25",
+          "close": 25.75,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.07348,
+          "r1d": 0.01099,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33133,11 +33133,11 @@
             "timezone": "Asia/Shanghai",
             "time_note": "2026Q3已于10/28披露；下一期日期待定"
           },
-          "close": 163.0,
-          "date": "2026-11-25",
+          "close": 169.4,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.05829,
+          "r1d": 0.03914,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33172,11 +33172,11 @@
             "timezone": "",
             "time_note": "下期披露日期尚待公告"
           },
-          "close": 126.8,
-          "date": "2026-11-25",
+          "close": 125.3,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.04077,
+          "r1d": -0.01199,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33213,11 +33213,11 @@
             "timezone": "Asia/Taipei",
             "time_note": "10/28已披露完整Q3；下期日期待官方确认"
           },
-          "close": 3355,
-          "date": "2026-11-25",
+          "close": 3660,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.01178,
+          "r1d": 0.09091,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33255,11 +33255,11 @@
             "timezone": "Asia/Shanghai",
             "time_note": "2026Q3已于10/28披露；下一期日期待定"
           },
-          "close": 79.49,
-          "date": "2026-11-25",
+          "close": 81.09,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.05515,
+          "r1d": 0.02013,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33294,11 +33294,11 @@
             "timezone": "",
             "time_note": "下期披露日期尚待公告"
           },
-          "close": 62.29,
-          "date": "2026-11-25",
+          "close": 64.06,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.04784,
+          "r1d": 0.02842,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33333,11 +33333,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 20.98,
-          "date": "2026-11-25",
+          "close": 21.6,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.11026,
+          "r1d": 0.02955,
           "financial": {
             "status": null,
             "basis": "half_year",
@@ -33372,11 +33372,11 @@
             "timezone": "Asia/Tokyo",
             "time_note": "11/5已披露FY2027Q2；下一期发布日期待定。"
           },
-          "close": 2100,
-          "date": "2026-11-25",
+          "close": 2185,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.12466,
+          "r1d": 0.04072,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33414,11 +33414,11 @@
             "timezone": "Asia/Shanghai",
             "time_note": "10/30已披露2026Q3；下一期官方日期待定"
           },
-          "close": 121.5,
-          "date": "2026-11-25",
+          "close": 123.7,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.00679,
+          "r1d": 0.01819,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33453,11 +33453,11 @@
             "timezone": "",
             "time_note": "下期披露日期尚待公告"
           },
-          "close": 197.0,
-          "date": "2026-11-25",
+          "close": 204.5,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.0508,
+          "r1d": 0.03813,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33492,11 +33492,11 @@
             "timezone": "Asia/Shanghai",
             "time_note": "10/30已披露2026Q3；下一期官方日期待定"
           },
-          "close": 58.43,
-          "date": "2026-11-25",
+          "close": 61.85,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.05146,
+          "r1d": 0.05853,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33531,11 +33531,11 @@
             "timezone": "",
             "time_note": "下期披露日期尚待公告"
           },
-          "close": 32.2,
-          "date": "2026-11-25",
+          "close": 33.07,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.05294,
+          "r1d": 0.02702,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33769,11 +33769,11 @@
             "timezone": "Asia/Shanghai",
             "time_note": "10/29已披露2026Q3；下一期官方日期待定"
           },
-          "close": 130.9,
-          "date": "2026-11-25",
+          "close": 134.0,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.0765,
+          "r1d": 0.02384,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33808,11 +33808,11 @@
             "timezone": "Asia/Shanghai",
             "time_note": "10/30已披露2026Q3；下一期官方日期待定"
           },
-          "close": 181.3,
-          "date": "2026-11-25",
+          "close": 189.0,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": 0.00717,
+          "r1d": 0.04264,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33847,11 +33847,11 @@
             "timezone": "Asia/Shanghai",
             "time_note": "10/31已披露2026Q3；下一期官方日期待定"
           },
-          "close": 571.0,
-          "date": "2026-11-25",
+          "close": 587.0,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.04722,
+          "r1d": 0.02802,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33886,11 +33886,11 @@
             "timezone": "Asia/Shanghai",
             "time_note": "10/30已披露2026Q3；下一期官方日期待定"
           },
-          "close": 409.0,
-          "date": "2026-11-25",
+          "close": 430.2,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.01918,
+          "r1d": 0.05178,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33925,11 +33925,11 @@
             "timezone": "Asia/Shanghai",
             "time_note": "10/30已披露2026Q3；下一期官方日期待定"
           },
-          "close": 19.6,
-          "date": "2026-11-25",
+          "close": 19.35,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.0439,
+          "r1d": -0.01276,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -33966,9 +33966,9 @@
           },
           "close": 112.5,
           "date": "2026-11-25",
-          "source": "yahoo-meta-close",
+          "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": null,
+          "r1d": -0.04598,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -34083,11 +34083,11 @@
             "timezone": "",
             "time_note": ""
           },
-          "close": 45.7,
-          "date": "2026-11-25",
+          "close": 45.23,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.05481,
+          "r1d": -0.01028,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -34122,11 +34122,11 @@
             "timezone": "Asia/Shanghai",
             "time_note": "10/29已披露2026Q3；下一期官方日期待定"
           },
-          "close": 21.13,
-          "date": "2026-11-25",
+          "close": 20.97,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.05796,
+          "r1d": -0.00757,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -34201,11 +34201,11 @@
             "timezone": "Europe/Paris",
             "time_note": "2026全年业绩；10/16官方Q3公告第11页"
           },
-          "close": 216.7,
+          "close": 216.6,
           "date": "2026-11-25",
-          "source": "yahoo-meta-close",
+          "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": null,
+          "r1d": -0.0418,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -34239,11 +34239,11 @@
             "timezone": "",
             "time_note": "2026Q3已于10/24披露；下一期日期待定"
           },
-          "close": 102.7,
-          "date": "2026-11-25",
+          "close": 100.9,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.06731,
+          "r1d": -0.01714,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -34317,11 +34317,11 @@
             "timezone": "Asia/Shanghai",
             "time_note": "2026Q3已于10月27日正式披露；下一次财报日期尚未核实，保留待定。"
           },
-          "close": 30.7,
-          "date": "2026-11-25",
+          "close": 30.58,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.05655,
+          "r1d": -0.00391,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -34356,11 +34356,11 @@
             "timezone": "",
             "time_note": "下期披露日期尚待公告"
           },
-          "close": 9.76,
-          "date": "2026-11-25",
+          "close": 9.71,
+          "date": "2026-11-26",
           "source": "yahoo",
           "basis": "yahoo-adjclose",
-          "r1d": -0.05058,
+          "r1d": -0.00512,
           "financial": {
             "status": null,
             "basis": "single_quarter",
@@ -36587,31 +36587,31 @@
           "kind": "company",
           "symbol": "ENR.DE",
           "metric": "r5",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "ENR.DE",
           "metric": "r20",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "ENR.DE",
           "metric": "r60",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "ENR.DE",
           "metric": "ytd",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "ENR.DE",
           "metric": "high52",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
@@ -36623,7 +36623,7 @@
           "kind": "company",
           "symbol": "ENR.DE",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -36983,31 +36983,31 @@
           "kind": "company",
           "symbol": "SU.PA",
           "metric": "r5",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "SU.PA",
           "metric": "r20",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "SU.PA",
           "metric": "r60",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "SU.PA",
           "metric": "ytd",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
           "symbol": "SU.PA",
           "metric": "high52",
-          "status": "missing"
+          "status": "complete"
         },
         {
           "kind": "company",
@@ -37019,7 +37019,7 @@
           "kind": "company",
           "symbol": "SU.PA",
           "metric": "marketCapUSD",
-          "status": "complete"
+          "status": "partial"
         },
         {
           "kind": "company",
@@ -37301,7 +37301,7 @@
           "kind": "index",
           "symbol": "000001.SS",
           "metric": null,
-          "status": "partial"
+          "status": "complete"
         },
         {
           "kind": "index",
