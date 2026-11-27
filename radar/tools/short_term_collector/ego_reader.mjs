@@ -337,7 +337,7 @@ async function readPlatform(task, page, platform, spec, date) {
           '[data-e2e="comment-level-1"],.comment-item,.reply_item,.comment__item');
       },panel);
       if (open) await active.click(panel,{label:'查看作品评论',timeout:budget(2500)});
-      const commentTimeout = platform === 'xq' && discovered ? 6500 : 1800;
+      const commentTimeout = discovered && (platform === 'xq' || platform === 'em') ? 6500 : 1800;
       try {
         await active.waitForFunction(()=>Boolean(document.querySelector(
           '.reply_item,.reply-item,.comment__item,.comment-item,.cmt-item,[data-e2e="comment-level-1"],[role="dialog"]'

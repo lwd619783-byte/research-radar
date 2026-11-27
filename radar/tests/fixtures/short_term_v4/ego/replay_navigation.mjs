@@ -15,7 +15,7 @@ const platforms = {
 
 class FakePage {
   constructor({fail, challenge, clock, latency = () => 0, forumWork = null,
-    delayedForum = false, delayedHot = false, delayedXueqiu = false, stalledLoad = false}) {
+    delayedForum = false, delayedHot = false, delayedCommentPlatform = null, stalledLoad = false}) {
     this.fail = fail;
     this.challenge = challenge;
     this.clock = clock;
@@ -23,8 +23,8 @@ class FakePage {
     this.forumWork = forumWork;
     this.forumReady = !delayedForum;
     this.delayedHot = delayedHot;
-    this.delayedXueqiu = delayedXueqiu;
-    this.xueqiuCommentReady = false;
+    this.delayedCommentPlatform = delayedCommentPlatform;
+    this.commentsReady = false;
     this.stalledLoad = stalledLoad;
     this.hotReady = !delayedHot;
     this.address = 'about:blank';
@@ -60,7 +60,7 @@ class FakePage {
       if (args.platform === 'em' && this.forumWork && !this.address.endsWith(this.forumWork)) {
         return {status: 'ok', comments: []};
       }
-      if (args.platform === 'xq' && this.delayedXueqiu && !this.xueqiuCommentReady) {
+      if (args.platform === this.delayedCommentPlatform && !this.commentsReady) {
         return {status: 'ok', comments: []};
       }
       return {status: 'ok', counts: {rows: 1, dated: 1, inWindow: 1},
@@ -68,14 +68,13 @@ class FakePage {
     }
     if (fn === discoverWorks) {
       if (args.platform === 'em' && this.forumWork) return this.forumReady ? [this.forumWork] : [];
-      if (args.platform === 'xq' && this.delayedXueqiu) return ['/123456/789012'];
+      if (args.platform === 'xq' && this.delayedCommentPlatform === 'xq') return ['/123456/789012'];
       if (args.platform === 'dy' && args.track === 'hot' && !this.hotReady) return [];
       return args.platform === 'dy' ? ['/video/123456'] : ['/explore/1234567890abcdef'];
     }
     if (fn === datedReview) return true;
     if (fn === approvedHotAuthor) return args.authors.length > 0;
-    if (this.forumWork && args === '[aria-label="展开评论"]') return false;
-    if (this.delayedXueqiu && args === '[aria-label="展开评论"]') return false;
+    if ((this.forumWork || this.delayedCommentPlatform) && args === '[aria-label="展开评论"]') return false;
     assert.fail('Unexpected evaluation in navigation replay');
   }
 
@@ -99,10 +98,11 @@ class FakePage {
       this.clock.value += 4500;
       this.hotReady = true;
     }
-    if (this.delayedXueqiu && args === undefined && this.address.endsWith('/123456/789012')) {
+    const delayedWork = this.delayedCommentPlatform === 'xq' ? '/123456/789012' : this.forumWork;
+    if (this.delayedCommentPlatform && args === undefined && this.address.endsWith(delayedWork)) {
       assert.ok(opts.timeout >= 4500);
       this.clock.value += 4500;
-      this.xueqiuCommentReady = true;
+      this.commentsReady = true;
     }
     return true;
   }
@@ -190,11 +190,14 @@ test('a committed document can provide links and comments while embedded resourc
   assert.equal(result.xhs.trackDetails.kol.inWindow, 1);
 });
 
-test('a selected Xueqiu discussion waits for delayed comment rows', async () => {
-  const {result} = await replay({fail: () => false, delayedXueqiu:true});
-  assert.equal(result.xq.trackDetails.community.works, 1);
-  assert.equal(result.xq.trackDetails.community.inWindow, 1);
-});
+for (const platform of ['xq','em']) {
+  test('a selected ' + platform + ' discussion waits for delayed comment rows', async () => {
+    const {result} = await replay({fail: () => false, delayedCommentPlatform:platform,
+      forumWork:platform === 'em' ? '/news,zssh000001,123456.html' : null});
+    assert.equal(result[platform].trackDetails.community.works, 1);
+    assert.equal(result[platform].trackDetails.community.inWindow, 1);
+  });
+}
 
 test('stock bar reply counts prioritize readable discussions without discarding unknown rows', () => {
   const counts = [null, '0', '3', '0', '2', '0', '0', '0', '1'];
