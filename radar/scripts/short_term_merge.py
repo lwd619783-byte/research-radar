@@ -82,6 +82,15 @@ def _clean(value, depth=0):
     return value
 
 
+def clean_override_text(value):
+    """Check prospective manual text before it can displace an accepted observation."""
+    from acceptance_bundle import check_sensitive
+
+    cleaned = _clean(value)
+    check_sensitive(cleaned)
+    return cleaned
+
+
 def _iso_date(text):
     _require(isinstance(text, str) and re.fullmatch(r'\d{4}-\d{2}-\d{2}', text))
     return dt.date.fromisoformat(text)

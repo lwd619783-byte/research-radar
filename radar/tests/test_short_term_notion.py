@@ -9,6 +9,7 @@ from unittest.mock import Mock, patch
 RADAR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RADAR / 'scripts'))
 from short_term_notion import apply_overrides
+from short_term_merge import load_short_term
 
 FIXTURE = RADAR / 'tests/fixtures/short_term_v4/sample_short_term_history.json'
 LEDGER_ID = '10101010-abcd-1234-8888-101010101010'
@@ -96,6 +97,35 @@ class NotionOverrideTests(unittest.TestCase):
         result = apply_overrides(self.history, environ=ENV, transport=transport)
         self.assertEqual(result['days'][0]['headline'], '台账校正')
         self.assertEqual(result['catalysts'], self.history['catalysts'])
+
+    def test_unsafe_override_is_rejected_per_row_before_replacing_local_data(self):
+        base = load_short_term(FIXTURE, environ={})
+        today, prior = base['days'][:2]
+        good_ledger = {name: self.ledger[name] for name in (
+            '定调结论', '散户情绪分', '短线周期阶段')}
+        good_ledger.update({'交易日期': ('title', prior['date']),
+                            '定调结论': ('rich_text', '@样本，买入')})
+        bad_ledger = {**self.ledger, '对账实盘_1': (
+            'rich_text', 'https://example:synthetic@example.invalid/')}
+        first_event, second_event = base['catalysts'][:2]
+        bad_event = {**self.event, '事件ID': ('title', first_event['id']),
+                     '核心看点': ('rich_text', 'https://example.invalid/?api_key=synthetic')}
+        good_event = {**self.event, '事件ID': ('title', second_event['id'])}
+        transport = Mock()
+        transport.request.side_effect = [
+            response([page(bad_ledger), page(good_ledger),
+                      page({**bad_ledger, '交易日期': ('title', prior['date'])})]),
+            response([page(bad_event), page(good_event)])]
+        with patch('short_term_notion.UrllibTransport', return_value=transport):
+            result = load_short_term(FIXTURE, environ=ENV)
+        self.assertEqual([row['date'] for row in result['days']], [row['date'] for row in base['days']])
+        self.assertEqual(result['days'][0], today)
+        self.assertEqual(result['days'][1]['headline'], '匿名用户，介入')
+        self.assertEqual(result['meta']['isStale'], base['meta']['isStale'])
+        by_id = {event['id']: event for event in result['catalysts']}
+        self.assertEqual(set(by_id), {event['id'] for event in base['catalysts']})
+        self.assertEqual(by_id[first_event['id']], first_event)
+        self.assertEqual(by_id[second_event['id']]['title'], '修订事件')
 
     def test_sparse_anchor_is_idempotent_across_collect_and_build(self):
         history = copy.deepcopy(self.history)

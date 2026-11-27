@@ -10,6 +10,7 @@ from uuid import UUID
 
 from market_calendar import calendar_data, is_session
 from notion_source import DEFAULTS, NotionError, UrllibTransport
+from short_term_merge import clean_override_text
 
 
 CONTRACT = Path(__file__).resolve().parents[1] / 'data' / 'short_term_schema.json'
@@ -84,6 +85,7 @@ def _properties(page, columns):
             if kind == 'date' or spec.get('format') == 'YYYY-MM-DD':
                 if date.fromisoformat(value).isoformat() != value:
                     raise ValueError('invalid date')
+            value = clean_override_text(value)
         values[name] = value
     return values
 
