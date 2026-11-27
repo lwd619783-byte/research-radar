@@ -220,7 +220,11 @@ class ShortTermCollectorTests(unittest.TestCase):
         recovered = {**raw, 'warnings': []}
         raw.update(concepts=[], warnings=['concept_boards_missing'])
         captured = collect_sentiment(self.day, captures=self.fixture['egoCaptures'])
-        diagnostics = {'em': {'community': {'status': 'ok', 'stage': 'comment_sample', 'links': 1}}}
+        diagnostics = {
+            'em': {'community': {'status': 'ok', 'stage': 'comment_sample', 'links': 1}},
+            'xhs': {'hot': {'status': 'timeout', 'stage': 'work_link', 'works': 1,
+                            'workLinkTimeouts': 2, 'workDateRejected': 1}},
+        }
         captured['platformDiagnostics'] = diagnostics
 
         def wait(day, target):

@@ -41,16 +41,18 @@ BULL = re.compile('看涨|看多|多头|偏强|走强|上涨|突破|放量回升
 BEAR = re.compile('看跌|看空|空头|偏弱|走弱|下跌|跌破|缩量回落|承接较弱|继续下行|不看好|承压')
 CJ = timezone(timedelta(hours=8))
 SIGNATURE = 'dated-comments-v4'
+METHOD_SUFFIXES = {'em': '-reply-priority', 'dy': '-recheck-work-link', 'xhs': '-recheck-work-link'}
 MARK = 'RESEARCH_RADAR_EGO_V4 '
 STATUS = {'ok', 'partial', 'empty', 'no_sample', 'timeout', 'login_required', 'captcha',
           'handoff', 'unavailable', 'skipped', 'error', 'user_control'}
 TRACK_STATUS = {'ok', 'empty', 'timeout', 'unavailable', 'unconfigured', 'login_required', 'captcha_required'}
-TRACK_STAGES = {'configured', 'seed_navigation', 'seed_loaded', 'work_navigation', 'work_date',
+TRACK_STAGES = {'configured', 'seed_navigation', 'seed_loaded', 'work_link', 'work_navigation', 'work_date',
                 'hot_author', 'comment_sample'}
 # The reader tries up to three seeds and six works per seed. DOM counts may
 # include visible comments outside the window, so they can exceed the sample cap.
 TRACK_COUNT_LIMITS = {'navigationRetries': 3, 'links': 6, 'works': 18, 'rows': 100_000,
-                      'dated': 100_000, 'inWindow': 100_000}
+                      'dated': 100_000, 'inWindow': 100_000, 'workLinkTimeouts': 18,
+                      'workDateRejected': 18, 'hotAuthorRejected': 18}
 
 
 def _empty(message, status=None, diagnostics=None):
@@ -285,7 +287,7 @@ def collect_sentiment(day, *, skip=False, previous=None, captures=None, breadth=
         if raw_status in ('ok', 'partial'):
             status[platform] = 'ok' if complete else 'partial'
         comparable = complete and not cap.get('truncated') and len(cap.get('comments', [])) < 300
-        method = (SIGNATURE + '-reply-priority' if platform == 'em' else SIGNATURE) + '-' + signature.get(platform, 'fixture')
+        method = SIGNATURE + METHOD_SUFFIXES.get(platform, '') + '-' + signature.get(platform, 'fixture')
         old = baseline.get(platform, {})
         previous_count = old.get('sampleCount')
         volume = '—'

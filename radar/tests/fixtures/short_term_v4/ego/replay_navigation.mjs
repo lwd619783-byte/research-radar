@@ -5,6 +5,7 @@ import {approvedHotAuthor, discoverWorks, datedReview, extractComments, readPlat
   from '../../../../tools/short_term_collector/ego_reader.mjs';
 
 const date = '2026-11-24';
+const xhsWorks = ['/explore/1234567890abcdef','/explore/abcdef1234567890'];
 const platforms = {
   em: {seeds: ['https://guba.eastmoney.com/list,zssh000001.html']},
   xq: {seeds: ['https://xueqiu.com/S/SH000001']},
@@ -15,7 +16,8 @@ const platforms = {
 
 class FakePage {
   constructor({fail, challenge, clock, latency = () => 0, forumWork = null,
-    delayedForum = false, delayedHot = false, delayedCommentPlatform = null, stalledLoad = false}) {
+    delayedForum = false, delayedHot = false, delayedCommentPlatform = null, stalledLoad = false,
+    xhsReloadDelay = null}) {
     this.fail = fail;
     this.challenge = challenge;
     this.clock = clock;
@@ -27,6 +29,9 @@ class FakePage {
     this.commentsReady = false;
     this.stalledLoad = stalledLoad;
     this.hotReady = !delayedHot;
+    this.xhsReloadDelay = xhsReloadDelay;
+    this.xhsReloadReady = false;
+    this.opened = [];
     this.address = 'about:blank';
     this.navigations = new Map();
   }
@@ -67,12 +72,18 @@ class FakePage {
         comments: [{text: '离线复盘评论 ' + args.track, track: args.track, date, time: '19:20'}]};
     }
     if (fn === discoverWorks) {
+      if (args.platform === 'xhs' && args.track === 'hot' && this.xhsReloadDelay !== null) {
+        if (!args.targetPath) return xhsWorks;
+        if (args.targetPath === xhsWorks[1]) return this.xhsReloadReady ? 2 : -1;
+        return 0;
+      }
+      if (args.targetPath) return 0;
       if (args.platform === 'em' && this.forumWork) return this.forumReady ? [this.forumWork] : [];
       if (args.platform === 'xq' && this.delayedCommentPlatform === 'xq') return ['/123456/789012'];
       if (args.platform === 'dy' && args.track === 'hot' && !this.hotReady) return [];
-      return args.platform === 'dy' ? ['/video/123456'] : ['/explore/1234567890abcdef'];
+      return args.platform === 'dy' ? ['/video/123456'] : [xhsWorks[0]];
     }
-    if (fn === datedReview) return true;
+    if (fn === datedReview) return this.xhsReloadDelay === null || !this.address.endsWith(xhsWorks[0]);
     if (fn === approvedHotAuthor) return args.authors.length > 0;
     if ((this.forumWork || this.delayedCommentPlatform) && args === '[aria-label="展开评论"]') return false;
     assert.fail('Unexpected evaluation in navigation replay');
@@ -81,11 +92,26 @@ class FakePage {
   async click(selector) {
     const path = selector.match(/a\[href\*="([^"]+)"\]/)?.[1];
     assert.ok(path, 'Only the selected synthetic work may be opened');
+    if (this.xhsReloadDelay !== null && path === xhsWorks[1]) {
+      assert.ok(this.xhsReloadReady);
+      assert.ok(selector.endsWith('nth=2'));
+    }
+    this.opened.push(path);
     this.address = new URL(path, this.address).href;
     return {};
   }
 
   async waitForFunction(fn,args,opts) {
+    if (fn === discoverWorks && args.targetPath === xhsWorks[1] && this.xhsReloadDelay !== null) {
+      assert.equal(args.readyOnly,true);
+      assert.ok(opts.timeout <= 6500);
+      if (this.xhsReloadDelay > opts.timeout) {
+        this.clock.value += opts.timeout;
+        throw Error('Matching work link timed out');
+      }
+      this.clock.value += this.xhsReloadDelay;
+      this.xhsReloadReady = true;
+    }
     if (!this.forumReady && fn === discoverWorks && args.platform === 'em') {
       assert.equal(args.readyOnly,true);
       assert.ok(opts.timeout >= 17000 && opts.timeout <= 22000);
@@ -167,6 +193,42 @@ test('a social search waits for matching work cards within its track deadline', 
   assert.equal(result.dy.trackStatus.hot,'ok');
   assert.equal(result.dy.trackDetails.hot.links,1);
   assert.ok(result.dy.comments.some(comment=>comment.track === 'hot'));
+});
+
+test('a reloaded XHS search waits for the previously selected card and uses its visible link', async () => {
+  const {result, page} = await replay({fail: () => false, xhsReloadDelay:4300});
+  const hot = result.xhs.trackDetails.hot;
+  assert.equal(hot.works,2);
+  assert.equal(hot.workDateRejected,1);
+  assert.equal(hot.inWindow,1);
+  assert.equal(hot.workLinkTimeouts,0);
+  assert.ok(page.opened.includes(xhsWorks[1]));
+});
+
+test('a missing XHS card is never opened and retains the previous work rejection', async () => {
+  const {result, page} = await replay({fail: () => false, xhsReloadDelay:9000});
+  const hot = result.xhs.trackDetails.hot;
+  assert.equal(result.xhs.trackStatus.hot,'timeout');
+  assert.equal(hot.stage,'work_link');
+  assert.equal(hot.works,1);
+  assert.equal(hot.workDateRejected,1);
+  assert.equal(hot.workLinkTimeouts,1);
+  assert.ok(!page.opened.includes(xhsWorks[1]));
+});
+
+test('a selected social path prefers a visible first-party work over hidden and misleading matches', () => {
+  const host = 'https://www.xiaohongshu.com';
+  const path = xhsWorks[1];
+  const card = {innerText:'A股复盘',querySelector:()=>null};
+  const anchor = (href,visible=true) => ({href,getClientRects:()=>visible?[1]:[],
+    closest: selector => selector.startsWith('[hidden]') ? null : card, querySelector:()=>null});
+  const anchors = [anchor(host+path,false),anchor('https://example.invalid'+path),
+    anchor(host+'/redirect?target='+path),anchor(host+path+'?synthetic=1')];
+  const result = runInNewContext(`(${discoverWorks.toString()})(args)`, {
+    URL,location:new URL(host),args:{platform:'xhs',track:'hot',targetPath:path},
+    document:{querySelectorAll: selector => { assert.equal(selector,'a[href*="'+path+'"]'); return anchors; }},
+  });
+  assert.equal(result,3);
 });
 
 test('a discovered public community article can open with its own navigation budget', async () => {

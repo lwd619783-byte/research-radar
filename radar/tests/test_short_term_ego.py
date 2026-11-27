@@ -47,7 +47,9 @@ class SentimentTests(unittest.TestCase):
                         'links': 0, 'rows': 0, 'works': False, 'inWindow': 10**20, 'dated': -1, 'url': private},
                         'hot': {'stage': 'hot_author'}}},
             'xhs': {'status': 'empty', 'trackStatus': {'kol': 'unconfigured', 'hot': private},
-                    'trackDetails': {'hot': {'stage': private, 'navigationRetries': True, 'links': '0'}}},
+                    'trackDetails': {'hot': {'stage': 'work_link', 'navigationRetries': True, 'links': '0',
+                                             'workLinkTimeouts': 2, 'workDateRejected': 1,
+                                             'hotAuthorRejected': 19, 'href': private}}},
             'dy': {'trackStatus': [], 'trackDetails': {'kol': [private]}},
             private: {'trackStatus': {'community': 'ok'}}}
         data = ego.collect_sentiment(DAY, captures=raw)
@@ -56,7 +58,8 @@ class SentimentTests(unittest.TestCase):
         self.assertEqual(data['platformDiagnostics'], {
             'em': {'community': {'status': 'timeout', 'stage': 'seed_navigation', 'navigationRetries': 1,
                                  'links': 0, 'rows': 0}},
-            'xhs': {'kol': {'status': 'unconfigured'}}})
+            'xhs': {'kol': {'status': 'unconfigured'}, 'hot': {
+                'stage': 'work_link', 'workLinkTimeouts': 2, 'workDateRejected': 1}}})
         self.assertNotIn(private, json.dumps(data))
         self.assertEqual(ego.collect_sentiment(DAY, skip=True)['platformDiagnostics'], {})
 

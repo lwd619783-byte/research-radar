@@ -177,10 +177,9 @@ export function approvedHotAuthor({platform,authors}) {
   });
 }
 
-// Return only public work paths. For signed links the browser itself follows
-// the displayed anchor. Query strings, authors, device and session state
-// never leave the page.
-export function discoverWorks({platform, track, readyOnly = false}) {
+// Return public paths, or locate a previously selected path in the current DOM.
+// The browser follows the displayed anchor with its own query string.
+export function discoverWorks({platform, track, readyOnly = false, targetPath = null}) {
   const pattern = {
     em:/^\/news,[\w-]+,\d+\.html$/i, xq:/^\/\d+\/\d+\/?$/,
     ths:/^\/(?:pid[_/]\d+|[^/]+\/post\/\d+|(?:discussion|article)\/\d+)(?:\.s?html?)?\/?$/,
@@ -194,9 +193,11 @@ export function discoverWorks({platform, track, readyOnly = false}) {
   };
   const financial = /A\s*股|复盘|收评|收盘|大盘|指数|龙虎榜|涨停|股市|板块|题材|连板|盘后|情绪周期/iu;
   const found = new Map();
-  for (const anchor of document.querySelectorAll('a[href]')) {
+  const selector = targetPath ? 'a[href*="'+targetPath+'"]' : 'a[href]';
+  for (const [index,anchor] of document.querySelectorAll(selector).entries()) {
     if (!anchor.getClientRects().length || anchor.closest('[hidden],.advertisement,[data-ad]')) continue;
     const url = new URL(anchor.href, location.href);
+    if (targetPath && url.pathname !== targetPath) continue;
     const sameXueqiu = platform === 'xq' && ['xueqiu.com','www.xueqiu.com'].includes(location.hostname)
       && ['xueqiu.com','www.xueqiu.com'].includes(url.hostname);
     if (url.protocol !== 'https:' || url.username || url.password || url.port ||
@@ -214,6 +215,7 @@ export function discoverWorks({platform, track, readyOnly = false}) {
       if (count) likes = Number(count[1]) * (count[2] ? 10000 : 1);
     }
     if (readyOnly) return true;
+    if (targetPath) return index;
     if (platform === 'em' && track === 'community') {
       const value = anchor.closest('tr.listitem')?.querySelector('.reply')?.textContent?.trim();
       if (value && /^\d{1,9}$/.test(value)) replies = Number(value);
@@ -222,6 +224,7 @@ export function discoverWorks({platform, track, readyOnly = false}) {
     if (found.size >= 40) break;
   }
   if (readyOnly) return false;
+  if (targetPath) return -1;
   const works = Array.from(found.values());
   // Ordered result links are retained for the platform's popularity search.
   // Where displayed likes exist, prefer the most discussed visible works.
@@ -322,11 +325,17 @@ async function readPlatform(task, page, platform, spec, date) {
         await active.waitForFunction(datedReview,{platform,date,now:Date.now(),readyOnly:true},{timeout:budget(3500)});
       } catch (error) { if (controlError(error) || !timedOut(error)) throw error; }
       await sample(track,false);
-      if (!await active.evaluate(datedReview,{platform,date,now:Date.now()})) return 0;
+      if (!await active.evaluate(datedReview,{platform,date,now:Date.now()})) {
+        detail.workDateRejected++;
+        return 0;
+      }
       if (track === 'hot') {
         detail.stage='hot_author';
         const authors = (spec.kol || []).concat(spec.hot_kol || []);
-        if (!await active.evaluate(approvedHotAuthor,{platform,authors})) return 0;
+        if (!await active.evaluate(approvedHotAuthor,{platform,authors})) {
+          detail.hotAuthorRejected++;
+          return 0;
+        }
       }
     }
     let count = await sample(track);
@@ -351,7 +360,8 @@ async function readPlatform(task, page, platform, spec, date) {
     let matched = 0, worksRead = 0, failed = false, expired = false;
     if (!urls.length) { trackStatus[track]='unconfigured'; continue; }
     deadline=Date.now()+(track === 'community' ? 36000 : 26000);
-    detail=trackDetails[track]={stage:'configured', navigationRetries:0, links:0, works:0, rows:0, dated:0, inWindow:0};
+    detail=trackDetails[track]={stage:'configured', navigationRetries:0, links:0, works:0,
+      workLinkTimeouts:0, workDateRejected:0, hotAuthorRejected:0, rows:0, dated:0, inWindow:0};
     if(urls.length>3) truncated=true;
     const seeds = urls.slice(0,3);
     for (const [seedIndex, seed] of seeds.entries()) {
@@ -393,10 +403,30 @@ async function readPlatform(task, page, platform, spec, date) {
               detail.stage='work_navigation';
               await active.goto(work.href, {waitUntil:'commit',timeout:budget(15000)});
             } else {
-              if (index) { active = page; await go(seed, false); }
+              if (index) {
+                active = page;
+                await go(seed, false);
+                await sample(track,false);
+              }
+              detail.stage='work_link';
+              const target = {platform,track,targetPath:path};
+              let anchorIndex = await active.evaluate(discoverWorks,target);
+              if (anchorIndex < 0) {
+                try {
+                  await active.waitForFunction(discoverWorks,{...target,readyOnly:true},{timeout:budget(6500)});
+                } catch (err) {
+                  if (controlError(err) || !timedOut(err)) throw err;
+                  await sample(track,false);
+                  detail.workLinkTimeouts++;
+                  throw err;
+                }
+                await sample(track,false);
+                anchorIndex = await active.evaluate(discoverWorks,target);
+              }
+              if (anchorIndex < 0) throw Error('work_link_missing');
               // Follow signed social links on the page without exporting their query strings.
               detail.stage='work_navigation';
-              const receipt = await active.click('loc=css:a[href*="'+path+'"] >> nth=0',{
+              const receipt = await active.click('loc=css:a[href*="'+path+'"] >> nth='+anchorIndex,{
                 label:'打开复盘讨论',timeout:budget(2800)});
               if (receipt?.popups?.length) active=task.page(receipt.popups[0].label);
             }
