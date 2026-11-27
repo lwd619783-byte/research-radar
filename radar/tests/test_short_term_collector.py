@@ -262,6 +262,39 @@ class ShortTermCollectorTests(unittest.TestCase):
         self.assertEqual(sum(receipt['coverage']['catalystSourceRows'].values()), len(snapshot['catalysts']))
         self.assertEqual(receipt['dataSHA256'], collector.data_digest(snapshot))
 
+    def test_missing_sw_anchor_fetches_one_directory_within_budget_for_reconciliation_only(self):
+        from short_term_collector import market
+        thu, fri = date(2026,11,26), date(2026,11,27)
+        clock = datetime.combine(fri,time(19,30),collector.BJ)
+        cutoff = datetime.combine(fri,collector.BOARD_RETRY_CUTOFF,collector.BJ)
+        anchor = dict(title='通信能否持平',rule=dict(claim='通信能否持平',
+                       checks=[dict(metric='board:SW801770',minimum=0)]))
+        ranked = dict(code='SW801770',name='通信',px='4217.84')
+        prior = dict(date=str(thu),anchors=[anchor],industries={'up':[ranked]})
+        raw = dict(date=str(fri),closeConfirmed=True,industries=[dict(code='BK1326',name='半导体设备',pct=.176)])
+        point = dict(code='SW801770',name='通信',date=str(fri),pct=.12645097964835061)
+        http = PublicHttp()
+        with (patch.object(collector,'now_bj',return_value=clock),
+              patch.object(market,'published_sw_industries',return_value=([point,dict(code='SW801760')],[])) as load):
+            revised = dict(raw)
+            collector.supplement_sw_anchors(fri,revised,prior,http,cutoff)
+            load.assert_called_once_with(http,fri)
+            self.assertEqual(revised,{**raw,'anchorBoardQuotes':[point]})
+            load.reset_mock()
+            for initial,history,end in [
+                    (raw,None,cutoff),(raw,{**prior,'date':'2026-11-25'},cutoff),
+                    (raw,{**prior,'anchors':[{**anchor,'title':'人工覆盖的新陈述'}]},cutoff),
+                    (raw,{**prior,'industries':{'up':[]}},cutoff),
+                    (raw,{**prior,'industries':{'up':[{**ranked,'px':None}]}},cutoff),
+                    ({**raw,'industries':[point]},prior,cutoff),(raw,prior,clock)]:
+                sample = dict(initial)
+                collector.supplement_sw_anchors(fri,sample,history,http,end)
+                self.assertEqual(sample,initial)
+                load.assert_not_called()
+            load.side_effect = OSError()
+            collector.supplement_sw_anchors(fri,raw,prior,http,cutoff)
+            self.assertNotIn('anchorBoardQuotes',raw)
+
     def test_late_announcement_fetch_does_not_delay_the_final_slot(self):
         final_clock = datetime.combine(self.day, time(20, 30), collector.BJ)
         mine = {'title': '减持计划窗口', 'detail': '同日已核候选窗口'}

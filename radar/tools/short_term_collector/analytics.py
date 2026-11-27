@@ -9,7 +9,7 @@ import re
 
 from market_calendar import calendar_data, is_session, known_non_session
 from short_term_merge import contract, sanitize_short_term_text
-from .market import symbol, tradable_name
+from .market import SW_LEVEL_ONE, number, symbol, tradable_name
 
 
 def _number(x):
@@ -278,6 +278,64 @@ def _anchors(metrics, leader):
     return result
 
 
+def missing_sw_anchor_closes(raw, previous, day):
+    """Only a prior ranked SW index with its recorded closing level can bind a supplemental quote."""
+    if (not previous or previous.get('date') != _previous_session(day).isoformat()
+            or raw.get('date') != day.isoformat()):
+        return {}
+    observed = {r['code'] for group in ('industries','concepts')
+                for r in _rows(raw,group,day) if _valid_quote(r)}
+    wanted = set()
+    for anchor in previous.get('anchors', [])[:3]:
+        rule = anchor.get('rule') or {}
+        if not anchor.get('title') or rule.get('claim') != anchor['title']:
+            continue
+        for check in rule.get('checks', []):
+            metric = check.get('metric')
+            if isinstance(metric,str) and re.fullmatch(r'board:SW\d{6}',metric) and _number(check.get('minimum')):
+                wanted.add(metric[6:])
+    wanted.difference_update(observed)
+    closes = {}
+    seen = set()
+    for side in ('up','down'):
+        for row in previous.get('industries', {}).get(side, []):
+            code = row.get('code')
+            previous_close = number(row.get('px'))
+            if code not in wanted:
+                continue
+            if code in seen:
+                closes.pop(code,None)
+            elif (code == 'SW' + SW_LEVEL_ONE.get(row.get('name'), '') and
+                    previous_close is not None and previous_close > 0):
+                closes[code] = previous_close
+            seen.add(code)
+    return closes
+
+
+def supplemental_anchor_metrics(raw, previous, day):
+    rows = raw.get('anchorBoardQuotes') or []
+    if not rows:
+        return {}
+    missing = missing_sw_anchor_closes(raw,previous,day)
+    rows = [r for r in rows if isinstance(r,dict) and isinstance(r.get('code'),str)]
+    counts = Counter(r['code'] for r in rows)
+    values = {}
+    for row in rows:
+        code = row.get('code')
+        if (code not in missing or counts[code] != 1 or row.get('date') != day.isoformat()
+                or code != 'SW' + SW_LEVEL_ONE.get(row.get('name'), '')
+                or row.get('source') != 'AlphaOnly申万一级行业日度数据'):
+            continue
+        spark, pct, close = row.get('spark'),row.get('pct'),row.get('price')
+        if (not isinstance(spark,list) or len(spark)!=5 or not _number(pct) or not _number(close) or close<=0
+                or spark[-1]!=close or not _number(spark[-2]) or spark[-2]<=0):
+            continue
+        # Historical public px is the dated prior close rendered to two decimals.
+        if f'{spark[-2]:.2f}' == f'{missing[code]:.2f}' and math.isclose(close/spark[-2]-1,pct,abs_tol=1e-10):
+            values['board:' + code] = pct
+    return values
+
+
 def reconcile_previous_day(previous, day, metrics):
     prior = _previous_session(day).isoformat()
     if not previous or previous.get('date') != prior:
@@ -434,6 +492,7 @@ def build_day(day: date, raw: dict, radar: dict, previous: dict | None) -> dict:
             metrics[metric] = breadth[plus] - breadth[minus]
     metrics.update({'board:' + r['code']: r['pct'] for r in boards})
     metrics['maxHeight'] = height
+    reconciliation_metrics = {**supplemental_anchor_metrics(raw,previous,day), **metrics}
     dragon = raw.get('dragonTiger') or dict(summary='龙虎榜数据暂缺', items=[])
     ego = raw.get('ego') or dict(score=None, state='样本暂缺', summary='本次未取得舆情样本', platforms=[], posts=[])
     score = ego.get('score')
@@ -445,7 +504,7 @@ def build_day(day: date, raw: dict, radar: dict, previous: dict | None) -> dict:
                   headline=f'{day.month} 月 {day.day} 日 A 股收盘复盘', subHeadline=subtitle, breadth=breadth,
                   pulse=dict(finalTime='交易日晚间汇总', quoteTime=day_id + (' 三市收盘汇总' if complete else ' 部分行情'),
                              egoTime=ego.get('summary') or '舆情样本暂缺', notionSync='本机快照'),
-                  yesterdayReconcile=reconcile_previous_day(previous, day, metrics),
+                  yesterdayReconcile=reconcile_previous_day(previous, day, reconciliation_metrics),
                   stocks=dict(market=_rank(market, company_links, '按当日收盘涨跌幅排序'),
                               radar=_rank(core, company_links, '雷达核心池收盘涨跌幅')),
                   cycle=cycle, matrix=_matrix(boards, linked, radar), dragonTiger=dragon,

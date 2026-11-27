@@ -255,6 +255,25 @@ def refresh_before_final(day, raw, http):
     return completed
 
 
+def supplement_sw_anchors(day, raw, previous, http, cutoff):
+    from short_term_collector.analytics import missing_sw_anchor_closes
+    from short_term_collector.market import published_sw_industries
+    if not raw.get('closeConfirmed'):
+        return
+    needed = missing_sw_anchor_closes(raw,previous,day)
+    if not needed:
+        return
+    now = now_bj()
+    if cutoff is not None and now >= cutoff:
+        return
+    deadline = now + timedelta(seconds=15)
+    if cutoff is not None:
+        deadline = min(deadline, cutoff)
+    directory = before_deadline(deadline, lambda:published_sw_industries(http,day))
+    if directory:
+        raw['anchorBoardQuotes'] = [row for row in directory[0] if row['code'] in needed]
+
+
 def assemble(raw, radar, history, day, clock, *, offline=False, environ=None):
     from short_term_collector.analytics import build_day, dated_stock_quotes
     if raw.get('date') != day.isoformat():
@@ -450,6 +469,9 @@ def run_session(args, day, offline, fixture, http, path, preview, receipt, phase
                 receipt['boardRetryCoverage'] = {'industryRows': len(raw.get('industries', [])),
                                                  'conceptRows': len(raw.get('concepts', []))}
                 phase('boardRetryFinishedAt')
+        if not offline:
+            supplement_sw_anchors(day, raw, latest_before(history,day), http, board_cutoff if args.evening else None)
+        if args.evening:
             wait_until(day, SENTIMENT_TIME)
         if raw.get('closeConfirmed') or args.evening:
             phase('egoStartedAt')

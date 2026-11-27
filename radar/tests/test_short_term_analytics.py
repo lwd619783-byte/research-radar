@@ -189,6 +189,35 @@ class ShortTermAnalyticsTests(unittest.TestCase):
         self.assertEqual(result['breadth']['turnoverDelta'], '—')
         self.assertEqual(result['yesterdayReconcile']['items'], [])
 
+    def test_sw_anchor_crossing_to_eastmoney_is_reconciled_outside_the_ranking(self):
+        thu, fri = date(2026,11,26), date(2026,11,27)
+        raw = observations(thu)
+        raw.update(marketComplete=False,industries=[quote('SW801770','通信',.0236,price=4217.84)])
+        raw['limitPool'][0]['height'] = 5
+        prior = build_day(thu,raw,R,None)
+        raw = observations(fri)
+        raw['industries'] = [quote('BK1326','半导体设备',.176),quote('BK9999','通信',-.10)]
+        raw['limitPool'][0]['height'] = 6
+        baseline = build_day(fri,raw,R,prior)
+        confirmed = dict(code='SW801770',name='通信',date=str(fri),price=4751.19,pct=.12645097964835061,
+                         spark=[4218.51,4216.36,4120.73,4217.84,4751.19],source='AlphaOnly申万一级行业日度数据')
+        def check(rows):
+            result = build_day(fri,{**raw,'anchorBoardQuotes':rows},R,prior)
+            self.assertEqual({k:v for k,v in baseline.items() if k!='yesterdayReconcile'},
+                             {k:v for k,v in result.items() if k!='yesterdayReconcile'})
+            return {r['code']:r for r in result['yesterdayReconcile']['items']}
+        self.assertNotIn('ANCHOR 03',check([]))
+        item = check([confirmed])['ANCHOR 03']
+        self.assertEqual(item['status'],'pass')
+        self.assertIn('SW801770 涨跌 +12.65%',item['actual'])
+        self.assertNotIn('ANCHOR 01',check([confirmed]))
+        for rows in [[confirmed,confirmed], [{**confirmed,'date':str(thu)}], [{**confirmed,'code':'SW801760'}],
+                     [{**confirmed,'name':'传媒'}], [{**confirmed,'source':'其他口径'}],
+                     [{**confirmed,'spark':[1,2,3,4000,4751.19]}], [{**confirmed,'pct':-.03}]]:
+            self.assertNotIn('ANCHOR 03',check(rows))
+        prior['industries']['up'][0]['px'] = None
+        self.assertNotIn('ANCHOR 03',check([confirmed]))
+
     def test_missing_universe_no_false_global_counts_and_legacy_market_flag(self):
         raw = observations()
         raw.pop('marketComplete')
